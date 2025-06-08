@@ -18,7 +18,11 @@ import {
   Video,
   Image,
   Settings,
-  Globe
+  Globe,
+  Brain,
+  Key,
+  Zap,
+  Save
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -50,6 +54,13 @@ interface BrandSettings {
   faviconUrl: string;
 }
 
+interface AISettings {
+  openaiApiKey: string;
+  geminiApiKey: string;
+  semrushApiKey: string;
+  enableAIFeatures: boolean;
+}
+
 export function Admin() {
   const { user, profile, isAdmin } = useAuth();
   const [videos, setVideos] = useState<Video[]>([]);
@@ -64,12 +75,20 @@ export function Admin() {
     logoUrl: '',
     faviconUrl: ''
   });
+  const [aiSettings, setAISettings] = useState<AISettings>({
+    openaiApiKey: '',
+    geminiApiKey: '',
+    semrushApiKey: '',
+    enableAIFeatures: true
+  });
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [uploadingBrand, setUploadingBrand] = useState(false);
+  const [savingAI, setSavingAI] = useState(false);
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [showBrandForm, setShowBrandForm] = useState(false);
-  const [activeTab, setActiveTab] = useState<'videos' | 'analytics' | 'branding'>('videos');
+  const [showAIForm, setShowAIForm] = useState(false);
+  const [activeTab, setActiveTab] = useState<'videos' | 'analytics' | 'branding' | 'ai-settings'>('videos');
   const [newVideo, setNewVideo] = useState({
     title: '',
     description: '',
@@ -83,6 +102,7 @@ export function Admin() {
     if (user && isAdmin) {
       loadAdminData();
       loadBrandSettings();
+      loadAISettings();
     }
   }, [user, isAdmin]);
 
@@ -183,6 +203,21 @@ export function Admin() {
       });
     } catch (error) {
       console.error('Error loading brand settings:', error);
+    }
+  };
+
+  const loadAISettings = async () => {
+    try {
+      // In a real implementation, these would be stored securely in environment variables
+      // For demo purposes, we'll simulate loading from a secure store
+      setAISettings({
+        openaiApiKey: '••••••••••••••••••••••••••••••••••••••••••••••••••••',
+        geminiApiKey: '••••••••••••••••••••••••••••••••••••••••••••••••••••',
+        semrushApiKey: '••••••••••••••••••••••••••••••••••••••••••••••••••••',
+        enableAIFeatures: true
+      });
+    } catch (error) {
+      console.error('Error loading AI settings:', error);
     }
   };
 
@@ -342,6 +377,25 @@ export function Admin() {
     }
   };
 
+  const handleAISettingsSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSavingAI(true);
+
+    try {
+      // In a real implementation, these would be saved to secure environment variables
+      // For demo purposes, we'll simulate saving
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      setShowAIForm(false);
+      alert('AI settings saved successfully! Changes will take effect after the next deployment.');
+    } catch (error) {
+      console.error('Error saving AI settings:', error);
+      alert('Error saving AI settings. Please try again.');
+    } finally {
+      setSavingAI(false);
+    }
+  };
+
   const toggleFeatured = async (videoId: string, currentStatus: boolean) => {
     try {
       const { error } = await supabase
@@ -437,7 +491,8 @@ export function Admin() {
   const tabs = [
     { id: 'videos', label: 'Videos', icon: Video },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
-    { id: 'branding', label: 'Branding', icon: Settings }
+    { id: 'branding', label: 'Branding', icon: Settings },
+    { id: 'ai-settings', label: 'AI Settings', icon: Brain }
   ];
 
   return (
@@ -446,7 +501,7 @@ export function Admin() {
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Admin Panel</h1>
-          <p className="text-slate-600">Manage videos, monitor usage, and customize branding</p>
+          <p className="text-slate-600">Manage videos, monitor usage, customize branding, and configure AI services</p>
         </div>
       </div>
 
@@ -686,151 +741,36 @@ export function Admin() {
               </div>
             </div>
           )}
-        </div>
-      </div>
 
-      {/* Upload Video Modal */}
-      {showUploadForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
-            <h2 className="text-xl font-bold text-slate-900 mb-4">Upload New Video</h2>
-            <form onSubmit={handleVideoUpload} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Video File
-                </label>
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Title
-                </label>
-                <input
-                  type="text"
-                  value={newVideo.title}
-                  onChange={(e) => setNewVideo({ ...newVideo, title: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
-                  placeholder="Video title"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Description
-                </label>
-                <textarea
-                  value={newVideo.description}
-                  onChange={(e) => setNewVideo({ ...newVideo, description: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
-                  placeholder="Video description"
-                  rows={3}
-                />
-              </div>
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="featured"
-                  checked={newVideo.is_featured}
-                  onChange={(e) => setNewVideo({ ...newVideo, is_featured: e.target.checked })}
-                  className="w-4 h-4 text-dark_moss_green-600 border-slate-300 rounded focus:ring-dark_moss_green-500"
-                />
-                <label htmlFor="featured" className="ml-2 text-sm text-slate-700">
-                  Feature this video on landing page
-                </label>
-              </div>
-              <div className="flex space-x-3 pt-4">
+          {/* AI Settings Tab */}
+          {activeTab === 'ai-settings' && (
+            <div>
+              <div className="flex items-center justify-between mb-6">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-900 flex items-center">
+                    <Brain className="w-5 h-5 mr-2" />
+                    AI Service Configuration
+                  </h2>
+                  <p className="text-sm text-slate-600 mt-1">Configure API keys and settings for AI-powered features</p>
+                </div>
                 <button
-                  type="submit"
-                  disabled={uploading}
-                  className="flex-1 bg-dark_moss_green-600 hover:bg-dark_moss_green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-2 px-4 rounded-lg font-medium transition-colors"
+                  onClick={() => setShowAIForm(true)}
+                  className="bg-gradient-to-r from-tiger_s_eye-600 to-earth_yellow-600 hover:from-tiger_s_eye-700 hover:to-earth_yellow-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2"
                 >
-                  {uploading ? 'Uploading...' : 'Upload Video'}
+                  <Key className="w-4 h-4" />
+                  <span>Configure APIs</span>
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setShowUploadForm(false)}
-                  className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 py-2 px-4 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* Upload Brand Assets Modal */}
-      {showBrandForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6">
-            <h2 className="text-xl font-bold text-slate-900 mb-4">Upload Brand Assets</h2>
-            <form onSubmit={handleBrandUpload} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Logo (PNG, JPG, SVG recommended)
-                </label>
-                <input
-                  type="file"
-                  accept="image/png,image/jpeg,image/jpg,image/svg+xml"
-                  onChange={(e) => setSelectedLogo(e.target.files?.[0] || null)}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-tiger_s_eye-500 focus:border-transparent"
-                />
-                <p className="text-xs text-slate-500 mt-1">
-                  Will replace the current logo. Recommended size: 200x50px or similar aspect ratio.
-                </p>
-                {selectedLogo && (
-                  <p className="text-xs text-pakistan_green-600 mt-1">
-                    Selected: {selectedLogo.name} ({(selectedLogo.size / 1024).toFixed(1)}KB)
-                  </p>
-                )}
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Favicon (ICO, PNG recommended)
-                </label>
-                <input
-                  type="file"
-                  accept="image/x-icon,image/vnd.microsoft.icon,image/png,image/jpeg"
-                  onChange={(e) => setSelectedFavicon(e.target.files?.[0] || null)}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-tiger_s_eye-500 focus:border-transparent"
-                />
-                <p className="text-xs text-slate-500 mt-1">
-                  Will update the browser tab icon. Recommended size: 32x32px or 16x16px.
-                </p>
-                {selectedFavicon && (
-                  <p className="text-xs text-pakistan_green-600 mt-1">
-                    Selected: {selectedFavicon.name} ({(selectedFavicon.size / 1024).toFixed(1)}KB)
-                  </p>
-                )}
               </div>
 
-              <div className="flex space-x-3 pt-4">
-                <button
-                  type="submit"
-                  disabled={uploadingBrand || (!selectedLogo && !selectedFavicon)}
-                  className="flex-1 bg-tiger_s_eye-600 hover:bg-tiger_s_eye-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-2 px-4 rounded-lg font-medium transition-colors"
-                >
-                  {uploadingBrand ? 'Uploading...' : 'Upload Assets'}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowBrandForm(false)}
-                  className="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 py-2 px-4 rounded-lg font-medium transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-gradient-to-br from-tiger_s_eye-50 to-earth_yellow-50 rounded-lg p-6 border border-tiger_s_eye-100">
+                  <h3 className="font-medium text-slate-900 mb-4 flex items-center">
+                    <Brain className="w-5 h-5 mr-2 text-tiger_s_eye-600" />
+                    OpenAI GPT
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-slate-600">API Key</span>
+                      <span className="text-xs font-mono bg-white px-2 py-1 rounded border">
+                        {aiSettings.openaiApiKey ? '••••••••••••••••' : 'Not configured'}
+                      

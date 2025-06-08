@@ -8,6 +8,7 @@ import { Contact } from './pages/Contact';
 import { Dashboard } from './pages/Dashboard';
 import { Clients } from './pages/Clients';
 import { ClientDetail } from './pages/ClientDetail';
+import { Playbooks } from './pages/Playbooks';
 import { Admin } from './pages/Admin';
 
 function AppContent() {
