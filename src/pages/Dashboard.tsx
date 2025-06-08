@@ -1,0 +1,299 @@
+import React, { useEffect, useState } from 'react';
+import { supabase } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
+import { 
+  TrendingUp, 
+  Users, 
+  FileText, 
+  Clock,
+  Activity,
+  ArrowUpRight,
+  CheckCircle,
+  AlertCircle
+} from 'lucide-react';
+import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
+
+interface DashboardStats {
+  totalClients: number;
+  totalReports: number;
+  completedReports: number;
+  pendingReports: number;
+  recentActivity: any[];
+}
+
+export function Dashboard() {
+  const { user } = useAuth();
+  const [stats, setStats] = useState<DashboardStats>({
+    totalClients: 0,
+    totalReports: 0,
+    completedReports: 0,
+    pendingReports: 0,
+    recentActivity: []
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      loadDashboardData();
+    }
+  }, [user]);
+
+  const loadDashboardData = async () => {
+    try {
+      // Get client count
+      const { count: clientCount } = await supabase
+        .from('clients')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user!.id);
+
+      // Get report stats
+      const { data: reports, count: reportCount } = await supabase
+        .from('reports')
+        .select(`
+          *,
+          clients!inner(user_id)
+        `, { count: 'exact' })
+        .eq('clients.user_id', user!.id);
+
+      const completedReports = reports?.filter(r => r.status === 'completed').length || 0;
+      const pendingReports = reports?.filter(r => r.status === 'pending').length || 0;
+
+      // Get recent activity (latest reports with client names)
+      const { data: recentActivity } = await supabase
+        .from('reports')
+        .select(`
+          *,
+          clients!inner(name, user_id)
+        `)
+        .eq('clients.user_id', user!.id)
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      setStats({
+        totalClients: clientCount || 0,
+        totalReports: reportCount || 0,
+        completedReports,
+        pendingReports,
+        recentActivity: recentActivity || []
+      });
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const statCards = [
+    {
+      title: 'Total Clients',
+      value: stats.totalClients,
+      icon: Users,
+      color: 'bg-dark_moss_green-500',
+      change: '+12%',
+      changeType: 'positive'
+    },
+    {
+      title: 'Total Reports',
+      value: stats.totalReports,
+      icon: FileText,
+      color: 'bg-pakistan_green-500',
+      change: '+8%',
+      changeType: 'positive'
+    },
+    {
+      title: 'Completed',
+      value: stats.completedReports,
+      icon: CheckCircle,
+      color: 'bg-pakistan_green-500',
+      change: `${stats.completedReports}/${stats.totalReports}`,
+      changeType: 'neutral'
+    },
+    {
+      title: 'In Progress',
+      value: stats.pendingReports,
+      icon: Clock,
+      color: 'bg-earth_yellow-500',
+      change: 'Active',
+      changeType: 'neutral'
+    }
+  ];
+
+  if (loading) {
+    return (
+      <div className="p-8">
+        <div className="animate-pulse space-y-6">
+          <div className="h-8 bg-cornsilk-200 rounded w-1/4"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-32 bg-cornsilk-200 rounded-xl"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-8">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">
+          Welcome back, {user?.email?.split('@')[0]}
+        </h1>
+        <p className="text-slate-600">
+          Here's what's happening with your client portfolio today.
+        </p>
+      </div>
+
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {statCards.map((stat, index) => (
+          <div key={index} className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-between mb-4">
+              <div className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center`}>
+                <stat.icon className="w-6 h-6 text-white" />
+              </div>
+              <div className="text-right">
+                <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
+                <div className={`text-sm ${
+                  stat.changeType === 'positive' ? 'text-pakistan_green-600' : 
+                  stat.changeType === 'negative' ? 'text-red-600' : 'text-slate-500'
+                }`}>
+                  {stat.change}
+                </div>
+              </div>
+            </div>
+            <h3 className="text-sm font-medium text-slate-600">{stat.title}</h3>
+          </div>
+        ))}
+      </div>
+
+      {/* Content Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Recent Activity */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-lg font-semibold text-slate-900 flex items-center">
+              <Activity className="w-5 h-5 mr-2 text-slate-500" />
+              Recent Activity
+            </h2>
+            <Link 
+              to="/reports" 
+              className="text-dark_moss_green-600 hover:text-dark_moss_green-700 text-sm font-medium flex items-center"
+            >
+              View all <ArrowUpRight className="w-4 h-4 ml-1" />
+            </Link>
+          </div>
+          
+          <div className="space-y-4">
+            {stats.recentActivity.length > 0 ? (
+              stats.recentActivity.map((activity) => (
+                <div key={activity.id} className="flex items-center space-x-4 p-3 bg-cornsilk-100 rounded-lg">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                    activity.status === 'completed' ? 'bg-pakistan_green-100' : 'bg-earth_yellow-100'
+                  }`}>
+                    {activity.status === 'completed' ? (
+                      <CheckCircle className={`w-5 h-5 ${
+                        activity.status === 'completed' ? 'text-pakistan_green-600' : 'text-earth_yellow-600'
+                      }`} />
+                    ) : (
+                      <Clock className="w-5 h-5 text-earth_yellow-600" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-slate-900">
+                      Market analysis for {activity.clients.name}
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      {format(new Date(activity.created_at), 'MMM d, yyyy • h:mm a')}
+                    </p>
+                  </div>
+                  <div className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    activity.status === 'completed' 
+                      ? 'bg-pakistan_green-100 text-pakistan_green-800' 
+                      : 'bg-earth_yellow-100 text-earth_yellow-800'
+                  }`}>
+                    {activity.status === 'completed' ? 'Complete' : 'Processing'}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-8">
+                <FileText className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <p className="text-slate-500">No recent activity</p>
+                <Link 
+                  to="/clients" 
+                  className="text-dark_moss_green-600 hover:text-dark_moss_green-700 text-sm font-medium"
+                >
+                  Add your first client to get started
+                </Link>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+          <h2 className="text-lg font-semibold text-slate-900 mb-6 flex items-center">
+            <TrendingUp className="w-5 h-5 mr-2 text-slate-500" />
+            Quick Actions
+          </h2>
+          
+          <div className="space-y-4">
+            <Link 
+              to="/clients?action=new"
+              className="block p-4 bg-gradient-to-r from-cornsilk-50 to-cornsilk-100 rounded-lg border border-cornsilk-200 hover:shadow-md transition-all group"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium text-slate-900 group-hover:text-dark_moss_green-900">
+                    Add New Client
+                  </h3>
+                  <p className="text-sm text-slate-600 mt-1">
+                    Start with client onboarding and domain analysis
+                  </p>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-dark_moss_green-600 group-hover:text-dark_moss_green-700" />
+              </div>
+            </Link>
+
+            <Link 
+              to="/playbooks"
+              className="block p-4 bg-gradient-to-r from-earth_yellow-50 to-tiger_s_eye-50 rounded-lg border border-earth_yellow-100 hover:shadow-md transition-all group"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium text-slate-900 group-hover:text-earth_yellow-900">
+                    Browse Playbooks
+                  </h3>
+                  <p className="text-sm text-slate-600 mt-1">
+                    Deploy proven marketing strategies
+                  </p>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-earth_yellow-600 group-hover:text-earth_yellow-700" />
+              </div>
+            </Link>
+
+            <Link 
+              to="/reports"
+              className="block p-4 bg-gradient-to-r from-pakistan_green-50 to-pakistan_green-100 rounded-lg border border-pakistan_green-100 hover:shadow-md transition-all group"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium text-slate-900 group-hover:text-pakistan_green-900">
+                    View Reports
+                  </h3>
+                  <p className="text-sm text-slate-600 mt-1">
+                    Access completed market analyses
+                  </p>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-pakistan_green-600 group-hover:text-pakistan_green-700" />
+              </div>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

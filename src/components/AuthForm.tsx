@@ -1,0 +1,140 @@
+import React, { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
+import { Compass, Mail, Lock, AlertCircle, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import clsx from 'clsx';
+
+export function AuthForm() {
+  const [isSignIn, setIsSignIn] = useState(true);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const { signIn, signUp } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError('');
+
+    try {
+      const { error } = isSignIn 
+        ? await signIn(email, password)
+        : await signUp(email, password);
+
+      if (error) {
+        setError(error.message);
+      }
+    } catch (err) {
+      setError('An unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-pakistan_green-900 via-dark_moss_green-800 to-dark_moss_green-900 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        {/* Back to Home Link */}
+        <div className="mb-4">
+          <Link 
+            to="/" 
+            className="inline-flex items-center text-cornsilk-200 hover:text-white transition-colors"
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Home
+          </Link>
+        </div>
+
+        {/* Logo and heading */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-6">
+            <Compass className="w-8 h-8 text-pakistan_green-900" />
+          </div>
+          <h1 className="text-3xl font-bold text-white mb-2">cmoxpert</h1>
+          <p className="text-cornsilk-200">Go from new client to indispensable strategist in record time</p>
+        </div>
+
+        {/* Form */}
+        <div className="bg-white rounded-xl shadow-2xl p-8">
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold text-slate-900 mb-2">
+              {isSignIn ? 'Welcome back' : 'Get started'}
+            </h2>
+            <p className="text-slate-600">
+              {isSignIn ? 'Sign in to your account' : 'Create your account'}
+            </p>
+          </div>
+
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center space-x-2">
+              <AlertCircle className="w-5 h-5 text-red-500" />
+              <span className="text-red-700 text-sm">{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
+                Email address
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent transition-all"
+                  placeholder="you@company.com"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent transition-all"
+                  placeholder="••••••••"
+                  required
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={loading}
+              className={clsx(
+                'w-full py-3 px-4 rounded-lg font-medium transition-all',
+                'bg-gradient-to-r from-dark_moss_green-600 to-pakistan_green-600 hover:from-dark_moss_green-700 hover:to-pakistan_green-700',
+                'text-white shadow-lg hover:shadow-xl',
+                'disabled:opacity-50 disabled:cursor-not-allowed'
+              )}
+            >
+              {loading ? 'Please wait...' : isSignIn ? 'Sign in' : 'Create account'}
+            </button>
+          </form>
+
+          <div className="mt-6 text-center">
+            <button
+              onClick={() => setIsSignIn(!isSignIn)}
+              className="text-earth_yellow-600 hover:text-earth_yellow-700 font-medium"
+            >
+              {isSignIn ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
