@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { SplineSceneBasic } from '../components/ui/spline-demo';
 import { 
   TrendingUp, 
   Users, 
@@ -171,6 +172,18 @@ export function Dashboard() {
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* 3D Interactive Demo */}
+        <div className="lg:col-span-2 mb-6">
+          <div className="mb-4">
+            <h2 className="text-xl font-semibold text-slate-900 flex items-center">
+              <Activity className="w-5 h-5 mr-2 text-slate-500" />
+              AI Marketing Intelligence
+            </h2>
+            <p className="text-slate-600 text-sm">Interactive 3D visualization of your marketing data and insights</p>
+          </div>
+          <SplineSceneBasic />
+        </div>
+
         {/* Recent Activity */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <div className="flex items-center justify-between mb-6">
