@@ -51,8 +51,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         .eq('id', userId)
         .single();
 
-      // Reduced timeout to 10 seconds for better UX
-      const timeoutPromise = createTimeoutPromise(10000, 'Profile loading');
+      // Increased timeout to 30 seconds for better reliability
+      const timeoutPromise = createTimeoutPromise(30000, 'Profile loading');
 
       const { data, error } = await Promise.race([profilePromise, timeoutPromise]) as any;
 
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
             .select()
             .single();
 
-          const createTimeoutPromise = createTimeoutPromise(10000, 'Profile creation');
+          const createTimeoutPromise = createTimeoutPromise(30000, 'Profile creation');
 
           try {
             const { data: newProfile, error: createError } = await Promise.race([createPromise, createTimeoutPromise]) as any;
@@ -130,9 +130,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         console.log('Initializing auth...');
         
-        // Reduced timeout to 10 seconds
+        // Increased timeout to 30 seconds for better reliability
         const sessionPromise = supabase.auth.getSession();
-        const timeoutPromise = createTimeoutPromise(10000, 'Session initialization');
+        const timeoutPromise = createTimeoutPromise(30000, 'Session initialization');
 
         const { data: { session }, error } = await Promise.race([sessionPromise, timeoutPromise]) as any;
         
