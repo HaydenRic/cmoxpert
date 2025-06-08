@@ -1,3 +1,4 @@
+// src/components/Layout.tsx
 import React from 'react';
 import { BrandLogo } from './BrandLogo';
 import { useAuth } from '../contexts/AuthContext';
@@ -43,9 +44,7 @@ export function Layout({ children }: LayoutProps) {
           {/* Logo */}
           <div className="flex items-center px-6 py-8">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-pakistan_green-900 to-dark_moss_green-600 rounded-lg flex items-center justify-center">
-                <Compass className="w-6 h-6 text-white" />
-              </div>
+              <BrandLogo />
               <div>
                 <h1 className="text-xl font-bold text-slate-900">cmoxpert</h1>
                 <p className="text-xs text-slate-500">AI Marketing Co-Pilot</p>
