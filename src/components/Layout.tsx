@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrandLogo } from './BrandLogo';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   LayoutDashboard, 

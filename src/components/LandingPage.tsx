@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { BrandLogo } from './BrandLogo';
 import { 
   Compass, 
   TrendingUp, 
@@ -350,9 +351,7 @@ export function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-pakistan_green-900 to-dark_moss_green-600 rounded-lg flex items-center justify-center">
-                <Compass className="w-6 h-6 text-white" />
-              </div>
+              <BrandLogo />
               <div>
                 <h1 className="text-xl font-bold text-slate-900">cmoxpert</h1>
                 <p className="text-xs text-slate-500">AI Marketing Co-Pilot</p>
@@ -913,9 +912,7 @@ export function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-br from-dark_moss_green-600 to-pakistan_green-600 rounded-lg flex items-center justify-center">
-                <Compass className="w-5 h-5 text-white" />
-              </div>
+              <BrandLogo size="sm" />
               <div>
                 <h3 className="text-lg font-bold text-white">cmoxpert</h3>
                 <p className="text-xs text-slate-400">AI Marketing Co-Pilot</p>

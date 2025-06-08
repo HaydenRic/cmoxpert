@@ -136,18 +136,50 @@ export function Admin() {
 
   const loadBrandSettings = async () => {
     try {
-      // Try to get stored brand settings from storage
-      const { data: logoData } = supabase.storage
+      // List all files in branding bucket to find logo and favicon
+      const { data: files, error } = await supabase.storage
         .from('branding')
-        .getPublicUrl('logo.png');
+        .list();
       
-      const { data: faviconData } = supabase.storage
-        .from('branding')
-        .getPublicUrl('favicon.ico');
+      if (error) {
+        console.error('Error listing branding files:', error);
+        return;
+      }
+      
+      let logoUrl = '';
+      let faviconUrl = '';
+      
+      if (files) {
+        // Find logo file
+        const logoFile = files.find(file => 
+          file.name.startsWith('logo.') && 
+          ['png', 'jpg', 'jpeg', 'svg'].includes(file.name.split('.').pop()?.toLowerCase() || '')
+        );
+        
+        // Find favicon file
+        const faviconFile = files.find(file => 
+          file.name.startsWith('favicon.') && 
+          ['ico', 'png', 'jpg', 'jpeg'].includes(file.name.split('.').pop()?.toLowerCase() || '')
+        );
+        
+        if (logoFile) {
+          const { data: logoData } = supabase.storage
+            .from('branding')
+            .getPublicUrl(logoFile.name);
+          logoUrl = logoData.publicUrl;
+        }
+        
+        if (faviconFile) {
+          const { data: faviconData } = supabase.storage
+            .from('branding')
+            .getPublicUrl(faviconFile.name);
+          faviconUrl = faviconData.publicUrl;
+        }
+      }
 
       setBrandSettings({
-        logoUrl: logoData.publicUrl,
-        faviconUrl: faviconData.publicUrl
+        logoUrl,
+        faviconUrl
       });
     } catch (error) {
       console.error('Error loading brand settings:', error);
@@ -224,7 +256,13 @@ export function Admin() {
       const uploadPromises = [];
 
       if (selectedLogo) {
-        const logoPath = 'logo.png';
+        // Delete existing logo first
+        await supabase.storage
+          .from('branding')
+          .remove(['logo.png', 'logo.jpg', 'logo.jpeg', 'logo.svg']);
+        
+        const fileExt = selectedLogo.name.split('.').pop();
+        const logoPath = `logo.${fileExt}`;
         uploadPromises.push(
           supabase.storage
             .from('branding')
@@ -233,7 +271,13 @@ export function Admin() {
       }
 
       if (selectedFavicon) {
-        const faviconPath = 'favicon.ico';
+        // Delete existing favicon first
+        await supabase.storage
+          .from('branding')
+          .remove(['favicon.ico', 'favicon.png', 'favicon.jpg']);
+        
+        const fileExt = selectedFavicon.name.split('.').pop();
+        const faviconPath = `favicon.${fileExt}`;
         uploadPromises.push(
           supabase.storage
             .from('branding')
@@ -241,18 +285,45 @@ export function Admin() {
         );
       }
 
-      await Promise.all(uploadPromises);
+      const results = await Promise.all(uploadPromises);
+      
+      // Check for upload errors
+      const errors = results.filter(result => result.error);
+      if (errors.length > 0) {
+        throw new Error(`Upload failed: ${errors.map(e => e.error.message).join(', ')}`);
+      }
 
       // Update favicon in the document head if uploaded
       if (selectedFavicon) {
+        const fileExt = selectedFavicon.name.split('.').pop();
         const { data } = supabase.storage
           .from('branding')
-          .getPublicUrl('favicon.ico');
+          .getPublicUrl(`favicon.${fileExt}`);
         
         const link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
         if (link) {
-          link.href = data.publicUrl;
+          link.href = `${data.publicUrl}?v=${Date.now()}`;
+        } else {
+          // Create favicon link if it doesn't exist
+          const newLink = document.createElement('link');
+          newLink.rel = 'icon';
+          newLink.href = `${data.publicUrl}?v=${Date.now()}`;
+          document.head.appendChild(newLink);
         }
+      }
+      
+      // Update logo in the document if uploaded
+      if (selectedLogo) {
+        const fileExt = selectedLogo.name.split('.').pop();
+        const { data } = supabase.storage
+          .from('branding')
+          .getPublicUrl(`logo.${fileExt}`);
+        
+        // Update all logo images on the page
+        const logoImages = document.querySelectorAll('[data-logo]');
+        logoImages.forEach((img: HTMLImageElement) => {
+          img.src = `${data.publicUrl}?v=${Date.now()}`;
+        });
       }
 
       // Reset form and reload settings
@@ -265,7 +336,7 @@ export function Admin() {
 
     } catch (error) {
       console.error('Error uploading brand assets:', error);
-      alert('Error uploading brand assets. Please try again.');
+      alert(`Error uploading brand assets: ${error.message}`);
     } finally {
       setUploadingBrand(false);
     }
@@ -554,7 +625,8 @@ export function Admin() {
                       <img 
                         src={brandSettings.logoUrl} 
                         alt="Logo" 
-                        className="max-w-full h-16 mx-auto object-contain"
+                        className="max-w-full h-16 mx-auto object-contain border border-slate-200 rounded bg-white p-2"
+                        data-logo
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                           e.currentTarget.nextElementSibling!.classList.remove('hidden');
@@ -566,6 +638,7 @@ export function Admin() {
                         </div>
                         <p className="text-sm text-slate-500 mt-2">No logo uploaded</p>
                       </div>
+                      <p className="text-xs text-slate-500 mt-2">Current logo</p>
                     </div>
                   ) : (
                     <div className="text-center">
@@ -587,7 +660,7 @@ export function Admin() {
                       <img 
                         src={brandSettings.faviconUrl} 
                         alt="Favicon" 
-                        className="w-8 h-8 mx-auto"
+                        className="w-8 h-8 mx-auto border border-slate-200 rounded bg-white p-1"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                           e.currentTarget.nextElementSibling!.classList.remove('hidden');
@@ -599,6 +672,7 @@ export function Admin() {
                         </div>
                         <p className="text-sm text-slate-500 mt-2">No favicon uploaded</p>
                       </div>
+                      <p className="text-xs text-slate-500 mt-2">Current favicon</p>
                     </div>
                   ) : (
                     <div className="text-center">
@@ -699,28 +773,42 @@ export function Admin() {
             <form onSubmit={handleBrandUpload} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Logo (PNG/SVG recommended)
+                  Logo (PNG, JPG, SVG recommended)
                 </label>
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image/png,image/jpeg,image/jpg,image/svg+xml"
                   onChange={(e) => setSelectedLogo(e.target.files?.[0] || null)}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-tiger_s_eye-500 focus:border-transparent"
                 />
-                <p className="text-xs text-slate-500 mt-1">Will replace the current logo in headers and navigation</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  Will replace the current logo. Recommended size: 200x50px or similar aspect ratio.
+                </p>
+                {selectedLogo && (
+                  <p className="text-xs text-pakistan_green-600 mt-1">
+                    Selected: {selectedLogo.name} ({(selectedLogo.size / 1024).toFixed(1)}KB)
+                  </p>
+                )}
               </div>
               
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Favicon (ICO/PNG, 32x32px recommended)
+                  Favicon (ICO, PNG recommended)
                 </label>
                 <input
                   type="file"
-                  accept="image/*"
+                  accept="image/x-icon,image/vnd.microsoft.icon,image/png,image/jpeg"
                   onChange={(e) => setSelectedFavicon(e.target.files?.[0] || null)}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-tiger_s_eye-500 focus:border-transparent"
                 />
-                <p className="text-xs text-slate-500 mt-1">Will update the browser tab icon</p>
+                <p className="text-xs text-slate-500 mt-1">
+                  Will update the browser tab icon. Recommended size: 32x32px or 16x16px.
+                </p>
+                {selectedFavicon && (
+                  <p className="text-xs text-pakistan_green-600 mt-1">
+                    Selected: {selectedFavicon.name} ({(selectedFavicon.size / 1024).toFixed(1)}KB)
+                  </p>
+                )}
               </div>
 
               <div className="flex space-x-3 pt-4">
