@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { BrandLogo } from '../components/BrandLogo';
 import { 
   ArrowLeft, 
   Mail, 
