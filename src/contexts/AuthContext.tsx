@@ -41,25 +41,37 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (error) {
         console.error('Error loading profile:', error);
+        setLoading(false);
         return;
       }
 
       console.log('Profile loaded:', data);
       setProfile(data);
+      setLoading(false);
     } catch (error) {
       console.error('Error loading profile:', error);
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
       console.log('Initial session:', session);
+      if (error) {
+        console.error('Error getting session:', error);
+        setLoading(false);
+        return;
+      }
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
         loadProfile(session.user.id);
+      } else {
+        setLoading(false);
       }
+    }).catch((error) => {
+      console.error('Session error:', error);
       setLoading(false);
     });
 
@@ -75,9 +87,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         await loadProfile(session.user.id);
       } else {
         setProfile(null);
+        setLoading(false);
       }
-      
-      setLoading(false);
     });
 
     return () => subscription.unsubscribe();
