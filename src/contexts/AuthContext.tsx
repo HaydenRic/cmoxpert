@@ -88,7 +88,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const signUp = async (email: string, password: string) => {
-    return await supabase.auth.signUp({ email, password });
+    const result = await supabase.auth.signUp({ 
+      email, 
+      password,
+      options: {
+        emailRedirectTo: undefined // Disable email confirmation for now
+      }
+    });
+    
+    // If signup is successful and we have a user, create their profile
+    if (result.data.user && !result.error) {
+      try {
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .insert([{
+            id: result.data.user.id,
+            email: result.data.user.email!,
+            role: 'user'
+          }]);
+        
+        if (profileError) {
+          console.error('Error creating profile:', profileError);
+        }
+      } catch (error) {
+        console.error('Error creating profile:', error);
+      }
+    }
+    
+    return result;
   };
 
   const signOut = async () => {
