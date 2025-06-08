@@ -13,12 +13,15 @@ import { Admin } from './pages/Admin';
 function AppContent() {
   const { user, loading } = useAuth();
 
+  console.log('App state:', { user: !!user, loading });
+
   if (loading) {
     return (
       <div className="min-h-screen bg-cornsilk-500 flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-dark_moss_green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-pakistan_green-600">Loading cmoxpert...</p>
+          <p className="text-xs text-slate-500 mt-2">Checking authentication status...</p>
         </div>
       </div>
     );

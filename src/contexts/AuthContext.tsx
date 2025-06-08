@@ -32,6 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const loadProfile = async (userId: string) => {
     try {
+      console.log('Loading profile for user:', userId);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -43,6 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         return;
       }
 
+      console.log('Profile loaded:', data);
       setProfile(data);
     } catch (error) {
       console.error('Error loading profile:', error);
@@ -52,6 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('Initial session:', session);
       setSession(session);
       setUser(session?.user ?? null);
       if (session?.user) {
@@ -64,6 +67,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      console.log('Auth state change:', _event, session);
       setSession(session);
       setUser(session?.user ?? null);
       
