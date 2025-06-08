@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       // Add a timeout to prevent hanging
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error('Profile loading timeout')), 10000);
+        setTimeout(() => reject(new Error('Profile loading timeout')), 30000);
       });
 
       const profilePromise = supabase
@@ -95,7 +95,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Get initial session with timeout
         const sessionPromise = supabase.auth.getSession();
         const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error('Session timeout')), 10000);
+          setTimeout(() => reject(new Error('Session timeout')), 30000);
         });
 
         const { data: { session }, error } = await Promise.race([sessionPromise, timeoutPromise]) as any;
