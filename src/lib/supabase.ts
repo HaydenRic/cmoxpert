@@ -11,23 +11,54 @@ console.log('Supabase config:', {
 });
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables');
+  console.error('Missing Supabase environment variables');
+  throw new Error('Missing Supabase environment variables. Please check your .env file.');
 }
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: false
+    detectSessionInUrl: false,
+    flowType: 'pkce'
+  },
+  global: {
+    headers: {
+      'X-Client-Info': 'cmoxpert-web'
+    }
   }
 });
 
-// Test the connection
-supabase.auth.getSession().then(({ data, error }) => {
-  console.log('Supabase connection test:', { data: !!data, error });
-}).catch((err) => {
-  console.error('Supabase connection failed:', err);
-});
+// Test the connection with better error handling
+const testConnection = async () => {
+  try {
+    console.log('Testing Supabase connection...');
+    const { data, error } = await supabase.auth.getSession();
+    
+    if (error) {
+      console.error('Supabase connection error:', error);
+    } else {
+      console.log('Supabase connection successful:', { hasSession: !!data.session });
+    }
+
+    // Test database connection
+    const { data: testData, error: dbError } = await supabase
+      .from('profiles')
+      .select('count')
+      .limit(1);
+    
+    if (dbError) {
+      console.error('Database connection error:', dbError);
+    } else {
+      console.log('Database connection successful');
+    }
+  } catch (err) {
+    console.error('Connection test failed:', err);
+  }
+};
+
+// Run connection test
+testConnection();
 
 export type Database = {
   public: {
@@ -238,30 +269,40 @@ export class AIServicesManager {
     domain: string;
     industry?: string;
   }) {
-    const response = await fetch(`${this.EDGE_FUNCTION_URL}/generate-market-analysis`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${supabaseAnonKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(payload)
-    });
-    
-    if (!response.ok) {
-      throw new Error(`AI Analysis failed: ${response.statusText}`);
+    try {
+      const response = await fetch(`${this.EDGE_FUNCTION_URL}/generate-market-analysis`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`AI Analysis failed: ${response.statusText}`);
+      }
+      
+      return response.json();
+    } catch (error) {
+      console.error('AI Services error:', error);
+      throw error;
     }
-    
-    return response.json();
   }
   
   static async getAnalysisStatus(reportId: string) {
-    const { data, error } = await supabase
-      .from('reports')
-      .select('status, ai_analysis, semrush_data, trends_data')
-      .eq('id', reportId)
-      .single();
-    
-    if (error) throw error;
-    return data;
+    try {
+      const { data, error } = await supabase
+        .from('reports')
+        .select('status, ai_analysis, semrush_data, trends_data')
+        .eq('id', reportId)
+        .single();
+      
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Get analysis status error:', error);
+      throw error;
+    }
   }
 }
