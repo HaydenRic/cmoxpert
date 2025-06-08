@@ -393,7 +393,7 @@ export function LandingPage() {
               </h1>
               
               <p className="text-xl text-white mb-8 leading-relaxed">
-                <strong className="text-white">You get me, and only me.</strong> <span className="text-cornsilk-200">No junior account managers, no diluted communication, no bait-and-switch. Just direct access to expert-level marketing intelligence powered by AI, delivered with radical transparency.</span>
+                <strong className="text-white">You get me, and only me.</strong> <span style={{ color: '#283618' }}>No junior account managers, no diluted communication, no bait-and-switch. Just direct access to expert-level marketing intelligence powered by AI, delivered with radical transparency.</span>
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
