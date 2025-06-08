@@ -290,6 +290,33 @@ export class AIServicesManager {
     }
   }
   
+  static async generatePlaybook(payload: {
+    clientId: string;
+    userId: string;
+    playbookType?: string;
+    reportId?: string;
+  }) {
+    try {
+      const response = await fetch(`${this.EDGE_FUNCTION_URL}/generate-playbook`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${supabaseAnonKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+      
+      if (!response.ok) {
+        throw new Error(`AI Playbook generation failed: ${response.statusText}`);
+      }
+      
+      return response.json();
+    } catch (error) {
+      console.error('AI Playbook generation error:', error);
+      throw error;
+    }
+  }
+  
   static async getAnalysisStatus(reportId: string) {
     try {
       const { data, error } = await supabase
