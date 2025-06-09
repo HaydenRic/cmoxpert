@@ -26,3 +26,5 @@ export const SplineScene = memo(function SplineScene({ scene, className }: Splin
       />
     </Suspense>
   )
+}
+)
