@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-import { SplineSceneBasic } from '../components/ui/spline-demo';
 import { 
   TrendingUp, 
   Users, 
@@ -14,6 +13,11 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
+
+// Lazy load the Spline component for better performance
+const SplineSceneBasic = React.lazy(() => 
+  import('../components/ui/spline-demo').then(module => ({ default: module.SplineSceneBasic }))
+);
 
 interface DashboardStats {
   totalClients: number;
@@ -181,7 +185,18 @@ export function Dashboard() {
             </h2>
             <p className="text-slate-600 text-sm">Interactive 3D visualization of your marketing data and insights</p>
           </div>
-          <SplineSceneBasic />
+          <React.Suspense 
+            fallback={
+              <div className="w-full h-[500px] bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl flex items-center justify-center">
+                <div className="text-center">
+                  <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                  <span className="text-white text-sm">Loading 3D Scene...</span>
+                </div>
+              </div>
+            }
+          >
+            <SplineSceneBasic />
+          </React.Suspense>
         </div>
 
         {/* Recent Activity */}
