@@ -18,7 +18,8 @@ import {
   UserCheck,
   Timer,
   Eye,
-  PoundSterling
+  PoundSterling,
+  Zap
 } from 'lucide-react';
 
 export function Contact() {
@@ -77,7 +78,7 @@ export function Contact() {
 
   const services = [
     {
-      icon: Target,
+      icon: Zap,
       title: "Strategic Planning",
       description: "Comprehensive marketing strategy and roadmap development with transparent sprint-based delivery"
     },
@@ -87,7 +88,7 @@ export function Contact() {
       description: "Revenue growth acceleration and funnel optimization with documented processes and clear metrics"
     },
     {
-      icon: Building,
+      icon: Target,
       title: "Team Leadership",
       description: "Marketing team guidance and capability building with 'look over my shoulder' transparency"
     }
@@ -234,7 +235,7 @@ export function Contact() {
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-earth_yellow-600">65%</div>
-                    <div className="text-slate-600">Lead quality increase</div>
+                    <div className="text-slate-600">Conversion rate increase</div>
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-earth_yellow-600">40%</div>
