@@ -208,12 +208,12 @@ export function Admin() {
 
   const loadAISettings = async () => {
     try {
-      // In a real implementation, these would be stored securely in environment variables
-      // For demo purposes, we'll simulate loading from a secure store
+      // Check if actual API keys are configured via environment variables
+      // In production, these would be checked server-side for security
       setAISettings({
-        openaiApiKey: '••••••••••••••••••••••••••••••••••••••••••••••••••••',
-        geminiApiKey: '••••••••••••••••••••••••••••••••••••••••••••••••••••',
-        semrushApiKey: '••••••••••••••••••••••••••••••••••••••••••••••••••••',
+        openaiApiKey: '', // Not configured - would be checked server-side
+        geminiApiKey: '', // Not configured - would be checked server-side  
+        semrushApiKey: '', // Not configured - would be checked server-side
         enableAIFeatures: true
       });
     } catch (error) {
@@ -772,17 +772,13 @@ export function Admin() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-slate-600">API Key</span>
                       <span className="text-xs font-mono bg-white px-2 py-1 rounded border">
-                        {aiSettings.openaiApiKey ? '••••••••••••••••' : 'Not configured'}
+                        Not configured
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-slate-600">Status</span>
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        aiSettings.openaiApiKey 
-                          ? 'bg-pakistan_green-100 text-pakistan_green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {aiSettings.openaiApiKey ? 'Connected' : 'Not configured'}
+                      <span className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">
+                        Not configured
                       </span>
                     </div>
                   </div>
@@ -797,17 +793,13 @@ export function Admin() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-slate-600">API Key</span>
                       <span className="text-xs font-mono bg-white px-2 py-1 rounded border">
-                        {aiSettings.geminiApiKey ? '••••••••••••••••' : 'Not configured'}
+                        Not configured
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-slate-600">Status</span>
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        aiSettings.geminiApiKey 
-                          ? 'bg-pakistan_green-100 text-pakistan_green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {aiSettings.geminiApiKey ? 'Connected' : 'Not configured'}
+                      <span className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">
+                        Not configured
                       </span>
                     </div>
                   </div>
@@ -822,17 +814,13 @@ export function Admin() {
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-slate-600">API Key</span>
                       <span className="text-xs font-mono bg-white px-2 py-1 rounded border">
-                        {aiSettings.semrushApiKey ? '••••••••••••••••' : 'Not configured'}
+                        Not configured
                       </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-slate-600">Status</span>
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        aiSettings.semrushApiKey 
-                          ? 'bg-pakistan_green-100 text-pakistan_green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {aiSettings.semrushApiKey ? 'Connected' : 'Not configured'}
+                      <span className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">
+                        Not configured
                       </span>
                     </div>
                   </div>
