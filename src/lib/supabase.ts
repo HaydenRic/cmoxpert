@@ -20,11 +20,20 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,
-    flowType: 'pkce'
+    flowType: 'pkce',
+    debug: false
   },
   global: {
     headers: {
       'X-Client-Info': 'cmoxpert-web'
+    }
+  },
+  db: {
+    schema: 'public'
+  },
+  realtime: {
+    params: {
+      eventsPerSecond: 2
     }
   }
 });
@@ -32,28 +41,33 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
 // Test the connection with better error handling
 const testConnection = async () => {
   try {
-    console.log('Testing Supabase connection...');
-    const { data, error } = await supabase.auth.getSession();
+    // Only test connection in development
+    if (import.meta.env.DEV) {
+      console.log('Testing Supabase connection...');
+      const { data, error } = await supabase.auth.getSession();
     
-    if (error) {
-      console.error('Supabase connection error:', error);
-    } else {
-      console.log('Supabase connection successful:', { hasSession: !!data.session });
-    }
+      if (error) {
+        console.error('Supabase connection error:', error);
+      } else {
+        console.log('Supabase connection successful:', { hasSession: !!data.session });
+      }
 
-    // Test database connection
-    const { data: testData, error: dbError } = await supabase
-      .from('profiles')
-      .select('count')
-      .limit(1);
+      // Test database connection
+      const { data: testData, error: dbError } = await supabase
+        .from('profiles')
+        .select('count')
+        .limit(1);
     
-    if (dbError) {
-      console.error('Database connection error:', dbError);
-    } else {
-      console.log('Database connection successful');
+      if (dbError) {
+        console.error('Database connection error:', dbError);
+      } else {
+        console.log('Database connection successful');
+      }
     }
   } catch (err) {
-    console.error('Connection test failed:', err);
+    if (import.meta.env.DEV) {
+      console.error('Connection test failed:', err);
+    }
   }
 };
 

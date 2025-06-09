@@ -1,14 +1,14 @@
 'use client'
 
-import { Suspense, lazy } from 'react'
-const Spline = lazy(() => import('@splinetool/react-spline'))
+import { Suspense, lazy, memo } from 'react'
+const Spline = lazy(() => import('@splinetool/react-spline').then(module => ({ default: module.default })))
 
 interface SplineSceneProps {
   scene: string
   className?: string
 }
 
-export function SplineScene({ scene, className }: SplineSceneProps) {
+export const SplineScene = memo(function SplineScene({ scene, className }: SplineSceneProps) {
   return (
     <Suspense 
       fallback={
@@ -26,4 +26,3 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
       />
     </Suspense>
   )
-}

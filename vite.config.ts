@@ -12,5 +12,25 @@ export default defineConfig({
   },
   optimizeDeps: {
     exclude: ['lucide-react'],
+    include: ['@supabase/supabase-js']
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          supabase: ['@supabase/supabase-js'],
+          ui: ['lucide-react', 'framer-motion'],
+          charts: ['recharts'],
+          spline: ['@splinetool/react-spline', '@splinetool/runtime']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000
+  },
+  server: {
+    hmr: {
+      overlay: false
+    }
+  }
 });
