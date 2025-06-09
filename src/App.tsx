@@ -14,11 +14,11 @@ const Playbooks = lazy(() => import('./pages/Playbooks').then(module => ({ defau
 const Admin = lazy(() => import('./pages/Admin').then(module => ({ default: module.Admin })));
 
 // Lazy load placeholder pages
-const Reports = lazy(() => import('./components/PlaceholderPages').then(module => ({ default: module.Reports })));
-const Settings = lazy(() => import('./components/PlaceholderPages').then(module => ({ default: module.Settings })));
-const Privacy = lazy(() => import('./components/PlaceholderPages').then(module => ({ default: module.Privacy })));
-const Terms = lazy(() => import('./components/PlaceholderPages').then(module => ({ default: module.Terms })));
-const Support = lazy(() => import('./components/PlaceholderPages').then(module => ({ default: module.Support })));
+const Reports = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Reports })));
+const Settings = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Settings })));
+const Privacy = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Privacy })));
+const Terms = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Terms })));
+const Support = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Support })));
 
 // Loading fallback component
 const PageLoadingFallback = () => (
