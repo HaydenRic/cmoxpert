@@ -21,7 +21,8 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
     persistSession: true,
     detectSessionInUrl: false,
     flowType: 'pkce',
-    debug: false
+    debug: false,
+    storageKey: 'cmoxpert-auth'
   },
   global: {
     headers: {
@@ -38,41 +39,24 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   }
 });
 
-// Test the connection with better error handling
-const testConnection = async () => {
-  try {
-    // Only test connection in development
-    if (import.meta.env.DEV) {
+// Only test connection in development and don't block startup
+if (import.meta.env.DEV) {
+  // Non-blocking connection test
+  setTimeout(async () => {
+    try {
       console.log('Testing Supabase connection...');
       const { data, error } = await supabase.auth.getSession();
-    
+      
       if (error) {
         console.error('Supabase connection error:', error);
       } else {
         console.log('Supabase connection successful:', { hasSession: !!data.session });
       }
-
-      // Test database connection
-      const { data: testData, error: dbError } = await supabase
-        .from('profiles')
-        .select('count')
-        .limit(1);
-    
-      if (dbError) {
-        console.error('Database connection error:', dbError);
-      } else {
-        console.log('Database connection successful');
-      }
-    }
-  } catch (err) {
-    if (import.meta.env.DEV) {
+    } catch (err) {
       console.error('Connection test failed:', err);
     }
-  }
-};
-
-// Run connection test
-testConnection();
+  }, 1000);
+}
 
 export type Database = {
   public: {

@@ -31,7 +31,7 @@ const PageLoadingFallback = () => (
 );
 
 function AppContent() {
-  const { user, loading } = useAuth();
+  const { user, loading, error, skipLoading } = useAuth();
 
   console.log('App state:', { 
     user: !!user, 
@@ -47,12 +47,25 @@ function AppContent() {
           <div className="w-12 h-12 border-4 border-dark_moss_green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-pakistan_green-600">Loading cmoxpert...</p>
           <p className="text-xs text-slate-500 mt-2">Checking authentication status...</p>
-          <button 
-            onClick={() => window.location.reload()} 
-            className="mt-4 text-xs text-slate-400 hover:text-slate-600 underline"
-          >
-            Reload if stuck
-          </button>
+          {error && (
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-700 text-sm">{error}</p>
+            </div>
+          )}
+          <div className="mt-4 space-x-2">
+            <button 
+              onClick={() => window.location.reload()} 
+              className="text-xs text-slate-400 hover:text-slate-600 underline"
+            >
+              Reload page
+            </button>
+            <button 
+              onClick={skipLoading} 
+              className="text-xs text-slate-400 hover:text-slate-600 underline"
+            >
+              Continue anyway
+            </button>
+          </div>
         </div>
       </div>
     );

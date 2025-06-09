@@ -22,6 +22,7 @@ interface AuthContextType {
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
   clearError: () => void;
+  skipLoading: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,139 +35,167 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   const clearError = () => setError(null);
-
-  const createTimeoutPromise = (ms: number, operation: string) => {
-    return new Promise((_, reject) => {
-      const timeoutId = setTimeout(() => reject(new Error(`${operation} timeout after ${ms}ms`)), ms);
-      return () => clearTimeout(timeoutId);
-    });
-  };
+  const skipLoading = () => setLoading(false);
 
   const loadProfile = async (userId: string, retryCount = 0) => {
     try {
       console.log('Loading profile for user:', userId, retryCount > 0 ? `(retry ${retryCount})` : '');
       
-      const profilePromise = supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
+      // Use AbortController for better timeout handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+      
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', userId)
+          .abortSignal(controller.signal)
+          .single();
 
-      // Increased timeout for better reliability
-      const timeoutPromise = createTimeoutPromise(40000, 'Profile loading');
+        clearTimeout(timeoutId);
 
-      const { data, error } = await Promise.race([profilePromise, timeoutPromise]) as any;
-
-      if (error) {
-        console.error('Error loading profile:', error);
-        
-        // If it's a timeout and we haven't retried yet, try once more
-        if (error.message?.includes('timeout') && retryCount === 0) {
-          console.log('Retrying profile load...');
-          return await loadProfile(userId, 1);
-        }
-        
-        // If profile doesn't exist, create it
-        if (error.code === 'PGRST116' || error.message?.includes('No rows')) {
-          console.log('Profile not found, creating new profile...');
+        if (error) {
+          console.error('Error loading profile:', error);
           
-          const createPromise = supabase
-            .from('profiles')
-            .insert([{
-              id: userId,
-              email: user?.email || '',
-              role: 'user'
-            }])
-            .select()
-            .single();
+          // If profile doesn't exist, create it
+          if (error.code === 'PGRST116' || error.message?.includes('No rows')) {
+            console.log('Profile not found, creating new profile...');
+            
+            const createController = new AbortController();
+            const createTimeoutId = setTimeout(() => createController.abort(), 15000);
+            
+            try {
+              const { data: newProfile, error: createError } = await supabase
+                .from('profiles')
+                .insert([{
+                  id: userId,
+                  email: user?.email || '',
+                  role: 'user'
+                }])
+                .select()
+                .abortSignal(createController.signal)
+                .single();
 
-          const createTimeoutPromise = createTimeoutPromise(120000, 'Profile creation');
+              clearTimeout(createTimeoutId);
 
-          try {
-            const { data: newProfile, error: createError } = await Promise.race([createPromise, createTimeoutPromise]) as any;
+              if (createError) {
+                console.error('Error creating profile:', createError);
+                setError('Failed to create user profile. Please try refreshing the page.');
+                return;
+              }
 
-            if (createError) {
-              console.error('Error creating profile:', createError);
-              setError('Failed to create user profile. Please try refreshing the page.');
+              console.log('Profile created:', newProfile);
+              setProfile(newProfile);
+              setError(null);
+              return;
+            } catch (createErr) {
+              clearTimeout(createTimeoutId);
+              console.error('Profile creation failed:', createErr);
+              setError('Failed to create profile. Please try again.');
               return;
             }
-
-            console.log('Profile created:', newProfile);
-            setProfile(newProfile);
-            setError(null);
-            return;
-          } catch (createErr) {
-            console.error('Profile creation timeout:', createErr);
-            setError('Connection timeout while creating profile. Please check your internet connection.');
+          }
+          
+          // For other errors, retry once
+          if (retryCount === 0) {
+            console.log('Retrying profile load...');
+            setTimeout(() => loadProfile(userId, 1), 2000);
             return;
           }
-        }
-        
-        // Handle other errors
-        if (error.message?.includes('timeout')) {
-          setError('Connection timeout. Please check your internet connection and try again.');
-        } else {
+          
           setError('Failed to load user profile. Please try refreshing the page.');
+          return;
         }
-        return;
-      }
 
-      console.log('Profile loaded:', data);
-      setProfile(data);
-      setError(null);
+        console.log('Profile loaded:', data);
+        setProfile(data);
+        setError(null);
+      } catch (err: any) {
+        clearTimeout(timeoutId);
+        if (err.name === 'AbortError') {
+          console.error('Profile loading timeout');
+          if (retryCount === 0) {
+            console.log('Retrying after timeout...');
+            setTimeout(() => loadProfile(userId, 1), 2000);
+            return;
+          }
+          setError('Connection timeout. Please check your internet connection.');
+        } else {
+          console.error('Profile loading error:', err);
+          setError('Failed to load profile. Please try again.');
+        }
+      }
     } catch (error: any) {
       console.error('Error in loadProfile:', error);
-      if (error.message?.includes('timeout')) {
-        setError('Connection timeout. Please check your internet connection.');
-      } else {
-        setError('An unexpected error occurred while loading your profile.');
-      }
+      setError('An unexpected error occurred while loading your profile.');
     }
   };
 
   useEffect(() => {
     let mounted = true;
+    let initTimeout: NodeJS.Timeout;
 
     const initializeAuth = async () => {
       try {
         console.log('Initializing auth...');
         
-        // Increased timeout for better reliability
-        const sessionPromise = supabase.auth.getSession();
-        const timeoutPromise = createTimeoutPromise(30000, 'Session initialization');
-
-        const { data: { session }, error } = await Promise.race([sessionPromise, timeoutPromise]) as any;
-        
-        if (!mounted) return;
-
-        console.log('Initial session:', session);
-        if (error) {
-          console.error('Error getting session:', error);
-          if (error.message?.includes('timeout')) {
-            setError('Connection timeout during authentication. Please check your internet connection.');
-          } else {
-            setError('Authentication error. Please try refreshing the page.');
+        // Set a maximum initialization time
+        initTimeout = setTimeout(() => {
+          if (mounted) {
+            console.warn('Auth initialization taking too long, proceeding without session');
+            setLoading(false);
+            setError('Connection timeout. You can still use the app, but some features may be limited.');
           }
-          setLoading(false);
-          return;
-        }
+        }, 15000);
 
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          await loadProfile(session.user.id);
-        }
-        
-        setLoading(false);
-      } catch (error: any) {
-        console.error('Session initialization error:', error);
-        if (mounted) {
-          if (error.message?.includes('timeout')) {
-            setError('Connection timeout during startup. Please check your internet connection.');
+        // Use AbortController for session initialization
+        const controller = new AbortController();
+        const sessionTimeout = setTimeout(() => controller.abort(), 10000);
+
+        try {
+          const { data: { session }, error } = await supabase.auth.getSession();
+          
+          clearTimeout(sessionTimeout);
+          clearTimeout(initTimeout);
+          
+          if (!mounted) return;
+
+          console.log('Initial session:', session);
+          if (error) {
+            console.error('Error getting session:', error);
+            setError('Authentication error. Please try refreshing the page.');
+            setLoading(false);
+            return;
+          }
+
+          setSession(session);
+          setUser(session?.user ?? null);
+          
+          if (session?.user) {
+            await loadProfile(session.user.id);
+          }
+          
+          setLoading(false);
+        } catch (err: any) {
+          clearTimeout(sessionTimeout);
+          clearTimeout(initTimeout);
+          
+          if (!mounted) return;
+          
+          if (err.name === 'AbortError') {
+            console.error('Session initialization timeout');
+            setError('Connection timeout. Please check your internet connection.');
           } else {
+            console.error('Session initialization error:', err);
             setError('Failed to initialize authentication. Please refresh the page.');
           }
+          setLoading(false);
+        }
+      } catch (error: any) {
+        console.error('Auth initialization error:', error);
+        if (mounted) {
+          setError('Failed to initialize authentication. Please refresh the page.');
           setLoading(false);
         }
       }
@@ -196,6 +225,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     return () => {
       mounted = false;
+      if (initTimeout) clearTimeout(initTimeout);
       subscription.unsubscribe();
     };
   }, []);
@@ -203,73 +233,112 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signIn = async (email: string, password: string) => {
     try {
       setError(null);
-      const result = await supabase.auth.signInWithPassword({ email, password });
-      console.log('Sign in result:', result);
+      setLoading(true);
       
-      if (result.error) {
-        setError(result.error.message);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout for sign in
+      
+      try {
+        const result = await supabase.auth.signInWithPassword({ 
+          email, 
+          password 
+        });
+        
+        clearTimeout(timeoutId);
+        console.log('Sign in result:', result);
+        
+        if (result.error) {
+          setError(result.error.message);
+        }
+        
+        return result;
+      } catch (err: any) {
+        clearTimeout(timeoutId);
+        if (err.name === 'AbortError') {
+          const errorMessage = 'Sign in timeout. Please check your connection and try again.';
+          setError(errorMessage);
+          return { error: { message: errorMessage } };
+        }
+        throw err;
       }
-      
-      return result;
     } catch (error: any) {
       console.error('Sign in error:', error);
       const errorMessage = error.message || 'An error occurred during sign in';
       setError(errorMessage);
       return { error: { message: errorMessage } };
+    } finally {
+      setLoading(false);
     }
   };
 
   const signUp = async (email: string, password: string) => {
     try {
       setError(null);
-      const result = await supabase.auth.signUp({ 
-        email, 
-        password,
-        options: {
-          emailRedirectTo: undefined // Disable email confirmation for now
-        }
-      });
+      setLoading(true);
       
-      console.log('Sign up result:', result);
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
       
-      if (result.error) {
-        setError(result.error.message);
-        return result;
-      }
-      
-      // If signup is successful and we have a user, the trigger should create their profile
-      // But let's add a fallback just in case
-      if (result.data.user) {
-        setTimeout(async () => {
-          try {
-            const { data: existingProfile } = await supabase
-              .from('profiles')
-              .select('*')
-              .eq('id', result.data.user!.id)
-              .single();
-
-            if (!existingProfile) {
-              console.log('Creating profile manually...');
-              await supabase
-                .from('profiles')
-                .insert([{
-                  id: result.data.user!.id,
-                  email: result.data.user!.email!,
-                  role: 'user'
-                }]);
-            }
-          } catch (error) {
-            console.error('Error ensuring profile exists:', error);
+      try {
+        const result = await supabase.auth.signUp({ 
+          email, 
+          password,
+          options: {
+            emailRedirectTo: undefined // Disable email confirmation for now
           }
-        }, 1000);
+        });
+        
+        clearTimeout(timeoutId);
+        console.log('Sign up result:', result);
+        
+        if (result.error) {
+          setError(result.error.message);
+          return result;
+        }
+        
+        // If signup is successful and we have a user, the trigger should create their profile
+        if (result.data.user) {
+          setTimeout(async () => {
+            try {
+              const { data: existingProfile } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', result.data.user!.id)
+                .single();
+
+              if (!existingProfile) {
+                console.log('Creating profile manually...');
+                await supabase
+                  .from('profiles')
+                  .insert([{
+                    id: result.data.user!.id,
+                    email: result.data.user!.email!,
+                    role: 'user'
+                  }]);
+              }
+            } catch (error) {
+              console.error('Error ensuring profile exists:', error);
+            }
+          }, 1000);
+        }
+        
+        return result;
+      } catch (err: any) {
+        clearTimeout(timeoutId);
+        if (err.name === 'AbortError') {
+          const errorMessage = 'Sign up timeout. Please check your connection and try again.';
+          setError(errorMessage);
+          return { error: { message: errorMessage } };
+        }
+        throw err;
       }
-      
-      return result;
     } catch (error: any) {
       console.error('Sign up error:', error);
       const errorMessage = error.message || 'An error occurred during sign up';
       setError(errorMessage);
       return { error: { message: errorMessage } };
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -303,6 +372,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signOut,
     refreshProfile,
     clearError,
+    skipLoading,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
