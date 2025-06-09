@@ -65,7 +65,7 @@ function AppContent() {
         <Route 
           path="/" 
           element={
-            user ? <Navigate to="/dashboard" replace /> : <LandingPage />
+            user ? <Navigate to="/dashboard\" replace /> : <LandingPage />
           } 
         />
         
@@ -76,7 +76,7 @@ function AppContent() {
         <Route 
           path="/auth" 
           element={
-            user ? <Navigate to="/dashboard" replace /> : <AuthForm />
+            user ? <Navigate to="/dashboard\" replace /> : <AuthForm />
           } 
         />
         
@@ -213,7 +213,7 @@ function AppContent() {
         />
         
         {/* Fallback routes */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/\" replace />} />
       </Routes>
     </Suspense>
   );
