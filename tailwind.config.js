@@ -3,6 +3,11 @@ export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        'heading': ['Archivo', 'sans-serif'],
+        'body': ['Assistant', 'sans-serif'],
+        'sans': ['Assistant', 'sans-serif'],
+      },
       animation: {
         spotlight: "spotlight 2s ease .75s 1 forwards",
       },
