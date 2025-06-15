@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { trackVideoPlay, trackEvent } from './Analytics';
 import { BrandLogo } from './BrandLogo';
 import { 
   Compass, 
@@ -92,11 +93,26 @@ export function LandingPage() {
     }
   };
 
+  const handleVideoPlay = () => {
+    if (featuredVideo) {
+      trackVideoView(featuredVideo.id);
+      trackVideoPlay(featuredVideo.title, featuredVideo.id);
+    }
+  };
+
   const handleGetStarted = () => {
+    trackEvent('cta_click', {
+      cta_location: 'hero',
+      cta_text: 'Get Started'
+    });
     navigate('/auth');
   };
 
   const handleContactCMO = () => {
+    trackEvent('cta_click', {
+      cta_location: 'hero',
+      cta_text: 'Fractional CMO'
+    });
     navigate('/contact');
   };
 
@@ -104,12 +120,6 @@ export function LandingPage() {
     e.preventDefault();
     console.log('Email submitted:', email);
     navigate('/auth');
-  };
-
-  const handleVideoPlay = () => {
-    if (featuredVideo) {
-      trackVideoView(featuredVideo.id);
-    }
   };
 
   const features = [
@@ -642,293 +652,4 @@ export function LandingPage() {
                 <div className="text-sm text-cornsilk-200">Complete GTM Package</div>
               </div>
               <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl font-bold">8 weeks</div>
-                <div className="text-sm text-cornsilk-200">Strategy to execution</div>
-              </div>
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl font-bold">4 phases</div>
-                <div className="text-sm text-cornsilk-200">Systematic approach</div>
-              </div>
-            </div>
-
-            <button
-              onClick={handleContactCMO}
-              className="bg-white text-tiger_s_eye-600 hover:bg-tiger_s_eye-50 px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all inline-flex items-center space-x-2"
-            >
-              <Rocket className="w-5 h-5" />
-              <span>Start Your GTM Strategy</span>
-            </button>
-            
-            <p className="text-xs text-cornsilk-200 mt-4">
-              Includes: Market analysis, competitive positioning, messaging framework, launch plan, and first 90 days of execution support
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 bg-cornsilk-500">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
-              AI That Thinks Like Your Best Strategist
-            </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Every feature is designed to give B2B SaaS companies the strategic intelligence they need to outmaneuver competition and capture market opportunities.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="bg-white rounded-xl p-8 shadow-lg hover:shadow-xl transition-all border border-slate-200 group">
-                <div className={`w-12 h-12 ${feature.color} rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
-                  <feature.icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900 mb-3">{feature.title}</h3>
-                <p className="text-slate-600 leading-relaxed">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Demo Section */}
-      <section id="demo-video" className="py-20 bg-gradient-to-br from-pakistan_green-900 via-dark_moss_green-800 to-dark_moss_green-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              See cmoxpert In Action
-            </h2>
-            <p className="text-xl text-cornsilk-200 max-w-2xl mx-auto">
-              Watch how leading B2B SaaS companies use our AI to identify opportunities and execute winning strategies.
-            </p>
-            {featuredVideo && (
-              <p className="text-sm text-cornsilk-300 mt-2">
-                {featuredVideo.views_count} views
-              </p>
-            )}
-          </div>
-          
-          <div className="relative max-w-4xl mx-auto">
-            <div className="rounded-2xl shadow-2xl aspect-video overflow-hidden">
-              {featuredVideo ? (
-                <video
-                  src={featuredVideo.url}
-                  title={featuredVideo.title}
-                  className="w-full h-full object-cover"
-                  controls
-                  onPlay={handleVideoPlay}
-                  poster="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800&h=450&fit=crop"
-                >
-                  Your browser does not support the video tag.
-                </video>
-              ) : (
-                <div className="w-full h-full bg-slate-800 flex items-center justify-center">
-                  <div className="text-center">
-                    <Play className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-                    <p className="text-slate-300">Demo video coming soon</p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Micro-Niche ICP Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 bg-dark_moss_green-100 text-dark_moss_green-900 rounded-full text-sm font-medium mb-6">
-              <Target className="w-4 h-4 mr-2" />
-              Micro-Niche Specialization
-            </div>
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
-              Who Benefits from cmoxpert?
-            </h2>
-            <p className="text-xl text-slate-600 max-w-4xl mx-auto mb-8">
-              We specialize in micro-niches within B2B SaaS, targeting specific segments where generalist agencies struggle and specialized expertise creates massive competitive advantages. Each niche gets tailored strategies based on deep industry understanding.
-            </p>
-          </div>
-
-          {/* Micro-Niche Benefits */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-            {microNicheBenefits.map((benefit, index) => (
-              <div key={index} className="bg-gradient-to-br from-cornsilk-50 to-earth_yellow-50 rounded-xl p-6 border border-earth_yellow-100">
-                <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center mb-4">
-                  <benefit.icon className="w-6 h-6 text-earth_yellow-600" />
-                </div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-2">{benefit.title}</h3>
-                <p className="text-slate-600 text-sm">{benefit.description}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Target ICPs Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {targetICPs.map((icp, index) => (
-              <div key={index} className="bg-white rounded-xl p-8 shadow-lg border border-slate-200 hover:shadow-xl transition-all group">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="w-12 h-12 bg-gradient-to-br from-dark_moss_green-100 to-pakistan_green-100 rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <icp.icon className="w-6 h-6 text-dark_moss_green-600" />
-                  </div>
-                  <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-full">
-                    {icp.companies}
-                  </span>
-                </div>
-                
-                <div className="mb-4">
-                  <div className="text-sm text-dark_moss_green-600 font-medium mb-1">{icp.category}</div>
-                  <h3 className="text-xl font-semibold text-slate-900 mb-3">{icp.title}</h3>
-                  <p className="text-slate-600 text-sm mb-4 leading-relaxed">{icp.description}</p>
-                </div>
-
-                <div className="mb-4">
-                  <h4 className="text-sm font-medium text-slate-900 mb-2">Key Challenges:</h4>
-                  <ul className="space-y-1">
-                    {icp.challenges.map((challenge, idx) => (
-                      <li key={idx} className="text-xs text-slate-600 flex items-start">
-                        <AlertCircle className="w-3 h-3 text-earth_yellow-500 mr-2 mt-0.5 flex-shrink-0" />
-                        {challenge}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="pt-4 border-t border-slate-100">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="text-lg font-bold text-pakistan_green-600">{icp.opportunity}</div>
-                      <div className="text-xs text-slate-500">Revenue potential</div>
-                    </div>
-                    <div className="w-8 h-8 bg-gradient-to-br from-pakistan_green-100 to-dark_moss_green-100 rounded-full flex items-center justify-center">
-                      <TrendingUp className="w-4 h-4 text-pakistan_green-600" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Why Micro-Niche CTA */}
-          <div className="mt-16 bg-gradient-to-r from-dark_moss_green-50 to-pakistan_green-50 rounded-2xl p-8 border border-dark_moss_green-100">
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Don't See Your Niche?</h3>
-              <p className="text-slate-600 mb-6 max-w-2xl mx-auto">
-                We're continuously expanding into new micro-niches within B2B SaaS. If you're in a specialized market that requires deep industry expertise, let's discuss how we can develop a tailored approach for your segment.
-              </p>
-              <button
-                onClick={handleContactCMO}
-                className="bg-gradient-to-r from-dark_moss_green-600 to-pakistan_green-600 hover:from-dark_moss_green-700 hover:to-pakistan_green-700 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all inline-flex items-center space-x-2"
-              >
-                <Target className="w-5 h-5" />
-                <span>Discuss Your Niche</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section (Future Social Proof) */}
-      <section className="py-20 bg-gradient-to-br from-cornsilk-50 via-cornsilk-100 to-cornsilk-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
-              Beta Program Success Stories
-            </h2>
-            <p className="text-xl text-slate-600">
-              Early results from our closed beta with select B2B SaaS companies
-            </p>
-          </div>
-          
-          {/* Testimonials */}
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-xl p-8 shadow-lg border border-cornsilk-200">
-                <div className="flex space-x-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-earth_yellow-400 fill-current" />
-                  ))}
-                </div>
-                <p className="text-slate-700 mb-6 italic">"{testimonial.content}"</p>
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-dark_moss_green-500 to-pakistan_green-500 rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-sm">{testimonial.avatar}</span>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-slate-900">{testimonial.name}</p>
-                    <p className="text-sm text-slate-600">{testimonial.role}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-          <div className="text-center mt-12">
-            <p className="text-sm text-slate-500 bg-white/80 backdrop-blur-sm rounded-lg p-4 inline-block border border-slate-200">
-              *Results from closed beta program. Full launch coming soon with expanded capabilities and enhanced AI features.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-dark_moss_green-600 to-pakistan_green-600">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-white mb-4">
-            Ready to Transform Your Marketing Strategy?
-          </h2>
-          <p className="text-xl text-cornsilk-100 mb-8">
-            Join the B2B SaaS leaders who use cmoxpert to stay ahead of the competition
-          </p>
-          
-          <div className="bg-white rounded-xl p-8 max-w-md mx-auto">
-            <h3 className="text-2xl font-bold text-slate-900 mb-4">Get Your Expert Strategy Session</h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your work email"
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
-                required
-              />
-              <button
-                type="submit"
-                className="w-full bg-gradient-to-r from-dark_moss_green-600 to-pakistan_green-600 hover:from-dark_moss_green-700 hover:to-pakistan_green-700 text-white py-3 rounded-lg font-semibold transition-all"
-              >
-                Schedule Direct Consultation
-              </button>
-            </form>
-            <p className="text-xs text-slate-500 mt-4">
-              Direct access guaranteed. No junior staff. Crystal-clear pricing.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-12 bg-slate-900">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <BrandLogo size="sm" />
-              <div>
-                <h3 className="text-lg font-bold text-white">cmoxpert</h3>
-                <p className="text-xs text-slate-400">AI Marketing Co-Pilot</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-6 text-slate-400">
-              <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
-              <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
-              <Link to="/support" className="hover:text-white transition-colors">Support</Link>
-            </div>
-          </div>
-          <div className="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
-            <p>&copy; 2025 cmoxpert. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}
+                <div className="text-2xl font
