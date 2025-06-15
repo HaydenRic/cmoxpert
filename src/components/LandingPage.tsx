@@ -652,4 +652,308 @@ export function LandingPage() {
                 <div className="text-sm text-cornsilk-200">Complete GTM Package</div>
               </div>
               <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl font
+                <div className="text-2xl font-bold">8 weeks</div>
+                <div className="text-sm text-cornsilk-200">From strategy to execution</div>
+              </div>
+            </div>
+            
+            <button
+              onClick={handleContactCMO}
+              className="bg-white text-tiger_s_eye-600 px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all hover:bg-cornsilk-50"
+            >
+              Book GTM Strategy Call
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
+              AI-Powered Marketing Intelligence
+            </h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+              Get the strategic insights you need to outmaneuver competitors and capture market opportunities before they become obvious.
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200 hover:shadow-xl transition-shadow">
+                <div className={`w-12 h-12 ${feature.color} rounded-lg flex items-center justify-center mb-4`}>
+                  <feature.icon className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-slate-900 mb-3">{feature.title}</h3>
+                <p className="text-slate-600">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Micro-Niche Specialization Section */}
+      <section className="py-20 bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center px-4 py-2 bg-slate-200 text-slate-700 rounded-full text-sm font-medium mb-6">
+              <Target className="w-4 h-4 mr-2" />
+              Micro-Niche Expertise
+            </div>
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
+              Specialized B2B SaaS Market Intelligence
+            </h2>
+            <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-8">
+              I focus exclusively on specific B2B SaaS market segments where I can deliver the deepest insights and most relevant strategies. No generalist approach—just laser-focused expertise.
+            </p>
+          </div>
+
+          {/* Target ICPs Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            {targetICPs.map((icp, index) => (
+              <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200 hover:shadow-xl transition-shadow">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg flex items-center justify-center">
+                    <icp.icon className="w-6 h-6 text-slate-600" />
+                  </div>
+                  <div className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-full">
+                    {icp.companies}
+                  </div>
+                </div>
+                
+                <div className="mb-4">
+                  <div className="text-xs text-slate-500 font-medium mb-1">{icp.category}</div>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-2">{icp.title}</h3>
+                  <p className="text-slate-600 text-sm mb-4">{icp.description}</p>
+                </div>
+                
+                <div className="mb-4">
+                  <h4 className="text-sm font-medium text-slate-900 mb-2">Key Challenges:</h4>
+                  <ul className="space-y-1">
+                    {icp.challenges.map((challenge, idx) => (
+                      <li key={idx} className="text-xs text-slate-600 flex items-start">
+                        <AlertCircle className="w-3 h-3 text-slate-400 mr-2 mt-0.5 flex-shrink-0" />
+                        {challenge}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                
+                <div className="pt-4 border-t border-slate-200">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm font-medium text-slate-900">{icp.opportunity}</div>
+                    <div className="text-xs text-slate-500">Market potential</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Micro-Niche Benefits */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            {microNicheBenefits.map((benefit, index) => (
+              <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+                <div className="w-12 h-12 bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg flex items-center justify-center mb-4">
+                  <benefit.icon className="w-6 h-6 text-slate-600" />
+                </div>
+                <h4 className="text-lg font-semibold text-slate-900 mb-2">{benefit.title}</h4>
+                <p className="text-slate-600 text-sm">{benefit.description}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <div className="inline-block bg-white rounded-xl p-8 shadow-lg border border-slate-200">
+              <h3 className="text-2xl font-bold text-slate-900 mb-4">Does Your SaaS Fit These Profiles?</h3>
+              <p className="text-slate-600 mb-6 max-w-2xl">
+                If your B2B SaaS company operates in one of these specialized markets, you'll benefit from industry-specific insights and strategies that generic marketing consultants simply can't provide.
+              </p>
+              <button
+                onClick={handleContactCMO}
+                className="bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all"
+              >
+                Discuss Your Market
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Demo Video Section */}
+      {featuredVideo && (
+        <section id="demo-video" className="py-20 bg-gradient-to-br from-dark_moss_green-900 to-pakistan_green-900">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 className="text-4xl font-bold text-white mb-4">
+              See cmoxpert in Action
+            </h2>
+            <p className="text-xl text-cornsilk-200 mb-8">
+              Watch how AI-powered market intelligence transforms strategic decision-making
+            </p>
+            
+            <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+              <div className="aspect-video bg-slate-900 rounded-lg overflow-hidden relative">
+                <video
+                  src={featuredVideo.url}
+                  controls
+                  className="w-full h-full object-cover"
+                  onPlay={handleVideoPlay}
+                  poster="/api/placeholder/800/450"
+                >
+                  Your browser does not support the video tag.
+                </video>
+                
+                <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm">
+                  {featuredVideo.views_count} views
+                </div>
+              </div>
+              
+              <div className="mt-6 text-left">
+                <h3 className="text-xl font-semibold text-white mb-2">{featuredVideo.title}</h3>
+                {featuredVideo.description && (
+                  <p className="text-cornsilk-200">{featuredVideo.description}</p>
+                )}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Testimonials Section */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
+              What Marketing Leaders Say
+            </h2>
+            <p className="text-xl text-slate-600">
+              Real results from B2B SaaS companies using cmoxpert
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+                <div className="flex items-center mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-earth_yellow-400 fill-current" />
+                  ))}
+                </div>
+                
+                <p className="text-slate-600 mb-6 italic">"{testimonial.content}"</p>
+                
+                <div className="flex items-center">
+                  <div className="w-12 h-12 bg-gradient-to-br from-pakistan_green-500 to-dark_moss_green-500 rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                    {testimonial.avatar}
+                  </div>
+                  <div>
+                    <div className="font-semibold text-slate-900">{testimonial.name}</div>
+                    <div className="text-sm text-slate-500">{testimonial.role}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 bg-gradient-to-br from-pakistan_green-900 via-dark_moss_green-800 to-dark_moss_green-900">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-bold text-white mb-6">
+            Ready to Turn Market Data Into Strategic Advantage?
+          </h2>
+          <p className="text-xl text-cornsilk-200 mb-8">
+            Join 150+ B2B SaaS companies using AI-powered market intelligence to outmaneuver competitors and accelerate growth.
+          </p>
+          
+          <form onSubmit={handleSubmit} className="max-w-md mx-auto mb-8">
+            <div className="flex gap-4">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="flex-1 px-4 py-3 rounded-lg border border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder-cornsilk-300 focus:outline-none focus:ring-2 focus:ring-earth_yellow-400"
+                required
+              />
+              <button
+                type="submit"
+                className="bg-gradient-to-r from-earth_yellow-600 to-tiger_s_eye-600 hover:from-earth_yellow-700 hover:to-tiger_s_eye-700 text-white px-6 py-3 rounded-lg font-semibold shadow-xl hover:shadow-2xl transition-all"
+              >
+                Get Started
+              </button>
+            </div>
+          </form>
+          
+          <div className="flex items-center justify-center space-x-8 text-sm text-cornsilk-300">
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="w-4 h-4 text-earth_yellow-400" />
+              <span>Free strategy session</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="w-4 h-4 text-earth_yellow-400" />
+              <span>No commitment required</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <CheckCircle className="w-4 h-4 text-earth_yellow-400" />
+              <span>Results in 5 minutes</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-slate-900 text-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div>
+              <div className="flex items-center space-x-3 mb-4">
+                <BrandLogo />
+                <div>
+                  <h3 className="text-lg font-bold">cmoxpert</h3>
+                  <p className="text-xs text-slate-400">AI Marketing Co-Pilot</p>
+                </div>
+              </div>
+              <p className="text-slate-400 text-sm">
+                AI-powered marketing intelligence for B2B SaaS companies ready to outmaneuver competitors.
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Product</h4>
+              <ul className="space-y-2 text-sm text-slate-400">
+                <li><Link to="/features" className="hover:text-white transition-colors">Features</Link></li>
+                <li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                <li><Link to="/integrations" className="hover:text-white transition-colors">Integrations</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Company</h4>
+              <ul className="space-y-2 text-sm text-slate-400">
+                <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
+                <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
+                <li><Link to="/terms" className="hover:text-white transition-colors">Terms</Link></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">Connect</h4>
+              <ul className="space-y-2 text-sm text-slate-400">
+                <li><a href="#" className="hover:text-white transition-colors">LinkedIn</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Twitter</a></li>
+                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
+              </ul>
+            </div>
+          </div>
+          
+          <div className="border-t border-slate-800 mt-8 pt-8 text-center text-sm text-slate-400">
+            <p>&copy; 2024 cmoxpert. All rights reserved.</p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
