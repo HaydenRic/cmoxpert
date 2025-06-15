@@ -1,6 +1,9 @@
 import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { Analytics } from './components/Analytics';
+import { PerformanceMonitor } from './components/PerformanceMonitor';
 import { Layout } from './components/Layout';
 import { AuthForm } from './components/AuthForm';
 import { LandingPage } from './components/LandingPage';
@@ -234,11 +237,15 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <AppContent />
-      </Router>
-    </AuthProvider>
+    <ErrorBoundary>
+      <AuthProvider>
+        <Router>
+          <Analytics trackingId={import.meta.env.VITE_GA_TRACKING_ID} />
+          <PerformanceMonitor />
+          <AppContent />
+        </Router>
+      </AuthProvider>
+    </ErrorBoundary>
   );
 }
 

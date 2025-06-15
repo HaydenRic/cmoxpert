@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BrandLogo } from '../components/BrandLogo';
+import { trackFormSubmission, trackEvent } from '../components/Analytics';
 import { 
   ArrowLeft, 
   Mail, 
@@ -42,10 +43,24 @@ export function Contact() {
     e.preventDefault();
     setLoading(true);
     
+    // Track form submission
+    trackFormSubmission('contact_form', {
+      project_type: formData.projectType,
+      budget: formData.budget,
+      timeline: formData.timeline,
+      company: formData.company
+    });
+    
     // Simulate form submission
     setTimeout(() => {
       setSubmitted(true);
       setLoading(false);
+      
+      // Track conversion
+      trackEvent('contact_form_completed', {
+        form_type: 'contact',
+        project_type: formData.projectType
+      });
     }, 1500);
   };
 

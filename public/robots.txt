@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://cmoxpert.com/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 1
+
+# Disallow admin areas
+Disallow: /admin
+Disallow: /settings
+
+# Allow important pages
+Allow: /
+Allow: /contact
+Allow: /privacy
+Allow: /terms
+Allow: /support
