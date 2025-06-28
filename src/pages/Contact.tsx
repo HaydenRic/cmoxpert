@@ -192,15 +192,15 @@ export function Contact() {
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-slate-500">
               <div className="flex items-center space-x-2">
-                <CheckCircle className="w-4 h-4 text-pakistan_green-500" />
+                <CheckCircle className="w-4 h-4 text-pakistan_green-600" />
                 <span>Direct access guaranteed</span>
               </div>
               <div className="flex items-center space-x-2">
-                <CheckCircle className="w-4 h-4 text-pakistan_green-500" />
+                <CheckCircle className="w-4 h-4 text-pakistan_green-600" />
                 <span>Sprint-based delivery</span>
               </div>
               <div className="flex items-center space-x-2">
-                <CheckCircle className="w-4 h-4 text-pakistan_green-500" />
+                <CheckCircle className="w-4 h-4 text-pakistan_green-600" />
                 <span>Radical transparency</span>
               </div>
             </div>
@@ -213,7 +213,7 @@ export function Contact() {
               {antiAgencyValue.map((benefit, index) => (
                 <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
                   <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center mb-4">
-                    <benefit.icon className="w-6 h-6 text-earth_yellow-600" />
+                    <benefit.icon className="w-6 h-6 text-earth_yellow-700" />
                   </div>
                   <h3 className="text-lg font-semibold text-slate-900 mb-2">{benefit.title}</h3>
                   <p className="text-slate-600 text-sm">{benefit.description}</p>
@@ -231,7 +231,7 @@ export function Contact() {
                 {services.map((service, index) => (
                   <div key={index} className="flex space-x-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <service.icon className="w-6 h-6 text-earth_yellow-600" />
+                      <service.icon className="w-6 h-6 text-earth_yellow-700" />
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold text-slate-900 mb-2">{service.title}</h3>
@@ -245,19 +245,19 @@ export function Contact() {
                 <h3 className="text-lg font-semibold text-slate-900 mb-3">Typical Engagement Results</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <div className="text-2xl font-bold text-earth_yellow-600">3.2x</div>
+                    <div className="text-2xl font-bold text-earth_yellow-700">3.2x</div>
                     <div className="text-slate-600">Average ROI improvement</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-earth_yellow-600">65%</div>
+                    <div className="text-2xl font-bold text-earth_yellow-700">65%</div>
                     <div className="text-slate-600">Conversion rate increase</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-earth_yellow-600">40%</div>
+                    <div className="text-2xl font-bold text-earth_yellow-700">40%</div>
                     <div className="text-slate-600">Faster growth velocity</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-earth_yellow-600">90%</div>
+                    <div className="text-2xl font-bold text-earth_yellow-700">90%</div>
                     <div className="text-slate-600">Client satisfaction rate</div>
                   </div>
                 </div>
@@ -394,7 +394,7 @@ export function Contact() {
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       Budget Range
-                      <span className="text-xs text-pakistan_green-600 block">Transparent pricing</span>
+                      <span className="text-xs text-pakistan_green-700 block">Transparent pricing</span>
                     </label>
                     <div className="relative">
                       <PoundSterling className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />

@@ -399,11 +399,11 @@ export function LandingPage() {
               
               <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
                 Turn Market Data Into 
-                <span className="bg-gradient-to-r from-earth_yellow-400 to-tiger_s_eye-400 bg-clip-text text-transparent"> Strategic Advantage</span>
+                <span className="bg-gradient-to-r from-earth_yellow-300 to-tiger_s_eye-300 bg-clip-text text-transparent"> Strategic Advantage</span>
               </h1>
               
               <p className="text-xl text-white mb-8 leading-relaxed">
-                <strong className="text-white">You get me, and only me.</strong> <span style={{ color: '#283618' }}>No junior account managers, no diluted communication, no bait-and-switch. Just direct access to expert-level marketing intelligence powered by AI, delivered with radical transparency.</span>
+                <strong className="text-white">You get me, and only me.</strong> <span className="text-cornsilk-100">No junior account managers, no diluted communication, no bait-and-switch. Just direct access to expert-level marketing intelligence powered by AI, delivered with radical transparency.</span>
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -437,15 +437,15 @@ export function LandingPage() {
               
               <div className="flex items-center space-x-8 text-sm text-cornsilk-300">
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-earth_yellow-400" />
+                  <CheckCircle className="w-4 h-4 text-earth_yellow-300" />
                   <span>No hidden fees</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-earth_yellow-400" />
+                  <CheckCircle className="w-4 h-4 text-earth_yellow-300" />
                   <span>Results in 5 minutes</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-earth_yellow-400" />
+                  <CheckCircle className="w-4 h-4 text-earth_yellow-300" />
                   <span>Direct expert access</span>
                 </div>
               </div>
@@ -478,8 +478,8 @@ export function LandingPage() {
                     </div>
                   </div>
                   
-                  <div className="p-4 bg-earth_yellow-500/20 rounded-lg border border-earth_yellow-400/30">
-                    <p className="text-sm font-medium text-earth_yellow-200 mb-2">Transparent Recommendation</p>
+                  <div className="p-4 bg-earth_yellow-500/30 rounded-lg border border-earth_yellow-300/50">
+                    <p className="text-sm font-medium text-earth_yellow-100 mb-2">Transparent Recommendation</p>
                     <p className="text-sm text-white">Sprint focus: Target "enterprise security" segment. 14-day timeline with clear deliverables.</p>
                   </div>
                 </div>
@@ -525,34 +525,34 @@ export function LandingPage() {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {antiAgencyBenefits.map((benefit, index) => (
-              <div key={index} className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20" style={{ color: '#283618' }}>
+              <div key={index} className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-4">
-                  <benefit.icon className="w-6 h-6" style={{ color: '#283618' }} />
+                  <benefit.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-lg font-semibold mb-3" style={{ color: '#283618' }}>{benefit.title}</h3>
-                <p className="text-sm leading-relaxed" style={{ color: '#283618' }}>{benefit.description}</p>
+                <h3 className="text-lg font-semibold mb-3 text-white">{benefit.title}</h3>
+                <p className="text-sm leading-relaxed text-cornsilk-100">{benefit.description}</p>
               </div>
             ))}
           </div>
 
           <div className="mt-16 text-center">
             <div className="inline-block bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
-              <h3 className="text-2xl font-bold mb-4" style={{ color: '#283618' }}>Sprint-Based Engagement Model</h3>
-              <p className="mb-6 max-w-2xl" style={{ color: '#283618' }}>
+              <h3 className="text-2xl font-bold mb-4 text-white">Sprint-Based Engagement Model</h3>
+              <p className="mb-6 max-w-2xl text-cornsilk-100">
                 Instead of long-term contracts with unclear deliverables, engage in focused 2-week "marketing sprints" that tackle specific challenges with measurable outcomes.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <div className="bg-white/20 rounded-lg p-4">
-                  <div className="text-2xl font-bold" style={{ color: '#283618' }}>2 weeks</div>
-                  <div className="text-sm" style={{ color: '#283618' }}>Sprint duration</div>
+                  <div className="text-2xl font-bold text-white">2 weeks</div>
+                  <div className="text-sm text-cornsilk-200">Sprint duration</div>
                 </div>
                 <div className="bg-white/20 rounded-lg p-4">
-                  <div className="text-2xl font-bold" style={{ color: '#283618' }}>Clear ROI</div>
-                  <div className="text-sm" style={{ color: '#283618' }}>Measurable results</div>
+                  <div className="text-2xl font-bold text-white">Clear ROI</div>
+                  <div className="text-sm text-cornsilk-200">Measurable results</div>
                 </div>
                 <div className="bg-white/20 rounded-lg p-4">
-                  <div className="text-2xl font-bold" style={{ color: '#283618' }}>100%</div>
-                  <div className="text-sm" style={{ color: '#283618' }}>Transparency</div>
+                  <div className="text-2xl font-bold text-white">100%</div>
+                  <div className="text-sm text-cornsilk-200">Transparency</div>
                 </div>
               </div>
             </div>
@@ -576,15 +576,15 @@ export function LandingPage() {
             </p>
             <div className="flex items-center justify-center space-x-8 text-sm text-slate-500">
               <div className="flex items-center space-x-2">
-                <Calendar className="w-4 h-4 text-earth_yellow-500" />
+                <Calendar className="w-4 h-4 text-earth_yellow-600" />
                 <span>8-week delivery</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Shield className="w-4 h-4 text-earth_yellow-500" />
+                <Shield className="w-4 h-4 text-earth_yellow-600" />
                 <span>Risk mitigation</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Award className="w-4 h-4 text-earth_yellow-500" />
+                <Award className="w-4 h-4 text-earth_yellow-600" />
                 <span>Proven framework</span>
               </div>
             </div>
@@ -601,11 +601,11 @@ export function LandingPage() {
                   </div>
                   
                   <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center mb-4">
-                    <phase.icon className="w-6 h-6 text-earth_yellow-600" />
+                    <phase.icon className="w-6 h-6 text-earth_yellow-700" />
                   </div>
                   
                   <div className="mb-4">
-                    <div className="text-sm text-earth_yellow-600 font-medium mb-1">{phase.duration}</div>
+                    <div className="text-sm text-earth_yellow-700 font-medium mb-1">{phase.duration}</div>
                     <h4 className="text-lg font-semibold text-slate-900 mb-2">{phase.title}</h4>
                     <p className="text-slate-600 text-sm mb-4">{phase.description}</p>
                   </div>
@@ -631,7 +631,7 @@ export function LandingPage() {
             {gtmBenefits.map((benefit, index) => (
               <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-earth_yellow-200">
                 <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center mb-4">
-                  <benefit.icon className="w-6 h-6 text-earth_yellow-600" />
+                  <benefit.icon className="w-6 h-6 text-earth_yellow-700" />
                 </div>
                 <h4 className="text-lg font-semibold text-slate-900 mb-2">{benefit.title}</h4>
                 <p className="text-slate-600 text-sm">{benefit.description}</p>
@@ -888,15 +888,15 @@ export function LandingPage() {
           
           <div className="flex items-center justify-center space-x-8 text-sm text-cornsilk-300">
             <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-earth_yellow-400" />
+              <CheckCircle className="w-4 h-4 text-earth_yellow-300" />
               <span>Free strategy session</span>
             </div>
             <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-earth_yellow-400" />
+              <CheckCircle className="w-4 h-4 text-earth_yellow-300" />
               <span>No commitment required</span>
             </div>
             <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-earth_yellow-400" />
+              <CheckCircle className="w-4 h-4 text-earth_yellow-300" />
               <span>Results in 5 minutes</span>
             </div>
           </div>
