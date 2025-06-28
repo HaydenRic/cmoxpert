@@ -34,7 +34,7 @@ export function AuthForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pakistan_green-900 via-dark_moss_green-800 to-dark_moss_green-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-slate_blue-800 to-slate_blue-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Back to Home Link */}
         <div className="mb-4">
@@ -49,8 +49,8 @@ export function AuthForm() {
 
         {/* Logo and heading */}
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-2xl shadow-lg mb-6">
-            <Compass className="w-8 h-8 text-pakistan_green-900" />
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-cream-100 rounded-2xl shadow-lg mb-6">
+            <Compass className="w-8 h-8 text-slate_blue-800" />
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">cmoxpert</h1>
           <p className="text-cornsilk-200">Go from new client to indispensable strategist in record time</p>
@@ -86,7 +86,7 @@ export function AuthForm() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-transparent transition-all"
                   placeholder="you@company.com"
                   required
                 />
@@ -104,7 +104,7 @@ export function AuthForm() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent transition-all"
+                  className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-transparent transition-all"
                   placeholder="••••••••"
                   required
                 />
@@ -116,7 +116,7 @@ export function AuthForm() {
               disabled={loading}
               className={clsx(
                 'w-full py-3 px-4 rounded-lg font-medium transition-all',
-                'bg-gradient-to-r from-dark_moss_green-600 to-pakistan_green-600 hover:from-dark_moss_green-700 hover:to-pakistan_green-700',
+                'bg-gradient-to-r from-slate_blue-600 to-charcoal-700 hover:from-slate_blue-700 hover:to-charcoal-800',
                 'text-white shadow-lg hover:shadow-xl',
                 'disabled:opacity-50 disabled:cursor-not-allowed'
               )}
@@ -128,7 +128,7 @@ export function AuthForm() {
           <div className="mt-6 text-center">
             <button
               onClick={() => setIsSignIn(!isSignIn)}
-              className="text-dark_moss_green-600 hover:text-dark_moss_green-700 font-medium"
+              className="text-tan-400 hover:text-tan-300 font-medium"
             >
               {isSignIn ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
             </button>

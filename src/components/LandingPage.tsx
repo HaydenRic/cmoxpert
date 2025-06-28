@@ -357,7 +357,7 @@ export function LandingPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-slate-200">
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-cream-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-3">
@@ -371,14 +371,14 @@ export function LandingPage() {
             <div className="flex items-center space-x-4">
               <Link 
                 to="/auth" 
-                className="text-slate-600 hover:text-slate-900 font-medium flex items-center space-x-2"
+                className="text-slate_blue-600 hover:text-charcoal-900 font-medium flex items-center space-x-2"
               >
                 <LogIn className="w-4 h-4" />
                 <span>Sign In</span>
               </Link>
               <button
                 onClick={handleGetStarted}
-                className="bg-gradient-to-r from-dark_moss_green-600 to-pakistan_green-600 hover:from-dark_moss_green-700 hover:to-pakistan_green-700 text-white px-6 py-2 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl"
+                className="bg-gradient-to-r from-slate_blue-600 to-charcoal-800 hover:from-slate_blue-700 hover:to-charcoal-900 text-white px-6 py-2 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl"
               >
                 Get Started
               </button>
@@ -388,28 +388,28 @@ export function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="pt-20 pb-16 bg-gradient-to-br from-pakistan_green-900 via-dark_moss_green-800 to-dark_moss_green-900">
+      <section className="pt-20 pb-16 bg-gradient-to-br from-charcoal-900 via-slate_blue-800 to-slate_blue-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-sm font-medium mb-6 border border-white/20">
-                <Zap className="w-4 h-4 mr-2" />
+                <Zap className="w-4 h-4 mr-2 text-tan-300" />
                 AI-Powered Expert Partnership
               </div>
               
               <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
                 Turn Market Data Into 
-                <span className="bg-gradient-to-r from-white to-cornsilk-100 bg-clip-text text-transparent"> Strategic Advantage</span>
+                <span className="bg-gradient-to-r from-tan-300 to-cream-200 bg-clip-text text-transparent"> Strategic Advantage</span>
               </h1>
               
               <p className="text-xl text-white mb-8 leading-relaxed">
-                <strong className="text-white">You get me, and only me.</strong> <span className="text-cornsilk-100">No junior account managers, no diluted communication, no bait-and-switch. Just direct access to expert-level marketing intelligence powered by AI, delivered with radical transparency.</span>
+                <strong className="text-white">You get me, and only me.</strong> <span className="text-cream-100">No junior account managers, no diluted communication, no bait-and-switch. Just direct access to expert-level marketing intelligence powered by AI, delivered with radical transparency.</span>
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mb-8">
                 <button
                   onClick={handleGetStarted}
-                  className="bg-gradient-to-r from-earth_yellow-600 to-tiger_s_eye-600 hover:from-earth_yellow-700 hover:to-tiger_s_eye-700 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
+                  className="bg-gradient-to-r from-tan-600 to-olive-600 hover:from-tan-700 hover:to-olive-700 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
                 >
                   <span>Start Your Strategy Session</span>
                   <ArrowRight className="w-5 h-5" />
@@ -428,7 +428,7 @@ export function LandingPage() {
 
                 <button
                   onClick={handleContactCMO}
-                  className="bg-gradient-to-r from-tiger_s_eye-600 to-earth_yellow-600 hover:from-tiger_s_eye-700 hover:to-earth_yellow-700 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
+                  className="bg-gradient-to-r from-olive-600 to-tan-600 hover:from-olive-700 hover:to-tan-700 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
                 >
                   <Users className="w-5 h-5" />
                   <span>Fractional CMO</span>
@@ -437,15 +437,15 @@ export function LandingPage() {
               
               <div className="flex items-center space-x-8 text-sm text-cornsilk-300">
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-white" />
+                  <CheckCircle className="w-4 h-4 text-tan-300" />
                   <span>No hidden fees</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-white" />
+                  <CheckCircle className="w-4 h-4 text-tan-300" />
                   <span>Results in 5 minutes</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-white" />
+                  <CheckCircle className="w-4 h-4 text-tan-300" />
                   <span>Direct expert access</span>
                 </div>
               </div>
@@ -456,7 +456,7 @@ export function LandingPage() {
                 <div className="space-y-4">
                   <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-earth_yellow-500 rounded-full flex items-center justify-center">
+                      <div className="w-10 h-10 bg-tan-500 rounded-full flex items-center justify-center">
                         <TrendingUp className="w-5 h-5 text-white" />
                       </div>
                       <div>
@@ -464,7 +464,7 @@ export function LandingPage() {
                         <p className="text-sm text-cornsilk-300">Direct expert analysis</p>
                       </div>
                     </div>
-                    <div className="text-earth_yellow-400 font-bold">+32% ROI</div>
+                    <div className="text-tan-300 font-bold">+32% ROI</div>
                   </div>
                   
                   <div className="grid grid-cols-2 gap-4">
@@ -478,18 +478,18 @@ export function LandingPage() {
                     </div>
                   </div>
                   
-                  <div className="p-4 bg-earth_yellow-500/30 rounded-lg border border-earth_yellow-300/50">
-                    <p className="text-sm font-medium text-earth_yellow-100 mb-2">Transparent Recommendation</p>
+                  <div className="p-4 bg-tan-500/30 rounded-lg border border-tan-300/50">
+                    <p className="text-sm font-medium text-tan-100 mb-2">Transparent Recommendation</p>
                     <p className="text-sm text-white">Sprint focus: Target "enterprise security" segment. 14-day timeline with clear deliverables.</p>
                   </div>
                 </div>
               </div>
               
               {/* Floating elements */}
-              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-earth_yellow-400 to-earth_yellow-600 rounded-full flex items-center justify-center shadow-lg">
-                <Zap className="w-10 h-10 text-slate-900" />
+              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-tan-400 to-tan-600 rounded-full flex items-center justify-center shadow-lg">
+                <Zap className="w-10 h-10 text-white" />
               </div>
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-tiger_s_eye-400 to-tiger_s_eye-600 rounded-full flex items-center justify-center shadow-lg">
+              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-olive-400 to-olive-600 rounded-full flex items-center justify-center shadow-lg">
                 <Target className="w-8 h-8 text-white" />
               </div>
             </div>
@@ -512,7 +512,7 @@ export function LandingPage() {
       </section>
 
       {/* Anti-Agency Section */}
-      <section className="py-20 bg-gradient-to-br from-pakistan_green-900 via-dark_moss_green-900 to-tiger_s_eye-100">
+      <section className="py-20 bg-gradient-to-br from-charcoal-900 via-slate_blue-900 to-cream-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
@@ -527,32 +527,32 @@ export function LandingPage() {
             {antiAgencyBenefits.map((benefit, index) => (
               <div key={index} className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-4">
-                  <benefit.icon className="w-6 h-6 text-white" />
+                  <benefit.icon className="w-6 h-6 text-tan-200" />
                 </div>
-                <h3 className="text-lg font-semibold mb-3 text-white">{benefit.title}</h3>
-                <p className="text-sm leading-relaxed text-cornsilk-100">{benefit.description}</p>
+                <h3 className="text-lg font-semibold mb-3 text-tan-100">{benefit.title}</h3>
+                <p className="text-sm leading-relaxed text-cream-100">{benefit.description}</p>
               </div>
             ))}
           </div>
 
           <div className="mt-16 text-center">
             <div className="inline-block bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
-              <h3 className="text-2xl font-bold mb-4 text-white">Sprint-Based Engagement Model</h3>
-              <p className="mb-6 max-w-2xl text-cornsilk-100">
+              <h3 className="text-2xl font-bold mb-4 text-tan-100">Sprint-Based Engagement Model</h3>
+              <p className="mb-6 max-w-2xl text-cream-100">
                 Instead of long-term contracts with unclear deliverables, engage in focused 2-week "marketing sprints" that tackle specific challenges with measurable outcomes.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <div className="bg-white/20 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-white">2 weeks</div>
-                  <div className="text-sm text-cornsilk-200">Sprint duration</div>
+                  <div className="text-2xl font-bold text-tan-100">2 weeks</div>
+                  <div className="text-sm text-cream-200">Sprint duration</div>
                 </div>
                 <div className="bg-white/20 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-white">Clear ROI</div>
-                  <div className="text-sm text-cornsilk-200">Measurable results</div>
+                  <div className="text-2xl font-bold text-tan-100">Clear ROI</div>
+                  <div className="text-sm text-cream-200">Measurable results</div>
                 </div>
                 <div className="bg-white/20 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-white">100%</div>
-                  <div className="text-sm text-cornsilk-200">Transparency</div>
+                  <div className="text-2xl font-bold text-tan-100">100%</div>
+                  <div className="text-sm text-cream-200">Transparency</div>
                 </div>
               </div>
             </div>
@@ -561,10 +561,10 @@ export function LandingPage() {
       </section>
 
       {/* Go-to-Market as a Service Section */}
-      <section className="py-20 bg-gradient-to-br from-cornsilk-50 via-earth_yellow-50 to-tiger_s_eye-50">
+      <section className="py-20 bg-gradient-to-br from-cream-50 via-tan-50 to-olive-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 bg-earth_yellow-100 text-earth_yellow-900 rounded-full text-sm font-medium mb-6">
+            <div className="inline-flex items-center px-4 py-2 bg-tan-100 text-olive-900 rounded-full text-sm font-medium mb-6">
               <Rocket className="w-4 h-4 mr-2" />
               Signature Methodology
             </div>
@@ -576,15 +576,15 @@ export function LandingPage() {
             </p>
             <div className="flex items-center justify-center space-x-8 text-sm text-slate-500">
               <div className="flex items-center space-x-2">
-                <Calendar className="w-4 h-4 text-dark_moss_green-600" />
+                <Calendar className="w-4 h-4 text-slate_blue-600" />
                 <span>8-week delivery</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Shield className="w-4 h-4 text-dark_moss_green-600" />
+                <Shield className="w-4 h-4 text-slate_blue-600" />
                 <span>Risk mitigation</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Award className="w-4 h-4 text-dark_moss_green-600" />
+                <Award className="w-4 h-4 text-slate_blue-600" />
                 <span>Proven framework</span>
               </div>
             </div>
@@ -595,17 +595,17 @@ export function LandingPage() {
             <h3 className="text-2xl font-bold text-slate-900 text-center mb-12">The 4-Phase GTM Framework</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {gtmPhases.map((phase, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200 relative">
-                  <div className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-tiger_s_eye-500 to-earth_yellow-500 rounded-full flex items-center justify-center shadow-lg">
+                <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-cream-200 relative">
+                  <div className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-olive-500 to-tan-500 rounded-full flex items-center justify-center shadow-lg">
                     <span className="text-white font-bold text-sm">{phase.phase}</span>
                   </div>
                   
-                  <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center mb-4">
-                    <phase.icon className="w-6 h-6 text-dark_moss_green-700" />
+                  <div className="w-12 h-12 bg-gradient-to-br from-tan-100 to-olive-100 rounded-lg flex items-center justify-center mb-4">
+                    <phase.icon className="w-6 h-6 text-slate_blue-700" />
                   </div>
                   
                   <div className="mb-4">
-                    <div className="text-sm text-dark_moss_green-700 font-medium mb-1">{phase.duration}</div>
+                    <div className="text-sm text-slate_blue-700 font-medium mb-1">{phase.duration}</div>
                     <h4 className="text-lg font-semibold text-slate-900 mb-2">{phase.title}</h4>
                     <p className="text-slate-600 text-sm mb-4">{phase.description}</p>
                   </div>
@@ -615,7 +615,7 @@ export function LandingPage() {
                     <ul className="space-y-1">
                       {phase.deliverables.map((deliverable, idx) => (
                         <li key={idx} className="text-xs text-slate-600 flex items-start">
-                          <CheckCircle className="w-3 h-3 text-pakistan_green-500 mr-2 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="w-3 h-3 text-slate_blue-600 mr-2 mt-0.5 flex-shrink-0" />
                           {deliverable}
                         </li>
                       ))}
@@ -629,9 +629,9 @@ export function LandingPage() {
           {/* GTM Benefits */}
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {gtmBenefits.map((benefit, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-earth_yellow-200">
-                <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center mb-4">
-                  <benefit.icon className="w-6 h-6 text-dark_moss_green-700" />
+              <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-tan-200">
+                <div className="w-12 h-12 bg-gradient-to-br from-tan-100 to-olive-100 rounded-lg flex items-center justify-center mb-4">
+                  <benefit.icon className="w-6 h-6 text-slate_blue-700" />
                 </div>
                 <h4 className="text-lg font-semibold text-slate-900 mb-2">{benefit.title}</h4>
                 <p className="text-slate-600 text-sm">{benefit.description}</p>
@@ -640,7 +640,7 @@ export function LandingPage() {
           </div>
 
           {/* GTM Pricing & CTA */}
-          <div className="bg-gradient-to-r from-tiger_s_eye-600 to-earth_yellow-600 rounded-2xl p-8 text-center text-white">
+          <div className="bg-gradient-to-r from-olive-600 to-tan-600 rounded-2xl p-8 text-center text-white">
             <h3 className="text-3xl font-bold mb-4">Ready to Launch with Confidence?</h3>
             <p className="text-cornsilk-100 mb-6 max-w-2xl mx-auto">
               Get your complete Go-to-Market strategy and initial execution in just 8 weeks. Transparent pricing, clear deliverables, direct expert access.
@@ -659,7 +659,7 @@ export function LandingPage() {
             
             <button
               onClick={handleContactCMO}
-              className="bg-white text-tiger_s_eye-600 px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all hover:bg-cornsilk-50"
+              className="bg-white text-olive-700 px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all hover:bg-cream-50"
             >
               Book GTM Strategy Call
             </button>
@@ -755,7 +755,7 @@ export function LandingPage() {
             {microNicheBenefits.map((benefit, index) => (
               <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
                 <div className="w-12 h-12 bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg flex items-center justify-center mb-4">
-                  <benefit.icon className="w-6 h-6 text-slate-600" />
+                  <benefit.icon className="w-6 h-6 text-slate_blue-600" />
                 </div>
                 <h4 className="text-lg font-semibold text-slate-900 mb-2">{benefit.title}</h4>
                 <p className="text-slate-600 text-sm">{benefit.description}</p>
@@ -833,17 +833,17 @@ export function LandingPage() {
           
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+              <div key={index} className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-xl transition-shadow">
                 <div className="flex items-center mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-dark_moss_green-600 fill-current" />
+                    <Star key={i} className="w-5 h-5 text-tan-500 fill-current" />
                   ))}
                 </div>
                 
                 <p className="text-slate-600 mb-6 italic">"{testimonial.content}"</p>
                 
                 <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-pakistan_green-500 to-dark_moss_green-500 rounded-full flex items-center justify-center text-white font-semibold mr-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-slate_blue-500 to-charcoal-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
                     {testimonial.avatar}
                   </div>
                   <div>
@@ -858,7 +858,7 @@ export function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-pakistan_green-900 via-dark_moss_green-800 to-dark_moss_green-900">
+      <section className="py-20 bg-gradient-to-br from-charcoal-900 via-slate_blue-800 to-slate_blue-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold text-white mb-6">
             Ready to Turn Market Data Into Strategic Advantage?
@@ -879,7 +879,7 @@ export function LandingPage() {
               />
               <button
                 type="submit"
-                className="bg-gradient-to-r from-earth_yellow-600 to-tiger_s_eye-600 hover:from-earth_yellow-700 hover:to-tiger_s_eye-700 text-white px-6 py-3 rounded-lg font-semibold shadow-xl hover:shadow-2xl transition-all"
+                className="bg-gradient-to-r from-tan-600 to-olive-600 hover:from-tan-700 hover:to-olive-700 text-white px-6 py-3 rounded-lg font-semibold shadow-xl hover:shadow-2xl transition-all"
               >
                 Get Started
               </button>
@@ -888,15 +888,15 @@ export function LandingPage() {
           
           <div className="flex items-center justify-center space-x-8 text-sm text-cornsilk-300">
             <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-white" />
+              <CheckCircle className="w-4 h-4 text-tan-300" />
               <span>Free strategy session</span>
             </div>
             <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-white" />
+              <CheckCircle className="w-4 h-4 text-tan-300" />
               <span>No commitment required</span>
             </div>
             <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-white" />
+              <CheckCircle className="w-4 h-4 text-tan-300" />
               <span>Results in 5 minutes</span>
             </div>
           </div>
@@ -904,7 +904,7 @@ export function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12">
+      <footer className="bg-charcoal-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">
             <div>
@@ -950,7 +950,7 @@ export function LandingPage() {
           </div>
           
           <div className="border-t border-slate-800 mt-8 pt-8 text-center text-sm text-slate-400">
-            <p>&copy; 2024 cmoxpert. All rights reserved.</p>
+            <p>&copy; 2025 cmoxpert. All rights reserved.</p>
           </div>
         </div>
       </footer>

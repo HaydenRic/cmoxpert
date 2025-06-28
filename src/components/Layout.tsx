@@ -37,7 +37,7 @@ export function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-cornsilk-500">
+    <div className="min-h-screen bg-cream-100">
       {/* Sidebar */}
       <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg">
         <div className="flex flex-col h-full">
@@ -63,7 +63,7 @@ export function Layout({ children }: LayoutProps) {
                   className={clsx(
                     'flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200',
                     isActive
-                      ? 'bg-cornsilk-200 text-dark_moss_green-900 border-r-2 border-dark_moss_green-600'
+                      ? 'bg-cream-200 text-slate_blue-900 border-r-2 border-slate_blue-600'
                       : 'text-slate-600 hover:bg-cornsilk-100 hover:text-slate-900'
                   )}
                 >
@@ -78,7 +78,7 @@ export function Layout({ children }: LayoutProps) {
           <div className="p-4 border-t border-slate-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-earth_yellow-400 to-earth_yellow-600 rounded-full flex items-center justify-center">
+                <div className="w-8 h-8 bg-gradient-to-br from-tan-400 to-olive-600 rounded-full flex items-center justify-center">
                   <span className="text-sm font-medium text-white">
                     {user?.email?.charAt(0).toUpperCase()}
                   </span>
