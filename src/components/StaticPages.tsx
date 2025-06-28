@@ -25,7 +25,7 @@ export function Settings() {
 export function Privacy() {
   return (
     <StaticPageLayout title="Privacy Policy">
-      <p><strong>Last updated:</strong> 7 January 2025</p>
+      <p><strong>Last updated:</strong> 8 January 2025</p>
       <p>Welcome to cmoxpert. This Privacy Policy explains how cmoxpert ("we", "us", or "our") collects, uses, discloses, and protects your personal data when you use our website and services (collectively, the "Service"). We are committed to protecting your privacy and handling your data in an open and transparent manner, in accordance with the UK General Data Protection Regulation (UK GDPR) and the Data Protection Act 2018.</p>
 
       <h2>1. Who We Are</h2>
@@ -114,7 +114,7 @@ export function Privacy() {
 export function Terms() {
   return (
     <StaticPageLayout title="Terms of Service">
-      <p><strong>Last updated:</strong> 7 January 2025</p>
+      <p><strong>Last updated:</strong> 8 January 2025</p>
       <p>Welcome to cmoxpert. These Terms of Service ("Terms") govern your use of our website and services (collectively, the "Service"). By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the terms, then you may not access the Service.</p>
 
       <h2>1. Who We Are</h2>
