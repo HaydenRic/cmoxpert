@@ -399,7 +399,7 @@ export function LandingPage() {
               
               <h1 className="text-5xl font-bold text-white mb-6 leading-tight">
                 Turn Market Data Into 
-                <span className="bg-gradient-to-r from-earth_yellow-300 to-tiger_s_eye-300 bg-clip-text text-transparent"> Strategic Advantage</span>
+                <span className="bg-gradient-to-r from-white to-cornsilk-100 bg-clip-text text-transparent"> Strategic Advantage</span>
               </h1>
               
               <p className="text-xl text-white mb-8 leading-relaxed">
@@ -576,15 +576,15 @@ export function LandingPage() {
             </p>
             <div className="flex items-center justify-center space-x-8 text-sm text-slate-500">
               <div className="flex items-center space-x-2">
-                <Calendar className="w-4 h-4 text-earth_yellow-600" />
+                <Calendar className="w-4 h-4 text-dark_moss_green-600" />
                 <span>8-week delivery</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Shield className="w-4 h-4 text-earth_yellow-600" />
+                <Shield className="w-4 h-4 text-dark_moss_green-600" />
                 <span>Risk mitigation</span>
               </div>
               <div className="flex items-center space-x-2">
-                <Award className="w-4 h-4 text-earth_yellow-600" />
+                <Award className="w-4 h-4 text-dark_moss_green-600" />
                 <span>Proven framework</span>
               </div>
             </div>
@@ -601,11 +601,11 @@ export function LandingPage() {
                   </div>
                   
                   <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center mb-4">
-                    <phase.icon className="w-6 h-6 text-earth_yellow-700" />
+                    <phase.icon className="w-6 h-6 text-dark_moss_green-700" />
                   </div>
                   
                   <div className="mb-4">
-                    <div className="text-sm text-earth_yellow-700 font-medium mb-1">{phase.duration}</div>
+                    <div className="text-sm text-dark_moss_green-700 font-medium mb-1">{phase.duration}</div>
                     <h4 className="text-lg font-semibold text-slate-900 mb-2">{phase.title}</h4>
                     <p className="text-slate-600 text-sm mb-4">{phase.description}</p>
                   </div>
@@ -631,7 +631,7 @@ export function LandingPage() {
             {gtmBenefits.map((benefit, index) => (
               <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-earth_yellow-200">
                 <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center mb-4">
-                  <benefit.icon className="w-6 h-6 text-earth_yellow-700" />
+                  <benefit.icon className="w-6 h-6 text-dark_moss_green-700" />
                 </div>
                 <h4 className="text-lg font-semibold text-slate-900 mb-2">{benefit.title}</h4>
                 <p className="text-slate-600 text-sm">{benefit.description}</p>
@@ -836,7 +836,7 @@ export function LandingPage() {
               <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
                 <div className="flex items-center mb-4">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-earth_yellow-600 fill-current" />
+                    <Star key={i} className="w-5 h-5 text-dark_moss_green-600 fill-current" />
                   ))}
                 </div>
                 

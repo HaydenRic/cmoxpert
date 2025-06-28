@@ -584,7 +584,7 @@ export function Admin() {
                           onClick={() => toggleFeatured(video.id, video.is_featured)}
                           className={`p-2 rounded-lg transition-colors ${
                             video.is_featured 
-                              ? 'bg-earth_yellow-100 text-earth_yellow-700 hover:bg-earth_yellow-200' 
+                              ? 'bg-dark_moss_green-100 text-dark_moss_green-700 hover:bg-dark_moss_green-200' 
                               : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
                           }`}
                           title={video.is_featured ? 'Remove from featured' : 'Add to featured'}
@@ -639,7 +639,7 @@ export function Admin() {
                       <div className={`px-2 py-1 rounded-full text-xs font-medium ${
                         activity.status === 'completed' 
                           ? 'bg-pakistan_green-100 text-pakistan_green-800' 
-                          : 'bg-earth_yellow-100 text-earth_yellow-900'
+                          : 'bg-dark_moss_green-100 text-dark_moss_green-800'
                       }`}>
                         {activity.status === 'completed' ? 'Complete' : 'Processing'}
                       </div>
@@ -1036,7 +1036,7 @@ export function Admin() {
                 </label>
               </div>
               <div className="bg-earth_yellow-50 border border-earth_yellow-200 rounded-lg p-3">
-                <p className="text-xs text-earth_yellow-900">
+                <p className="text-xs text-dark_moss_green-800">
                   <strong>Note:</strong> API keys are stored securely and encrypted. Changes will take effect after the next deployment.
                 </p>
               </div>

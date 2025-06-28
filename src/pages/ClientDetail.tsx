@@ -282,12 +282,12 @@ export function ClientDetail() {
       {(generating || generatingPlaybook) && (
         <div className="mb-6 bg-gradient-to-r from-earth_yellow-50 to-tiger_s_eye-50 border border-earth_yellow-200 rounded-xl p-4">
           <div className="flex items-center space-x-3">
-            <Activity className="w-5 h-5 text-earth_yellow-700 animate-pulse" />
+            <Activity className="w-5 h-5 text-dark_moss_green-700 animate-pulse" />
             <div>
-              <p className="font-medium text-earth_yellow-800">
+              <p className="font-medium text-dark_moss_green-800">
                 {generating ? 'AI Analysis in Progress' : 'AI Playbook Generation in Progress'}
               </p>
-              <p className="text-sm text-earth_yellow-800">
+              <p className="text-sm text-dark_moss_green-700">
                 {generating 
                   ? `Our AI is analyzing competitive intelligence, market trends, and generating strategic recommendations for ${client.name}...`
                   : `Our AI is creating a custom marketing playbook with actionable tactics tailored specifically for ${client.name}...`
@@ -397,7 +397,7 @@ export function ClientDetail() {
           ) : (
             <div className="text-center py-12">
               <div className="w-16 h-16 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Brain className="w-8 h-8 text-earth_yellow-700" />
+                <Brain className="w-8 h-8 text-dark_moss_green-700" />
               </div>
               <h3 className="text-lg font-medium text-slate-900 mb-2">No AI analysis yet</h3>
               <p className="text-slate-600 mb-6">
@@ -528,7 +528,7 @@ export function ClientDetail() {
           ) : (
             <div className="text-center py-12">
               <div className="w-16 h-16 bg-gradient-to-br from-tiger_s_eye-100 to-earth_yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <Lightbulb className="w-8 h-8 text-tiger_s_eye-700" />
+                <Lightbulb className="w-8 h-8 text-dark_moss_green-700" />
               </div>
               <h3 className="text-lg font-medium text-slate-900 mb-2">No AI playbooks yet</h3>
               <p className="text-slate-600 mb-6">
