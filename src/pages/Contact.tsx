@@ -294,7 +294,7 @@ export function Contact() {
                         name="name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                         placeholder="John Smith"
                         required
                       />
@@ -312,7 +312,7 @@ export function Contact() {
                         name="email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                         placeholder="john@company.com"
                         required
                       />
@@ -332,7 +332,7 @@ export function Contact() {
                         name="company"
                         value={formData.company}
                         onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                         placeholder="Acme SaaS Ltd"
                         required
                       />
@@ -350,7 +350,7 @@ export function Contact() {
                         name="phone"
                         value={formData.phone}
                         onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                         placeholder="+44 20 7123 4567"
                       />
                     </div>
@@ -366,7 +366,7 @@ export function Contact() {
                     name="website"
                     value={formData.website}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                     placeholder="https://yourcompany.co.uk"
                   />
                 </div>
@@ -381,7 +381,7 @@ export function Contact() {
                       name="projectType"
                       value={formData.projectType}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                     >
                       <option value="growth-strategy">Growth Strategy Sprint</option>
                       <option value="demand-generation">Demand Generation Sprint</option>
@@ -402,7 +402,7 @@ export function Contact() {
                         name="budget"
                         value={formData.budget}
                         onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                       >
                         <option value="4k-8k">£4K - £8K (Sprint)</option>
                         <option value="8k-20k">£8K - £20K/month</option>
@@ -422,7 +422,7 @@ export function Contact() {
                         name="timeline"
                         value={formData.timeline}
                         onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                       >
                         <option value="immediate">Start immediately</option>
                         <option value="2-weeks">2-week sprint</option>
@@ -445,7 +445,7 @@ export function Contact() {
                           type="checkbox"
                           checked={formData.currentChallenges.includes(challenge)}
                           onChange={() => handleChallengeToggle(challenge)}
-                          className="w-4 h-4 text-earth_yellow-600 border-slate-300 rounded focus:ring-earth_yellow-500"
+                          className="w-4 h-4 text-dark_moss_green-600 border-slate-300 rounded focus:ring-dark_moss_green-500"
                         />
                         <span className="text-sm text-slate-700">{challenge}</span>
                       </label>
@@ -465,7 +465,7 @@ export function Contact() {
                       value={formData.message}
                       onChange={handleInputChange}
                       rows={4}
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                       placeholder="Describe your current marketing challenges, goals, and what success looks like for your business. I'll personally review your situation and provide specific recommendations."
                     />
                   </div>

@@ -137,7 +137,7 @@ export function Clients() {
             placeholder="Search clients..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
           />
         </div>
       </div>
@@ -156,7 +156,7 @@ export function Clients() {
                   type="text"
                   value={newClient.name}
                   onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                   placeholder="Acme Corporation"
                   required
                 />
@@ -169,7 +169,7 @@ export function Clients() {
                   type="url"
                   value={newClient.domain}
                   onChange={(e) => setNewClient({ ...newClient, domain: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                   placeholder="https://acmecorp.com"
                   required
                 />
@@ -182,7 +182,7 @@ export function Clients() {
                   type="text"
                   value={newClient.industry}
                   onChange={(e) => setNewClient({ ...newClient, industry: e.target.value })}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-earth_yellow-500 focus:border-transparent"
+                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                   placeholder="Technology, Healthcare, etc."
                 />
               </div>

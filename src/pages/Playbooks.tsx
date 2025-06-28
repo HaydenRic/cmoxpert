@@ -236,7 +236,7 @@ export function Playbooks() {
             placeholder="Search playbooks..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-tiger_s_eye-500 focus:border-transparent"
+            className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
           />
         </div>
         
@@ -245,7 +245,7 @@ export function Playbooks() {
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="pl-10 pr-8 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-tiger_s_eye-500 focus:border-transparent appearance-none bg-white min-w-[200px]"
+            className="pl-10 pr-8 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent appearance-none bg-white min-w-[200px]"
           >
             {categories.map((category) => (
               <option key={category.value} value={category.value}>
@@ -479,7 +479,7 @@ export function Playbooks() {
                 <select
                   value={generateForm.clientId}
                   onChange={(e) => setGenerateForm({ ...generateForm, clientId: e.target.value })}
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-tiger_s_eye-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                   required
                 >
                   <option value="">Choose a client...</option>
