@@ -216,10 +216,10 @@ export function Playbooks() {
       {generating && (
         <div className="mb-6 bg-gradient-to-r from-tiger_s_eye-50 to-earth_yellow-50 border border-tiger_s_eye-200 rounded-xl p-4">
           <div className="flex items-center space-x-3">
-            <Brain className="w-5 h-5 text-tiger_s_eye-600 animate-pulse" />
+            <Brain className="w-5 h-5 text-tiger_s_eye-700 animate-pulse" />
             <div>
-              <p className="font-medium text-tiger_s_eye-900">AI Playbook Generation in Progress</p>
-              <p className="text-sm text-tiger_s_eye-700">
+              <p className="font-medium text-tiger_s_eye-800">AI Playbook Generation in Progress</p>
+              <p className="text-sm text-tiger_s_eye-800">
                 Our AI is analyzing your client data and creating a custom marketing playbook with actionable tactics...
               </p>
             </div>
@@ -264,7 +264,7 @@ export function Playbooks() {
             {playbookTypes.map((type) => (
               <div key={type.value} className="bg-gradient-to-br from-tiger_s_eye-50 to-earth_yellow-50 rounded-xl p-6 border border-tiger_s_eye-100">
                 <div className="w-12 h-12 bg-gradient-to-br from-tiger_s_eye-100 to-earth_yellow-100 rounded-lg flex items-center justify-center mb-4">
-                  <type.icon className="w-6 h-6 text-tiger_s_eye-600" />
+                  <type.icon className="w-6 h-6 text-tiger_s_eye-700" />
                 </div>
                 <h3 className="text-lg font-semibold text-slate-900 mb-2">{type.label}</h3>
                 <p className="text-slate-600 text-sm">{type.description}</p>
@@ -283,7 +283,7 @@ export function Playbooks() {
                 <div className="flex-1">
                   <div className="flex items-center space-x-3 mb-3">
                     <div className="w-10 h-10 bg-gradient-to-br from-tiger_s_eye-100 to-earth_yellow-100 rounded-lg flex items-center justify-center">
-                      <Lightbulb className="w-5 h-5 text-tiger_s_eye-600" />
+                      <Lightbulb className="w-5 h-5 text-tiger_s_eye-700" />
                     </div>
                     <div>
                       <h3 className="text-lg font-semibold text-slate-900">{playbook.name}</h3>
@@ -317,7 +317,7 @@ export function Playbooks() {
                       </span>
                     )}
                     <span className="flex items-center">
-                      <Brain className="w-4 h-4 mr-1 text-tiger_s_eye-500" />
+                      <Brain className="w-4 h-4 mr-1 text-tiger_s_eye-700" />
                       AI Generated
                     </span>
                   </div>
@@ -437,7 +437,7 @@ export function Playbooks() {
         ) : (
           <div className="text-center py-12">
             <div className="w-16 h-16 bg-gradient-to-br from-tiger_s_eye-100 to-earth_yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Lightbulb className="w-8 h-8 text-tiger_s_eye-600" />
+              <Lightbulb className="w-8 h-8 text-tiger_s_eye-700" />
             </div>
             <h3 className="text-lg font-medium text-slate-900 mb-2">
               {searchTerm || selectedCategory !== 'all' ? 'No playbooks found' : 'No playbooks yet'}
@@ -509,7 +509,7 @@ export function Playbooks() {
                       className={clsx(
                         'relative flex items-center p-4 border rounded-lg cursor-pointer transition-all',
                         generateForm.playbookType === type.value
-                          ? 'border-tiger_s_eye-500 bg-tiger_s_eye-50'
+                          ? 'border-tiger_s_eye-600 bg-tiger_s_eye-50'
                           : 'border-slate-200 hover:border-slate-300'
                       )}
                     >
@@ -525,13 +525,13 @@ export function Playbooks() {
                         <div className={clsx(
                           'w-8 h-8 rounded-lg flex items-center justify-center',
                           generateForm.playbookType === type.value
-                            ? 'bg-tiger_s_eye-100'
+                            ? 'bg-tiger_s_eye-200'
                             : 'bg-slate-100'
                         )}>
                           <type.icon className={clsx(
                             'w-4 h-4',
                             generateForm.playbookType === type.value
-                              ? 'text-tiger_s_eye-600'
+                              ? 'text-tiger_s_eye-700'
                               : 'text-slate-500'
                           )} />
                         </div>
@@ -547,10 +547,10 @@ export function Playbooks() {
 
               <div className="bg-tiger_s_eye-50 rounded-lg p-4 border border-tiger_s_eye-100">
                 <h3 className="font-medium text-tiger_s_eye-900 mb-2 flex items-center">
-                  <Brain className="w-4 h-4 mr-2" />
+                  <Brain className="w-4 h-4 mr-2 text-tiger_s_eye-700" />
                   AI Generation Process
                 </h3>
-                <p className="text-sm text-tiger_s_eye-700">
+                <p className="text-sm text-tiger_s_eye-800">
                   Our AI will analyze your client's industry, domain, and any existing market analysis data to create a customized playbook with 8-12 actionable tactics, timelines, and KPIs.
                 </p>
               </div>
