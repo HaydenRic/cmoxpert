@@ -870,7 +870,7 @@ export function Admin() {
                   type="file"
                   accept="video/*"
                   onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                  className="w-full border border-slate-300 rounded-lg px-3 py-2"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700"
                   required
                 />
               </div>
@@ -882,7 +882,7 @@ export function Admin() {
                   type="text"
                   value={newVideo.title}
                   onChange={(e) => setNewVideo({ ...newVideo, title: e.target.value })}
-                  className="w-full border border-slate-300 rounded-lg px-3 py-2"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700"
                   required
                 />
               </div>
@@ -893,7 +893,7 @@ export function Admin() {
                 <textarea
                   value={newVideo.description}
                   onChange={(e) => setNewVideo({ ...newVideo, description: e.target.value })}
-                  className="w-full border border-slate-300 rounded-lg px-3 py-2"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700"
                   rows={3}
                 />
               </div>
@@ -944,7 +944,7 @@ export function Admin() {
                   type="file"
                   accept="image/png,image/jpeg,image/jpg,image/svg+xml"
                   onChange={(e) => setSelectedLogo(e.target.files?.[0] || null)}
-                  className="w-full border border-slate-300 rounded-lg px-3 py-2"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700"
                 />
                 <p className="text-xs text-slate-500 mt-1">Recommended: 200x50px or similar aspect ratio</p>
               </div>
@@ -956,7 +956,7 @@ export function Admin() {
                   type="file"
                   accept="image/x-icon,image/png,image/jpeg"
                   onChange={(e) => setSelectedFavicon(e.target.files?.[0] || null)}
-                  className="w-full border border-slate-300 rounded-lg px-3 py-2"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700"
                 />
                 <p className="text-xs text-slate-500 mt-1">Recommended: 32x32px or 16x16px</p>
               </div>
@@ -995,7 +995,7 @@ export function Admin() {
                   type="password"
                   value={aiSettings.openaiApiKey}
                   onChange={(e) => setAISettings({ ...aiSettings, openaiApiKey: e.target.value })}
-                  className="w-full border border-slate-300 rounded-lg px-3 py-2"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700"
                   placeholder="sk-..."
                 />
               </div>
@@ -1007,7 +1007,7 @@ export function Admin() {
                   type="password"
                   value={aiSettings.geminiApiKey}
                   onChange={(e) => setAISettings({ ...aiSettings, geminiApiKey: e.target.value })}
-                  className="w-full border border-slate-300 rounded-lg px-3 py-2"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700"
                   placeholder="AI..."
                 />
               </div>
@@ -1019,7 +1019,7 @@ export function Admin() {
                   type="password"
                   value={aiSettings.semrushApiKey}
                   onChange={(e) => setAISettings({ ...aiSettings, semrushApiKey: e.target.value })}
-                  className="w-full border border-slate-300 rounded-lg px-3 py-2"
+                  className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700"
                   placeholder="Enter SEMrush API key"
                 />
               </div>
@@ -1036,7 +1036,7 @@ export function Admin() {
                 </label>
               </div>
               <div className="bg-earth_yellow-50 border border-earth_yellow-200 rounded-lg p-3">
-                <p className="text-xs text-earth_yellow-800">
+                <p className="text-xs text-earth_yellow-900">
                   <strong>Note:</strong> API keys are stored securely and encrypted. Changes will take effect after the next deployment.
                 </p>
               </div>

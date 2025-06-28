@@ -280,7 +280,7 @@ export function Support() {
       </ul>
 
       <p className="mt-8 p-4 bg-cornsilk-100 rounded-lg border border-cornsilk-200">
-        <strong>Need immediate assistance?</strong> Don't hesitate to reach out. Our support team is here to ensure you get maximum value from cmoxpert's AI-powered marketing intelligence platform.
+        <strong className="text-slate-900">Need immediate assistance?</strong> <span className="text-slate-700">Don't hesitate to reach out. Our support team is here to ensure you get maximum value from cmoxpert's AI-powered marketing intelligence platform.</span>
       </p>
     </StaticPageLayout>
   );
