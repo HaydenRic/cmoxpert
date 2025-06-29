@@ -13,6 +13,7 @@ import { Contact } from './pages/Contact';
 const Dashboard = lazy(() => import('./pages/Dashboard').then(module => ({ default: module.Dashboard })));
 const Clients = lazy(() => import('./pages/Clients').then(module => ({ default: module.Clients })));
 const ClientDetail = lazy(() => import('./pages/ClientDetail').then(module => ({ default: module.ClientDetail })));
+const Reports = lazy(() => import('./pages/Reports').then(module => ({ default: module.Reports })));
 const Playbooks = lazy(() => import('./pages/Playbooks').then(module => ({ default: module.Playbooks })));
 const Performance = lazy(() => import('./pages/Performance').then(module => ({ default: module.Performance })));
 const ClientOnboarding = lazy(() => import('./pages/ClientOnboarding').then(module => ({ default: module.ClientOnboarding })));
@@ -22,7 +23,6 @@ const CompetitiveIntelligence = lazy(() => import('./pages/CompetitiveIntelligen
 const Admin = lazy(() => import('./pages/Admin').then(module => ({ default: module.Admin })));
 
 // Lazy load placeholder pages
-const Reports = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Reports })));
 const Settings = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Settings })));
 const Privacy = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Privacy })));
 const Terms = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Terms })));
