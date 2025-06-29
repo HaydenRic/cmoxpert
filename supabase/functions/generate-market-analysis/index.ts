@@ -18,6 +18,7 @@
 */
 
 import { corsHeaders } from '../_shared/cors.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 const semrushApiKey = Deno.env.get('SEMRUSH_API_KEY');
@@ -36,6 +37,40 @@ interface AnalysisResult {
   status: 'completed' | 'failed';
 }
 
+// Retry configuration
+const MAX_RETRIES = 3;
+const INITIAL_DELAY = 1000; // 1 second
+
+async function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function retryWithBackoff<T>(
+  operation: () => Promise<T>,
+  maxRetries: number = MAX_RETRIES,
+  initialDelay: number = INITIAL_DELAY
+): Promise<T> {
+  let lastError: Error;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error as Error;
+      
+      if (attempt === maxRetries) {
+        throw lastError;
+      }
+      
+      const delay = initialDelay * Math.pow(2, attempt);
+      console.log(`Attempt ${attempt + 1} failed, retrying in ${delay}ms...`);
+      await sleep(delay);
+    }
+  }
+  
+  throw lastError!;
+}
+
 Deno.serve(async (req: Request) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -45,12 +80,51 @@ Deno.serve(async (req: Request) => {
     });
   }
 
+  let supabase: any;
+  let reportId: string = '';
+
   try {
-    const { reportId, clientId, domain, industry }: RequestPayload = await req.json();
+    // Initialize Supabase client with service role
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      throw new Error('Missing Supabase configuration');
+    }
+
+    supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Get user from JWT token
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization header' }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid or expired token' }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    const { reportId: reqReportId, clientId, domain, industry }: RequestPayload = await req.json();
+    reportId = reqReportId;
 
     if (!reportId || !clientId || !domain) {
       return new Response(
-        JSON.stringify({ error: 'Missing required fields' }),
+        JSON.stringify({ error: 'Missing required fields: reportId, clientId, domain' }),
         {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -58,40 +132,53 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Initialize Supabase client
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    
-    const supabaseHeaders = {
-      'Authorization': `Bearer ${supabaseServiceKey}`,
-      'Content-Type': 'application/json',
-      'apikey': supabaseServiceKey,
-    };
+    // Verify user owns the client
+    const { data: clientData, error: clientError } = await supabase
+      .from('clients')
+      .select('id, user_id')
+      .eq('id', clientId)
+      .eq('user_id', user.id)
+      .single();
 
-    // Step 1: Fetch competitive intelligence data
-    const semrushData = await fetchCompetitiveData(domain);
+    if (clientError || !clientData) {
+      return new Response(
+        JSON.stringify({ error: 'Client not found or access denied' }),
+        {
+          status: 403,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    // Update report status to processing
+    await updateReportStatus(supabase, reportId, 'pending', 'Starting market analysis...');
+
+    // Step 1: Fetch competitive intelligence data with retry
+    await updateReportStatus(supabase, reportId, 'pending', 'Fetching competitive intelligence...');
+    const semrushData = await retryWithBackoff(() => fetchCompetitiveData(domain));
     
-    // Step 2: Fetch trend data
-    const trendsData = await fetchTrendData(domain, industry);
+    // Step 2: Fetch trend data with retry
+    await updateReportStatus(supabase, reportId, 'pending', 'Analyzing market trends...');
+    const trendsData = await retryWithBackoff(() => fetchTrendData(domain, industry));
     
-    // Step 3: Generate AI analysis
-    const aiAnalysis = await generateAIAnalysis(domain, industry, semrushData, trendsData);
+    // Step 3: Generate AI analysis with retry
+    await updateReportStatus(supabase, reportId, 'pending', 'Generating AI insights...');
+    const aiAnalysis = await retryWithBackoff(() => generateAIAnalysis(domain, industry, semrushData, trendsData));
     
-    // Step 4: Update the report in Supabase
-    const updateResponse = await fetch(`${supabaseUrl}/rest/v1/reports?id=eq.${reportId}`, {
-      method: 'PATCH',
-      headers: supabaseHeaders,
-      body: JSON.stringify({
+    // Step 4: Update the report with final results
+    const { error: updateError } = await supabase
+      .from('reports')
+      .update({
         semrush_data: semrushData,
         trends_data: trendsData,
         ai_analysis: aiAnalysis,
         status: 'completed',
         updated_at: new Date().toISOString(),
-      }),
-    });
+      })
+      .eq('id', reportId);
 
-    if (!updateResponse.ok) {
-      throw new Error('Failed to update report in database');
+    if (updateError) {
+      throw new Error(`Failed to update report: ${updateError.message}`);
     }
 
     return new Response(
@@ -109,6 +196,15 @@ Deno.serve(async (req: Request) => {
   } catch (error) {
     console.error('Error generating market analysis:', error);
     
+    // Update report status to failed if we have the reportId
+    if (supabase && reportId) {
+      try {
+        await updateReportStatus(supabase, reportId, 'failed', `Analysis failed: ${error.message}`);
+      } catch (updateError) {
+        console.error('Failed to update report status:', updateError);
+      }
+    }
+    
     return new Response(
       JSON.stringify({ 
         error: 'Failed to generate market analysis',
@@ -122,31 +218,72 @@ Deno.serve(async (req: Request) => {
   }
 });
 
-// Fetch competitive intelligence data
+// Helper function to update report status with progress messages
+async function updateReportStatus(supabase: any, reportId: string, status: string, message?: string) {
+  const updateData: any = {
+    status,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (message) {
+    updateData.ai_analysis = message;
+  }
+
+  await supabase
+    .from('reports')
+    .update(updateData)
+    .eq('id', reportId);
+}
+
+// Fetch competitive intelligence data with enhanced error handling
 async function fetchCompetitiveData(domain: string) {
   try {
     // In production, this would make real API calls to SEMrush or similar
     if (semrushApiKey) {
-      // Real SEMrush API call would go here
-      const response = await fetch(`https://api.semrush.com/?type=domain_organic&key=${semrushApiKey}&domain=${domain}&display_limit=10&export_columns=Ph,Po,Pp,Pd,Nq,Cp,Ur,Tr,Tc,Co,Nr,Td`);
+      const response = await fetch(
+        `https://api.semrush.com/?type=domain_organic&key=${semrushApiKey}&domain=${domain}&display_limit=10&export_columns=Ph,Po,Pp,Pd,Nq,Cp,Ur,Tr,Tc,Co,Nr,Td`,
+        {
+          headers: {
+            'User-Agent': 'cmoxpert-analysis/1.0',
+          },
+          signal: AbortSignal.timeout(30000), // 30 second timeout
+        }
+      );
       
-      if (response.ok) {
-        return await response.json();
+      if (!response.ok) {
+        throw new Error(`SEMrush API error: ${response.status} ${response.statusText}`);
       }
+      
+      const data = await response.json();
+      
+      // Validate response structure
+      if (!data || typeof data !== 'object') {
+        throw new Error('Invalid SEMrush API response format');
+      }
+      
+      return data;
     }
     
     // Fallback to enhanced mock data
     return generateEnhancedMockSEMrushData(domain);
   } catch (error) {
     console.error('Error fetching competitive data:', error);
+    
+    // If it's a timeout or network error, throw to trigger retry
+    if (error.name === 'TimeoutError' || error.name === 'TypeError') {
+      throw error;
+    }
+    
+    // For other errors, return mock data
     return generateEnhancedMockSEMrushData(domain);
   }
 }
 
-// Fetch trend data
+// Fetch trend data with enhanced error handling
 async function fetchTrendData(domain: string, industry?: string) {
   try {
     // In production, this would use Google Trends API or similar
+    // For now, return enhanced mock data
     return generateEnhancedMockTrendsData(domain, industry);
   } catch (error) {
     console.error('Error fetching trend data:', error);
@@ -154,11 +291,15 @@ async function fetchTrendData(domain: string, industry?: string) {
   }
 }
 
-// Generate AI analysis using OpenAI
+// Generate AI analysis using OpenAI with enhanced validation
 async function generateAIAnalysis(domain: string, industry: string = '', semrushData: any, trendsData: any): Promise<string> {
   try {
-    if (openAIApiKey) {
-      const prompt = `As a senior marketing strategist, analyze the following data for ${domain} and provide strategic recommendations:
+    if (!openAIApiKey) {
+      console.log('OpenAI API key not configured, using mock analysis');
+      return generateEnhancedMockAnalysis(domain, industry);
+    }
+
+    const prompt = `As a senior marketing strategist, analyze the following data for ${domain} and provide strategic recommendations:
 
 Industry: ${industry || 'General'}
 Competitive Data: ${JSON.stringify(semrushData, null, 2)}
@@ -173,44 +314,63 @@ Please provide:
 
 Format as markdown with clear sections and actionable insights.`;
 
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${openAIApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-4',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a senior marketing strategist with 15+ years of experience in B2B SaaS marketing. Provide practical, actionable insights based on data.'
-            },
-            {
-              role: 'user',
-              content: prompt
-            }
-          ],
-          max_tokens: 2000,
-          temperature: 0.7,
-        }),
-      });
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a senior marketing strategist with 15+ years of experience in B2B SaaS marketing. Provide practical, actionable insights based on data.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        max_tokens: 2000,
+        temperature: 0.7,
+      }),
+      signal: AbortSignal.timeout(60000), // 60 second timeout
+    });
 
-      if (response.ok) {
-        const result = await response.json();
-        return result.choices[0]?.message?.content || generateEnhancedMockAnalysis(domain, industry);
-      }
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`OpenAI API error: ${response.status} ${response.statusText} - ${errorText}`);
     }
+
+    const result = await response.json();
     
-    // Fallback to enhanced mock analysis
-    return generateEnhancedMockAnalysis(domain, industry);
+    // Validate response structure
+    if (!result.choices || !Array.isArray(result.choices) || result.choices.length === 0) {
+      throw new Error('Invalid OpenAI API response structure');
+    }
+
+    const content = result.choices[0]?.message?.content;
+    
+    if (!content || typeof content !== 'string' || content.trim().length === 0) {
+      throw new Error('Empty or invalid content from OpenAI API');
+    }
+
+    return content;
   } catch (error) {
     console.error('Error generating AI analysis:', error);
+    
+    // If it's a timeout or network error, throw to trigger retry
+    if (error.name === 'TimeoutError' || error.name === 'TypeError') {
+      throw error;
+    }
+    
+    // For other errors, return mock analysis
     return generateEnhancedMockAnalysis(domain, industry);
   }
 }
 
-// Enhanced mock data generators
+// Enhanced mock data generators (keeping existing implementations)
 function generateEnhancedMockSEMrushData(domain: string) {
   const baseTraffic = Math.floor(Math.random() * 50000) + 10000;
   const keywords = Math.floor(Math.random() * 500) + 100;

@@ -284,7 +284,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email, 
           password,
           options: {
-            emailRedirectTo: undefined // Disable email confirmation for now
+            emailRedirectTo: `${window.location.origin}/auth?confirmed=true`
           }
         });
         

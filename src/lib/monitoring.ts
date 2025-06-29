@@ -1,4 +1,29 @@
 // Production monitoring utilities
+import * as Sentry from '@sentry/react';
+
+// Initialize Sentry for production error reporting
+export const initializeErrorReporting = () => {
+  if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_DSN) {
+    Sentry.init({
+      dsn: import.meta.env.VITE_SENTRY_DSN,
+      environment: import.meta.env.MODE,
+      integrations: [
+        new Sentry.BrowserTracing(),
+      ],
+      tracesSampleRate: 0.1, // Capture 10% of transactions for performance monitoring
+      beforeSend(event) {
+        // Filter out non-critical errors
+        if (event.exception) {
+          const error = event.exception.values?.[0];
+          if (error?.type === 'ChunkLoadError' || error?.type === 'ResizeObserver loop limit exceeded') {
+            return null; // Don't send these common, non-critical errors
+          }
+        }
+        return event;
+      },
+    });
+  }
+};
 
 interface ErrorReport {
   message: string;
@@ -10,35 +35,46 @@ interface ErrorReport {
   additionalData?: Record<string, any>;
 }
 
-// Error reporting function
+// Enhanced error reporting function
 export const reportError = (error: Error, additionalData?: Record<string, any>) => {
-  if (!import.meta.env.PROD) {
+  if (import.meta.env.DEV) {
     console.error('Development Error:', error, additionalData);
     return;
   }
 
-  const errorReport: ErrorReport = {
-    message: error.message,
-    stack: error.stack,
-    url: window.location.href,
-    userAgent: navigator.userAgent,
-    timestamp: Date.now(),
-    additionalData
-  };
+  // Send to Sentry if available
+  if (import.meta.env.VITE_SENTRY_DSN) {
+    Sentry.withScope((scope) => {
+      if (additionalData) {
+        Object.entries(additionalData).forEach(([key, value]) => {
+          scope.setExtra(key, value);
+        });
+      }
+      Sentry.captureException(error);
+    });
+  } else {
+    // Fallback error reporting
+    const errorReport: ErrorReport = {
+      message: error.message,
+      stack: error.stack,
+      url: window.location.href,
+      userAgent: navigator.userAgent,
+      timestamp: Date.now(),
+      additionalData
+    };
 
-  // In production, send to error reporting service
-  // Example: Sentry, LogRocket, Bugsnag, etc.
-  console.error('Production Error Report:', errorReport);
-  
-  // You could also send to your own endpoint
-  // fetch('/api/errors', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(errorReport)
-  // });
+    console.error('Production Error Report:', errorReport);
+    
+    // You could also send to your own endpoint
+    // fetch('/api/errors', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(errorReport)
+    // }).catch(() => {}); // Silently fail if error reporting fails
+  }
 };
 
-// Performance monitoring
+// Performance monitoring with enhanced error handling
 export const measurePerformance = (name: string, fn: () => Promise<any>) => {
   return async (...args: any[]) => {
     const startTime = performance.now();
@@ -61,6 +97,15 @@ export const measurePerformance = (name: string, fn: () => Promise<any>) => {
         });
       }
       
+      // Send to Sentry for performance monitoring
+      if (import.meta.env.VITE_SENTRY_DSN) {
+        Sentry.addBreadcrumb({
+          message: `Performance: ${name}`,
+          level: 'info',
+          data: { duration: Math.round(duration) }
+        });
+      }
+      
       return result;
     } catch (error) {
       reportError(error as Error, { operation: name, args });
@@ -69,14 +114,14 @@ export const measurePerformance = (name: string, fn: () => Promise<any>) => {
   };
 };
 
-// User session tracking
+// User session tracking with error handling
 export const trackUserSession = () => {
   if (!import.meta.env.PROD) return;
   
   const sessionStart = Date.now();
   
   // Track session duration on page unload
-  window.addEventListener('beforeunload', () => {
+  const handleBeforeUnload = () => {
     const sessionDuration = Date.now() - sessionStart;
     
     if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -84,21 +129,42 @@ export const trackUserSession = () => {
         value: Math.round(sessionDuration / 1000) // in seconds
       });
     }
-  });
+  };
+
+  window.addEventListener('beforeunload', handleBeforeUnload);
+  
+  // Cleanup function
+  return () => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  };
 };
 
-// Feature usage tracking
+// Feature usage tracking with error handling
 export const trackFeatureUsage = (feature: string, action: string, metadata?: Record<string, any>) => {
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', 'feature_usage', {
-      feature_name: feature,
-      action: action,
-      ...metadata
-    });
+  try {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'feature_usage', {
+        feature_name: feature,
+        action: action,
+        ...metadata
+      });
+    }
+
+    // Add breadcrumb for debugging
+    if (import.meta.env.VITE_SENTRY_DSN) {
+      Sentry.addBreadcrumb({
+        message: `Feature: ${feature} - ${action}`,
+        level: 'info',
+        data: metadata
+      });
+    }
+  } catch (error) {
+    // Silently fail for tracking errors
+    console.warn('Failed to track feature usage:', error);
   }
 };
 
-// API call monitoring
+// API call monitoring with enhanced error handling
 export const monitorApiCall = async (
   apiName: string, 
   apiCall: () => Promise<any>
@@ -117,6 +183,15 @@ export const monitorApiCall = async (
       });
     }
     
+    // Add success breadcrumb
+    if (import.meta.env.VITE_SENTRY_DSN) {
+      Sentry.addBreadcrumb({
+        message: `API Success: ${apiName}`,
+        level: 'info',
+        data: { duration: Math.round(duration) }
+      });
+    }
+    
     return result;
   } catch (error) {
     const duration = performance.now() - startTime;
@@ -132,5 +207,22 @@ export const monitorApiCall = async (
     
     reportError(error as Error, { apiName, duration });
     throw error;
+  }
+};
+
+// Set user context for error reporting
+export const setUserContext = (userId: string, email?: string) => {
+  if (import.meta.env.VITE_SENTRY_DSN) {
+    Sentry.setUser({
+      id: userId,
+      email: email
+    });
+  }
+};
+
+// Clear user context (e.g., on logout)
+export const clearUserContext = () => {
+  if (import.meta.env.VITE_SENTRY_DSN) {
+    Sentry.setUser(null);
   }
 };

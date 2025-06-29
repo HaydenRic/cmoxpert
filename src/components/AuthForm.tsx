@@ -25,6 +25,9 @@ export function AuthForm() {
 
       if (error) {
         setError(error.message);
+      } else if (!isSignIn && result.data?.user && !result.data.session) {
+        // Handle case where email confirmation is required
+        setError('Please check your email and click the confirmation link to complete registration.');
       }
     } catch (err) {
       setError('An unexpected error occurred');

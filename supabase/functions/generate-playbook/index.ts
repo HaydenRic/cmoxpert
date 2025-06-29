@@ -20,6 +20,7 @@
 */
 
 import { corsHeaders } from '../_shared/cors.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
@@ -37,6 +38,101 @@ interface PlaybookData {
   category: string;
 }
 
+interface PlaybookTactic {
+  title: string;
+  description: string;
+  timeline: string;
+  difficulty: 'Easy' | 'Medium' | 'Hard';
+  impact: 'Low' | 'Medium' | 'High';
+  resources: string[];
+  kpis: string[];
+}
+
+// Retry configuration
+const MAX_RETRIES = 3;
+const INITIAL_DELAY = 1000;
+
+async function sleep(ms: number) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function retryWithBackoff<T>(
+  operation: () => Promise<T>,
+  maxRetries: number = MAX_RETRIES,
+  initialDelay: number = INITIAL_DELAY
+): Promise<T> {
+  let lastError: Error;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error as Error;
+      
+      if (attempt === maxRetries) {
+        throw lastError;
+      }
+      
+      const delay = initialDelay * Math.pow(2, attempt);
+      console.log(`Playbook generation attempt ${attempt + 1} failed, retrying in ${delay}ms...`);
+      await sleep(delay);
+    }
+  }
+  
+  throw lastError!;
+}
+
+// Validate playbook data structure
+function validatePlaybookData(data: any): PlaybookData {
+  if (!data || typeof data !== 'object') {
+    throw new Error('Invalid playbook data: not an object');
+  }
+
+  const { name, description, category, tactics } = data;
+
+  if (!name || typeof name !== 'string' || name.trim().length === 0) {
+    throw new Error('Invalid playbook data: missing or invalid name');
+  }
+
+  if (!description || typeof description !== 'string' || description.trim().length === 0) {
+    throw new Error('Invalid playbook data: missing or invalid description');
+  }
+
+  if (!category || typeof category !== 'string') {
+    throw new Error('Invalid playbook data: missing or invalid category');
+  }
+
+  if (!Array.isArray(tactics)) {
+    throw new Error('Invalid playbook data: tactics must be an array');
+  }
+
+  // Validate each tactic
+  const validatedTactics = tactics.map((tactic, index) => {
+    if (!tactic || typeof tactic !== 'object') {
+      throw new Error(`Invalid tactic at index ${index}: not an object`);
+    }
+
+    const validatedTactic: PlaybookTactic = {
+      title: tactic.title || `Tactic ${index + 1}`,
+      description: tactic.description || 'No description provided',
+      timeline: tactic.timeline || 'TBD',
+      difficulty: ['Easy', 'Medium', 'Hard'].includes(tactic.difficulty) ? tactic.difficulty : 'Medium',
+      impact: ['Low', 'Medium', 'High'].includes(tactic.impact) ? tactic.impact : 'Medium',
+      resources: Array.isArray(tactic.resources) ? tactic.resources : [],
+      kpis: Array.isArray(tactic.kpis) ? tactic.kpis : []
+    };
+
+    return validatedTactic;
+  });
+
+  return {
+    name: name.trim(),
+    description: description.trim(),
+    category: category.trim(),
+    tactics: validatedTactics
+  };
+}
+
 Deno.serve(async (req: Request) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -47,6 +143,41 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
+    // Initialize Supabase client with service role
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    
+    if (!supabaseUrl || !supabaseServiceKey) {
+      throw new Error('Missing Supabase configuration');
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+
+    // Get user from JWT token
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization header' }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+    const { data: { user }, error: authError } = await supabase.auth.getUser(token);
+
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid or expired token' }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
     const { clientId, userId, playbookType = 'growth-strategy', reportId }: RequestPayload = await req.json();
 
     if (!clientId || !userId) {
@@ -59,88 +190,92 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Initialize Supabase client
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    
-    const supabaseHeaders = {
-      'Authorization': `Bearer ${supabaseServiceKey}`,
-      'Content-Type': 'application/json',
-      'apikey': supabaseServiceKey,
-    };
-
-    // Step 1: Fetch client data
-    const clientResponse = await fetch(`${supabaseUrl}/rest/v1/clients?id=eq.${clientId}&user_id=eq.${userId}`, {
-      headers: supabaseHeaders,
-    });
-
-    if (!clientResponse.ok) {
-      throw new Error('Failed to fetch client data');
+    // Verify user ID matches authenticated user
+    if (userId !== user.id) {
+      return new Response(
+        JSON.stringify({ error: 'User ID mismatch' }),
+        {
+          status: 403,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
     }
 
-    const clientData = await clientResponse.json();
-    if (!clientData || clientData.length === 0) {
-      throw new Error('Client not found or access denied');
-    }
+    // Step 1: Fetch client data and verify ownership
+    const { data: clientData, error: clientError } = await supabase
+      .from('clients')
+      .select('*')
+      .eq('id', clientId)
+      .eq('user_id', userId)
+      .single();
 
-    const client = clientData[0];
+    if (clientError || !clientData) {
+      return new Response(
+        JSON.stringify({ error: 'Client not found or access denied' }),
+        {
+          status: 403,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
 
     // Step 2: Fetch latest market analysis if available
     let marketAnalysis = null;
     if (reportId) {
-      const reportResponse = await fetch(`${supabaseUrl}/rest/v1/reports?id=eq.${reportId}`, {
-        headers: supabaseHeaders,
-      });
+      const { data: reportData, error: reportError } = await supabase
+        .from('reports')
+        .select('*')
+        .eq('id', reportId)
+        .eq('client_id', clientId)
+        .single();
       
-      if (reportResponse.ok) {
-        const reportData = await reportResponse.json();
-        if (reportData && reportData.length > 0) {
-          marketAnalysis = reportData[0];
-        }
+      if (!reportError && reportData) {
+        marketAnalysis = reportData;
       }
     } else {
       // Get the latest completed report for this client
-      const latestReportResponse = await fetch(
-        `${supabaseUrl}/rest/v1/reports?client_id=eq.${clientId}&status=eq.completed&order=created_at.desc&limit=1`,
-        { headers: supabaseHeaders }
-      );
+      const { data: latestReportData, error: latestReportError } = await supabase
+        .from('reports')
+        .select('*')
+        .eq('client_id', clientId)
+        .eq('status', 'completed')
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .single();
       
-      if (latestReportResponse.ok) {
-        const latestReportData = await latestReportResponse.json();
-        if (latestReportData && latestReportData.length > 0) {
-          marketAnalysis = latestReportData[0];
-        }
+      if (!latestReportError && latestReportData) {
+        marketAnalysis = latestReportData;
       }
     }
 
-    // Step 3: Generate AI playbook
-    const playbookData = await generateAIPlaybook(client, marketAnalysis, playbookType);
+    // Step 3: Generate AI playbook with retry and validation
+    const playbookData = await retryWithBackoff(() => 
+      generateAIPlaybook(clientData, marketAnalysis, playbookType)
+    );
     
     // Step 4: Insert playbook into database
-    const insertResponse = await fetch(`${supabaseUrl}/rest/v1/playbooks`, {
-      method: 'POST',
-      headers: supabaseHeaders,
-      body: JSON.stringify({
+    const { data: insertedPlaybook, error: insertError } = await supabase
+      .from('playbooks')
+      .insert([{
         name: playbookData.name,
         description: playbookData.description,
         tactics: playbookData.tactics,
         category: playbookData.category,
         user_id: userId,
         source_client_id: clientId,
-      }),
-    });
+      }])
+      .select()
+      .single();
 
-    if (!insertResponse.ok) {
-      throw new Error('Failed to save playbook to database');
+    if (insertError) {
+      throw new Error(`Failed to save playbook: ${insertError.message}`);
     }
-
-    const insertedPlaybook = await insertResponse.json();
 
     return new Response(
       JSON.stringify({ 
         success: true, 
         message: 'AI playbook generated successfully',
-        playbookId: insertedPlaybook[0]?.id,
+        playbookId: insertedPlaybook.id,
         playbook: playbookData
       }),
       {
@@ -165,11 +300,15 @@ Deno.serve(async (req: Request) => {
   }
 });
 
-// Generate AI playbook using OpenAI
+// Generate AI playbook using OpenAI with enhanced validation
 async function generateAIPlaybook(client: any, marketAnalysis: any, playbookType: string): Promise<PlaybookData> {
   try {
-    if (openAIApiKey) {
-      const prompt = `As a senior marketing strategist, create a comprehensive marketing playbook for the following client:
+    if (!openAIApiKey) {
+      console.log('OpenAI API key not configured, using mock playbook');
+      return generateEnhancedMockPlaybook(client, playbookType);
+    }
+
+    const prompt = `As a senior marketing strategist, create a comprehensive marketing playbook for the following client:
 
 Client Information:
 - Company: ${client.name}
@@ -216,54 +355,74 @@ Return the response as a valid JSON object with this exact structure:
   ]
 }`;
 
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${openAIApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-4',
-          messages: [
-            {
-              role: 'system',
-              content: 'You are a senior marketing strategist with 15+ years of experience in B2B SaaS marketing. Create practical, actionable marketing playbooks. Always respond with valid JSON only, no additional text or formatting.'
-            },
-            {
-              role: 'user',
-              content: prompt
-            }
-          ],
-          max_tokens: 3000,
-          temperature: 0.7,
-        }),
-      });
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a senior marketing strategist with 15+ years of experience in B2B SaaS marketing. Create practical, actionable marketing playbooks. Always respond with valid JSON only, no additional text or formatting.'
+          },
+          {
+            role: 'user',
+            content: prompt
+          }
+        ],
+        max_tokens: 3000,
+        temperature: 0.7,
+      }),
+      signal: AbortSignal.timeout(60000), // 60 second timeout
+    });
 
-      if (response.ok) {
-        const result = await response.json();
-        const content = result.choices[0]?.message?.content;
-        
-        try {
-          // Parse the JSON response
-          const playbookData = JSON.parse(content);
-          return playbookData;
-        } catch (parseError) {
-          console.error('Failed to parse AI response as JSON:', parseError);
-          // Fallback to mock data if JSON parsing fails
-          return generateEnhancedMockPlaybook(client, playbookType);
-        }
-      }
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`OpenAI API error: ${response.status} ${response.statusText} - ${errorText}`);
     }
+
+    const result = await response.json();
     
-    // Fallback to enhanced mock playbook
-    return generateEnhancedMockPlaybook(client, playbookType);
+    // Validate response structure
+    if (!result.choices || !Array.isArray(result.choices) || result.choices.length === 0) {
+      throw new Error('Invalid OpenAI API response structure');
+    }
+
+    const content = result.choices[0]?.message?.content;
+    
+    if (!content || typeof content !== 'string' || content.trim().length === 0) {
+      throw new Error('Empty or invalid content from OpenAI API');
+    }
+
+    try {
+      // Parse and validate the JSON response
+      const rawPlaybookData = JSON.parse(content);
+      const validatedPlaybookData = validatePlaybookData(rawPlaybookData);
+      return validatedPlaybookData;
+    } catch (parseError) {
+      console.error('Failed to parse or validate AI response:', parseError);
+      console.log('Raw AI response:', content);
+      
+      // Fallback to mock data if JSON parsing or validation fails
+      return generateEnhancedMockPlaybook(client, playbookType);
+    }
   } catch (error) {
     console.error('Error generating AI playbook:', error);
+    
+    // If it's a timeout or network error, throw to trigger retry
+    if (error.name === 'TimeoutError' || error.name === 'TypeError') {
+      throw error;
+    }
+    
+    // For other errors, return mock playbook
     return generateEnhancedMockPlaybook(client, playbookType);
   }
 }
 
-// Enhanced mock playbook generator
+// Enhanced mock playbook generator (keeping existing implementation)
 function generateEnhancedMockPlaybook(client: any, playbookType: string): PlaybookData {
   const companyName = client.name;
   const industry = client.industry || 'B2B SaaS';
