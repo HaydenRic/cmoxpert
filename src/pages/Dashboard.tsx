@@ -287,6 +287,23 @@ export function Dashboard() {
             </Link>
 
             <Link 
+              to="/competitive-intelligence"
+              className="block p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-lg border border-orange-200 hover:shadow-md transition-all group"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium text-slate-900 group-hover:text-orange-900">
+                    Competitive Intelligence
+                  </h3>
+                  <p className="text-sm text-slate-600 mt-1">
+                    Monitor competitors and receive real-time market alerts
+                  </p>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-orange-600 group-hover:text-orange-700" />
+              </div>
+            </Link>
+
+            <Link 
               to="/content"
               className="block p-4 bg-gradient-to-r from-tan-50 to-olive-50 rounded-lg border border-tan-200 hover:shadow-md transition-all group"
             >
