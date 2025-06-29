@@ -4,6 +4,7 @@ import { supabase, AIServicesManager } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   ArrowLeft, 
+  Rocket,
   Globe, 
   TrendingUp, 
   FileText, 
@@ -241,8 +242,8 @@ export function ClientDetail() {
           <div className="flex items-center space-x-4">
             <button
               onClick={generateMarketAnalysis}
-              disabled={generating}
-              className="bg-gradient-to-r from-dark_moss_green-600 to-pakistan_green-600 hover:from-dark_moss_green-700 hover:to-pakistan_green-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
+              disabled={generating || reports.length === 0}
+              className="bg-gradient-to-r from-slate_blue-600 to-charcoal-700 hover:from-slate_blue-700 hover:to-charcoal-800 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
             >
               {generating ? (
                 <>
@@ -260,7 +261,7 @@ export function ClientDetail() {
             <button
               onClick={generateAIPlaybook}
               disabled={generatingPlaybook}
-              className="bg-gradient-to-r from-tiger_s_eye-600 to-earth_yellow-600 hover:from-tiger_s_eye-700 hover:to-earth_yellow-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
+              className="bg-gradient-to-r from-tan-600 to-olive-600 hover:from-tan-700 hover:to-olive-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
             >
               {generatingPlaybook ? (
                 <>
@@ -272,6 +273,57 @@ export function ClientDetail() {
                   <Lightbulb className="w-5 h-5" />
                   <span>Generate AI Playbook</span>
                 </>
+              )}
+            </button>
+            
+            <Link
+              to={`/clients/${client.id}/onboarding`}
+              className="bg-cream-100 hover:bg-cream-200 text-slate_blue-700 px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
+            >
+              <Rocket className="w-5 h-5" />
+              <span>Guided Setup</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+      
+      {/* Onboarding Banner */}
+      {reports.length === 0 && (
+        <div className="mb-6 bg-gradient-to-r from-slate_blue-50 to-cream-100 border border-slate_blue-200 rounded-xl p-4">
+          <div className="flex items-center space-x-3">
+            <Rocket className="w-5 h-5 text-slate_blue-600" />
+            <div>
+              <p className="font-medium text-slate_blue-900">
+                Complete Client Onboarding
+              </p>
+              <p className="text-sm text-slate_blue-700">
+                Use our guided setup process to configure {client.name}'s profile, track competitors, and generate AI-powered market analysis.
+              </p>
+            </div>
+            <Link
+              to={`/clients/${client.id}/onboarding`}
+              className="ml-auto bg-slate_blue-600 hover:bg-slate_blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
+            >
+              Start Onboarding
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* Generation Status Banner */}
+      {(generating || generatingPlaybook) && (
+        <div className="mb-6 bg-gradient-to-r from-tan-50 to-olive-50 border border-tan-200 rounded-xl p-4">
+          <div className="flex items-center space-x-3">
+            <Activity className="w-5 h-5 text-tan-600 animate-pulse" />
+            <div>
+              <p className="font-medium text-olive-900">
+                {generating ? 'AI Analysis in Progress' : 'AI Playbook Generation in Progress'}
+              </p>
+              <p className="text-sm text-olive-700">
+                {generating 
+                  ? `Our AI is analyzing competitive intelligence, market trends, and generating strategic recommendations for ${client.name}...`
+                  : `Our AI is creating a custom marketing playbook with actionable tactics tailored specifically for ${client.name}...`
+                }
               )}
             </button>
           </div>

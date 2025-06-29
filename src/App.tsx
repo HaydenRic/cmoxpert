@@ -15,6 +15,7 @@ const Clients = lazy(() => import('./pages/Clients').then(module => ({ default: 
 const ClientDetail = lazy(() => import('./pages/ClientDetail').then(module => ({ default: module.ClientDetail })));
 const Playbooks = lazy(() => import('./pages/Playbooks').then(module => ({ default: module.Playbooks })));
 const Performance = lazy(() => import('./pages/Performance').then(module => ({ default: module.Performance })));
+const ClientOnboarding = lazy(() => import('./pages/ClientOnboarding').then(module => ({ default: module.ClientOnboarding })));
 const ContentHub = lazy(() => import('./pages/ContentHub').then(module => ({ default: module.ContentHub })));
 const CompetitiveIntelligence = lazy(() => import('./pages/CompetitiveIntelligence').then(module => ({ default: module.CompetitiveIntelligence })));
 const Admin = lazy(() => import('./pages/Admin').then(module => ({ default: module.Admin })));
@@ -182,6 +183,21 @@ function AppContent() {
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
                   <CompetitiveIntelligence />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          } 
+        />
+        
+        <Route 
+          path="/clients/:clientId/onboarding" 
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <ClientOnboarding />
                 </Suspense>
               </Layout>
             ) : (

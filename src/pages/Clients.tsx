@@ -238,10 +238,17 @@ export function Clients() {
                   <div className="flex items-center space-x-2">
                     <Link
                       to={`/clients/${client.id}`}
-                      className="bg-cornsilk-100 hover:bg-cornsilk-200 text-dark_moss_green-600 px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+                      className="bg-cream-100 hover:bg-cream-200 text-slate_blue-600 px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
                     >
                       <TrendingUp className="w-4 h-4" />
                       <span>Analyze</span>
+                    </Link>
+                    <Link
+                      to={`/clients/${client.id}/onboarding`}
+                      className="bg-slate_blue-100 hover:bg-slate_blue-200 text-slate_blue-700 px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+                    >
+                      <Rocket className="w-4 h-4" />
+                      <span>Onboard</span>
                     </Link>
                     <Link
                       to={`/reports?client=${client.id}`}

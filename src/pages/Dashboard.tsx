@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   TrendingUp, 
+  Rocket,
   Users, 
   FileText, 
   Clock,
@@ -21,6 +22,7 @@ const SplineSceneBasic = React.lazy(() =>
 
 interface DashboardStats {
   totalClients: number;
+  clientsNeedingOnboarding: number;
   totalReports: number;
   completedReports: number;
   pendingReports: number;
@@ -30,6 +32,7 @@ interface DashboardStats {
 export function Dashboard() {
   const { user } = useAuth();
   const [stats, setStats] = useState<DashboardStats>({
+    clientsNeedingOnboarding: 0,
     totalClients: 0,
     totalReports: 0,
     completedReports: 0,
@@ -49,8 +52,18 @@ export function Dashboard() {
       // Get client count
       const { count: clientCount } = await supabase
         .from('clients')
-        .select('*', { count: 'exact', head: true })
+        .select('id', { count: 'exact', head: true })
         .eq('user_id', user!.id);
+
+      // Get clients needing onboarding
+      const { data: onboardingData } = await supabase
+        .from('onboarding_progress')
+        .select(`
+          client_id,
+          is_completed
+        `)
+        .eq('user_id', user!.id)
+        .eq('is_completed', false);
 
       // Get report stats
       const { data: reports, count: reportCount } = await supabase
@@ -76,6 +89,7 @@ export function Dashboard() {
         .limit(5);
 
       setStats({
+        clientsNeedingOnboarding: onboardingData?.length || 0,
         totalClients: clientCount || 0,
         totalReports: reportCount || 0,
         completedReports,
@@ -144,12 +158,35 @@ export function Dashboard() {
       {/* Header */}
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-slate-900 mb-2">
-          Welcome back, {user?.email?.split('@')[0]}
+          Welcome back, {user?.email?.split('@')[0] || 'User'}
         </h1>
         <p className="text-slate-600">
           Here's what's happening with your client portfolio today.
         </p>
       </div>
+
+      {/* Onboarding Banner */}
+      {stats.clientsNeedingOnboarding > 0 && (
+        <div className="mb-6 bg-gradient-to-r from-slate_blue-50 to-cream-100 border border-slate_blue-200 rounded-xl p-4">
+          <div className="flex items-center space-x-3">
+            <Rocket className="w-5 h-5 text-slate_blue-600" />
+            <div>
+              <p className="font-medium text-slate_blue-900">
+                {stats.clientsNeedingOnboarding} {stats.clientsNeedingOnboarding === 1 ? 'Client' : 'Clients'} Need Onboarding
+              </p>
+              <p className="text-sm text-slate_blue-700">
+                Complete the guided setup process to get AI-powered insights and recommendations.
+              </p>
+            </div>
+            <Link
+              to="/clients"
+              className="ml-auto bg-slate_blue-600 hover:bg-slate_blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
+            >
+              View Clients
+            </Link>
+          </div>
+        </div>
+      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
