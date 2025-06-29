@@ -322,13 +322,12 @@ export function ClientDetail() {
               <p className="text-sm text-olive-700">
                 {generating 
                   ? `Our AI is analyzing competitive intelligence, market trends, and generating strategic recommendations for ${client.name}...`
-                  : `Our AI is creating a custom marketing playbook with actionable tactics tailored specifically for ${client.name}...`
-                }
-              )}
-            </button>
+                  : `Our AI is creating a custom marketing playbook with actionable tactics tailored specifically for ${client.name}...`}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Analysis Status Banner */}
       {(generating || generatingPlaybook) && (
@@ -342,8 +341,7 @@ export function ClientDetail() {
               <p className="text-sm text-dark_moss_green-700">
                 {generating 
                   ? `Our AI is analyzing competitive intelligence, market trends, and generating strategic recommendations for ${client.name}...`
-                  : `Our AI is creating a custom marketing playbook with actionable tactics tailored specifically for ${client.name}...`
-                }
+                  : `Our AI is creating a custom marketing playbook with actionable tactics tailored specifically for ${client.name}...`}
               </p>
             </div>
           </div>
