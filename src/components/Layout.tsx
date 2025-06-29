@@ -4,6 +4,7 @@ import { BrandLogo } from './BrandLogo';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   LayoutDashboard, 
+  Rocket,
   BarChart3,
   DollarSign,
   Eye,
@@ -34,6 +35,7 @@ export function Layout({ children }: LayoutProps) {
     { name: 'Competitive Intel', href: '/competitive-intelligence', icon: Eye },
     { name: 'Content Hub', href: '/content', icon: Sparkles },
     { name: 'Clients', href: '/clients', icon: Users },
+    { name: 'Onboarding', href: '/onboarding', icon: Rocket },
     { name: 'Reports', href: '/reports', icon: FileText },
     { name: 'Playbooks', href: '/playbooks', icon: BookOpen },
     ...(isAdmin ? [{ name: 'Admin', href: '/admin', icon: Shield }] : []),

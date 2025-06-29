@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   Plus, 
+  Rocket,
   Search, 
   Globe, 
   Calendar,
@@ -24,6 +25,19 @@ interface Client {
   status: string;
   created_at: string;
   updated_at: string;
+  onboarding_progress?: {
+    is_completed: boolean;
+  };
+}
+
+interface OnboardingStatus {
+  client_id: string;
+  is_completed: boolean;
+  domain: string;
+  industry?: string;
+  status: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export function Clients() {
@@ -32,6 +46,7 @@ export function Clients() {
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [onboardingStatus, setOnboardingStatus] = useState<OnboardingStatus[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [newClient, setNewClient] = useState({
     name: '',
@@ -56,12 +71,26 @@ export function Clients() {
     try {
       const { data, error } = await supabase
         .from('clients')
-        .select('*')
+        .select(`
+          *,
+          onboarding_progress(is_completed)
+        `)
         .eq('user_id', user!.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setClients(data || []);
+      
+      // Process clients and onboarding status
+      const clientsData = data || [];
+      setClients(clientsData);
+      
+      // Extract onboarding status
+      const onboardingData = clientsData.map(client => ({
+        client_id: client.id,
+        is_completed: client.onboarding_progress?.[0]?.is_completed || false
+      }));
+      setOnboardingStatus(onboardingData);
+      
     } catch (error) {
       console.error('Error loading clients:', error);
     } finally {
@@ -219,6 +248,11 @@ export function Clients() {
                   <div>
                     <h3 className="text-lg font-semibold text-slate-900">{client.name}</h3>
                     <p className="text-slate-600 text-sm">{client.domain}</p>
+                    {!client.onboarding_progress?.[0]?.is_completed && (
+                      <span className="inline-block mt-1 px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full">
+                        Onboarding needed
+                      </span>
+                    )}
                     {client.industry && (
                       <span className="inline-block mt-1 px-2 py-1 bg-cornsilk-200 text-slate-600 text-xs rounded-full">
                         {client.industry}
@@ -246,9 +280,10 @@ export function Clients() {
                     <Link
                       to={`/clients/${client.id}/onboarding`}
                       className="bg-slate_blue-100 hover:bg-slate_blue-200 text-slate_blue-700 px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+                      title={client.onboarding_progress?.[0]?.is_completed ? "Onboarding complete" : "Complete onboarding"}
                     >
                       <Rocket className="w-4 h-4" />
-                      <span>Onboard</span>
+                      <span>{client.onboarding_progress?.[0]?.is_completed ? "Setup" : "Onboard"}</span>
                     </Link>
                     <Link
                       to={`/reports?client=${client.id}`}

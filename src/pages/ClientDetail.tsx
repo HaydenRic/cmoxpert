@@ -288,7 +288,7 @@ export function ClientDetail() {
       </div>
       
       {/* Onboarding Banner */}
-      {reports.length === 0 && (
+      {client && reports.length === 0 && (
         <div className="mb-6 bg-gradient-to-r from-slate_blue-50 to-cream-100 border border-slate_blue-200 rounded-xl p-4">
           <div className="flex items-center space-x-3">
             <Rocket className="w-5 h-5 text-slate_blue-600" />
@@ -311,7 +311,7 @@ export function ClientDetail() {
       )}
 
       {/* Generation Status Banner */}
-      {(generating || generatingPlaybook) && (
+      {client && (generating || generatingPlaybook) && (
         <div className="mb-6 bg-gradient-to-r from-tan-50 to-olive-50 border border-tan-200 rounded-xl p-4">
           <div className="flex items-center space-x-3">
             <Activity className="w-5 h-5 text-tan-600 animate-pulse" />
@@ -330,7 +330,7 @@ export function ClientDetail() {
       )}
 
       {/* Analysis Status Banner */}
-      {(generating || generatingPlaybook) && (
+      {client && (generating || generatingPlaybook) && (
         <div className="mb-6 bg-gradient-to-r from-earth_yellow-50 to-tiger_s_eye-50 border border-earth_yellow-200 rounded-xl p-4">
           <div className="flex items-center space-x-3">
             <Activity className="w-5 h-5 text-dark_moss_green-700 animate-pulse" />

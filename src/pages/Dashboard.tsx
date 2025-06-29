@@ -142,6 +142,159 @@ export function Dashboard() {
     return (
       <div className="p-8">
         <div className="animate-pulse space-y-6">
+          <div className="h-8 bg-cream-200 rounded w-1/4"></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-32 bg-cream-200 rounded-xl"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-8">
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">
+          Welcome back, {user?.email?.split('@')[0] || 'User'}
+        </h1>
+        <p className="text-slate-600">
+          Here's what's happening with your client portfolio today.
+        </p>
+      </div>
+
+      {/* Onboarding Banner */}
+      {stats.clientsNeedingOnboarding > 0 && (
+        <div className="mb-6 bg-gradient-to-r from-slate_blue-50 to-cream-100 border border-slate_blue-200 rounded-xl p-4">
+          <div className="flex items-center space-x-3">
+            <Rocket className="w-5 h-5 text-slate_blue-600" />
+            <div>
+              <p className="font-medium text-slate_blue-900">
+                {stats.clientsNeedingOnboarding} {stats.clientsNeedingOnboarding === 1 ? 'Client' : 'Clients'} Need Onboarding
+              </p>
+              <p className="text-sm text-slate_blue-700">
+                Complete the guided setup process to get AI-powered insights and recommendations.
+              </p>
+            </div>
+            <Link
+              to="/clients"
+              className="ml-auto bg-slate_blue-600 hover:bg-slate_blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium"
+            >
+              View Clients
+            </Link>
+          </div>
+        </div>
+      )}
+    totalReports: 0,
+    completedReports: 0,
+    pendingReports: 0,
+    recentActivity: []
+  });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (user) {
+      loadDashboardData();
+    }
+  }, [user]);
+
+  const loadDashboardData = async () => {
+    try {
+      // Get client count
+      const { count: clientCount } = await supabase
+        .from('clients')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user!.id);
+
+      // Get clients needing onboarding
+      const { data: onboardingData } = await supabase
+        .from('onboarding_progress')
+        .select(`
+          client_id,
+          is_completed
+        `)
+        .eq('user_id', user!.id)
+        .eq('is_completed', false);
+
+      // Get report stats
+      const { data: reports, count: reportCount } = await supabase
+        .from('reports')
+        .select(`
+          *,
+          clients!inner(user_id)
+        `, { count: 'exact' })
+        .eq('clients.user_id', user!.id);
+
+      const completedReports = reports?.filter(r => r.status === 'completed').length || 0;
+      const pendingReports = reports?.filter(r => r.status === 'pending').length || 0;
+
+      // Get recent activity (latest reports with client names)
+      const { data: recentActivity } = await supabase
+        .from('reports')
+        .select(`
+          *,
+          clients!inner(name, user_id)
+        `)
+        .eq('clients.user_id', user!.id)
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      setStats({
+        clientsNeedingOnboarding: onboardingData?.length || 0,
+        totalClients: clientCount || 0,
+        totalReports: reportCount || 0,
+        completedReports,
+        pendingReports,
+        recentActivity: recentActivity || []
+      });
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const statCards = [
+    {
+      title: 'Total Clients',
+      value: stats.totalClients,
+      icon: Users,
+      color: 'bg-dark_moss_green-500',
+      change: '+12%',
+      changeType: 'positive'
+    },
+    {
+      title: 'Total Reports',
+      value: stats.totalReports,
+      icon: FileText,
+      color: 'bg-pakistan_green-500',
+      change: '+8%',
+      changeType: 'positive'
+    },
+    {
+      title: 'Completed',
+      value: stats.completedReports,
+      icon: CheckCircle,
+      color: 'bg-pakistan_green-500',
+      change: `${stats.completedReports}/${stats.totalReports}`,
+      changeType: 'neutral'
+    },
+    {
+      title: 'In Progress',
+      value: stats.pendingReports,
+      icon: Clock,
+      color: 'bg-earth_yellow-500',
+      change: 'Active',
+      changeType: 'neutral'
+    }
+  ];
+
+  if (loading) {
+    return (
+      <div className="p-8">
+        <div className="animate-pulse space-y-6">
           <div className="h-8 bg-cornsilk-200 rounded w-1/4"></div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[...Array(4)].map((_, i) => (

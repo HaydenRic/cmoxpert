@@ -31,12 +31,25 @@ interface OnboardingStep {
   icon: React.ElementType;
 }
 
+interface OnboardingProgress {
+  id: string;
+  client_id: string;
+  user_id: string;
+  current_step: string;
+  completed_steps: string[];
+  form_data: Record<string, any>;
+  is_completed: boolean;
+  started_at: string;
+  completed_at: string | null;
+}
+
 export function ClientOnboarding() {
   const { clientId } = useParams<{ clientId: string }>();
   const { user } = useAuth();
   const navigate = useNavigate();
   
   const [client, setClient] = useState<any>(null);
+  const [onboardingProgress, setOnboardingProgress] = useState<OnboardingProgress | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(true);
   const [processingStep, setProcessingStep] = useState(false);
@@ -113,29 +126,194 @@ export function ClientOnboarding() {
 
   const loadClientData = async () => {
     try {
-      const { data, error } = await supabase
+      setLoading(true);
+      
+      // Load client data
+      const { data: clientData, error: clientError } = await supabase
         .from('clients')
         .select('*')
         .eq('id', clientId)
         .eq('user_id', user!.id)
         .single();
 
-      if (error) throw error;
+      if (clientError) throw clientError;
+      setClient(clientData);
       
-      setClient(data);
-      setFormData(prev => ({
-        ...prev,
-        industry: data.industry || '',
-        websiteUrl: data.domain || ''
-      }));
+      // Load onboarding progress
+      const { data: progressData, error: progressError } = await supabase
+        .from('onboarding_progress')
+        .select('*')
+        .eq('client_id', clientId)
+        .eq('user_id', user!.id)
+        .single();
       
-      // Initialize step completion status
-      setStepComplete(Array(steps.length).fill(false));
+      if (progressError && progressError.code !== 'PGRST116') {
+        // If error is not "no rows returned", throw it
+        throw progressError;
+      }
+      
+      if (progressData) {
+        setOnboardingProgress(progressData);
+        
+        // Set current step based on progress
+        const stepIndex = steps.findIndex(step => step.id === progressData.current_step);
+        if (stepIndex !== -1) {
+          setCurrentStep(stepIndex);
+        }
+        
+        // Set completed steps
+        const completedSteps = Array(steps.length).fill(false);
+        progressData.completed_steps.forEach((stepId: string) => {
+          const index = steps.findIndex(step => step.id === stepId);
+          if (index !== -1) {
+            completedSteps[index] = true;
+          }
+        });
+        setStepComplete(completedSteps);
+        
+        // Set form data if available
+        if (progressData.form_data && Object.keys(progressData.form_data).length > 0) {
+          setFormData({
+            ...formData,
+            ...progressData.form_data
+          });
+          
+          // Set competitors if available
+          if (progressData.form_data.mainCompetitors) {
+            setCompetitors(progressData.form_data.mainCompetitors.split(',').map((item: string) => item.trim()));
+          }
+          
+          // Set analysis status if available
+          if (progressData.form_data.analysisStarted) {
+            setAnalysisStarted(true);
+          }
+          
+          if (progressData.form_data.analysisCompleted) {
+            setAnalysisStarted(true);
+            setAnalysisCompleted(true);
+          }
+        } else {
+          // Initialize with client data
+          setFormData(prev => ({
+            ...prev,
+            industry: clientData.industry || '',
+            websiteUrl: clientData.domain || ''
+          }));
+        }
+      } else {
+        // Create new onboarding progress
+        const { data: newProgress, error: createError } = await supabase
+          .from('onboarding_progress')
+          .insert([{
+            client_id: clientId,
+            user_id: user!.id,
+            current_step: 'client-info',
+            completed_steps: [],
+            form_data: {}
+          }])
+          .select()
+          .single();
+          
+        if (createError) throw createError;
+        setOnboardingProgress(newProgress);
+        
+        // Initialize with client data
+        setFormData(prev => ({
+          ...prev,
+          industry: clientData.industry || '',
+          websiteUrl: clientData.domain || ''
+        }));
+        
+        // Initialize step completion status
+        setStepComplete(Array(steps.length).fill(false));
+      }
+      
+      // Check if there are existing competitors
+      const { data: existingCompetitors, error: competitorsError } = await supabase
+        .from('competitors')
+        .select('*')
+        .eq('client_id', clientId);
+        
+      if (!competitorsError && existingCompetitors && existingCompetitors.length > 0) {
+        // If competitors exist, mark the competitors step as complete
+        const newStepComplete = [...stepComplete];
+        const competitorsStepIndex = steps.findIndex(step => step.id === 'competitors');
+        if (competitorsStepIndex !== -1) {
+          newStepComplete[competitorsStepIndex] = true;
+        }
+        setStepComplete(newStepComplete);
+        
+        // Set discovered competitors
+        setDiscoveredCompetitors(existingCompetitors.map(comp => ({
+          name: comp.name,
+          domain: comp.domain,
+          relevance: 'high',
+          manual: true
+        })));
+        
+        // Set selected competitors
+        setSelectedCompetitors(existingCompetitors.map(comp => comp.domain));
+      }
+      
+      // Check if there are existing reports
+      const { data: existingReports, error: reportsError } = await supabase
+        .from('reports')
+        .select('*')
+        .eq('client_id', clientId)
+        .eq('status', 'completed');
+        
+      if (!reportsError && existingReports && existingReports.length > 0) {
+        // If completed reports exist, mark the market analysis step as complete
+        const newStepComplete = [...stepComplete];
+        const analysisStepIndex = steps.findIndex(step => step.id === 'market-analysis');
+        if (analysisStepIndex !== -1) {
+          newStepComplete[analysisStepIndex] = true;
+        }
+        setStepComplete(newStepComplete);
+        
+        // Set analysis status
+        setAnalysisStarted(true);
+        setAnalysisCompleted(true);
+      }
+      
     } catch (error) {
       console.error('Error loading client data:', error);
       setError('Failed to load client data. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const updateOnboardingProgress = async () => {
+    if (!onboardingProgress) return;
+    
+    try {
+      // Update completed steps
+      const completedStepIds = steps
+        .filter((_, index) => stepComplete[index])
+        .map(step => step.id);
+      
+      // Update form data with current values
+      const updatedFormData = {
+        ...formData,
+        mainCompetitors: competitors.join(', '),
+        analysisStarted,
+        analysisCompleted
+      };
+      
+      // Update in database
+      await supabase
+        .from('onboarding_progress')
+        .update({
+          current_step: steps[currentStep].id,
+          completed_steps: completedStepIds,
+          form_data: updatedFormData,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', onboardingProgress.id);
+        
+    } catch (error) {
+      console.error('Error updating onboarding progress:', error);
     }
   };
 
@@ -200,6 +378,14 @@ export function ClientOnboarding() {
           .map(c => c.domain)
       );
       
+      // Mark step as ready to complete
+      const newStepComplete = [...stepComplete];
+      newStepComplete[currentStep] = true;
+      setStepComplete(newStepComplete);
+      
+      // Update onboarding progress
+      await updateOnboardingProgress();
+      
     } catch (error) {
       console.error('Error discovering competitors:', error);
       setError('Failed to discover competitors. Please try again.');
@@ -217,13 +403,23 @@ export function ClientOnboarding() {
       for (const domain of selectedCompetitors) {
         const competitor = discoveredCompetitors.find(c => c.domain === domain);
         if (competitor) {
-          await supabase
+          // Check if competitor already exists
+          const { data: existingCompetitor } = await supabase
             .from('competitors')
-            .insert([{
-              client_id: clientId,
-              name: competitor.name,
-              domain: competitor.domain
-            }]);
+            .select('*')
+            .eq('client_id', clientId)
+            .eq('domain', competitor.domain)
+            .maybeSingle();
+            
+          if (!existingCompetitor) {
+            await supabase
+              .from('competitors')
+              .insert([{
+                client_id: clientId,
+                name: competitor.name,
+                domain: competitor.domain
+              }]);
+          }
         }
       }
       
@@ -234,6 +430,29 @@ export function ClientOnboarding() {
           industry: formData.industry
         })
         .eq('id', clientId);
+      
+      // Check if a report already exists
+      const { data: existingReports } = await supabase
+        .from('reports')
+        .select('*')
+        .eq('client_id', clientId)
+        .eq('status', 'completed');
+        
+      if (existingReports && existingReports.length > 0) {
+        // If a completed report exists, skip creating a new one
+        setAnalysisCompleted(true);
+        setProcessingStep(false);
+        
+        // Mark step as complete
+        const newStepComplete = [...stepComplete];
+        newStepComplete[currentStep] = true;
+        setStepComplete(newStepComplete);
+        
+        // Update onboarding progress
+        await updateOnboardingProgress();
+        
+        return;
+      }
       
       // Create a new report
       const { data: reportData, error: reportError } = await supabase
@@ -257,7 +476,7 @@ export function ClientOnboarding() {
       });
       
       // For demo purposes, we'll simulate the analysis completion
-      setTimeout(() => {
+      setTimeout(async () => {
         setAnalysisCompleted(true);
         setProcessingStep(false);
         
@@ -265,6 +484,9 @@ export function ClientOnboarding() {
         const newStepComplete = [...stepComplete];
         newStepComplete[currentStep] = true;
         setStepComplete(newStepComplete);
+        
+        // Update onboarding progress
+        await updateOnboardingProgress();
         
         // Track event
         trackEvent('client_onboarding_analysis_completed', {
@@ -282,6 +504,11 @@ export function ClientOnboarding() {
 
   const completeOnboarding = async () => {
     try {
+      // Mark onboarding as complete
+      await supabase.rpc('complete_client_onboarding', {
+        client_id_param: clientId
+      });
+      
       // Track completion event
       trackEvent('client_onboarding_completed', {
         client_id: clientId,
@@ -295,11 +522,14 @@ export function ClientOnboarding() {
     }
   };
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     // Mark current step as complete
     const newStepComplete = [...stepComplete];
     newStepComplete[currentStep] = true;
     setStepComplete(newStepComplete);
+    
+    // Update onboarding progress
+    await updateOnboardingProgress();
     
     // Move to next step
     setCurrentStep(prev => prev + 1);
