@@ -5,8 +5,10 @@ import { useAuth } from '../contexts/AuthContext';
 import { 
   LayoutDashboard, 
   BarChart3,
+  Eye,
+  FileText,
   Users, 
-  FileText, 
+  Sparkles,
   BookOpen, 
   Settings, 
   LogOut,
@@ -27,6 +29,8 @@ export function Layout({ children }: LayoutProps) {
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Performance', href: '/performance', icon: BarChart3 },
+    { name: 'Competitive Intel', href: '/competitive-intelligence', icon: Eye },
+    { name: 'Content Hub', href: '/content', icon: Sparkles },
     { name: 'Clients', href: '/clients', icon: Users },
     { name: 'Reports', href: '/reports', icon: FileText },
     { name: 'Playbooks', href: '/playbooks', icon: BookOpen },

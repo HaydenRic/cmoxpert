@@ -287,6 +287,23 @@ export function Dashboard() {
             </Link>
 
             <Link 
+              to="/content"
+              className="block p-4 bg-gradient-to-r from-tan-50 to-olive-50 rounded-lg border border-tan-200 hover:shadow-md transition-all group"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium text-slate-900 group-hover:text-tan-900">
+                    AI Content Hub
+                  </h3>
+                  <p className="text-sm text-slate-600 mt-1">
+                    Generate blog posts, social media, and marketing copy with AI
+                  </p>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-tan-600 group-hover:text-tan-700" />
+              </div>
+            </Link>
+
+            <Link 
               to="/clients?action=new"
               className="block p-4 bg-gradient-to-r from-cornsilk-50 to-cornsilk-100 rounded-lg border border-cornsilk-200 hover:shadow-md transition-all group"
             >
