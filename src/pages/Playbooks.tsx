@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase, AIServicesManager } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { trackFeatureUsage, monitorApiCall } from '../lib/monitoring';
 import { 
   BookOpen, 
   Plus, 
@@ -131,14 +132,28 @@ export function Playbooks() {
 
     setGenerating(true);
     
+    // Track feature usage
+    trackFeatureUsage('ai_playbook', 'generation_started', {
+      client_id: generateForm.clientId,
+      playbook_type: generateForm.playbookType
+    });
+    
     try {
-      const result = await AIServicesManager.generatePlaybook({
-        clientId: generateForm.clientId,
-        userId: user!.id,
-        playbookType: generateForm.playbookType
-      });
+      const result = await monitorApiCall('generate_playbook', () =>
+        AIServicesManager.generatePlaybook({
+          clientId: generateForm.clientId,
+          userId: user!.id,
+          playbookType: generateForm.playbookType
+        })
+      );
       
       console.log('Playbook generation result:', result);
+      
+      // Track successful completion
+      trackFeatureUsage('ai_playbook', 'generation_completed', {
+        client_id: generateForm.clientId,
+        playbook_type: generateForm.playbookType
+      });
 
       // Reset form and reload data
       setGenerateForm({
@@ -156,6 +171,13 @@ export function Playbooks() {
     } catch (error) {
       console.error('Error generating playbook:', error);
       alert('Failed to generate playbook. Please try again.');
+      
+      // Track failure
+      trackFeatureUsage('ai_playbook', 'generation_failed', {
+        client_id: generateForm.clientId,
+        error: error.message
+      });
+      
       setGenerating(false);
     }
   };

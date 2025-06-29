@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '../lib/supabase';
+import { setUserContext, clearUserContext } from '../lib/monitoring';
 
 interface Profile {
   id: string;
@@ -215,9 +216,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       
       if (session?.user) {
         await loadProfile(session.user.id);
+        // Set user context for error reporting
+        setUserContext(session.user.id, session.user.email);
       } else {
         setProfile(null);
         setError(null);
+        // Clear user context on logout
+        clearUserContext();
       }
       
       setLoading(false);
@@ -284,7 +289,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           email, 
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/auth?confirmed=true`
+            emailRedirectTo: undefined // Disable email confirmation for now
           }
         });
         

@@ -1,6 +1,7 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { reportError } from '../lib/monitoring';
 
 interface Props {
   children: ReactNode;
@@ -31,11 +32,11 @@ export class ErrorBoundary extends Component<Props, State> {
       errorInfo
     });
 
-    // In production, you would send this to an error reporting service
-    if (import.meta.env.PROD) {
-      // Example: Sentry.captureException(error, { extra: errorInfo });
-      console.error('Production error:', { error, errorInfo });
-    }
+    // Report error to monitoring service
+    reportError(error, { 
+      componentStack: errorInfo.componentStack,
+      errorBoundary: true 
+    });
   }
 
   handleReload = () => {

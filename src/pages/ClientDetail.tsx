@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { supabase, AIServicesManager } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { trackFeatureUsage, monitorApiCall } from '../lib/monitoring';
 import { 
   ArrowLeft, 
   Rocket,
@@ -110,6 +111,12 @@ export function ClientDetail() {
 
     setGenerating(true);
     
+    // Track feature usage
+    trackFeatureUsage('market_analysis', 'generation_started', {
+      client_id: client.id,
+      client_name: client.name
+    });
+    
     try {
       // Create a new report record
       const { data: reportData, error: reportError } = await supabase
@@ -125,14 +132,22 @@ export function ClientDetail() {
       if (reportError) throw reportError;
 
       // Call the Supabase Edge Function for AI analysis
-      const result = await AIServicesManager.generateMarketAnalysis({
-        reportId: reportData.id,
-        clientId: client.id,
-        domain: client.domain,
-        industry: client.industry
-      });
+      const result = await monitorApiCall('generate_market_analysis', () =>
+        AIServicesManager.generateMarketAnalysis({
+          reportId: reportData.id,
+          clientId: client.id,
+          domain: client.domain,
+          industry: client.industry
+        })
+      );
       
       console.log('Analysis generation result:', result);
+      
+      // Track successful completion
+      trackFeatureUsage('market_analysis', 'generation_completed', {
+        client_id: client.id,
+        client_name: client.name
+      });
 
       // Reload client data to show updated reports
       setTimeout(() => {
@@ -152,6 +167,13 @@ export function ClientDetail() {
       }
       
       alert('Failed to generate market analysis. Please try again.');
+      
+      // Track failure
+      trackFeatureUsage('market_analysis', 'generation_failed', {
+        client_id: client.id,
+        error: error.message
+      });
+      
       setGenerating(false);
     }
   };
@@ -161,18 +183,32 @@ export function ClientDetail() {
 
     setGeneratingPlaybook(true);
     
+    // Track feature usage
+    trackFeatureUsage('ai_playbook', 'generation_started', {
+      client_id: client.id,
+      client_name: client.name
+    });
+    
     try {
       // Get the latest completed report for context
       const latestReport = reports.find(r => r.status === 'completed');
       
-      const result = await AIServicesManager.generatePlaybook({
-        clientId: client.id,
-        userId: user.id,
-        playbookType: 'growth-strategy',
-        reportId: latestReport?.id
-      });
+      const result = await monitorApiCall('generate_playbook', () =>
+        AIServicesManager.generatePlaybook({
+          clientId: client.id,
+          userId: user.id,
+          playbookType: 'growth-strategy',
+          reportId: latestReport?.id
+        })
+      );
       
       console.log('Playbook generation result:', result);
+      
+      // Track successful completion
+      trackFeatureUsage('ai_playbook', 'generation_completed', {
+        client_id: client.id,
+        client_name: client.name
+      });
 
       // Reload client data to show updated playbooks
       setTimeout(() => {
@@ -182,6 +218,13 @@ export function ClientDetail() {
     } catch (error) {
       console.error('Error generating playbook:', error);
       alert('Failed to generate playbook. Please try again.');
+      
+      // Track failure
+      trackFeatureUsage('ai_playbook', 'generation_failed', {
+        client_id: client.id,
+        error: error.message
+      });
+      
       setGeneratingPlaybook(false);
     }
   };

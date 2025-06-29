@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { trackFeatureUsage, monitorApiCall } from '../lib/monitoring';
 import { 
   FileText, 
   MessageSquare, 
@@ -139,6 +140,12 @@ export function ContentHub() {
   const generateContent = async (e: React.FormEvent) => {
     e.preventDefault();
     setGenerating(true);
+    
+    // Track feature usage
+    trackFeatureUsage('ai_content', 'generation_started', {
+      content_type: generateForm.content_type,
+      client_id: generateForm.client_id
+    });
 
     try {
       // Get client context if selected
@@ -161,7 +168,9 @@ Additional requirements: ${generateForm.prompt}
 Please create compelling, professional content that drives engagement and conversions.`;
 
       // Simulate AI content generation (in production, this would call OpenAI)
-      const generatedContent = await simulateContentGeneration(generateForm, fullPrompt);
+      const generatedContent = await monitorApiCall('generate_content', () =>
+        simulateContentGeneration(generateForm, fullPrompt)
+      );
 
       // Save to database
       const { error } = await supabase
@@ -177,6 +186,12 @@ Please create compelling, professional content that drives engagement and conver
         }]);
 
       if (error) throw error;
+      
+      // Track successful completion
+      trackFeatureUsage('ai_content', 'generation_completed', {
+        content_type: generateForm.content_type,
+        client_id: generateForm.client_id
+      });
 
       // Reset form and reload data
       setGenerateForm({
@@ -193,6 +208,12 @@ Please create compelling, professional content that drives engagement and conver
     } catch (error) {
       console.error('Error generating content:', error);
       alert('Failed to generate content. Please try again.');
+      
+      // Track failure
+      trackFeatureUsage('ai_content', 'generation_failed', {
+        content_type: generateForm.content_type,
+        error: error.message
+      });
     } finally {
       setGenerating(false);
     }
