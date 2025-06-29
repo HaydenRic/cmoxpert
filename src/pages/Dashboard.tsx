@@ -324,6 +324,23 @@ export function Dashboard() {
             </Link>
 
             <Link 
+              to="/marketing-analytics"
+              className="block p-4 bg-gradient-to-r from-green-50 to-teal-50 rounded-lg border border-green-200 hover:shadow-md transition-all group"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium text-slate-900 group-hover:text-green-900">
+                    Marketing Analytics
+                  </h3>
+                  <p className="text-sm text-slate-600 mt-1">
+                    Track campaigns, ROI, and marketing goals
+                  </p>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-green-600 group-hover:text-green-700" />
+              </div>
+            </Link>
+
+            <Link 
               to="/competitive-intelligence"
               className="block p-4 bg-gradient-to-r from-orange-50 to-red-50 rounded-lg border border-orange-200 hover:shadow-md transition-all group"
             >
