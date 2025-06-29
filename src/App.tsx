@@ -14,6 +14,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard').then(module => ({ defau
 const Clients = lazy(() => import('./pages/Clients').then(module => ({ default: module.Clients })));
 const ClientDetail = lazy(() => import('./pages/ClientDetail').then(module => ({ default: module.ClientDetail })));
 const Playbooks = lazy(() => import('./pages/Playbooks').then(module => ({ default: module.Playbooks })));
+const Performance = lazy(() => import('./pages/Performance').then(module => ({ default: module.Performance })));
 const Admin = lazy(() => import('./pages/Admin').then(module => ({ default: module.Admin })));
 
 // Lazy load placeholder pages
@@ -134,6 +135,21 @@ function AppContent() {
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
                   <ClientDetail />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          } 
+        />
+        
+        <Route 
+          path="/performance" 
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <Performance />
                 </Suspense>
               </Layout>
             ) : (

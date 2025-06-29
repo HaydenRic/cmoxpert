@@ -270,6 +270,23 @@ export function Dashboard() {
           
           <div className="space-y-4">
             <Link 
+              to="/performance"
+              className="block p-4 bg-gradient-to-r from-slate_blue-50 to-charcoal-50 rounded-lg border border-slate_blue-200 hover:shadow-md transition-all group"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium text-slate-900 group-hover:text-slate_blue-900">
+                    View Performance Dashboard
+                  </h3>
+                  <p className="text-sm text-slate-600 mt-1">
+                    Monitor KPIs, track campaigns, and competitive intelligence
+                  </p>
+                </div>
+                <ArrowUpRight className="w-5 h-5 text-slate_blue-600 group-hover:text-slate_blue-700" />
+              </div>
+            </Link>
+
+            <Link 
               to="/clients?action=new"
               className="block p-4 bg-gradient-to-r from-cornsilk-50 to-cornsilk-100 rounded-lg border border-cornsilk-200 hover:shadow-md transition-all group"
             >
