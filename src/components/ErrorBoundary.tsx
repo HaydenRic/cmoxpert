@@ -2,6 +2,7 @@ import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { reportError } from '../lib/monitoring';
+import { ErrorHandler } from '../lib/errorHandling';
 
 interface Props {
   children: ReactNode;
@@ -27,15 +28,16 @@ export class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error('Error caught by boundary:', error, errorInfo);
     
+    // Use enhanced error handling
+    ErrorHandler.handleError(error, {
+      componentStack: errorInfo.componentStack,
+      errorBoundary: true,
+      type: 'component_error'
+    });
+    
     this.setState({
       error,
       errorInfo
-    });
-
-    // Report error to monitoring service
-    reportError(error, { 
-      componentStack: errorInfo.componentStack,
-      errorBoundary: true 
     });
   }
 

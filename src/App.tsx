@@ -4,6 +4,10 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Analytics } from './components/Analytics';
 import { PerformanceMonitor } from './components/PerformanceMonitor';
+import { ErrorToast, useErrorToast } from './components/ui/ErrorToast';
+import { OfflineIndicator } from './components/ui/OfflineIndicator';
+import { NetworkStatus } from './components/ui/ErrorToast';
+import { initializeErrorHandling } from './lib/errorHandling';
 import { Layout } from './components/Layout';
 import { AuthForm } from './components/AuthForm';
 import { LandingPage } from './components/LandingPage';
@@ -28,6 +32,9 @@ const Privacy = lazy(() => import('./components/StaticPages').then(module => ({ 
 const Terms = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Terms })));
 const Support = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Support })));
 
+// Initialize error handling
+initializeErrorHandling();
+
 // Loading fallback component
 const PageLoadingFallback = () => (
   <div className="min-h-screen bg-cornsilk-500 flex items-center justify-center">
@@ -40,6 +47,7 @@ const PageLoadingFallback = () => (
 
 function AppContent() {
   const { user, loading, error, skipLoading } = useAuth();
+  const { toasts, closeToast } = useErrorToast();
 
   console.log('App state:', { 
     user: !!user, 
@@ -81,6 +89,20 @@ function AppContent() {
 
   return (
     <Suspense fallback={<PageLoadingFallback />}>
+      <NetworkStatus />
+      <OfflineIndicator onRetry={() => window.location.reload()} />
+      <ErrorToast 
+        toasts={toasts} 
+        onClose={closeToast}
+        onRetry={(error) => {
+          console.log('Retrying operation:', error);
+          window.location.reload();
+        }}
+        onAction={(error, action) => {
+          console.log('Error action:', action, error);
+          // Handle specific actions based on error type
+        }}
+      />
       <Routes>
         {/* Public landing page */}
         <Route 

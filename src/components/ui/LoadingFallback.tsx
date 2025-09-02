@@ -1,0 +1,137 @@
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Loader2, AlertCircle, RefreshCw } from 'lucide-react';
+
+interface LoadingFallbackProps {
+  error?: boolean;
+  message?: string;
+  onRetry?: () => void;
+  size?: 'sm' | 'md' | 'lg';
+}
+
+export function LoadingFallback({ 
+  error = false, 
+  message, 
+  onRetry, 
+  size = 'md' 
+}: LoadingFallbackProps) {
+  const sizeClasses = {
+    sm: 'w-6 h-6',
+    md: 'w-8 h-8',
+    lg: 'w-12 h-12'
+  };
+
+  const containerClasses = {
+    sm: 'p-4',
+    md: 'p-8',
+    lg: 'p-12'
+  };
+
+  if (error) {
+    return (
+      <div className={`flex flex-col items-center justify-center ${containerClasses[size]} text-center`}>
+        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+          <AlertCircle className="w-8 h-8 text-red-600" />
+        </div>
+        <h3 className="text-lg font-medium text-slate-900 mb-2">
+          Something went wrong
+        </h3>
+        <p className="text-slate-600 mb-4 max-w-md">
+          {message || 'We encountered an error while loading this content. Please try again.'}
+        </p>
+        {onRetry && (
+          <button
+            onClick={onRetry}
+            className="bg-slate-600 hover:bg-slate-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
+          >
+            <RefreshCw className="w-4 h-4" />
+            <span>Try Again</span>
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className={`flex flex-col items-center justify-center ${containerClasses[size]} text-center`}>
+      <motion.div
+        animate={{ rotate: 360 }}
+        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+        className={`${sizeClasses[size]} text-slate-600 mb-4`}
+      >
+        <Loader2 className="w-full h-full" />
+      </motion.div>
+      <p className="text-slate-600">
+        {message || 'Loading...'}
+      </p>
+    </div>
+  );
+}
+
+// Skeleton loading components
+export function SkeletonCard() {
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 animate-pulse">
+      <div className="flex items-center space-x-4 mb-4">
+        <div className="w-12 h-12 bg-slate-200 rounded-lg"></div>
+        <div className="flex-1">
+          <div className="h-4 bg-slate-200 rounded w-3/4 mb-2"></div>
+          <div className="h-3 bg-slate-200 rounded w-1/2"></div>
+        </div>
+      </div>
+      <div className="space-y-2">
+        <div className="h-3 bg-slate-200 rounded"></div>
+        <div className="h-3 bg-slate-200 rounded w-5/6"></div>
+        <div className="h-3 bg-slate-200 rounded w-4/6"></div>
+      </div>
+    </div>
+  );
+}
+
+export function SkeletonTable({ rows = 5, columns = 4 }: { rows?: number; columns?: number }) {
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden animate-pulse">
+      <div className="bg-slate-50 p-4 border-b border-slate-200">
+        <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+          {Array.from({ length: columns }).map((_, i) => (
+            <div key={i} className="h-4 bg-slate-200 rounded"></div>
+          ))}
+        </div>
+      </div>
+      <div className="divide-y divide-slate-200">
+        {Array.from({ length: rows }).map((_, rowIndex) => (
+          <div key={rowIndex} className="p-4">
+            <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
+              {Array.from({ length: columns }).map((_, colIndex) => (
+                <div key={colIndex} className="h-4 bg-slate-200 rounded"></div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export function SkeletonChart() {
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 animate-pulse">
+      <div className="flex items-center justify-between mb-6">
+        <div className="h-6 bg-slate-200 rounded w-1/3"></div>
+        <div className="h-4 bg-slate-200 rounded w-1/6"></div>
+      </div>
+      <div className="h-64 bg-slate-100 rounded-lg flex items-end justify-between p-4">
+        {Array.from({ length: 7 }).map((_, i) => (
+          <div
+            key={i}
+            className="bg-slate-200 rounded-t"
+            style={{
+              height: `${Math.random() * 80 + 20}%`,
+              width: '12%'
+            }}
+          ></div>
+        ))}
+      </div>
+    </div>
+  );
+}
