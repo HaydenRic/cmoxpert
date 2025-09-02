@@ -1,22 +1,29 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-console.log('Supabase config:', {
-  url: supabaseUrl ? 'Set' : 'Missing',
-  key: supabaseAnonKey ? 'Set' : 'Missing',
-  urlValue: supabaseUrl?.substring(0, 20) + '...',
-  keyLength: supabaseAnonKey?.length || 0
-});
+// Only log in development
+if (import.meta.env.DEV) {
+  console.log('Supabase config:', {
+    url: supabaseUrl ? 'Set' : 'Missing',
+    key: supabaseAnonKey ? 'Set' : 'Missing',
+    configured: !!(supabaseUrl && supabaseAnonKey)
+  });
+}
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Missing Supabase environment variables - some features will be disabled');
-  // Don't throw error, allow app to continue with limited functionality
+// Check if Supabase is properly configured
+const isSupabaseConfigured = supabaseUrl && supabaseAnonKey && 
+  supabaseUrl.startsWith('https://') && 
+  supabaseUrl.includes('.supabase.co') &&
+  supabaseAnonKey.length > 50;
+
+if (!isSupabaseConfigured) {
+  console.warn('Supabase not properly configured - running in offline mode');
 }
 
 // Create a safe Supabase client that handles missing configuration
-export const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey, {
+export const supabase = isSupabaseConfigured ? createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
@@ -40,33 +47,50 @@ export const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUr
   }
 }) : {
   // Fallback client for when Supabase is not configured
-  from: () => ({ select: () => ({ eq: () => ({ order: () => ({ limit: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }) }) }) }) }),
+  from: () => ({
+    select: () => ({
+      eq: () => ({
+        order: () => ({
+          limit: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
+          single: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
+          maybeSingle: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
+        }),
+        single: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
+        maybeSingle: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
+      }),
+      insert: () => ({
+        select: () => ({
+          single: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
+        })
+      }),
+      update: () => ({
+        eq: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
+      }),
+      delete: () => ({
+        eq: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
+      })
+    })
+  }),
+  storage: {
+    from: () => ({
+      list: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
+      getPublicUrl: () => ({ publicUrl: '' }),
+      upload: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
+      remove: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
+    })
+  },
   auth: {
     getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+    getUser: () => Promise.resolve({ data: { user: null }, error: new Error('Supabase not configured') }),
     signUp: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
     signInWithPassword: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
-    signOut: () => Promise.resolve({ error: null })
+    signOut: () => Promise.resolve({ error: null }),
+    onAuthStateChange: () => ({
+      data: { subscription: { unsubscribe: () => {} } }
+    })
   }
 } as any;
 
-// Only test connection in development and don't block startup
-if (import.meta.env.DEV) {
-  // Non-blocking connection test
-  setTimeout(async () => {
-    try {
-      console.log('Testing Supabase connection...');
-      const { data, error } = await supabase.auth.getSession();
-      
-      if (error) {
-        console.error('Supabase connection error:', error);
-      } else {
-        console.log('Supabase connection successful:', { hasSession: !!data.session });
-      }
-    } catch (err) {
-      console.error('Connection test failed:', err);
-    }
-  }, 1000);
-}
 
 export type Database = {
   public: {

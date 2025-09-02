@@ -17,12 +17,24 @@ export function BrandLogo({ className = '', size = 'md' }: BrandLogoProps) {
 
   const loadLogo = async () => {
     try {
+      // Check if Supabase is configured
+      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+        setLoading(false);
+        return;
+      }
+
       // List files in branding bucket to find logo
       const { data: files, error } = await supabase.storage
         .from('branding')
         .list();
 
-      if (error || !files) {
+      if (error) {
+        console.warn('Could not load logo from Supabase:', error.message);
+        setLoading(false);
+        return;
+      }
+      
+      if (!files) {
         setLoading(false);
         return;
       }
