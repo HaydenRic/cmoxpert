@@ -57,7 +57,7 @@ export class ErrorHandler {
   }
 
   private static classifyError(error: any, context?: Record<string, any>): AppError {
-    const id = `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    const id = \`error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
     const timestamp = Date.now();
     const message = this.extractErrorMessage(error);
     
@@ -340,7 +340,7 @@ export class ErrorHandler {
     // Generate or retrieve session ID for error tracking
     let sessionId = sessionStorage.getItem('error_session_id');
     if (!sessionId) {
-      sessionId = `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      sessionId = \`session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       sessionStorage.setItem('error_session_id', sessionId);
     }
     return sessionId;
@@ -469,7 +469,7 @@ export class RetryManager {
         // Call retry callback
         onRetry?.(attempt + 1, error);
         
-        console.log(`Retrying operation (attempt ${attempt + 1}/${maxRetries}) in ${delay}ms...`);
+        console.log(\`Retrying operation (attempt ${attempt + 1}/${maxRetries}) in ${delay}ms...`);
         await this.sleep(delay);
       }
     }

@@ -6,6 +6,99 @@ export * from './validationUtils';
 
 export * from './offlineManager';
 export * from './validationUtils';
+
+// Network monitoring utility
+export class NetworkMonitor {
+  private static instance: NetworkMonitor;
+  private isOnline = navigator.onLine;
+  private listeners: ((isOnline: boolean) => void)[] = [];
+
+  static init(): NetworkMonitor {
+    if (!this.instance) {
+      this.instance = new NetworkMonitor();
+    }
+    return this.instance;
+  }
+
+  private constructor() {
+    window.addEventListener('online', () => {
+      this.isOnline = true;
+      this.notifyListeners();
+    });
+
+    window.addEventListener('offline', () => {
+      this.isOnline = false;
+      this.notifyListeners();
+    });
+  }
+
+  static get isOnline(): boolean {
+    return this.init().isOnline;
+  }
+
+  static addListener(callback: (isOnline: boolean) => void): void {
+    this.init().listeners.push(callback);
+  }
+
+  static removeListener(callback: (isOnline: boolean) => void): void {
+    const instance = this.init();
+    instance.listeners = instance.listeners.filter(listener => listener !== callback);
+  }
+
+  private notifyListeners(): void {
+    this.listeners.forEach(listener => listener(this.isOnline));
+  }
+}
+
+// Error types
+export enum ErrorType {
+  NETWORK = 'NETWORK',
+  VALIDATION = 'VALIDATION',
+  AUTHENTICATION = 'AUTHENTICATION',
+  AUTHORIZATION = 'AUTHORIZATION',
+  NOT_FOUND = 'NOT_FOUND',
+  SERVER = 'SERVER',
+  CLIENT = 'CLIENT',
+  UNKNOWN = 'UNKNOWN'
+}
+
+export enum ErrorSeverity {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  CRITICAL = 'CRITICAL'
+}
+
+export interface AppError extends Error {
+  type: ErrorType;
+  severity: ErrorSeverity;
+  userMessage: string;
+  retryable: boolean;
+  action?: string;
+  context?: Record<string, any>;
+}
+
+// Error reporting function (placeholder)
+const reportError = (error: any, context: any) => {
+  // This would integrate with your error reporting service
+  console.log('Reporting error:', error, context);
+};
+
+// Main error handler
+export class ErrorHandler {
+  static async handleError(error: any, context?: Record<string, any>): Promise<AppError> {
+    let appError: AppError;
+
+    if (error instanceof Error && 'type' in error) {
+      appError = error as AppError;
+    } else {
+      appError = this.createAppError(error, context);
+    }
+
+    // Add additional context
+    try {
+      if (context) {
+        appError.context = { ...appError.context, ...context };
       }
     } catch {
       // Ignore errors when getting user context
@@ -31,6 +124,61 @@ export * from './validationUtils';
     }
 
     return appError;
+  }
+
+  private static createAppError(error: any, context?: Record<string, any>): AppError {
+    const baseError = error instanceof Error ? error : new Error(String(error));
+    
+    let type = ErrorType.UNKNOWN;
+    let severity = ErrorSeverity.MEDIUM;
+    let userMessage = 'An unexpected error occurred';
+    let retryable = false;
+    let action = '';
+
+    // Determine error type and properties based on error characteristics
+    if (error?.name === 'NetworkError' || error?.code === 'NETWORK_ERROR') {
+      type = ErrorType.NETWORK;
+      severity = ErrorSeverity.HIGH;
+      userMessage = 'Network connection error. Please check your internet connection.';
+      retryable = true;
+      action = 'retry';
+    } else if (error?.status === 401) {
+      type = ErrorType.AUTHENTICATION;
+      severity = ErrorSeverity.HIGH;
+      userMessage = 'Authentication required. Please log in again.';
+      retryable = false;
+      action = 'login';
+    } else if (error?.status === 403) {
+      type = ErrorType.AUTHORIZATION;
+      severity = ErrorSeverity.MEDIUM;
+      userMessage = 'You do not have permission to perform this action.';
+      retryable = false;
+    } else if (error?.status === 404) {
+      type = ErrorType.NOT_FOUND;
+      severity = ErrorSeverity.LOW;
+      userMessage = 'The requested resource was not found.';
+      retryable = false;
+    } else if (error?.status >= 500) {
+      type = ErrorType.SERVER;
+      severity = ErrorSeverity.HIGH;
+      userMessage = 'Server error. Please try again later.';
+      retryable = true;
+      action = 'retry';
+    } else if (error?.status >= 400) {
+      type = ErrorType.CLIENT;
+      severity = ErrorSeverity.MEDIUM;
+      userMessage = 'Invalid request. Please check your input.';
+      retryable = false;
+    }
+
+    return Object.assign(baseError, {
+      type,
+      severity,
+      userMessage,
+      retryable,
+      action,
+      context
+    });
   }
 
   static shouldRetry(error: AppError): boolean {
