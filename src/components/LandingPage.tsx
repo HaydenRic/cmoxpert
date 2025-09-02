@@ -63,6 +63,12 @@ export function LandingPage() {
 
   const loadFeaturedVideo = async () => {
     try {
+      // Check if Supabase is properly configured
+      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+        console.warn('Supabase not configured, skipping featured video load');
+        return;
+      }
+
       const { data } = await supabase
         .from('videos')
         .select('*')
@@ -75,7 +81,8 @@ export function LandingPage() {
         setFeaturedVideo(data[0]);
       }
     } catch (error) {
-      console.error('Error loading featured video:', error);
+      console.warn('Could not load featured video (this is normal in development):', error);
+      // Silently fail - don't show error to user for missing featured video
     }
   };
 

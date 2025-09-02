@@ -6,16 +6,17 @@ const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 console.log('Supabase config:', {
   url: supabaseUrl ? 'Set' : 'Missing',
   key: supabaseAnonKey ? 'Set' : 'Missing',
-  urlValue: supabaseUrl,
-  keyLength: supabaseAnonKey?.length
+  urlValue: supabaseUrl?.substring(0, 20) + '...',
+  keyLength: supabaseAnonKey?.length || 0
 });
 
 if (!supabaseUrl || !supabaseAnonKey) {
-  console.error('Missing Supabase environment variables');
-  throw new Error('Missing Supabase environment variables. Please check your .env file.');
+  console.warn('Missing Supabase environment variables - some features will be disabled');
+  // Don't throw error, allow app to continue with limited functionality
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+// Create a safe Supabase client that handles missing configuration
+export const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
@@ -37,7 +38,16 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       eventsPerSecond: 2
     }
   }
-});
+}) : {
+  // Fallback client for when Supabase is not configured
+  from: () => ({ select: () => ({ eq: () => ({ order: () => ({ limit: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }) }) }) }) }),
+  auth: {
+    getSession: () => Promise.resolve({ data: { session: null }, error: null }),
+    signUp: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
+    signInWithPassword: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
+    signOut: () => Promise.resolve({ error: null })
+  }
+} as any;
 
 // Only test connection in development and don't block startup
 if (import.meta.env.DEV) {
