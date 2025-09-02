@@ -1,3 +1,4 @@
+```typescript
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ErrorHandler, RetryManager, CircuitBreaker } from '../lib/errorHandler';
@@ -283,3 +284,4 @@ export function useFileUpload() {
 
   return { uploadFile };
 }
+```

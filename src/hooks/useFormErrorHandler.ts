@@ -1,3 +1,4 @@
+```typescript
 import { useState, useCallback } from 'react';
 import { AppError } from '../lib/errorTypes';
 import { ErrorHandler } from '../lib/errorHandler';
@@ -218,3 +219,4 @@ export function useRealTimeValidation(
     formState: getFormState()
   };
 }
+```

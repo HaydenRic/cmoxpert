@@ -1,3 +1,4 @@
+```typescript
 import { AppError, ErrorType } from './errorTypes';
 
 // Offline data management and synchronization
@@ -375,3 +376,4 @@ export class GracefulDegradation {
     };
   }
 }
+```

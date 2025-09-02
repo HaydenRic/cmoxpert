@@ -1,3 +1,4 @@
+```typescript
 // Comprehensive error type definitions and classifications
 export enum ErrorType {
   NETWORK = 'network',
@@ -154,3 +155,4 @@ export const USER_ERROR_MESSAGES = {
     invalid: "AI request failed. Please try with different parameters."
   }
 };
+```

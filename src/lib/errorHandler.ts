@@ -1,3 +1,4 @@
+```typescript
 import { 
   AppError, 
   ErrorType, 
@@ -568,3 +569,4 @@ export class CircuitBreaker {
     };
   }
 }
+```

@@ -1,3 +1,4 @@
+```typescript
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -495,3 +496,56 @@ export function NetworkStatus() {
     </>
   );
 }
+
+// Offline-capable component wrapper
+export function withOfflineSupport<T extends object>(
+  Component: React.ComponentType<T>,
+  options?: {
+    fallbackData?: any;
+    cacheKey?: string;
+    feature?: string;
+  }
+) {
+  return function OfflineCapableComponent(props: T) {
+    const [isOnline, setIsOnline] = useState(navigator.onLine);
+    const [cachedData, setCachedData] = useState(null);
+
+    useEffect(() => {
+      const handleNetworkChange = (online: boolean) => {
+        setIsOnline(online);
+        
+        if (!online && options?.cacheKey) {
+          const cached = OfflineManager.getCachedData(options.cacheKey);
+          setCachedData(cached);
+        }
+      };
+
+      OfflineManager.addNetworkListener(handleNetworkChange);
+      
+      // Load cached data if offline
+      if (!isOnline && options?.cacheKey) {
+        const cached = OfflineManager.getCachedData(options.cacheKey);
+        setCachedData(cached);
+      }
+
+      return () => {
+        OfflineManager.removeNetworkListener(handleNetworkChange);
+      };
+    }, []);
+
+    // If offline and we have cached data, pass it to the component
+    const enhancedProps = {
+      ...props,
+      isOnline,
+      cachedData: cachedData || options?.fallbackData,
+      offlineMode: !isOnline
+    } as T & {
+      isOnline: boolean;
+      cachedData: any;
+      offlineMode: boolean;
+    };
+
+    return <Component {...enhancedProps} />;
+  };
+}
+```

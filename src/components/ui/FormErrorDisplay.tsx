@@ -1,3 +1,4 @@
+```typescript
 import React from 'react';
 import { AlertCircle, Info, CheckCircle, X } from 'lucide-react';
 import { AppError, ErrorSeverity } from '../lib/errorTypes';
@@ -138,3 +139,4 @@ export function SuccessMessage({
     </div>
   );
 }
+```

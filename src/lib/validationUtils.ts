@@ -1,3 +1,4 @@
+```typescript
 import { ErrorType } from './errorTypes';
 
 // Enhanced validation utilities with better error messages
@@ -327,3 +328,4 @@ export const validateContentGeneration = (data: {
     );
   }
 };
+```

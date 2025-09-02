@@ -1,229 +1,340 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { Loader2, AlertCircle, RefreshCw, Wifi, WifiOff, Clock, Info } from 'lucide-react';
-import { AppError, ErrorSeverity } from '../lib/errorTypes';
+// Re-export from new modular error handling system
+export * from './errorTypes';
+export * from './errorHandler';
+export * from './offlineManager';
+export * from './validationUtils';
 
-interface LoadingFallbackProps {
-  error?: boolean;
-  appError?: AppError;
-  message?: string;
-  onRetry?: () => void;
-  size?: 'sm' | 'md' | 'lg';
-  showOfflineSupport?: boolean;
-  offlineData?: any;
+      }
+    } catch {
+      // Ignore errors when getting user context
+    }
+
+    // Report error for monitoring
+    reportError(error, {
+      errorType: appError.type,
+      severity: appError.severity,
+      userMessage: appError.userMessage,
+      retryable: appError.retryable,
+      action: appError.action,
+      ...appError.context
+    });
+
+    // Log error based on severity
+    if (appError.severity === ErrorSeverity.CRITICAL || appError.severity === ErrorSeverity.HIGH) {
+      console.error('Critical/High severity error:', appError);
+    } else if (appError.severity === ErrorSeverity.MEDIUM) {
+      console.warn('Medium severity error:', appError);
+    } else {
+      console.log('Low severity error:', appError);
+    }
+
+    return appError;
+  }
+
+  static shouldRetry(error: AppError): boolean {
+    return error.retryable === true;
+  }
+
+  static getRetryDelay(attemptNumber: number): number {
+    // Exponential backoff: 1s, 2s, 4s, 8s, max 30s
+    return Math.min(1000 * Math.pow(2, attemptNumber), 30000);
+  }
 }
 
-export function LoadingFallback({ 
-  error = false, 
-  appError,
-  message, 
-  onRetry, 
-  size = 'md',
-  showOfflineSupport = false,
-  offlineData
-}: LoadingFallbackProps) {
-  const sizeClasses = {
-    sm: 'w-6 h-6',
-    md: 'w-8 h-8',
-    lg: 'w-12 h-12'
-  };
-
-  const containerClasses = {
-    sm: 'p-4',
-    md: 'p-8',
-    lg: 'p-12'
-  };
-
-  // Show offline data if available
-  if (!navigator.onLine && offlineData && showOfflineSupport) {
-    return (
-      <div className={`flex flex-col items-center justify-center ${containerClasses[size]} text-center`}>
-        <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-          <WifiOff className="w-8 h-8 text-blue-600" />
-        </div>
-        <h3 className="text-lg font-medium text-slate-900 mb-2">
-          Offline Mode
-        </h3>
-        <p className="text-slate-600 mb-4 max-w-md">
-          You're currently offline. Showing cached data from your last session.
-        </p>
-        <div className="flex items-center space-x-2 text-sm text-slate-500 mb-4">
-          <Clock className="w-4 h-4" />
-          <span>Data may not be current</span>
-        </div>
-        {onRetry && (
-          <button
-            onClick={onRetry}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
-          >
-            <RefreshCw className="w-4 h-4" />
-            <span>Check Connection</span>
-          </button>
-        )}
-      </div>
-    );
-  }
-  if (error) {
-    const errorIcon = appError?.severity === ErrorSeverity.CRITICAL ? AlertCircle : 
-                     appError?.severity === ErrorSeverity.HIGH ? AlertCircle :
-                     Info;
-    const errorColor = appError?.severity === ErrorSeverity.CRITICAL ? 'text-red-600' :
-                      appError?.severity === ErrorSeverity.HIGH ? 'text-orange-600' :
-                      'text-yellow-600';
-    const bgColor = appError?.severity === ErrorSeverity.CRITICAL ? 'bg-red-100' :
-                    appError?.severity === ErrorSeverity.HIGH ? 'bg-orange-100' :
-                    'bg-yellow-100';
-
-    return (
-      <div className={`flex flex-col items-center justify-center ${containerClasses[size]} text-center`}>
-        <div className={`w-16 h-16 ${bgColor} rounded-full flex items-center justify-center mb-4`}>
-          {React.createElement(errorIcon, { className: `w-8 h-8 ${errorColor}` })}
-        </div>
-        <h3 className="text-lg font-medium text-slate-900 mb-2">
-          {appError?.severity === ErrorSeverity.CRITICAL ? 'Critical Error' :
-           appError?.severity === ErrorSeverity.HIGH ? 'Service Error' :
-           'Something went wrong'}
-        </h3>
-        <p className="text-slate-600 mb-4 max-w-md">
-          {appError?.userMessage || message || 'We encountered an error while loading this content. Please try again.'}
-        </p>
-        
-        {/* Show error type and code for debugging */}
-        {appError && (import.meta.env.DEV || appError.severity === ErrorSeverity.CRITICAL) && (
-          <div className="mb-4 p-3 bg-slate-100 rounded-lg text-left max-w-md">
-            <div className="text-xs text-slate-600 space-y-1">
-              <div><strong>Type:</strong> {appError.type}</div>
-              <div><strong>Code:</strong> {appError.code || 'N/A'}</div>
-              {appError.context?.operation && (
-                <div><strong>Operation:</strong> {appError.context.operation}</div>
-              )}
-            </div>
-          </div>
-        )}
-        
-        {/* Recovery actions */}
-        {appError?.recoveryActions && appError.recoveryActions.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4">
-            {appError.recoveryActions.slice(0, 3).map((action) => (
-              <button
-                key={action.id}
-                onClick={() => action.action()}
-                className={`${action.primary ? 
-                  'bg-slate-600 hover:bg-slate-700 text-white' : 
-                  'bg-slate-200 hover:bg-slate-300 text-slate-700'
-                } px-3 py-2 rounded-lg text-sm font-medium transition-colors`}
-              >
-                {action.label}
-              </button>
-            ))}
-          </div>
-        )}
-        
-        {onRetry && (
-          <button
-            onClick={onRetry}
-            className={`${appError?.retryable ? 
-              'bg-slate-600 hover:bg-slate-700' : 
-              'bg-gray-400 cursor-not-allowed'
-            } text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors`}
-            disabled={appError && !appError.retryable}
-          >
-            <RefreshCw className="w-4 h-4" />
-            <span>{appError?.retryable ? 'Try Again' : 'Reload Page'}</span>
-          </button>
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <div className={`flex flex-col items-center justify-center ${containerClasses[size]} text-center`}>
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-        className={`${sizeClasses[size]} text-slate-600 mb-4`}
-      >
-        <Loader2 className="w-full h-full" />
-      </motion.div>
-      <p className="text-slate-600">
-        {message || 'Loading...'}
-      </p>
+// Retry wrapper with exponential backoff
+export async function withRetry<T>(
+  operation: () => Promise<T>,
+  maxRetries: number = 3,
+  context?: Record<string, any>
+): Promise<T> {
+  let lastError: AppError;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = await ErrorHandler.handleError(error, {
+        ...context,
+        attempt: attempt + 1,
+        maxRetries: maxRetries + 1
+      });
       
-      {/* Show network status if relevant */}
-      {!navigator.onLine && (
-        <div className="flex items-center space-x-2 text-sm text-slate-500 mt-2">
-          <WifiOff className="w-4 h-4" />
-          <span>Working offline</span>
-        </div>
-      )}
-    </div>
-  );
+      if (attempt === maxRetries || !ErrorHandler.shouldRetry(lastError)) {
+        throw lastError;
+      }
+      
+      const delay = ErrorHandler.getRetryDelay(attempt);
+      console.log(`Retrying operation in ${delay}ms... (attempt ${attempt + 1}/${maxRetries + 1})`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+  
+  throw lastError!;
 }
 
-// Skeleton loading components
-export function SkeletonCard() {
-  return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 animate-pulse">
-      <div className="flex items-center space-x-4 mb-4">
-        <div className="w-12 h-12 bg-slate-200 rounded-lg"></div>
-        <div className="flex-1">
-          <div className="h-4 bg-slate-200 rounded w-3/4 mb-2"></div>
-          <div className="h-3 bg-slate-200 rounded w-1/2"></div>
-        </div>
-      </div>
-      <div className="space-y-2">
-        <div className="h-3 bg-slate-200 rounded"></div>
-        <div className="h-3 bg-slate-200 rounded w-5/6"></div>
-        <div className="h-3 bg-slate-200 rounded w-4/6"></div>
-      </div>
-    </div>
-  );
+// Safe API call wrapper
+export async function safeApiCall<T>(
+  apiCall: () => Promise<T>,
+  context?: Record<string, any>
+): Promise<{ data: T | null; error: AppError | null }> {
+  try {
+    const data = await withRetry(apiCall, 2, context);
+    return { data, error: null };
+  } catch (error) {
+    const appError = error instanceof Error ? await ErrorHandler.handleError(error, context) : error;
+    return { data: null, error: appError };
+  }
 }
 
-export function SkeletonTable({ rows = 5, columns = 4 }: { rows?: number; columns?: number }) {
-  return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden animate-pulse">
-      <div className="bg-slate-50 p-4 border-b border-slate-200">
-        <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
-          {Array.from({ length: columns }).map((_, i) => (
-            <div key={i} className="h-4 bg-slate-200 rounded"></div>
-          ))}
-        </div>
-      </div>
-      <div className="divide-y divide-slate-200">
-        {Array.from({ length: rows }).map((_, rowIndex) => (
-          <div key={rowIndex} className="p-4">
-            <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
-              {Array.from({ length: columns }).map((_, colIndex) => (
-                <div key={colIndex} className="h-4 bg-slate-200 rounded"></div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
+// Form validation utilities
+export class ValidationError extends Error {
+  constructor(
+    message: string,
+    public field?: string,
+    public code?: string
+  ) {
+    super(message);
+    this.name = 'ValidationError';
+  }
 }
 
-export function SkeletonChart() {
-  return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 animate-pulse">
-      <div className="flex items-center justify-between mb-6">
-        <div className="h-6 bg-slate-200 rounded w-1/3"></div>
-        <div className="h-4 bg-slate-200 rounded w-1/6"></div>
-      </div>
-      <div className="h-64 bg-slate-100 rounded-lg flex items-end justify-between p-4">
-        {Array.from({ length: 7 }).map((_, i) => (
-          <div
-            key={i}
-            className="bg-slate-200 rounded-t"
-            style={{
-              height: `${Math.random() * 80 + 20}%`,
-              width: '12%'
-            }}
-          ></div>
-        ))}
-      </div>
-    </div>
-  );
+export const validateEmail = (email: string): void => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email) {
+    throw new ValidationError('Email is required', 'email', 'REQUIRED');
+  }
+  if (!emailRegex.test(email)) {
+    throw new ValidationError('Please enter a valid email address', 'email', 'INVALID_FORMAT');
+  }
+};
+
+export const validatePassword = (password: string): void => {
+  if (!password) {
+    throw new ValidationError('Password is required', 'password', 'REQUIRED');
+  }
+  if (password.length < 8) {
+    throw new ValidationError('Password must be at least 8 characters long', 'password', 'TOO_SHORT');
+  }
+  if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(password)) {
+    throw new ValidationError('Password must contain both letters and numbers', 'password', 'WEAK');
+  }
+};
+
+export const validateRequired = (value: any, fieldName: string): void => {
+  if (!value || (typeof value === 'string' && value.trim() === '')) {
+    throw new ValidationError(`${fieldName} is required`, fieldName.toLowerCase().replace(' ', '_'), 'REQUIRED');
+  }
+};
+
+export const validateUrl = (url: string, fieldName: string = 'URL'): void => {
+  if (!url) {
+    throw new ValidationError(`${fieldName} is required`, fieldName.toLowerCase().replace(' ', '_'), 'REQUIRED');
+  }
+  
+  try {
+    new URL(url);
+  } catch {
+    throw new ValidationError(`Please enter a valid ${fieldName.toLowerCase()}`, fieldName.toLowerCase().replace(' ', '_'), 'INVALID_FORMAT');
+  }
+};
+
+export const validateFileSize = (file: File, maxSizeMB: number = 5): void => {
+  const maxSizeBytes = maxSizeMB * 1024 * 1024;
+  if (file.size > maxSizeBytes) {
+    throw new ValidationError(`File is too large. Maximum size is ${maxSizeMB}MB.`, 'file', 'FILE_TOO_LARGE');
+  }
+};
+
+export const validateFileType = (file: File, allowedTypes: string[]): void => {
+  if (!allowedTypes.includes(file.type)) {
+    throw new ValidationError(
+      `Invalid file type. Allowed types: ${allowedTypes.join(', ')}`,
+      'file',
+      'INVALID_FILE_TYPE'
+    );
+  }
+};
+
+// Offline storage utilities
+export class OfflineStorage {
+  private static readonly STORAGE_KEY = 'cmoxpert_offline_data';
+  private static readonly MAX_STORAGE_SIZE = 5 * 1024 * 1024; // 5MB
+
+  static save(key: string, data: any): boolean {
+    try {
+      const storage = this.getStorage();
+      storage[key] = {
+        data,
+        timestamp: Date.now(),
+        version: '1.0'
+      };
+      
+      const serialized = JSON.stringify(storage);
+      
+      // Check storage size
+      if (serialized.length > this.MAX_STORAGE_SIZE) {
+        console.warn('Offline storage limit exceeded, cleaning old data');
+        this.cleanup();
+        return false;
+      }
+      
+      localStorage.setItem(this.STORAGE_KEY, serialized);
+      return true;
+    } catch (error) {
+      console.error('Failed to save offline data:', error);
+      return false;
+    }
+  }
+
+  static load(key: string): any | null {
+    try {
+      const storage = this.getStorage();
+      const item = storage[key];
+      
+      if (!item) return null;
+      
+      // Check if data is too old (7 days)
+      const maxAge = 7 * 24 * 60 * 60 * 1000;
+      if (Date.now() - item.timestamp > maxAge) {
+        delete storage[key];
+        this.saveStorage(storage);
+        return null;
+      }
+      
+      return item.data;
+    } catch (error) {
+      console.error('Failed to load offline data:', error);
+      return null;
+    }
+  }
+
+  static remove(key: string): void {
+    try {
+      const storage = this.getStorage();
+      delete storage[key];
+      this.saveStorage(storage);
+    } catch (error) {
+      console.error('Failed to remove offline data:', error);
+    }
+  }
+
+  static clear(): void {
+    try {
+      localStorage.removeItem(this.STORAGE_KEY);
+    } catch (error) {
+      console.error('Failed to clear offline storage:', error);
+    }
+  }
+
+  private static getStorage(): Record<string, any> {
+    try {
+      const stored = localStorage.getItem(this.STORAGE_KEY);
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  private static saveStorage(storage: Record<string, any>): void {
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(storage));
+    } catch (error) {
+      console.error('Failed to save storage:', error);
+    }
+  }
+
+  private static cleanup(): void {
+    try {
+      const storage = this.getStorage();
+      const entries = Object.entries(storage);
+      
+      // Sort by timestamp and keep only the 10 most recent items
+      entries.sort((a, b) => (b[1] as any).timestamp - (a[1] as any).timestamp);
+      const cleaned = Object.fromEntries(entries.slice(0, 10));
+      
+      this.saveStorage(cleaned);
+    } catch (error) {
+      console.error('Failed to cleanup storage:', error);
+    }
+  }
 }
+
+// Circuit breaker pattern for API calls
+export class CircuitBreaker {
+  private failures = 0;
+  private lastFailureTime = 0;
+  private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
+
+  constructor(
+    private readonly failureThreshold = 5,
+    private readonly recoveryTimeout = 60000 // 1 minute
+  ) {}
+
+  async execute<T>(operation: () => Promise<T>): Promise<T> {
+    if (this.state === 'OPEN') {
+      if (Date.now() - this.lastFailureTime > this.recoveryTimeout) {
+        this.state = 'HALF_OPEN';
+      } else {
+        throw new Error('Circuit breaker is OPEN - service temporarily unavailable');
+      }
+    }
+
+    try {
+      const result = await operation();
+      this.onSuccess();
+      return result;
+    } catch (error) {
+      this.onFailure();
+      throw error;
+    }
+  }
+
+  private onSuccess(): void {
+    this.failures = 0;
+    this.state = 'CLOSED';
+  }
+
+  private onFailure(): void {
+    this.failures++;
+    this.lastFailureTime = Date.now();
+    
+    if (this.failures >= this.failureThreshold) {
+      this.state = 'OPEN';
+    }
+  }
+
+  get isOpen(): boolean {
+    return this.state === 'OPEN';
+  }
+}
+
+// Global error handler initialization
+export const initializeErrorHandling = () => {
+  // Initialize network monitoring
+  NetworkMonitor.init();
+
+  // Global unhandled promise rejection handler
+  window.addEventListener('unhandledrejection', (event) => {
+    console.error('Unhandled promise rejection:', event.reason);
+    ErrorHandler.handleError(event.reason, {
+      type: 'unhandled_promise_rejection',
+      promise: event.promise
+    });
+    
+    // Prevent the default browser behavior
+    event.preventDefault();
+  });
+
+  // Global error handler
+  window.addEventListener('error', (event) => {
+    console.error('Global error:', event.error);
+    ErrorHandler.handleError(event.error, {
+      type: 'global_error',
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno
+    });
+  });
+
+  console.log('Error handling initialized');
+};
