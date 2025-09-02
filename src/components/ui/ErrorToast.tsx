@@ -9,15 +9,23 @@ import {
   RefreshCw, 
   Wifi, 
   WifiOff,
-  ExternalLink
+  ExternalLink,
+  Clock,
+  Shield,
+  Bug,
+  Zap,
+  Copy,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
-import { AppError, ErrorSeverity } from '../lib/errorHandling';
+import { AppError, ErrorSeverity, ErrorType, RecoveryAction } from '../lib/errorTypes';
 
 interface Toast {
   id: string;
   error: AppError;
   autoClose?: boolean;
   duration?: number;
+  showDetails?: boolean;
 }
 
 interface ErrorToastProps {
@@ -25,20 +33,46 @@ interface ErrorToastProps {
   onClose: (id: string) => void;
   onRetry?: (error: AppError) => void;
   onAction?: (error: AppError, action: string) => void;
+  onFeedback?: (error: AppError, feedback: string) => void;
 }
 
-export function ErrorToast({ toasts, onClose, onRetry, onAction }: ErrorToastProps) {
+export function ErrorToast({ 
+  toasts, 
+  onClose, 
+  onRetry, 
+  onAction, 
+  onFeedback 
+}: ErrorToastProps) {
+  const [expandedToasts, setExpandedToasts] = useState<Set<string>>(new Set());
+  const [feedbackText, setFeedbackText] = useState<Record<string, string>>({});
+
   const getIcon = (severity: ErrorSeverity) => {
     switch (severity) {
       case ErrorSeverity.CRITICAL:
-      case ErrorSeverity.HIGH:
         return AlertCircle;
-      case ErrorSeverity.MEDIUM:
+      case ErrorSeverity.HIGH:
         return AlertTriangle;
-      case ErrorSeverity.LOW:
+      case ErrorSeverity.MEDIUM:
         return Info;
+      case ErrorSeverity.LOW:
+        return CheckCircle;
       default:
         return AlertCircle;
+    }
+  };
+
+  const getTypeIcon = (type: ErrorType) => {
+    switch (type) {
+      case ErrorType.NETWORK:
+        return WifiOff;
+      case ErrorType.AUTHENTICATION:
+        return Shield;
+      case ErrorType.AI_SERVICE:
+        return Zap;
+      case ErrorType.VALIDATION:
+        return AlertTriangle;
+      default:
+        return Bug;
     }
   };
 
@@ -50,7 +84,8 @@ export function ErrorToast({ toasts, onClose, onRetry, onAction }: ErrorToastPro
           border: 'border-red-200',
           icon: 'text-red-600',
           text: 'text-red-800',
-          button: 'bg-red-600 hover:bg-red-700'
+          button: 'bg-red-600 hover:bg-red-700',
+          accent: 'bg-red-100'
         };
       case ErrorSeverity.HIGH:
         return {
@@ -58,7 +93,8 @@ export function ErrorToast({ toasts, onClose, onRetry, onAction }: ErrorToastPro
           border: 'border-orange-200',
           icon: 'text-orange-600',
           text: 'text-orange-800',
-          button: 'bg-orange-600 hover:bg-orange-700'
+          button: 'bg-orange-600 hover:bg-orange-700',
+          accent: 'bg-orange-100'
         };
       case ErrorSeverity.MEDIUM:
         return {
@@ -66,7 +102,8 @@ export function ErrorToast({ toasts, onClose, onRetry, onAction }: ErrorToastPro
           border: 'border-yellow-200',
           icon: 'text-yellow-600',
           text: 'text-yellow-800',
-          button: 'bg-yellow-600 hover:bg-yellow-700'
+          button: 'bg-yellow-600 hover:bg-yellow-700',
+          accent: 'bg-yellow-100'
         };
       case ErrorSeverity.LOW:
         return {
@@ -74,7 +111,8 @@ export function ErrorToast({ toasts, onClose, onRetry, onAction }: ErrorToastPro
           border: 'border-blue-200',
           icon: 'text-blue-600',
           text: 'text-blue-800',
-          button: 'bg-blue-600 hover:bg-blue-700'
+          button: 'bg-blue-600 hover:bg-blue-700',
+          accent: 'bg-blue-100'
         };
       default:
         return {
@@ -82,52 +120,41 @@ export function ErrorToast({ toasts, onClose, onRetry, onAction }: ErrorToastPro
           border: 'border-gray-200',
           icon: 'text-gray-600',
           text: 'text-gray-800',
-          button: 'bg-gray-600 hover:bg-gray-700'
+          button: 'bg-gray-600 hover:bg-gray-700',
+          accent: 'bg-gray-100'
         };
     }
   };
 
-  const getActionButton = (error: AppError) => {
-    switch (error.action) {
-      case 'retry':
-        return {
-          label: 'Try Again',
-          icon: RefreshCw,
-          onClick: () => onRetry?.(error)
-        };
-      case 'check_connection':
-        return {
-          label: 'Check Connection',
-          icon: WifiOff,
-          onClick: () => window.open('https://www.google.com', '_blank')
-        };
-      case 'contact_support':
-        return {
-          label: 'Contact Support',
-          icon: ExternalLink,
-          onClick: () => onAction?.(error, 'contact_support')
-        };
-      case 'sign_in':
-        return {
-          label: 'Sign In',
-          icon: ExternalLink,
-          onClick: () => onAction?.(error, 'sign_in')
-        };
-      case 'check_email':
-        return {
-          label: 'Check Email',
-          icon: ExternalLink,
-          onClick: () => onAction?.(error, 'check_email')
-        };
-      default:
-        if (error.retryable) {
-          return {
-            label: 'Try Again',
-            icon: RefreshCw,
-            onClick: () => onRetry?.(error)
-          };
-        }
-        return null;
+  const toggleExpanded = (toastId: string) => {
+    setExpandedToasts(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(toastId)) {
+        newSet.delete(toastId);
+      } else {
+        newSet.add(toastId);
+      }
+      return newSet;
+    });
+  };
+
+  const copyErrorDetails = (error: AppError) => {
+    const details = {
+      id: error.id,
+      type: error.type,
+      message: error.message,
+      timestamp: new Date(error.timestamp).toISOString(),
+      context: error.context
+    };
+    
+    navigator.clipboard.writeText(JSON.stringify(details, null, 2));
+  };
+
+  const submitFeedback = (error: AppError) => {
+    const feedback = feedbackText[error.id];
+    if (feedback && onFeedback) {
+      onFeedback(error, feedback);
+      setFeedbackText(prev => ({ ...prev, [error.id]: '' }));
     }
   };
 
@@ -135,9 +162,10 @@ export function ErrorToast({ toasts, onClose, onRetry, onAction }: ErrorToastPro
     <div className="fixed top-4 right-4 z-50 space-y-2 max-w-sm">
       <AnimatePresence>
         {toasts.map((toast) => {
-          const Icon = getIcon(toast.error.severity);
+          const SeverityIcon = getIcon(toast.error.severity);
+          const TypeIcon = getTypeIcon(toast.error.type);
           const colors = getColors(toast.error.severity);
-          const actionButton = getActionButton(toast.error);
+          const isExpanded = expandedToasts.has(toast.id);
 
           return (
             <motion.div
@@ -146,49 +174,136 @@ export function ErrorToast({ toasts, onClose, onRetry, onAction }: ErrorToastPro
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 300, scale: 0.8 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              className={`${colors.bg} ${colors.border} border rounded-lg shadow-lg p-4 backdrop-blur-sm`}
+              className={`${colors.bg} ${colors.border} border rounded-lg shadow-lg backdrop-blur-sm overflow-hidden`}
             >
-              <div className="flex items-start space-x-3">
-                <Icon className={`w-5 h-5 ${colors.icon} flex-shrink-0 mt-0.5`} />
-                
-                <div className="flex-1 min-w-0">
-                  <p className={`text-sm font-medium ${colors.text}`}>
-                    {toast.error.userMessage}
-                  </p>
+              {/* Main error content */}
+              <div className="p-4">
+                <div className="flex items-start space-x-3">
+                  <div className="flex-shrink-0 flex items-center space-x-1">
+                    <SeverityIcon className={`w-5 h-5 ${colors.icon}`} />
+                    <TypeIcon className={`w-4 h-4 ${colors.icon} opacity-60`} />
+                  </div>
                   
-                  {import.meta.env.DEV && (
-                    <details className="mt-2">
-                      <summary className={`text-xs ${colors.text} cursor-pointer opacity-75 hover:opacity-100`}>
-                        Debug Info
-                      </summary>
-                      <div className="mt-1 text-xs font-mono bg-white/50 rounded p-2 overflow-auto max-h-20">
-                        <div><strong>Type:</strong> {toast.error.type}</div>
-                        <div><strong>Code:</strong> {toast.error.code || 'N/A'}</div>
-                        <div><strong>Message:</strong> {toast.error.message}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <p className={`text-sm font-medium ${colors.text}`}>
+                          {toast.error.userMessage}
+                        </p>
+                        
+                        {toast.error.code && (
+                          <p className={`text-xs ${colors.text} opacity-75 mt-1`}>
+                            Error Code: {toast.error.code}
+                          </p>
+                        )}
                       </div>
-                    </details>
-                  )}
-                  
-                  {actionButton && (
-                    <div className="mt-3 flex items-center space-x-2">
-                      <button
-                        onClick={actionButton.onClick}
-                        className={`${colors.button} text-white px-3 py-1 rounded text-xs font-medium flex items-center space-x-1 transition-colors`}
-                      >
-                        <actionButton.icon className="w-3 h-3" />
-                        <span>{actionButton.label}</span>
-                      </button>
+                      
+                      <div className="flex items-center space-x-1 ml-2">
+                        {(import.meta.env.DEV || toast.error.severity === ErrorSeverity.CRITICAL) && (
+                          <button
+                            onClick={() => toggleExpanded(toast.id)}
+                            className={`${colors.icon} hover:opacity-75 transition-opacity p-1`}
+                            title="Show details"
+                          >
+                            {isExpanded ? (
+                              <ChevronUp className="w-4 h-4" />
+                            ) : (
+                              <ChevronDown className="w-4 h-4" />
+                            )}
+                          </button>
+                        )}
+                        
+                        <button
+                          onClick={() => onClose(toast.id)}
+                          className={`${colors.icon} hover:opacity-75 transition-opacity p-1`}
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
-                  )}
+                    
+                    {/* Recovery actions */}
+                    {toast.error.recoveryActions && toast.error.recoveryActions.length > 0 && (
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {toast.error.recoveryActions.slice(0, 2).map((action) => (
+                          <button
+                            key={action.id}
+                            onClick={() => action.action()}
+                            className={`${action.primary ? colors.button : `${colors.accent} ${colors.text}`} text-white px-3 py-1 rounded text-xs font-medium flex items-center space-x-1 transition-colors`}
+                          >
+                            <span>{action.label}</span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-                
-                <button
-                  onClick={() => onClose(toast.id)}
-                  className={`${colors.icon} hover:opacity-75 transition-opacity`}
-                >
-                  <X className="w-4 h-4" />
-                </button>
               </div>
+
+              {/* Expanded details */}
+              <AnimatePresence>
+                {isExpanded && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className={`border-t ${colors.border} ${colors.accent}`}
+                  >
+                    <div className="p-4 space-y-3">
+                      {/* Error details */}
+                      <div>
+                        <h4 className={`text-xs font-medium ${colors.text} mb-1`}>
+                          Technical Details
+                        </h4>
+                        <div className="bg-white/50 rounded p-2 text-xs font-mono text-slate-800 max-h-20 overflow-auto">
+                          <div><strong>Type:</strong> {toast.error.type}</div>
+                          <div><strong>Category:</strong> {toast.error.category}</div>
+                          <div><strong>Message:</strong> {toast.error.message}</div>
+                          {toast.error.context?.operation && (
+                            <div><strong>Operation:</strong> {toast.error.context.operation}</div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Copy error details */}
+                      <button
+                        onClick={() => copyErrorDetails(toast.error)}
+                        className={`w-full ${colors.button} text-white px-3 py-2 rounded text-xs font-medium flex items-center justify-center space-x-1 transition-colors`}
+                      >
+                        <Copy className="w-3 h-3" />
+                        <span>Copy Error Details</span>
+                      </button>
+
+                      {/* User feedback */}
+                      {toast.error.severity === ErrorSeverity.HIGH || toast.error.severity === ErrorSeverity.CRITICAL ? (
+                        <div className="space-y-2">
+                          <h4 className={`text-xs font-medium ${colors.text}`}>
+                            Help us improve (optional)
+                          </h4>
+                          <textarea
+                            value={feedbackText[toast.id] || ''}
+                            onChange={(e) => setFeedbackText(prev => ({ 
+                              ...prev, 
+                              [toast.id]: e.target.value 
+                            }))}
+                            placeholder="What were you trying to do when this error occurred?"
+                            className="w-full text-xs p-2 border border-slate-300 rounded resize-none"
+                            rows={2}
+                          />
+                          <button
+                            onClick={() => submitFeedback(toast.error)}
+                            disabled={!feedbackText[toast.id]}
+                            className={`w-full ${colors.button} disabled:opacity-50 text-white px-3 py-1 rounded text-xs font-medium transition-colors`}
+                          >
+                            Send Feedback
+                          </button>
+                        </div>
+                      ) : null}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </motion.div>
           );
         })}
@@ -197,20 +312,32 @@ export function ErrorToast({ toasts, onClose, onRetry, onAction }: ErrorToastPro
   );
 }
 
-// Toast manager hook
+// Enhanced toast manager hook
 export function useErrorToast() {
   const [toasts, setToasts] = useState<Toast[]>([]);
 
-  const showError = (error: AppError, options?: { autoClose?: boolean; duration?: number }) => {
+  const showError = (
+    error: AppError, 
+    options?: { 
+      autoClose?: boolean; 
+      duration?: number;
+      showDetails?: boolean;
+    }
+  ) => {
     const id = `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const toast: Toast = {
       id,
       error,
-      autoClose: options?.autoClose ?? true,
-      duration: options?.duration ?? 5000
+      autoClose: options?.autoClose ?? (error.severity === ErrorSeverity.LOW),
+      duration: options?.duration ?? this.getDurationBySeverity(error.severity),
+      showDetails: options?.showDetails ?? false
     };
 
-    setToasts(prev => [...prev, toast]);
+    setToasts(prev => {
+      // Limit number of toasts
+      const newToasts = [toast, ...prev.slice(0, 4)];
+      return newToasts;
+    });
 
     // Auto-close toast
     if (toast.autoClose) {
@@ -230,6 +357,21 @@ export function useErrorToast() {
     setToasts([]);
   };
 
+  const getDurationBySeverity = (severity: ErrorSeverity): number => {
+    switch (severity) {
+      case ErrorSeverity.CRITICAL:
+        return 0; // Never auto-close
+      case ErrorSeverity.HIGH:
+        return 10000; // 10 seconds
+      case ErrorSeverity.MEDIUM:
+        return 7000; // 7 seconds
+      case ErrorSeverity.LOW:
+        return 4000; // 4 seconds
+      default:
+        return 5000;
+    }
+  };
+
   return {
     toasts,
     showError,
@@ -238,10 +380,11 @@ export function useErrorToast() {
   };
 }
 
-// Network status indicator component
+// Network status indicator
 export function NetworkStatus() {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [showOfflineMessage, setShowOfflineMessage] = useState(false);
+  const [pendingOperations, setPendingOperations] = useState(0);
 
   useEffect(() => {
     const handleOnline = () => {
@@ -260,40 +403,95 @@ export function NetworkStatus() {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
 
+    // Check for pending operations periodically
+    const checkPending = () => {
+      try {
+        const { OfflineManager } = require('../lib/offlineManager');
+        setPendingOperations(OfflineManager.getPendingOperationsCount());
+      } catch {
+        // OfflineManager not available
+      }
+    };
+
+    const interval = setInterval(checkPending, 5000);
+    checkPending();
+
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
+      clearInterval(interval);
     };
   }, []);
 
-  if (!showOfflineMessage && isOnline) return null;
-
   return (
-    <AnimatePresence>
-      {showOfflineMessage && (
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -50 }}
-          className="fixed top-0 left-0 right-0 z-50 bg-red-600 text-white p-3 text-center"
-        >
-          <div className="flex items-center justify-center space-x-2">
-            <WifiOff className="w-4 h-4" />
-            <span className="text-sm font-medium">
-              You're currently offline. Some features may not work properly.
-            </span>
-          </div>
-        </motion.div>
-      )}
-      
+    <>
+      {/* Offline Banner */}
+      <AnimatePresence>
+        {showOfflineMessage && (
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            className="fixed top-0 left-0 right-0 z-50 bg-red-600 text-white p-3"
+          >
+            <div className="max-w-7xl mx-auto flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <WifiOff className="w-4 h-4" />
+                <span className="text-sm font-medium">
+                  You're currently offline. Some features may not work properly.
+                </span>
+                {pendingOperations > 0 && (
+                  <span className="text-xs bg-red-700 px-2 py-1 rounded">
+                    {pendingOperations} operations queued
+                  </span>
+                )}
+              </div>
+              
+              <button
+                onClick={() => window.location.reload()}
+                className="bg-red-700 hover:bg-red-800 text-white px-3 py-1 rounded text-xs font-medium flex items-center space-x-1 transition-colors"
+              >
+                <RefreshCw className="w-3 h-3" />
+                <span>Retry</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Connection Restored Banner */}
+      <AnimatePresence>
+        {isOnline && pendingOperations > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            className="fixed top-0 left-0 right-0 z-50 bg-green-600 text-white p-3"
+          >
+            <div className="max-w-7xl mx-auto flex items-center justify-center space-x-2">
+              <Wifi className="w-4 h-4" />
+              <span className="text-sm font-medium">
+                Connection restored! Syncing {pendingOperations} operations...
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Persistent Offline Indicator */}
       {!isOnline && !showOfflineMessage && (
-        <div className="fixed bottom-4 left-4 bg-red-600 text-white p-2 rounded-lg shadow-lg">
+        <div className="fixed bottom-4 left-4 bg-red-600 text-white p-2 rounded-lg shadow-lg z-40">
           <div className="flex items-center space-x-2">
             <WifiOff className="w-4 h-4" />
-            <span className="text-xs">Offline</span>
+            <span className="text-xs font-medium">Offline</span>
+            {pendingOperations > 0 && (
+              <span className="text-xs bg-red-700 px-1 py-0.5 rounded">
+                {pendingOperations}
+              </span>
+            )}
           </div>
         </div>
       )}
-    </AnimatePresence>
+    </>
   );
 }
