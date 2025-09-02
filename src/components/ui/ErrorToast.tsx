@@ -175,25 +175,25 @@ export function ErrorToast({
               animate={{ opacity: 1, x: 0, scale: 1 }}
               exit={{ opacity: 0, x: 300, scale: 0.8 }}
               transition={{ duration: 0.3, ease: 'easeOut' }}
-              className={`${colors.bg} ${colors.border} border rounded-lg shadow-lg backdrop-blur-sm overflow-hidden`}
+              className={\`${colors.bg} ${colors.border} border rounded-lg shadow-lg backdrop-blur-sm overflow-hidden`}
             >
               {/* Main error content */}
               <div className="p-4">
                 <div className="flex items-start space-x-3">
                   <div className="flex-shrink-0 flex items-center space-x-1">
-                    <SeverityIcon className={`w-5 h-5 ${colors.icon}`} />
-                    <TypeIcon className={`w-4 h-4 ${colors.icon} opacity-60`} />
+                    <SeverityIcon className={\`w-5 h-5 ${colors.icon}`} />
+                    <TypeIcon className={\`w-4 h-4 ${colors.icon} opacity-60`} />
                   </div>
                   
                   <div className="flex-1 min-w-0">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <p className={`text-sm font-medium ${colors.text}`}>
+                        <p className={\`text-sm font-medium ${colors.text}`}>
                           {toast.error.userMessage}
                         </p>
                         
                         {toast.error.code && (
-                          <p className={`text-xs ${colors.text} opacity-75 mt-1`}>
+                          <p className={\`text-xs ${colors.text} opacity-75 mt-1`}>
                             Error Code: {toast.error.code}
                           </p>
                         )}
@@ -203,7 +203,7 @@ export function ErrorToast({
                         {(import.meta.env.DEV || toast.error.severity === ErrorSeverity.CRITICAL) && (
                           <button
                             onClick={() => toggleExpanded(toast.id)}
-                            className={`${colors.icon} hover:opacity-75 transition-opacity p-1`}
+                            className={\`${colors.icon} hover:opacity-75 transition-opacity p-1`}
                             title="Show details"
                           >
                             {isExpanded ? (
@@ -216,7 +216,7 @@ export function ErrorToast({
                         
                         <button
                           onClick={() => onClose(toast.id)}
-                          className={`${colors.icon} hover:opacity-75 transition-opacity p-1`}
+                          className={\`${colors.icon} hover:opacity-75 transition-opacity p-1`}
                         >
                           <X className="w-4 h-4" />
                         </button>
@@ -230,7 +230,7 @@ export function ErrorToast({
                           <button
                             key={action.id}
                             onClick={() => action.action()}
-                            className={`${action.primary ? colors.button : `${colors.accent} ${colors.text}`} text-white px-3 py-1 rounded text-xs font-medium flex items-center space-x-1 transition-colors`}
+                            className={\`${action.primary ? colors.button : `${colors.accent} ${colors.text}`} text-white px-3 py-1 rounded text-xs font-medium flex items-center space-x-1 transition-colors`}
                           >
                             <span>{action.label}</span>
                           </button>
@@ -249,12 +249,12 @@ export function ErrorToast({
                     animate={{ height: 'auto', opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    className={`border-t ${colors.border} ${colors.accent}`}
+                    className={\`border-t ${colors.border} ${colors.accent}`}
                   >
                     <div className="p-4 space-y-3">
                       {/* Error details */}
                       <div>
-                        <h4 className={`text-xs font-medium ${colors.text} mb-1`}>
+                        <h4 className={\`text-xs font-medium ${colors.text} mb-1`}>
                           Technical Details
                         </h4>
                         <div className="bg-white/50 rounded p-2 text-xs font-mono text-slate-800 max-h-20 overflow-auto">
@@ -270,7 +270,7 @@ export function ErrorToast({
                       {/* Copy error details */}
                       <button
                         onClick={() => copyErrorDetails(toast.error)}
-                        className={`w-full ${colors.button} text-white px-3 py-2 rounded text-xs font-medium flex items-center justify-center space-x-1 transition-colors`}
+                        className={\`w-full ${colors.button} text-white px-3 py-2 rounded text-xs font-medium flex items-center justify-center space-x-1 transition-colors`}
                       >
                         <Copy className="w-3 h-3" />
                         <span>Copy Error Details</span>
@@ -279,7 +279,7 @@ export function ErrorToast({
                       {/* User feedback */}
                       {toast.error.severity === ErrorSeverity.HIGH || toast.error.severity === ErrorSeverity.CRITICAL ? (
                         <div className="space-y-2">
-                          <h4 className={`text-xs font-medium ${colors.text}`}>
+                          <h4 className={\`text-xs font-medium ${colors.text}`}>
                             Help us improve (optional)
                           </h4>
                           <textarea
@@ -295,7 +295,7 @@ export function ErrorToast({
                           <button
                             onClick={() => submitFeedback(toast.error)}
                             disabled={!feedbackText[toast.id]}
-                            className={`w-full ${colors.button} disabled:opacity-50 text-white px-3 py-1 rounded text-xs font-medium transition-colors`}
+                            className={\`w-full ${colors.button} disabled:opacity-50 text-white px-3 py-1 rounded text-xs font-medium transition-colors`}
                           >
                             Send Feedback
                           </button>
@@ -325,7 +325,7 @@ export function useErrorToast() {
       showDetails?: boolean;
     }
   ) => {
-    const id = `error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    const id = \`error-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const toast: Toast = {
       id,
       error,

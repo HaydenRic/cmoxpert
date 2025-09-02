@@ -255,11 +255,11 @@ export function useFileUpload() {
     // Validate file before upload
     try {
       if (options?.maxSize && file.size > options.maxSize) {
-        throw new Error(`File too large. Maximum size is ${options.maxSize / 1024 / 1024}MB`);
+        throw new Error(\`File too large. Maximum size is ${options.maxSize / 1024 / 1024}MB`);
       }
       
       if (options?.allowedTypes && !options.allowedTypes.includes(file.type)) {
-        throw new Error(`Invalid file type. Allowed types: ${options.allowedTypes.join(', ')}`);
+        throw new Error(\`Invalid file type. Allowed types: ${options.allowedTypes.join(', ')}`);
       }
     } catch (error) {
       return await handleError(error, {

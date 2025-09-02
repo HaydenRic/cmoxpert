@@ -43,7 +43,7 @@ export function FormErrorDisplay({ errors, onClearError, className = '' }: FormE
   if (!hasErrors) return null;
 
   return (
-    <div className={`space-y-2 ${className}`}>
+    <div className={\`space-y-2 ${className}`}>
       {Object.entries(errors).map(([field, fieldErrors]) => 
         fieldErrors.map((error) => {
           const Icon = getErrorIcon(error.severity);
@@ -51,8 +51,8 @@ export function FormErrorDisplay({ errors, onClearError, className = '' }: FormE
           
           return (
             <div
-              key={`${field}-${error.id}`}
-              className={`flex items-start space-x-2 p-3 rounded-lg border ${colors}`}
+              key={\`${field}-${error.id}`}
+              className={\`flex items-start space-x-2 p-3 rounded-lg border ${colors}`}
             >
               <Icon className="w-4 h-4 flex-shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
@@ -94,9 +94,9 @@ export function FieldError({ error, className = '' }: FieldErrorProps) {
   const colorClass = error.severity === ErrorSeverity.LOW ? 'text-blue-600' : 'text-red-600';
 
   return (
-    <div className={`flex items-center space-x-1 mt-1 ${className}`}>
-      <Icon className={`w-3 h-3 ${colorClass}`} />
-      <span className={`text-xs ${colorClass}`}>
+    <div className={\`flex items-center space-x-1 mt-1 ${className}`}>
+      <Icon className={\`w-3 h-3 ${colorClass}`} />
+      <span className={\`text-xs ${colorClass}`}>
         {error.userMessage}
       </span>
     </div>

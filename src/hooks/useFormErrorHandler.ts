@@ -99,7 +99,7 @@ export function useFormErrorHandler() {
     minLength: (min: number, fieldName: string) => (value: string) => {
       if (value && value.length < min) {
         throw new ValidationError(
-          `${fieldName} must be at least ${min} characters`,
+          \`${fieldName} must be at least ${min} characters`,
           fieldName.toLowerCase().replace(' ', '_'),
           'TOO_SHORT'
         );
@@ -108,7 +108,7 @@ export function useFormErrorHandler() {
     maxLength: (max: number, fieldName: string) => (value: string) => {
       if (value && value.length > max) {
         throw new ValidationError(
-          `${fieldName} must be no more than ${max} characters`,
+          \`${fieldName} must be no more than ${max} characters`,
           fieldName.toLowerCase().replace(' ', '_'),
           'TOO_LONG'
         );
@@ -119,7 +119,7 @@ export function useFormErrorHandler() {
         const num = Number(value);
         if (isNaN(num)) {
           throw new ValidationError(
-            `${fieldName} must be a valid number`,
+            \`${fieldName} must be a valid number`,
             fieldName.toLowerCase().replace(' ', '_'),
             'INVALID_NUMBER'
           );
@@ -129,7 +129,7 @@ export function useFormErrorHandler() {
     positive: (fieldName: string) => (value: number) => {
       if (value !== null && value !== undefined && value < 0) {
         throw new ValidationError(
-          `${fieldName} must be positive`,
+          \`${fieldName} must be positive`,
           fieldName.toLowerCase().replace(' ', '_'),
           'NEGATIVE_VALUE'
         );
@@ -138,7 +138,7 @@ export function useFormErrorHandler() {
     oneOf: (options: any[], fieldName: string) => (value: any) => {
       if (value && !options.includes(value)) {
         throw new ValidationError(
-          `${fieldName} must be one of: ${options.join(', ')}`,
+          \`${fieldName} must be one of: ${options.join(', ')}`,
           fieldName.toLowerCase().replace(' ', '_'),
           'INVALID_OPTION'
         );

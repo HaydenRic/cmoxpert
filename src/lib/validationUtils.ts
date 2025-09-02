@@ -17,7 +17,7 @@ export class ValidationError extends Error {
 // Email validation with detailed feedback
 export const validateEmail = (email: string, fieldName: string = 'Email'): void => {
   if (!email || email.trim() === '') {
-    throw new ValidationError(`${fieldName} is required`, 'email', 'REQUIRED');
+    throw new ValidationError(\`${fieldName} is required`, 'email', 'REQUIRED');
   }
   
   const trimmedEmail = email.trim();
@@ -49,7 +49,7 @@ export const validateEmail = (email: string, fieldName: string = 'Email'): void 
     
     if (suggestions.length > 0) {
       throw new ValidationError(
-        `Did you mean ${suggestions[0]}?`, 
+        \`Did you mean ${suggestions[0]}?`, 
         'email', 
         'POSSIBLE_TYPO', 
         trimmedEmail
@@ -61,7 +61,7 @@ export const validateEmail = (email: string, fieldName: string = 'Email'): void 
 // Password validation with strength checking
 export const validatePassword = (password: string, fieldName: string = 'Password'): void => {
   if (!password) {
-    throw new ValidationError(`${fieldName} is required`, 'password', 'REQUIRED');
+    throw new ValidationError(\`${fieldName} is required`, 'password', 'REQUIRED');
   }
   
   if (password.length < 8) {
@@ -105,22 +105,22 @@ export const validatePassword = (password: string, fieldName: string = 'Password
 // Required field validation
 export const validateRequired = (value: any, fieldName: string): void => {
   if (value === null || value === undefined) {
-    throw new ValidationError(`${fieldName} is required`, fieldName.toLowerCase().replace(' ', '_'), 'REQUIRED');
+    throw new ValidationError(\`${fieldName} is required`, fieldName.toLowerCase().replace(' ', '_'), 'REQUIRED');
   }
   
   if (typeof value === 'string' && value.trim() === '') {
-    throw new ValidationError(`${fieldName} cannot be empty`, fieldName.toLowerCase().replace(' ', '_'), 'EMPTY');
+    throw new ValidationError(\`${fieldName} cannot be empty`, fieldName.toLowerCase().replace(' ', '_'), 'EMPTY');
   }
   
   if (Array.isArray(value) && value.length === 0) {
-    throw new ValidationError(`${fieldName} must have at least one item`, fieldName.toLowerCase().replace(' ', '_'), 'EMPTY_ARRAY');
+    throw new ValidationError(\`${fieldName} must have at least one item`, fieldName.toLowerCase().replace(' ', '_'), 'EMPTY_ARRAY');
   }
 };
 
 // URL validation with protocol checking
 export const validateUrl = (url: string, fieldName: string = 'URL'): void => {
   if (!url || url.trim() === '') {
-    throw new ValidationError(`${fieldName} is required`, fieldName.toLowerCase().replace(' ', '_'), 'REQUIRED');
+    throw new ValidationError(\`${fieldName} is required`, fieldName.toLowerCase().replace(' ', '_'), 'REQUIRED');
   }
   
   const trimmedUrl = url.trim();
@@ -159,7 +159,7 @@ export const validateUrl = (url: string, fieldName: string = 'URL'): void => {
       try {
         new URL(fixedUrl);
         throw new ValidationError(
-          `Did you mean ${fixedUrl}?`, 
+          \`Did you mean ${fixedUrl}?`, 
           fieldName.toLowerCase().replace(' ', '_'), 
           'MISSING_PROTOCOL',
           fixedUrl
@@ -170,7 +170,7 @@ export const validateUrl = (url: string, fieldName: string = 'URL'): void => {
     }
     
     throw new ValidationError(
-      `Please enter a valid ${fieldName.toLowerCase()}`, 
+      \`Please enter a valid ${fieldName.toLowerCase()}`, 
       fieldName.toLowerCase().replace(' ', '_'), 
       'INVALID_FORMAT',
       trimmedUrl
@@ -196,7 +196,7 @@ export const validateFile = (
     const maxSizeMB = options.maxSize / 1024 / 1024;
     const fileSizeMB = file.size / 1024 / 1024;
     throw new ValidationError(
-      `File is too large (${fileSizeMB.toFixed(1)}MB). Maximum size is ${maxSizeMB}MB`,
+      \`File is too large (${fileSizeMB.toFixed(1)}MB). Maximum size is ${maxSizeMB}MB`,
       'file',
       'FILE_TOO_LARGE',
       { size: file.size, maxSize: options.maxSize }
@@ -206,7 +206,7 @@ export const validateFile = (
   // Type validation
   if (options?.allowedTypes && !options.allowedTypes.includes(file.type)) {
     throw new ValidationError(
-      `Invalid file type. Allowed types: ${options.allowedTypes.join(', ')}`,
+      \`Invalid file type. Allowed types: ${options.allowedTypes.join(', ')}`,
       'file',
       'INVALID_FILE_TYPE',
       { type: file.type, allowedTypes: options.allowedTypes }
@@ -218,7 +218,7 @@ export const validateFile = (
     const extension = file.name.split('.').pop()?.toLowerCase();
     if (!extension || !options.allowedExtensions.includes(extension)) {
       throw new ValidationError(
-        `Invalid file extension. Allowed extensions: ${options.allowedExtensions.join(', ')}`,
+        \`Invalid file extension. Allowed extensions: ${options.allowedExtensions.join(', ')}`,
         'file',
         'INVALID_EXTENSION',
         { extension, allowedExtensions: options.allowedExtensions }
@@ -280,7 +280,7 @@ export const validateKPIData = (data: {
   const validPeriods = ['daily', 'weekly', 'monthly', 'quarterly', 'yearly'];
   if (data.period && !validPeriods.includes(data.period)) {
     throw new ValidationError(
-      `Invalid period. Must be one of: ${validPeriods.join(', ')}`,
+      \`Invalid period. Must be one of: ${validPeriods.join(', ')}`,
       'period',
       'INVALID_OPTION'
     );
@@ -304,7 +304,7 @@ export const validateContentGeneration = (data: {
   const validContentTypes = ['blog_post', 'social_media_post', 'email_copy', 'ad_copy', 'landing_page', 'press_release'];
   if (data.contentType && !validContentTypes.includes(data.contentType)) {
     throw new ValidationError(
-      `Invalid content type. Must be one of: ${validContentTypes.join(', ')}`,
+      \`Invalid content type. Must be one of: ${validContentTypes.join(', ')}`,
       'contentType',
       'INVALID_OPTION'
     );
@@ -313,7 +313,7 @@ export const validateContentGeneration = (data: {
   const validTones = ['professional', 'friendly', 'authoritative', 'conversational', 'urgent', 'educational'];
   if (data.tone && !validTones.includes(data.tone)) {
     throw new ValidationError(
-      `Invalid tone. Must be one of: ${validTones.join(', ')}`,
+      \`Invalid tone. Must be one of: ${validTones.join(', ')}`,
       'tone',
       'INVALID_OPTION'
     );
@@ -322,7 +322,7 @@ export const validateContentGeneration = (data: {
   const validLengths = ['short', 'medium', 'long'];
   if (data.length && !validLengths.includes(data.length)) {
     throw new ValidationError(
-      `Invalid length. Must be one of: ${validLengths.join(', ')}`,
+      \`Invalid length. Must be one of: ${validLengths.join(', ')}`,
       'length',
       'INVALID_OPTION'
     );

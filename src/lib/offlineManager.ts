@@ -143,7 +143,7 @@ export class OfflineManager {
     if (queue.length === 0) return;
     
     this.syncInProgress = true;
-    console.log(`Syncing ${queue.length} queued operations...`);
+    console.log(\`Syncing ${queue.length} queued operations...`);
     
     try {
       const results = await Promise.allSettled(
@@ -160,7 +160,7 @@ export class OfflineManager {
       const successCount = results.filter(r => r.status === 'fulfilled').length;
       const failureCount = results.filter(r => r.status === 'rejected').length;
       
-      console.log(`Sync completed: ${successCount} successful, ${failureCount} failed`);
+      console.log(\`Sync completed: ${successCount} successful, ${failureCount} failed`);
       
       if (successCount > 0) {
         // Notify user of successful sync
@@ -348,7 +348,7 @@ export class GracefulDegradation {
 
       return result;
     } catch (error) {
-      console.warn(`Operation failed, using fallback:`, error);
+      console.warn(\`Operation failed, using fallback:`, error);
       
       // Try cached data first
       if (options?.cacheKey) {
