@@ -4,9 +4,9 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Analytics } from './components/Analytics';
 import { PerformanceMonitor } from './components/PerformanceMonitor';
-import { ErrorToast, useErrorToast } from './components/ui/ErrorToast';
+import { ErrorToast, useErrorToast, NetworkStatus } from './components/ui/ErrorToast';
 import { OfflineIndicator } from './components/ui/OfflineIndicator';
-import { NetworkStatus } from './components/ui/ErrorToast';
+import { ErrorBoundaryWrapper } from './components/ui/ErrorBoundaryWrapper';
 import { initializeErrorHandling } from './lib/errorHandling';
 import { Layout } from './components/Layout';
 import { AuthForm } from './components/AuthForm';
@@ -126,7 +126,7 @@ function AppContent() {
         {/* Protected app routes with lazy loading */}
         <Route 
           path="/dashboard" 
-          element={
+          element={ 
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -141,7 +141,7 @@ function AppContent() {
         
         <Route 
           path="/clients" 
-          element={
+          element={ 
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -156,7 +156,7 @@ function AppContent() {
         
         <Route 
           path="/clients/:id" 
-          element={
+          element={ 
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -171,7 +171,7 @@ function AppContent() {
         
         <Route 
           path="/performance" 
-          element={
+          element={ 
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -186,7 +186,7 @@ function AppContent() {
         
         <Route 
           path="/marketing-analytics" 
-          element={
+          element={ 
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -201,7 +201,7 @@ function AppContent() {
         
         <Route 
           path="/content" 
-          element={
+          element={ 
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -216,7 +216,7 @@ function AppContent() {
         
         <Route 
           path="/competitive-intelligence" 
-          element={
+          element={ 
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -231,7 +231,7 @@ function AppContent() {
         
         <Route 
           path="/clients/:clientId/onboarding" 
-          element={
+          element={ 
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -246,7 +246,7 @@ function AppContent() {
         
         <Route 
           path="/reports" 
-          element={
+          element={ 
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -261,7 +261,7 @@ function AppContent() {
         
         <Route 
           path="/playbooks" 
-          element={
+          element={ 
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -276,7 +276,7 @@ function AppContent() {
         
         <Route 
           path="/admin" 
-          element={
+          element={ 
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -291,7 +291,7 @@ function AppContent() {
         
         <Route 
           path="/settings" 
-          element={
+          element={ 
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
