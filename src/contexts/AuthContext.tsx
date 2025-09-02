@@ -141,6 +141,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         console.log('Initializing auth...');
         
+        // Check if Supabase is configured before attempting auth
+        const { isSupabaseConfigured } = await import('../lib/supabase');
+        
+        if (!isSupabaseConfigured) {
+          console.log('Supabase not configured, skipping auth initialization');
+          setLoading(false);
+          return;
+        }
+        
+        const { supabase } = await import('../lib/supabase');
+        
+        if (!supabase) {
+          console.log('Supabase client not available, skipping auth initialization');
+          setLoading(false);
+          return;
+        }
+        
         // Set a maximum initialization time
         initTimeout = setTimeout(() => {
           if (mounted) {
@@ -207,7 +224,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     // Listen for auth changes
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
+    } = (supabase?.auth?.onAuthStateChange || (() => ({ data: { subscription: { unsubscribe: () => {} } } })))(async (event, session) => {
       if (!mounted) return;
       
       console.log('Auth state change:', event, session);

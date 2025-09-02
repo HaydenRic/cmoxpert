@@ -63,9 +63,18 @@ export function LandingPage() {
 
   const loadFeaturedVideo = async () => {
     try {
-      // Check if Supabase is properly configured
-      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-        console.warn('Supabase not configured, skipping featured video load');
+      // Import configuration status
+      const { isSupabaseConfigured } = await import('../lib/supabase');
+      
+      if (!isSupabaseConfigured) {
+        console.log('Supabase not configured, skipping featured video load');
+        return;
+      }
+
+      const { supabase } = await import('../lib/supabase');
+      
+      if (!supabase) {
+        console.log('Supabase client not available, skipping featured video load');
         return;
       }
 
@@ -81,7 +90,7 @@ export function LandingPage() {
         setFeaturedVideo(data[0]);
       }
     } catch (error) {
-      console.warn('Could not load featured video (this is normal in development):', error);
+      console.log('Could not load featured video (this is normal in development)');
       // Silently fail - don't show error to user for missing featured video
     }
   };

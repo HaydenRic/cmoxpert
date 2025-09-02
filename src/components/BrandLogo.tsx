@@ -17,8 +17,17 @@ export function BrandLogo({ className = '', size = 'md' }: BrandLogoProps) {
 
   const loadLogo = async () => {
     try {
-      // Check if Supabase is configured
-      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+      // Import configuration status
+      const { isSupabaseConfigured } = await import('../lib/supabase');
+      
+      if (!isSupabaseConfigured) {
+        setLoading(false);
+        return;
+      }
+
+      const { supabase } = await import('../lib/supabase');
+      
+      if (!supabase) {
         setLoading(false);
         return;
       }
@@ -29,7 +38,7 @@ export function BrandLogo({ className = '', size = 'md' }: BrandLogoProps) {
         .list();
 
       if (error) {
-        console.warn('Could not load logo from Supabase:', error.message);
+        console.log('Could not load logo from Supabase - using fallback');
         setLoading(false);
         return;
       }

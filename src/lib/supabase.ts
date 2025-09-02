@@ -22,7 +22,7 @@ if (!isSupabaseConfigured) {
   console.warn('Supabase not properly configured - running in offline mode');
 }
 
-// Create a safe Supabase client that handles missing configuration
+// Create Supabase client only if properly configured
 export const supabase = isSupabaseConfigured ? createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
@@ -45,51 +45,10 @@ export const supabase = isSupabaseConfigured ? createClient(supabaseUrl, supabas
       eventsPerSecond: 2
     }
   }
-}) : {
-  // Fallback client for when Supabase is not configured
-  from: () => ({
-    select: () => ({
-      eq: () => ({
-        order: () => ({
-          limit: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
-          single: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
-          maybeSingle: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
-        }),
-        single: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
-        maybeSingle: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
-      }),
-      insert: () => ({
-        select: () => ({
-          single: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
-        })
-      }),
-      update: () => ({
-        eq: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
-      }),
-      delete: () => ({
-        eq: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
-      })
-    })
-  }),
-  storage: {
-    from: () => ({
-      list: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
-      getPublicUrl: () => ({ publicUrl: '' }),
-      upload: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
-      remove: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') })
-    })
-  },
-  auth: {
-    getSession: () => Promise.resolve({ data: { session: null }, error: null }),
-    getUser: () => Promise.resolve({ data: { user: null }, error: new Error('Supabase not configured') }),
-    signUp: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
-    signInWithPassword: () => Promise.resolve({ data: null, error: new Error('Supabase not configured') }),
-    signOut: () => Promise.resolve({ error: null }),
-    onAuthStateChange: () => ({
-      data: { subscription: { unsubscribe: () => {} } }
-    })
-  }
-} as any;
+}) : null;
+
+// Export configuration status
+export { isSupabaseConfigured };
 
 
 export type Database = {
