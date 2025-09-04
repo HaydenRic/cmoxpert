@@ -1,531 +1,432 @@
-```typescript
-import { 
-  AppError, 
-  ErrorType, 
-  ErrorSeverity, 
-  ErrorCategory, 
-  ERROR_PATTERNS, 
-  USER_ERROR_MESSAGES,
-  ErrorHandlerConfig,
-  RecoveryAction
-} from './errorTypes';
-import { reportError } from './monitoring';
+// Re-export from new modular error handling system
+export * from './errorTypes';
+export * from './errorHandler';
+export * from './offlineManager';
+export * from './validationUtils';
 
-// Global error handler configuration
-const DEFAULT_CONFIG: ErrorHandlerConfig = {
-  enableRetry: true,
-  maxRetries: 3,
-  retryDelay: 1000,
-  enableOfflineMode: true,
-  enableUserFeedback: true,
-  logLevel: import.meta.env.DEV ? 'debug' : 'error'
-};
+export * from './offlineManager';
+export * from './validationUtils';
 
-export class ErrorHandler {
-  private static config: ErrorHandlerConfig = DEFAULT_CONFIG;
-  private static errorHistory: AppError[] = [];
-  private static maxHistorySize = 100;
+// Network monitoring utility
+export class NetworkMonitor {
+  private static instance: NetworkMonitor;
+  private isOnline = navigator.onLine;
+  private listeners: ((isOnline: boolean) => void)[] = [];
 
-  static configure(config: Partial<ErrorHandlerConfig>) {
-    this.config = { ...this.config, ...config };
+  static init(): NetworkMonitor {
+    if (!this.instance) {
+      this.instance = new NetworkMonitor();
+    }
+    return this.instance;
   }
 
-  static async handleError(
-    error: any, 
-    context?: Record<string, any>
-  ): Promise<AppError> {
-    const appError = this.classifyError(error, context);
-    
-    // Add to error history
-    this.addToHistory(appError);
-    
-    // Log error based on severity and configuration
-    this.logError(appError);
-    
-    // Report to monitoring service
-    if (appError.severity !== ErrorSeverity.LOW) {
-      reportError(new Error(appError.message), {
-        errorType: appError.type,
-        severity: appError.severity,
-        userMessage: appError.userMessage,
-        context: appError.context,
-        metadata: appError.metadata
-      });
+  private constructor() {
+    window.addEventListener('online', () => {
+      this.isOnline = true;
+      this.notifyListeners();
+    });
+
+    window.addEventListener('offline', () => {
+      this.isOnline = false;
+      this.notifyListeners();
+    });
+  }
+
+  static get isOnline(): boolean {
+    return this.init().isOnline;
+  }
+
+  static addListener(callback: (isOnline: boolean) => void): void {
+    this.init().listeners.push(callback);
+  }
+
+  static removeListener(callback: (isOnline: boolean) => void): void {
+    const instance = this.init();
+    instance.listeners = instance.listeners.filter(listener => listener !== callback);
+  }
+
+  private notifyListeners(): void {
+    this.listeners.forEach(listener => listener(this.isOnline));
+  }
+}
+
+// Error types
+export enum ErrorType {
+  NETWORK = 'NETWORK',
+  VALIDATION = 'VALIDATION',
+  AUTHENTICATION = 'AUTHENTICATION',
+  AUTHORIZATION = 'AUTHORIZATION',
+  NOT_FOUND = 'NOT_FOUND',
+  SERVER = 'SERVER',
+  CLIENT = 'CLIENT',
+  UNKNOWN = 'UNKNOWN'
+}
+
+export enum ErrorSeverity {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  CRITICAL = 'CRITICAL'
+}
+
+export interface AppError extends Error {
+  type: ErrorType;
+  severity: ErrorSeverity;
+  userMessage: string;
+  retryable: boolean;
+  action?: string;
+  context?: Record<string, any>;
+}
+
+// Error reporting function (placeholder)
+const reportError = (error: any, context: any) => {
+  // This would integrate with your error reporting service
+  console.log('Reporting error:', error, context);
+};
+
+// Main error handler
+export class ErrorHandler {
+  static async handleError(error: any, context?: Record<string, any>): Promise<AppError> {
+    let appError: AppError;
+
+    if (error instanceof Error && 'type' in error) {
+      appError = error as AppError;
+    } else {
+      appError = this.createAppError(error, context);
     }
-    
+
+    // Add additional context
+    try {
+      if (context) {
+        appError.context = { ...appError.context, ...context };
+      }
+    } catch {
+      // Ignore errors when getting user context
+    }
+
+    // Report error for monitoring
+    reportError(error, {
+      errorType: appError.type,
+      severity: appError.severity,
+      userMessage: appError.userMessage,
+      retryable: appError.retryable,
+      action: appError.action,
+      ...appError.context
+    });
+
+    // Log error based on severity
+    if (appError.severity === ErrorSeverity.CRITICAL || appError.severity === ErrorSeverity.HIGH) {
+      console.error('Critical/High severity error:', appError);
+    } else if (appError.severity === ErrorSeverity.MEDIUM) {
+      console.warn('Medium severity error:', appError);
+    } else {
+      console.log('Low severity error:', appError);
+    }
+
     return appError;
   }
 
-  private static classifyError(error: any, context?: Record<string, any>): AppError {
-    const id = \`error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    const timestamp = Date.now();
-    const message = this.extractErrorMessage(error);
+  private static createAppError(error: any, context?: Record<string, any>): AppError {
+    const baseError = error instanceof Error ? error : new Error(String(error));
     
-    // Classify error type
-    const type = this.determineErrorType(error, message);
-    const category = this.determineErrorCategory(type, error);
-    const severity = this.determineSeverity(type, error);
-    
-    // Generate user-friendly message
-    const userMessage = this.generateUserMessage(type, error, message);
-    
-    // Determine if error is retryable
-    const retryable = this.isRetryable(type, error);
-    
-    // Generate recovery actions
-    const recoveryActions = this.generateRecoveryActions(type, error, context);
-    
-    return {
-      id,
+    let type = ErrorType.UNKNOWN;
+    let severity = ErrorSeverity.MEDIUM;
+    let userMessage = 'An unexpected error occurred';
+    let retryable = false;
+    let action = '';
+
+    // Determine error type and properties based on error characteristics
+    if (error?.name === 'NetworkError' || error?.code === 'NETWORK_ERROR') {
+      type = ErrorType.NETWORK;
+      severity = ErrorSeverity.HIGH;
+      userMessage = 'Network connection error. Please check your internet connection.';
+      retryable = true;
+      action = 'retry';
+    } else if (error?.status === 401) {
+      type = ErrorType.AUTHENTICATION;
+      severity = ErrorSeverity.HIGH;
+      userMessage = 'Authentication required. Please log in again.';
+      retryable = false;
+      action = 'login';
+    } else if (error?.status === 403) {
+      type = ErrorType.AUTHORIZATION;
+      severity = ErrorSeverity.MEDIUM;
+      userMessage = 'You do not have permission to perform this action.';
+      retryable = false;
+    } else if (error?.status === 404) {
+      type = ErrorType.NOT_FOUND;
+      severity = ErrorSeverity.LOW;
+      userMessage = 'The requested resource was not found.';
+      retryable = false;
+    } else if (error?.status >= 500) {
+      type = ErrorType.SERVER;
+      severity = ErrorSeverity.HIGH;
+      userMessage = 'Server error. Please try again later.';
+      retryable = true;
+      action = 'retry';
+    } else if (error?.status >= 400) {
+      type = ErrorType.CLIENT;
+      severity = ErrorSeverity.MEDIUM;
+      userMessage = 'Invalid request. Please check your input.';
+      retryable = false;
+    }
+
+    return Object.assign(baseError, {
       type,
-      category,
       severity,
-      message,
       userMessage,
-      code: error?.code || error?.status?.toString(),
-      details: this.sanitizeErrorDetails(error),
-      timestamp,
-      context: {
-        ...context,
-        url: window.location.href,
-        userAgent: navigator.userAgent,
-        online: navigator.onLine,
-        timestamp: new Date().toISOString()
-      },
       retryable,
-      action: this.determineAction(type, error),
-      recoveryActions,
-      metadata: {
-        component: context?.component,
-        operation: context?.operation,
-        url: window.location.href,
-        userAgent: navigator.userAgent,
-        sessionId: this.getSessionId()
-      }
-    };
-  }
+      action,
+      context
+    });
 
   private static extractErrorMessage(error: any): string {
-    if (typeof error === 'string') return error;
-    if (error?.message) return error.message;
-    if (error?.error?.message) return error.error.message;
-    if (error?.data?.message) return error.data.message;
-    return error?.toString() || 'Unknown error occurred';
+
+  static shouldRetry(error: AppError): boolean {
+    return error.retryable === true;
   }
 
-  private static determineErrorType(error: any, message: string): ErrorType {
-    // Check for specific error patterns
-    for (const [type, patterns] of Object.entries(ERROR_PATTERNS)) {
-      if (patterns.some(pattern => pattern.test(message))) {
-        return type as ErrorType;
+  static getRetryDelay(attemptNumber: number): number {
+    // Exponential backoff: 1s, 2s, 4s, 8s, max 30s
+    return Math.min(1000 * Math.pow(2, attemptNumber), 30000);
+  }
+}
+
+// Retry wrapper with exponential backoff
+export async function withRetry<T>(
+  operation: () => Promise<T>,
+  maxRetries: number = 3,
+  context?: Record<string, any>
+): Promise<T> {
+  let lastError: AppError;
+  
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = await ErrorHandler.handleError(error, {
+        ...context,
+        attempt: attempt + 1,
+        maxRetries: maxRetries + 1
+      });
+      
+      if (attempt === maxRetries || !ErrorHandler.shouldRetry(lastError)) {
+        throw lastError;
       }
-    }
-
-    // Check HTTP status codes
-    if (error?.status) {
-      if (error.status === 401 || error.status === 403) return ErrorType.AUTHENTICATION;
-      if (error.status === 422) return ErrorType.VALIDATION;
-      if (error.status >= 400 && error.status < 500) return ErrorType.API;
-      if (error.status >= 500) return ErrorType.API;
-    }
-
-    // Check error names
-    if (error?.name === 'ValidationError') return ErrorType.VALIDATION;
-    if (error?.name === 'TypeError' && message.includes('fetch')) return ErrorType.NETWORK;
-    if (error?.name === 'AbortError') return ErrorType.NETWORK;
-
-    return ErrorType.UNKNOWN;
-  }
-
-  private static determineErrorCategory(type: ErrorType, error: any): ErrorCategory {
-    switch (type) {
-      case ErrorType.VALIDATION:
-      case ErrorType.FORM:
-        return ErrorCategory.USER_ERROR;
-      case ErrorType.NETWORK:
-      case ErrorType.API:
-      case ErrorType.AI_SERVICE:
-        return ErrorCategory.EXTERNAL_ERROR;
-      case ErrorType.AUTHENTICATION:
-      case ErrorType.PERMISSION:
-        return ErrorCategory.SYSTEM_ERROR;
-      default:
-        return ErrorCategory.SYSTEM_ERROR;
+      
+      const delay = ErrorHandler.getRetryDelay(attempt);
+      console.log(`Retrying operation in ${delay}ms... (attempt ${attempt + 1}/${maxRetries + 1})`);
+      await new Promise(resolve => setTimeout(resolve, delay));
     }
   }
+  
+  throw lastError!;
+}
 
-  private static determineSeverity(type: ErrorType, error: any): ErrorSeverity {
-    // Critical errors that break core functionality
-    if (type === ErrorType.AUTHENTICATION && error?.code === 'auth_session_missing') {
-      return ErrorSeverity.CRITICAL;
-    }
-    
-    // High severity errors
-    if (type === ErrorType.API && error?.status >= 500) return ErrorSeverity.HIGH;
-    if (type === ErrorType.PERMISSION) return ErrorSeverity.HIGH;
-    
-    // Medium severity errors
-    if (type === ErrorType.NETWORK) return ErrorSeverity.MEDIUM;
-    if (type === ErrorType.AI_SERVICE) return ErrorSeverity.MEDIUM;
-    if (type === ErrorType.STORAGE) return ErrorSeverity.MEDIUM;
-    
-    // Low severity errors
-    if (type === ErrorType.VALIDATION) return ErrorSeverity.LOW;
-    if (type === ErrorType.FORM) return ErrorSeverity.LOW;
-    
-    return ErrorSeverity.MEDIUM;
+// Safe API call wrapper
+export async function safeApiCall<T>(
+  apiCall: () => Promise<T>,
+  context?: Record<string, any>
+): Promise<{ data: T | null; error: AppError | null }> {
+  try {
+    const data = await withRetry(apiCall, 2, context);
+    return { data, error: null };
+  } catch (error) {
+    const appError = error instanceof Error ? await ErrorHandler.handleError(error, context) : error;
+    return { data: null, error: appError };
   }
+}
 
-  private static generateUserMessage(type: ErrorType, error: any, message: string): string {
-    const messages = USER_ERROR_MESSAGES[type];
-    if (!messages) return "An unexpected error occurred. Please try again.";
-
-    // Check for specific error conditions
-    if (type === ErrorType.NETWORK) {
-      if (!navigator.onLine) return messages.offline;
-      if (message.includes('timeout')) return messages.timeout;
-      if (error?.status === 0) return messages.slow;
-    }
-
-    if (type === ErrorType.API) {
-      if (error?.status === 429) return messages.rateLimit;
-      if (error?.status >= 500) return messages.serverError;
-      if (message.includes('maintenance')) return messages.maintenance;
-    }
-
-    if (type === ErrorType.AUTHENTICATION) {
-      if (message.includes('expired')) return messages.expired;
-      if (message.includes('invalid')) return messages.invalid;
-      if (message.includes('required')) return messages.required;
-    }
-
-    if (type === ErrorType.VALIDATION) {
-      if (message.includes('email')) return messages.email;
-      if (message.includes('password')) return messages.password;
-      if (message.includes('required')) return messages.required;
-      if (message.includes('format')) return messages.format;
-    }
-
-    return messages.default;
+// Form validation utilities
+export class ValidationError extends Error {
+  constructor(
+    message: string,
+    public field?: string,
+    public code?: string
+  ) {
+    super(message);
+    this.name = 'ValidationError';
   }
+}
 
-  private static isRetryable(type: ErrorType, error: any): boolean {
-    // Network errors are usually retryable
-    if (type === ErrorType.NETWORK) return true;
-    
-    // API errors depend on status code
-    if (type === ErrorType.API) {
-      if (error?.status >= 500) return true; // Server errors
-      if (error?.status === 429) return true; // Rate limiting
-      if (error?.status === 408) return true; // Request timeout
+export const validateEmail = (email: string): void => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email) {
+    throw new ValidationError('Email is required', 'email', 'REQUIRED');
+  }
+  if (!emailRegex.test(email)) {
+    throw new ValidationError('Please enter a valid email address', 'email', 'INVALID_FORMAT');
+  }
+};
+
+export const validatePassword = (password: string): void => {
+  if (!password) {
+    throw new ValidationError('Password is required', 'password', 'REQUIRED');
+  }
+  if (password.length < 8) {
+    throw new ValidationError('Password must be at least 8 characters long', 'password', 'TOO_SHORT');
+  }
+  if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(password)) {
+    throw new ValidationError('Password must contain both letters and numbers', 'password', 'WEAK');
+  }
+};
+
+export const validateRequired = (value: any, fieldName: string): void => {
+  if (!value || (typeof value === 'string' && value.trim() === '')) {
+    throw new ValidationError(`${fieldName} is required`, fieldName.toLowerCase().replace(' ', '_'), 'REQUIRED');
+  }
+};
+
+export const validateUrl = (url: string, fieldName: string = 'URL'): void => {
+  if (!url) {
+    throw new ValidationError(`${fieldName} is required`, fieldName.toLowerCase().replace(' ', '_'), 'REQUIRED');
+  }
+  
+  try {
+    new URL(url);
+  } catch {
+    throw new ValidationError(`Please enter a valid ${fieldName.toLowerCase()}`, fieldName.toLowerCase().replace(' ', '_'), 'INVALID_FORMAT');
+  }
+};
+
+export const validateFileSize = (file: File, maxSizeMB: number = 5): void => {
+  const maxSizeBytes = maxSizeMB * 1024 * 1024;
+  if (file.size > maxSizeBytes) {
+    throw new ValidationError(`File is too large. Maximum size is ${maxSizeMB}MB.`, 'file', 'FILE_TOO_LARGE');
+  }
+};
+
+export const validateFileType = (file: File, allowedTypes: string[]): void => {
+  if (!allowedTypes.includes(file.type)) {
+    throw new ValidationError(
+      `Invalid file type. Allowed types: ${allowedTypes.join(', ')}`,
+      'file',
+      'INVALID_FILE_TYPE'
+    );
+  }
+};
+
+// Offline storage utilities
+export class OfflineStorage {
+  private static readonly STORAGE_KEY = 'cmoxpert_offline_data';
+  private static readonly MAX_STORAGE_SIZE = 5 * 1024 * 1024; // 5MB
+
+  static save(key: string, data: any): boolean {
+    try {
+      const storage = this.getStorage();
+      storage[key] = {
+        data,
+        timestamp: Date.now(),
+        version: '1.0'
+      };
+      
+      const serialized = JSON.stringify(storage);
+      
+      // Check storage size
+      if (serialized.length > this.MAX_STORAGE_SIZE) {
+        console.warn('Offline storage limit exceeded, cleaning old data');
+        this.cleanup();
+        return false;
+      }
+      
+      localStorage.setItem(this.STORAGE_KEY, serialized);
+      return true;
+    } catch (error) {
+      console.error('Failed to save offline data:', error);
       return false;
     }
-    
-    // AI service errors are often retryable
-    if (type === ErrorType.AI_SERVICE) return true;
-    
-    // Storage errors might be retryable
-    if (type === ErrorType.STORAGE && error?.code !== 'file_too_large') return true;
-    
-    // Authentication and validation errors are not retryable
-    return false;
   }
 
-  private static determineAction(type: ErrorType, error: any): string {
-    switch (type) {
-      case ErrorType.NETWORK:
-        return navigator.onLine ? 'retry' : 'check_connection';
-      case ErrorType.AUTHENTICATION:
-        return 'sign_in';
-      case ErrorType.PERMISSION:
-        return 'contact_admin';
-      case ErrorType.VALIDATION:
-        return 'fix_input';
-      case ErrorType.API:
-        return error?.status >= 500 ? 'retry_later' : 'retry';
-      case ErrorType.AI_SERVICE:
-        return 'retry';
-      default:
-        return 'retry';
-    }
-  }
-
-  private static generateRecoveryActions(
-    type: ErrorType, 
-    error: any, 
-    context?: Record<string, any>
-  ): RecoveryAction[] {
-    const actions: RecoveryAction[] = [];
-
-    // Always provide a retry action for retryable errors
-    if (this.isRetryable(type, error)) {
-      actions.push({
-        id: 'retry',
-        label: 'Try Again',
-        description: 'Retry the operation',
-        action: () => window.location.reload(),
-        primary: true
-      });
-    }
-
-    // Type-specific actions
-    switch (type) {
-      case ErrorType.NETWORK:
-        if (!navigator.onLine) {
-          actions.push({
-            id: 'check_connection',
-            label: 'Check Connection',
-            description: 'Verify your internet connection',
-            action: () => window.open('https://www.google.com', '_blank')
-          });
-        }
-        break;
-
-      case ErrorType.AUTHENTICATION:
-        actions.push({
-          id: 'sign_in',
-          label: 'Sign In',
-          description: 'Go to sign in page',
-          action: () => window.location.href = '/auth',
-          primary: true
-        });
-        break;
-
-      case ErrorType.PERMISSION:
-        actions.push({
-          id: 'contact_support',
-          label: 'Contact Support',
-          description: 'Get help with permissions',
-          action: () => window.location.href = '/contact'
-        });
-        break;
-
-      case ErrorType.STORAGE:
-        if (error?.code === 'file_too_large') {
-          actions.push({
-            id: 'choose_smaller_file',
-            label: 'Choose Smaller File',
-            description: 'Select a file under 5MB',
-            action: () => {} // This would be handled by the component
-          });
-        }
-        break;
-    }
-
-    // Always provide a way to go home
-    actions.push({
-      id: 'go_home',
-      label: 'Go Home',
-      description: 'Return to the main page',
-      action: () => window.location.href = '/'
-    });
-
-    return actions;
-  }
-
-  private static sanitizeErrorDetails(error: any): any {
-    // Remove sensitive information from error details
-    const sanitized = { ...error };
-    
-    // Remove potential sensitive fields
-    delete sanitized.password;
-    delete sanitized.token;
-    delete sanitized.apiKey;
-    delete sanitized.secret;
-    
-    return sanitized;
-  }
-
-  private static getSessionId(): string {
-    // Generate or retrieve session ID for error tracking
-    let sessionId = sessionStorage.getItem('error_session_id');
-    if (!sessionId) {
-      sessionId = \`session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      sessionStorage.setItem('error_session_id', sessionId);
-    }
-    return sessionId;
-  }
-
-  private static addToHistory(error: AppError): void {
-    this.errorHistory.unshift(error);
-    if (this.errorHistory.length > this.maxHistorySize) {
-      this.errorHistory = this.errorHistory.slice(0, this.maxHistorySize);
-    }
-  }
-
-  private static logError(error: AppError): void {
-    const logLevel = this.config.logLevel;
-    const logMessage = `[${error.severity.toUpperCase()}] ${error.type}: ${error.message}`;
-    
-    switch (error.severity) {
-      case ErrorSeverity.CRITICAL:
-        console.error(logMessage, error);
-        break;
-      case ErrorSeverity.HIGH:
-        console.error(logMessage, error);
-        break;
-      case ErrorSeverity.MEDIUM:
-        if (logLevel === 'debug' || logLevel === 'info' || logLevel === 'warn') {
-          console.warn(logMessage, error);
-        }
-        break;
-      case ErrorSeverity.LOW:
-        if (logLevel === 'debug' || logLevel === 'info') {
-          console.info(logMessage, error);
-        }
-        break;
-    }
-  }
-
-  // Public methods for error history and statistics
-  static getErrorHistory(): AppError[] {
-    return [...this.errorHistory];
-  }
-
-  static getErrorStats(): {
-    total: number;
-    byType: Record<ErrorType, number>;
-    bySeverity: Record<ErrorSeverity, number>;
-    recentErrors: AppError[];
-  } {
-    const byType = {} as Record<ErrorType, number>;
-    const bySeverity = {} as Record<ErrorSeverity, number>;
-    
-    this.errorHistory.forEach(error => {
-      byType[error.type] = (byType[error.type] || 0) + 1;
-      bySeverity[error.severity] = (bySeverity[error.severity] || 0) + 1;
-    });
-
-    return {
-      total: this.errorHistory.length,
-      byType,
-      bySeverity,
-      recentErrors: this.errorHistory.slice(0, 10)
-    };
-  }
-
-  static clearHistory(): void {
-    this.errorHistory = [];
-  }
-}
-
-// Retry mechanism with exponential backoff
-export class RetryManager {
-  private static retryAttempts = new Map<string, number>();
-
-  static async withRetry<T>(
-    operation: () => Promise<T>,
-    options: {
-      maxRetries?: number;
-      initialDelay?: number;
-      maxDelay?: number;
-      backoffFactor?: number;
-      retryCondition?: (error: any) => boolean;
-      onRetry?: (attempt: number, error: any) => void;
-      context?: Record<string, any>;
-    } = {}
-  ): Promise<T> {
-    const {
-      maxRetries = 3,
-      initialDelay = 1000,
-      maxDelay = 30000,
-      backoffFactor = 2,
-      retryCondition = (error) => this.isRetryableError(error),
-      onRetry,
-      context
-    } = options;
-
-    let lastError: any;
-    
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
-      try {
-        const result = await operation();
-        
-        // Clear retry count on success
-        if (context?.operationId) {
-          this.retryAttempts.delete(context.operationId);
-        }
-        
-        return result;
-      } catch (error) {
-        lastError = error;
-        
-        // Check if we should retry
-        if (attempt === maxRetries || !retryCondition(error)) {
-          break;
-        }
-        
-        // Calculate delay with exponential backoff
-        const delay = Math.min(
-          initialDelay * Math.pow(backoffFactor, attempt),
-          maxDelay
-        );
-        
-        // Track retry attempts
-        if (context?.operationId) {
-          this.retryAttempts.set(context.operationId, attempt + 1);
-        }
-        
-        // Call retry callback
-        onRetry?.(attempt + 1, error);
-        
-        console.log(\`Retrying operation (attempt ${attempt + 1}/${maxRetries}) in ${delay}ms...`);
-        await this.sleep(delay);
+  static load(key: string): any | null {
+    try {
+      const storage = this.getStorage();
+      const item = storage[key];
+      
+      if (!item) return null;
+      
+      // Check if data is too old (7 days)
+      const maxAge = 7 * 24 * 60 * 60 * 1000;
+      if (Date.now() - item.timestamp > maxAge) {
+        delete storage[key];
+        this.saveStorage(storage);
+        return null;
       }
+      
+      return item.data;
+    } catch (error) {
+      console.error('Failed to load offline data:', error);
+      return null;
     }
-    
-    throw lastError;
   }
 
-  private static isRetryableError(error: any): boolean {
-    // Network errors
-    if (error?.name === 'TypeError' && error?.message?.includes('fetch')) return true;
-    if (error?.name === 'AbortError') return true;
-    
-    // HTTP status codes
-    if (error?.status >= 500) return true; // Server errors
-    if (error?.status === 429) return true; // Rate limiting
-    if (error?.status === 408) return true; // Request timeout
-    
-    // Supabase specific errors
-    if (error?.code === 'PGRST301') return true; // Connection error
-    
-    return false;
+  static remove(key: string): void {
+    try {
+      const storage = this.getStorage();
+      delete storage[key];
+      this.saveStorage(storage);
+    } catch (error) {
+      console.error('Failed to remove offline data:', error);
+    }
   }
 
-  private static sleep(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+  static clear(): void {
+    try {
+      localStorage.removeItem(this.STORAGE_KEY);
+    } catch (error) {
+      console.error('Failed to clear offline storage:', error);
+    }
   }
 
-  static getRetryCount(operationId: string): number {
-    return this.retryAttempts.get(operationId) || 0;
+  private static getStorage(): Record<string, any> {
+    try {
+      const stored = localStorage.getItem(this.STORAGE_KEY);
+      return stored ? JSON.parse(stored) : {};
+    } catch {
+      return {};
+    }
   }
 
-  static clearRetryCount(operationId: string): void {
-    this.retryAttempts.delete(operationId);
+  private static saveStorage(storage: Record<string, any>): void {
+    try {
+      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(storage));
+    } catch (error) {
+      console.error('Failed to save storage:', error);
+    }
+  }
+
+  private static cleanup(): void {
+    try {
+      const storage = this.getStorage();
+      const entries = Object.entries(storage);
+      
+      // Sort by timestamp and keep only the 10 most recent items
+      entries.sort((a, b) => (b[1] as any).timestamp - (a[1] as any).timestamp);
+      const cleaned = Object.fromEntries(entries.slice(0, 10));
+      
+      this.saveStorage(cleaned);
+    } catch (error) {
+      console.error('Failed to cleanup storage:', error);
+    }
   }
 }
 
-// Circuit breaker for preventing cascading failures
+// Circuit breaker pattern for API calls
 export class CircuitBreaker {
   private failures = 0;
   private lastFailureTime = 0;
   private state: 'CLOSED' | 'OPEN' | 'HALF_OPEN' = 'CLOSED';
 
   constructor(
-    private readonly name: string,
     private readonly failureThreshold = 5,
-    private readonly recoveryTimeout = 60000, // 1 minute
-    private readonly monitorWindow = 300000 // 5 minutes
+    private readonly recoveryTimeout = 60000 // 1 minute
   ) {}
 
   async execute<T>(operation: () => Promise<T>): Promise<T> {
     if (this.state === 'OPEN') {
       if (Date.now() - this.lastFailureTime > this.recoveryTimeout) {
         this.state = 'HALF_OPEN';
-        console.log(`Circuit breaker ${this.name} transitioning to HALF_OPEN`);
       } else {
-        throw new Error(`Circuit breaker ${this.name} is OPEN - service temporarily unavailable`);
+        throw new Error('Circuit breaker is OPEN - service temporarily unavailable');
       }
     }
 
@@ -541,10 +442,7 @@ export class CircuitBreaker {
 
   private onSuccess(): void {
     this.failures = 0;
-    if (this.state === 'HALF_OPEN') {
-      this.state = 'CLOSED';
-      console.log(`Circuit breaker ${this.name} recovered - state: CLOSED`);
-    }
+    this.state = 'CLOSED';
   }
 
   private onFailure(): void {
@@ -553,20 +451,41 @@ export class CircuitBreaker {
     
     if (this.failures >= this.failureThreshold) {
       this.state = 'OPEN';
-      console.warn(`Circuit breaker ${this.name} opened due to ${this.failures} failures`);
     }
   }
 
   get isOpen(): boolean {
     return this.state === 'OPEN';
   }
-
-  get status(): { state: string; failures: number; lastFailure: number } {
-    return {
-      state: this.state,
-      failures: this.failures,
-      lastFailure: this.lastFailureTime
-    };
-  }
 }
-```
+
+// Global error handler initialization
+export const initializeErrorHandling = () => {
+  // Initialize network monitoring
+  NetworkMonitor.init();
+
+  // Global unhandled promise rejection handler
+  window.addEventListener('unhandledrejection', (event) => {
+    console.error('Unhandled promise rejection:', event.reason);
+    ErrorHandler.handleError(event.reason, {
+      type: 'unhandled_promise_rejection',
+      promise: event.promise
+    });
+    
+    // Prevent the default browser behavior
+    event.preventDefault();
+  });
+
+  // Global error handler
+  window.addEventListener('error', (event) => {
+    console.error('Global error:', event.error);
+    ErrorHandler.handleError(event.error, {
+      type: 'global_error',
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno
+    });
+  });
+
+  console.log('Error handling initialized');
+};
