@@ -1,0 +1,150 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-01-08T14:30:00.000Z",
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "req_market_analysis",
+      "parentId": "fld_market_analysis",
+      "modified": 1704722200000,
+      "created": 1704722200000,
+      "url": "{{ _.base_url }}/generate-market-analysis",
+      "name": "Generate Market Analysis",
+      "description": "Generate comprehensive AI-powered market analysis",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"reportId\": \"{{ _.report_id }}\",\n  \"clientId\": \"{{ _.client_id }}\",\n  \"domain\": \"example.com\",\n  \"industry\": \"B2B SaaS\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704722200000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_playbook_generation",
+      "parentId": "fld_playbooks",
+      "modified": 1704722200000,
+      "created": 1704722200000,
+      "url": "{{ _.base_url }}/generate-playbook",
+      "name": "Generate AI Playbook",
+      "description": "Create custom marketing playbook with AI",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"clientId\": \"{{ _.client_id }}\",\n  \"userId\": \"{{ _.user_id }}\",\n  \"playbookType\": \"growth-strategy\",\n  \"reportId\": \"{{ _.report_id }}\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        },
+        {
+          "name": "Authorization",
+          "value": "Bearer {{ _.jwt_token }}"
+        }
+      ],
+      "authentication": {},
+      "metaSortKey": -1704722200000,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_market_analysis",
+      "parentId": "wrk_cmoxpert",
+      "modified": 1704722200000,
+      "created": 1704722200000,
+      "name": "Market Analysis",
+      "description": "AI-powered market analysis endpoints",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1704722200000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "fld_playbooks",
+      "parentId": "wrk_cmoxpert",
+      "modified": 1704722200000,
+      "created": 1704722200000,
+      "name": "AI Playbooks",
+      "description": "AI playbook generation endpoints",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1704722100000,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_cmoxpert",
+      "parentId": null,
+      "modified": 1704722200000,
+      "created": 1704722200000,
+      "name": "cmoxpert API",
+      "description": "AI Marketing Co-Pilot API",
+      "scope": "collection",
+      "_type": "workspace"
+    },
+    {
+      "_id": "env_base",
+      "parentId": "wrk_cmoxpert",
+      "modified": 1704722200000,
+      "created": 1704722200000,
+      "name": "Base Environment",
+      "data": {
+        "base_url": "https://your-project.supabase.co/functions/v1",
+        "jwt_token": "",
+        "client_id": "550e8400-e29b-41d4-a716-446655440001",
+        "user_id": "550e8400-e29b-41d4-a716-446655440002",
+        "report_id": "550e8400-e29b-41d4-a716-446655440000"
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url", "jwt_token", "client_id", "user_id", "report_id"]
+      },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1704722200000,
+      "_type": "environment"
+    },
+    {
+      "_id": "env_development",
+      "parentId": "env_base",
+      "modified": 1704722200000,
+      "created": 1704722200000,
+      "name": "Development",
+      "data": {
+        "base_url": "http://localhost:54321/functions/v1"
+      },
+      "dataPropertyOrder": {
+        "&": ["base_url"]
+      },
+      "color": "#7d69cb",
+      "isPrivate": false,
+      "metaSortKey": 1704722200000,
+      "_type": "environment"
+    }
+  ]
+}

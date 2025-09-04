@@ -1,0 +1,381 @@
+openapi: 3.0.3
+info:
+  title: cmoxpert API
+  description: AI-powered marketing intelligence and automation for B2B SaaS companies
+  version: 1.2.0
+  contact:
+    name: cmoxpert API Support
+    email: api-support@cmoxpert.com
+    url: https://cmoxpert.com/support
+  license:
+    name: Proprietary
+    url: https://cmoxpert.com/terms
+
+servers:
+  - url: https://your-project.supabase.co/functions/v1
+    description: Production server
+  - url: http://localhost:54321/functions/v1
+    description: Development server
+
+security:
+  - BearerAuth: []
+
+paths:
+  /generate-market-analysis:
+    post:
+      summary: Generate Market Analysis
+      description: Creates comprehensive AI-powered market analysis for a client's domain
+      operationId: generateMarketAnalysis
+      tags:
+        - Market Analysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketAnalysisRequest'
+            examples:
+              basic:
+                summary: Basic analysis request
+                value:
+                  reportId: "550e8400-e29b-41d4-a716-446655440000"
+                  clientId: "550e8400-e29b-41d4-a716-446655440001"
+                  domain: "example.com"
+                  industry: "B2B SaaS"
+      responses:
+        '200':
+          description: Analysis generation started successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketAnalysisResponse'
+        '400':
+          description: Bad request - validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - invalid or missing token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /generate-playbook:
+    post:
+      summary: Generate AI Playbook
+      description: Creates custom AI-powered marketing playbooks with actionable tactics
+      operationId: generatePlaybook
+      tags:
+        - AI Playbooks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlaybookRequest'
+            examples:
+              growth_strategy:
+                summary: Growth strategy playbook
+                value:
+                  clientId: "550e8400-e29b-41d4-a716-446655440001"
+                  userId: "550e8400-e29b-41d4-a716-446655440002"
+                  playbookType: "growth-strategy"
+                  reportId: "550e8400-e29b-41d4-a716-446655440000"
+      responses:
+        '200':
+          description: Playbook generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlaybookResponse'
+        '400':
+          description: Bad request - validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized - invalid or missing token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Forbidden - insufficient permissions
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Supabase JWT token obtained from authentication
+
+  schemas:
+    MarketAnalysisRequest:
+      type: object
+      required:
+        - reportId
+        - clientId
+        - domain
+      properties:
+        reportId:
+          type: string
+          format: uuid
+          description: Unique identifier for the report
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        clientId:
+          type: string
+          format: uuid
+          description: Client identifier
+          example: "550e8400-e29b-41d4-a716-446655440001"
+        domain:
+          type: string
+          pattern: '^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9]\.[a-zA-Z]{2,}$'
+          description: Domain to analyze
+          example: "example.com"
+        industry:
+          type: string
+          description: Industry context for analysis
+          example: "B2B SaaS"
+          enum:
+            - "B2B SaaS"
+            - "Fintech"
+            - "Healthcare Technology"
+            - "E-commerce"
+            - "EdTech"
+            - "PropTech"
+            - "Other"
+
+    MarketAnalysisResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Market analysis completed successfully"
+        reportId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        data:
+          type: object
+          properties:
+            status:
+              type: string
+              enum: ["pending", "completed", "failed"]
+              example: "completed"
+            analysis_url:
+              type: string
+              example: "/reports/550e8400-e29b-41d4-a716-446655440000"
+
+    PlaybookRequest:
+      type: object
+      required:
+        - clientId
+        - userId
+      properties:
+        clientId:
+          type: string
+          format: uuid
+          description: Client identifier
+          example: "550e8400-e29b-41d4-a716-446655440001"
+        userId:
+          type: string
+          format: uuid
+          description: User identifier (must match authenticated user)
+          example: "550e8400-e29b-41d4-a716-446655440002"
+        playbookType:
+          type: string
+          description: Type of playbook to generate
+          default: "growth-strategy"
+          enum:
+            - "growth-strategy"
+            - "demand-generation"
+            - "brand-positioning"
+            - "content-marketing"
+            - "competitive-analysis"
+            - "customer-retention"
+        reportId:
+          type: string
+          format: uuid
+          description: Reference report for additional context
+          example: "550e8400-e29b-41d4-a716-446655440000"
+
+    PlaybookResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "AI playbook generated successfully"
+        playbookId:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440003"
+        playbook:
+          $ref: '#/components/schemas/Playbook'
+
+    Playbook:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Growth Acceleration Playbook for Acme Corp"
+        description:
+          type: string
+          example: "A comprehensive growth strategy designed specifically for Acme Corp..."
+        category:
+          type: string
+          example: "growth-strategy"
+        tactics:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaybookTactic'
+
+    PlaybookTactic:
+      type: object
+      properties:
+        title:
+          type: string
+          example: "Competitive Intelligence Dashboard"
+        description:
+          type: string
+          example: "Set up automated monitoring of competitor pricing, features, and marketing campaigns..."
+        timeline:
+          type: string
+          example: "Week 1-2"
+        difficulty:
+          type: string
+          enum: ["Easy", "Medium", "Hard"]
+          example: "Medium"
+        impact:
+          type: string
+          enum: ["Low", "Medium", "High"]
+          example: "High"
+        resources:
+          type: array
+          items:
+            type: string
+          example: ["SEMrush", "Ahrefs", "Google Alerts"]
+        kpis:
+          type: array
+          items:
+            type: string
+          example: ["Competitor updates tracked", "Market opportunities identified"]
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "VALIDATION_ERROR"
+            message:
+              type: string
+              example: "Invalid input parameters"
+            details:
+              type: object
+              description: Additional error details
+            timestamp:
+              type: string
+              format: date-time
+              example: "2025-01-08T14:30:00Z"
+            request_id:
+              type: string
+              example: "req_123456789"
+
+    Client:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          example: "Acme Corporation"
+        domain:
+          type: string
+          example: "acme.com"
+        industry:
+          type: string
+          example: "B2B SaaS"
+        status:
+          type: string
+          enum: ["active", "inactive"]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Report:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        client_id:
+          type: string
+          format: uuid
+        domain:
+          type: string
+        status:
+          type: string
+          enum: ["pending", "completed", "failed"]
+        ai_analysis:
+          type: string
+          description: Generated AI analysis content
+        semrush_data:
+          type: object
+          description: Competitive intelligence data
+        trends_data:
+          type: object
+          description: Market trend analysis data
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+tags:
+  - name: Market Analysis
+    description: AI-powered market analysis and competitive intelligence
+  - name: AI Playbooks
+    description: Custom marketing playbook generation
+  - name: Clients
+    description: Client management operations
+  - name: Reports
+    description: Analysis report management

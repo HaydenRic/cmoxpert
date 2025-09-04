@@ -1,0 +1,199 @@
+{
+  "info": {
+    "name": "cmoxpert API",
+    "description": "AI-powered marketing intelligence API for B2B SaaS companies",
+    "version": "1.2.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{jwt_token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://your-project.supabase.co/functions/v1",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "client_id",
+      "value": "550e8400-e29b-41d4-a716-446655440001",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "550e8400-e29b-41d4-a716-446655440002",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Market Analysis",
+      "item": [
+        {
+          "name": "Generate Market Analysis",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reportId\": \"{{$guid}}\",\n  \"clientId\": \"{{client_id}}\",\n  \"domain\": \"example.com\",\n  \"industry\": \"B2B SaaS\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/generate-market-analysis",
+              "host": ["{{base_url}}"],
+              "path": ["generate-market-analysis"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reportId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"clientId\": \"550e8400-e29b-41d4-a716-446655440001\",\n  \"domain\": \"example.com\",\n  \"industry\": \"B2B SaaS\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/generate-market-analysis",
+                  "host": ["{{base_url}}"],
+                  "path": ["generate-market-analysis"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"Market analysis completed successfully\",\n  \"reportId\": \"550e8400-e29b-41d4-a716-446655440000\"\n}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "AI Playbooks",
+      "item": [
+        {
+          "name": "Generate Playbook",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clientId\": \"{{client_id}}\",\n  \"userId\": \"{{user_id}}\",\n  \"playbookType\": \"growth-strategy\",\n  \"reportId\": \"{{$guid}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/generate-playbook",
+              "host": ["{{base_url}}"],
+              "path": ["generate-playbook"]
+            }
+          },
+          "response": [
+            {
+              "name": "Success",
+              "originalRequest": {
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"clientId\": \"550e8400-e29b-41d4-a716-446655440001\",\n  \"userId\": \"550e8400-e29b-41d4-a716-446655440002\",\n  \"playbookType\": \"growth-strategy\"\n}"
+                },
+                "url": {
+                  "raw": "{{base_url}}/generate-playbook",
+                  "host": ["{{base_url}}"],
+                  "path": ["generate-playbook"]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "_postman_previewlanguage": "json",
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"success\": true,\n  \"message\": \"AI playbook generated successfully\",\n  \"playbookId\": \"550e8400-e29b-41d4-a716-446655440003\",\n  \"playbook\": {\n    \"name\": \"Growth Acceleration Playbook for Acme Corp\",\n    \"description\": \"A comprehensive growth strategy...\",\n    \"category\": \"growth-strategy\",\n    \"tactics\": []\n  }\n}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Auto-generate UUIDs for testing",
+          "if (!pm.collectionVariables.get('test_report_id')) {",
+          "  pm.collectionVariables.set('test_report_id', pm.variables.replaceIn('{{$guid}}'));",
+          "}",
+          "",
+          "// Set timestamp for requests",
+          "pm.collectionVariables.set('timestamp', new Date().toISOString());"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "// Common test assertions",
+          "pm.test('Status code is successful', function () {",
+          "  pm.expect(pm.response.code).to.be.oneOf([200, 201, 202]);",
+          "});",
+          "",
+          "pm.test('Response has required fields', function () {",
+          "  const jsonData = pm.response.json();",
+          "  pm.expect(jsonData).to.have.property('success');",
+          "  pm.expect(jsonData).to.have.property('message');",
+          "});",
+          "",
+          "pm.test('Response time is acceptable', function () {",
+          "  pm.expect(pm.response.responseTime).to.be.below(30000);",
+          "});"
+        ]
+      }
+    }
+  ]
+}
