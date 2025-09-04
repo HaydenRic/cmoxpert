@@ -179,8 +179,7 @@ export class ErrorHandler {
       action,
       context
     });
-
-  private static extractErrorMessage(error: any): string {
+  }
 
   static shouldRetry(error: AppError): boolean {
     return error.retryable === true;
