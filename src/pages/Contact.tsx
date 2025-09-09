@@ -188,7 +188,7 @@ export function Contact() {
               <span className="bg-gradient-to-r from-tiger_s_eye-600 to-earth_yellow-600 bg-clip-text text-transparent">Get Direct Expert Access.</span>
             </h1>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-8">
-              Partner with a fractional CMO who combines 15+ years of strategic expertise with AI-powered insights. No junior staff, no hidden fees, no lengthy contracts – just transparent, results-driven marketing leadership.
+              Partner with a fractional CMO who combines 15+ years of strategic expertise with AI-powered insights. Expect transparent, results-driven marketing leadership. There's no junior staff, no hidden fees, and no lengthy contracts.
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-slate-500">
               <div className="flex items-center space-x-2">
@@ -269,9 +269,9 @@ export function Contact() {
                   Transparent Pricing Promise
                 </h3>
                 <p className="text-slate-700 text-sm">
-                  Project-based pricing with clear deliverables. No hidden fees, no surprise charges. 
-                  Sprint engagements start at £4K with specific outcomes defined upfront. 
-                  You'll know exactly what you're getting and when you'll get it.
+                  We offer project-based pricing with clear deliverables. You'll find no hidden fees or surprise charges. 
+                  Sprint engagements start at £4K, with specific outcomes defined upfront. 
+                  You'll always know what to expect and when.
                 </p>
               </div>
             </div>
