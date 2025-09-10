@@ -500,6 +500,7 @@ export function Contact() {
               </form>
             </div>
           </div>
+          </div>
         </div>
       </main>
     </div>
