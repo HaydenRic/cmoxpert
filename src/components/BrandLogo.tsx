@@ -29,25 +29,25 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     lg: 'text-base'
   };
 
-  // Colors from site palette
+  // Using site's actual color palette
   const colors = {
     light: {
-      primary: '#22333B', // slate_blue (dark blue-gray)
-      accent: '#5E503F',  // olive (sophisticated brown)
-      text: '#0A0908',    // charcoal (deep black)
-      textMuted: '#6B7280' // gray for tagline
+      primary: '#22333B', // slate_blue
+      accent: '#5E503F',  // olive
+      text: '#0A0908',    // charcoal
+      textMuted: '#6B7280'
     },
     dark: {
       primary: '#EAE0D5', // cream
       accent: '#C6AC8F',  // tan
-      text: '#F8F8F8',    // light
+      text: '#F8F8F8',
       textMuted: '#D1D5DB'
     }
   };
 
   const currentColors = colors[theme];
 
-  // Sophisticated abstract mark: interconnected nodes converging to a strategic point
+  // Sophisticated abstract mark: interconnected nodes converging to strategic clarity
   const LogoSymbol = () => (
     <div className={`${sizeClasses[size]} aspect-square relative flex items-center justify-center`}>
       <svg
@@ -58,50 +58,47 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
       >
         {/* Abstract geometric mark representing data convergence to insight */}
         <g>
-          {/* Outer data nodes - scattered points */}
-          <circle cx="8" cy="12" r="2.5" fill={currentColors.primary} opacity="0.6" />
-          <circle cx="32" cy="16" r="2.5" fill={currentColors.primary} opacity="0.6" />
-          <circle cx="6" cy="28" r="2.5" fill={currentColors.primary} opacity="0.6" />
-          <circle cx="34" cy="32" r="2.5" fill={currentColors.primary} opacity="0.6" />
+          {/* Outer data nodes - positioned at strategic points */}
+          <circle cx="8" cy="8" r="2" fill={currentColors.primary} opacity="0.7" />
+          <circle cx="32" cy="8" r="2" fill={currentColors.primary} opacity="0.7" />
+          <circle cx="8" cy="32" r="2" fill={currentColors.primary} opacity="0.7" />
+          <circle cx="32" cy="32" r="2" fill={currentColors.primary} opacity="0.7" />
           
-          {/* Connecting pathways - subtle curves leading to center */}
+          {/* Subtle connecting pathways - flowing curves leading to center */}
           <path 
-            d="M8 12 Q16 16 20 20" 
+            d="M8 8 Q14 14 20 20" 
             stroke={currentColors.primary} 
             strokeWidth="1.5" 
-            opacity="0.4"
+            opacity="0.5"
             strokeLinecap="round"
           />
           <path 
-            d="M32 16 Q26 18 20 20" 
+            d="M32 8 Q26 14 20 20" 
             stroke={currentColors.primary} 
             strokeWidth="1.5" 
-            opacity="0.4"
+            opacity="0.5"
             strokeLinecap="round"
           />
           <path 
-            d="M6 28 Q12 24 20 20" 
+            d="M8 32 Q14 26 20 20" 
             stroke={currentColors.primary} 
             strokeWidth="1.5" 
-            opacity="0.4"
+            opacity="0.5"
             strokeLinecap="round"
           />
           <path 
-            d="M34 32 Q28 26 20 20" 
+            d="M32 32 Q26 26 20 20" 
             stroke={currentColors.primary} 
             strokeWidth="1.5" 
-            opacity="0.4"
+            opacity="0.5"
             strokeLinecap="round"
           />
           
-          {/* Central strategic point - the insight/clarity */}
-          <circle cx="20" cy="20" r="4" fill={currentColors.primary} />
+          {/* Central convergence point - the strategic insight */}
+          <circle cx="20" cy="20" r="5" fill={currentColors.primary} />
           
-          {/* Strategic direction indicator - subtle geometric form */}
-          <path 
-            d="M20 16 L24 20 L20 24 L20 20 Z" 
-            fill={currentColors.accent}
-          />
+          {/* Inner clarity indicator - subtle geometric accent */}
+          <circle cx="20" cy="20" r="2" fill={currentColors.accent} />
         </g>
       </svg>
     </div>
