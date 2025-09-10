@@ -293,145 +293,156 @@ export function LandingPage() {
       <main id="main-content" role="main" tabIndex={-1}>
         {/* Hero Section */}
         <section className="pt-20 pb-24 bg-white" aria-labelledby="hero-heading">
+        <section className="pt-20 pb-32 bg-cream-100" aria-labelledby="hero-heading">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div className="space-y-8">
                 <div className="space-y-6">
-                  <div className="inline-flex items-center px-4 py-2 bg-slate_blue-50 text-slate_blue-700 rounded-full text-sm font-medium border border-slate_blue-200">
-                    <Sparkles className="w-4 h-4 mr-2" />
-                    AI-Powered Marketing Intelligence
-                  </div>
-                  
-                  <h1 id="hero-heading" className="text-5xl lg:text-6xl font-bold text-charcoal-900 leading-tight">
+                  <h1 id="hero-heading" className="text-6xl lg:text-7xl font-bold text-charcoal-900 leading-tight">
                     Transform Market Data Into
                     <span className="block text-slate_blue-600">Strategic Advantage</span>
                   </h1>
                   
-                  <p className="text-xl text-charcoal-600 leading-relaxed max-w-xl">
-                    AI-powered competitive intelligence and market analysis platform designed for B2B SaaS marketing teams who need strategic insights, not just data.
+                  <p className="text-2xl text-charcoal-600 leading-relaxed max-w-2xl font-medium">
+                    The AI Marketing Co-Pilot for B2B SaaS teams who need to move faster and smarter than their competition.
                   </p>
                 </div>
                 
                 <div className="flex flex-col sm:flex-row gap-4">
                   <button
                     onClick={handleGetStarted}
-                    className="bg-gradient-to-r from-slate_blue-600 to-charcoal-700 hover:from-slate_blue-700 hover:to-charcoal-800 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
+                    className="bg-slate_blue-600 hover:bg-slate_blue-700 text-white px-10 py-5 rounded-xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all transform hover:scale-105 flex items-center justify-center space-x-3"
                   >
-                    <span>Request Demo</span>
+                    <span>Request a Demo</span>
                     <ArrowRight className="w-5 h-5" />
                   </button>
                   
                   <button 
                     onClick={handleLearnMore}
-                    className="border-2 border-charcoal-300 hover:border-charcoal-400 text-charcoal-700 hover:text-charcoal-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all flex items-center justify-center space-x-2"
+                    className="text-slate_blue-600 hover:text-slate_blue-700 px-10 py-5 rounded-xl font-semibold text-xl transition-all flex items-center justify-center space-x-2 hover:bg-slate_blue-50"
                   >
                     <span>Learn More</span>
-                    <ChevronRight className="w-5 h-5" />
                   </button>
                 </div>
                 
-                <div className="flex items-center space-x-8 text-sm text-charcoal-500">
+                <div className="flex items-center space-x-8 text-base text-charcoal-600">
                   <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-slate_blue-600" />
-                    <span>Free 14-day trial</span>
+                    <CheckCircle className="w-5 h-5 text-slate_blue-600" />
+                    <span className="font-medium">Free strategy session</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-slate_blue-600" />
-                    <span>No setup fees</span>
+                    <CheckCircle className="w-5 h-5 text-slate_blue-600" />
+                    <span className="font-medium">Results in 24 hours</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <CheckCircle className="w-4 h-4 text-slate_blue-600" />
-                    <span>Cancel anytime</span>
+                    <CheckCircle className="w-5 h-5 text-slate_blue-600" />
+                    <span className="font-medium">No long-term contracts</span>
                   </div>
                 </div>
               </div>
               
-              {/* Hero Visual - Data Dashboard Preview */}
+              {/* Hero Visual - Strategic Intelligence Dashboard */}
               <div className="relative">
-                <div className="bg-white rounded-2xl shadow-2xl border border-cream-200 p-8 relative z-10">
+                {/* Main Dashboard Container */}
+                <div className="bg-cream-100 rounded-3xl shadow-2xl border-2 border-cream-300 p-8 relative z-10 transform rotate-1">
                   {/* Dashboard Header */}
-                  <div className="flex items-center justify-between mb-6 pb-4 border-b border-cream-200">
+                  <div className="flex items-center justify-between mb-8 pb-6 border-b-2 border-cream-300">
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-slate_blue-100 rounded-lg flex items-center justify-center">
-                        <BarChart3 className="w-4 h-4 text-slate_blue-700" />
+                      <div className="w-10 h-10 bg-slate_blue-600 rounded-xl flex items-center justify-center">
+                        <Brain className="w-5 h-5 text-white" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-charcoal-900">Market Intelligence Dashboard</h3>
-                        <p className="text-xs text-charcoal-500">Real-time competitive analysis</p>
+                        <h3 className="font-bold text-charcoal-900 text-lg">Strategic Intelligence</h3>
+                        <p className="text-sm text-charcoal-600">Live market analysis</p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-2">
-                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                      <span className="text-xs text-charcoal-500">Live</span>
+                      <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                      <span className="text-sm font-medium text-charcoal-700">LIVE</span>
                     </div>
                   </div>
                   
-                  {/* Key Metrics Cards */}
-                  <div className="grid grid-cols-2 gap-4 mb-6">
-                    <div className="bg-slate_blue-50 rounded-lg p-4 border border-slate_blue-100">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-medium text-slate_blue-700">Market Share</span>
-                        <TrendingUp className="w-3 h-3 text-slate_blue-600" />
+                  {/* Strategic Metrics Grid */}
+                  <div className="grid grid-cols-2 gap-6 mb-8">
+                    <div className="bg-white rounded-2xl p-6 border-2 border-slate_blue-100 shadow-lg">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-bold text-slate_blue-700 uppercase tracking-wide">Competitive Edge</span>
+                        <TrendingUp className="w-5 h-5 text-slate_blue-600" />
                       </div>
-                      <div className="text-2xl font-bold text-charcoal-900">23.4%</div>
-                      <div className="text-xs text-green-600">+12% vs last quarter</div>
+                      <div className="text-3xl font-black text-charcoal-900">+156%</div>
+                      <div className="text-sm font-medium text-green-600">Market opportunity identified</div>
                     </div>
                     
-                    <div className="bg-tan-50 rounded-lg p-4 border border-tan-100">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-xs font-medium text-tan-700">Competitive Alerts</span>
-                        <Eye className="w-3 h-3 text-tan-600" />
+                    <div className="bg-white rounded-2xl p-6 border-2 border-charcoal-100 shadow-lg">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-bold text-charcoal-700 uppercase tracking-wide">Intelligence Alerts</span>
+                        <Eye className="w-5 h-5 text-charcoal-600" />
                       </div>
-                      <div className="text-2xl font-bold text-charcoal-900">7</div>
-                      <div className="text-xs text-orange-600">3 high priority</div>
+                      <div className="text-3xl font-black text-charcoal-900">12</div>
+                      <div className="text-sm font-medium text-orange-600">Critical insights today</div>
                     </div>
                   </div>
                   
-                  {/* Chart Visualization */}
-                  <div className="bg-cornsilk-50 rounded-lg p-4 border border-cream-200">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-medium text-charcoal-700">Traffic Trends</span>
-                      <span className="text-xs text-charcoal-500">Last 30 days</span>
+                  {/* Strategic Growth Visualization */}
+                  <div className="bg-white rounded-2xl p-6 border-2 border-cream-200 shadow-lg">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-sm font-bold text-charcoal-900 uppercase tracking-wide">Strategic Growth</span>
+                      <span className="text-sm font-medium text-charcoal-600">Last 90 days</span>
                     </div>
                     
-                    {/* Simple SVG chart visualization */}
-                    <div className="h-20 relative">
-                      <svg className="w-full h-full" viewBox="0 0 300 80">
+                    {/* Enhanced SVG chart visualization */}
+                    <div className="h-24 relative">
+                      <svg className="w-full h-full" viewBox="0 0 320 96">
                         <defs>
-                          <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stopColor="#22333B" stopOpacity="0.3"/>
-                            <stop offset="100%" stopColor="#22333B" stopOpacity="0.1"/>
+                          <linearGradient id="strategicGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stopColor="#22333B" stopOpacity="0.4"/>
+                            <stop offset="100%" stopColor="#22333B" stopOpacity="0.05"/>
                           </linearGradient>
                         </defs>
+                        {/* Growth curve */}
                         <path
-                          d="M0,60 Q75,45 150,35 T300,25"
+                          d="M0,70 Q80,50 160,30 Q240,15 320,10"
                           stroke="#22333B"
-                          strokeWidth="2"
+                          strokeWidth="3"
                           fill="none"
                         />
+                        {/* Area fill */}
                         <path
-                          d="M0,60 Q75,45 150,35 T300,25 L300,80 L0,80 Z"
-                          fill="url(#chartGradient)"
+                          d="M0,70 Q80,50 160,30 Q240,15 320,10 L320,96 L0,96 Z"
+                          fill="url(#strategicGradient)"
                         />
-                        <circle cx="300" cy="25" r="3" fill="#22333B"/>
+                        {/* Data points */}
+                        <circle cx="80" cy="50" r="4" fill="#22333B"/>
+                        <circle cx="160" cy="30" r="4" fill="#22333B"/>
+                        <circle cx="240" cy="15" r="4" fill="#22333B"/>
+                        <circle cx="320" cy="10" r="5" fill="#22333B"/>
                       </svg>
                     </div>
                     
-                    <div className="flex items-center justify-between mt-2 text-xs">
-                      <span className="text-charcoal-500">Jan</span>
-                      <span className="text-charcoal-500">Feb</span>
-                      <span className="text-charcoal-500">Mar</span>
-                      <span className="font-medium text-slate_blue-700">+156% growth</span>
+                    <div className="flex items-center justify-between mt-4">
+                      <div className="flex space-x-6 text-sm text-charcoal-500">
+                        <span>Q1</span>
+                        <span>Q2</span>
+                        <span>Q3</span>
+                        <span>Q4</span>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-lg font-black text-slate_blue-700">+340%</div>
+                        <div className="text-xs font-medium text-charcoal-600">Strategic advantage</div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 
-                {/* Floating elements */}
-                <div className="absolute -top-6 -right-6 w-16 h-16 bg-gradient-to-br from-slate_blue-500 to-charcoal-600 rounded-2xl flex items-center justify-center shadow-lg">
-                  <Brain className="w-8 h-8 text-white" />
+                {/* Floating Strategic Elements */}
+                <div className="absolute -top-8 -right-8 w-20 h-20 bg-slate_blue-600 rounded-3xl flex items-center justify-center shadow-2xl transform -rotate-12">
+                  <Target className="w-10 h-10 text-white" />
                 </div>
-                <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-gradient-to-br from-tan-500 to-olive-600 rounded-xl flex items-center justify-center shadow-lg">
-                  <Zap className="w-6 h-6 text-white" />
+                <div className="absolute -bottom-8 -left-8 w-16 h-16 bg-charcoal-900 rounded-2xl flex items-center justify-center shadow-2xl transform rotate-12">
+                  <Zap className="w-8 h-8 text-cream-100" />
+                </div>
+                <div className="absolute top-1/2 -right-4 w-12 h-12 bg-cream-300 rounded-full flex items-center justify-center shadow-lg">
+                  <BarChart3 className="w-6 h-6 text-charcoal-700" />
                 </div>
               </div>
             </div>
