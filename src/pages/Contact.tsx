@@ -156,16 +156,8 @@ export function Contact() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-cornsilk-50 via-cornsilk-100 to-cornsilk-200">
-      {/* Skip to main content link */}
-      <a 
-        href="#main-content" 
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-slate-900 text-white px-4 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
-      >
-        Skip to main content
-      </a>
-
       {/* Header */}
-      <header className="bg-white/95 backdrop-blur-sm border-b border-slate-200" role="banner">
+      <header className="bg-white/95 backdrop-blur-sm border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link to="/" className="flex items-center space-x-3">
@@ -176,24 +168,22 @@ export function Contact() {
               </div>
             </Link>
             
-            <nav role="navigation" aria-label="Header navigation">
-              <Link 
-                to="/" 
-                className="text-slate-600 hover:text-slate-900 font-medium flex items-center space-x-2"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                <span>Back to Home</span>
-              </Link>
-            </nav>
+            <Link 
+              to="/" 
+              className="text-slate-600 hover:text-slate-900 font-medium flex items-center space-x-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              <span>Back to Home</span>
+            </Link>
           </div>
         </div>
       </header>
 
-      <main id="main-content" className="pt-16 pb-20" role="main" tabIndex={-1}>
+      <div className="pt-16 pb-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
-          <section className="text-center mb-16" aria-labelledby="contact-hero-heading">
-            <h1 id="contact-hero-heading" className="text-5xl font-bold text-slate-900 mb-6">
+          <div className="text-center mb-16">
+            <h1 className="text-5xl font-bold text-slate-900 mb-6">
               Skip the Agency Overhead.<br/>
               <span className="bg-gradient-to-r from-tiger_s_eye-600 to-earth_yellow-600 bg-clip-text text-transparent">Get Direct Expert Access.</span>
             </h1>
@@ -214,32 +204,32 @@ export function Contact() {
                 <span>Radical transparency</span>
               </div>
             </div>
-          </section>
+          </div>
 
           {/* Anti-Agency Benefits */}
-          <section className="mb-16" aria-labelledby="benefits-heading">
-            <h2 id="benefits-heading" className="text-3xl font-bold text-slate-900 text-center mb-12">Why Choose the Anti-Agency Approach?</h2>
+          <div className="mb-16">
+            <h2 className="text-3xl font-bold text-slate-900 text-center mb-12">Why Choose the Anti-Agency Approach?</h2>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {antiAgencyValue.map((benefit, index) => (
-                <article key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
+                <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
                   <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center mb-4">
                     <benefit.icon className="w-6 h-6 text-dark_moss_green-700" />
                   </div>
                   <h3 className="text-lg font-semibold text-slate-900 mb-2">{benefit.title}</h3>
                   <p className="text-slate-600 text-sm">{benefit.description}</p>
-                </article>
+                </div>
               ))}
             </div>
-          </section>
+          </div>
 
           <div className="grid lg:grid-cols-2 gap-12">
             {/* Services Overview */}
-            <section aria-labelledby="services-heading">
-              <h2 id="services-heading" className="text-3xl font-bold text-slate-900 mb-8">How I Help B2B SaaS Companies</h2>
+            <div>
+              <h2 className="text-3xl font-bold text-slate-900 mb-8">How I Help B2B SaaS Companies</h2>
               
               <div className="space-y-6 mb-8">
                 {services.map((service, index) => (
-                  <article key={index} className="flex space-x-4">
+                  <div key={index} className="flex space-x-4">
                     <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center flex-shrink-0">
                       <service.icon className="w-6 h-6 text-dark_moss_green-700" />
                     </div>
@@ -247,7 +237,7 @@ export function Contact() {
                       <h3 className="text-xl font-semibold text-slate-900 mb-2">{service.title}</h3>
                       <p className="text-slate-600">{service.description}</p>
                     </div>
-                  </article>
+                  </div>
                 ))}
               </div>
 
@@ -272,7 +262,7 @@ export function Contact() {
                   </div>
                 </div>
               </div>
-            </section>
+
               <div className="mt-8 p-6 bg-gradient-to-r from-cornsilk-50 to-cornsilk-100 rounded-xl border border-cornsilk-200">
                 <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center">
                   <Shield className="w-5 h-5 mr-2 text-dark_moss_green-600" />
@@ -287,16 +277,15 @@ export function Contact() {
             </div>
 
             {/* Contact Form */}
-            <section className="bg-white rounded-xl shadow-2xl p-8" aria-labelledby="contact-form-heading">
-              <h2 id="contact-form-heading" className="text-2xl font-bold text-slate-900 mb-6">Let's Discuss Your Growth Goals</h2>
+            <div className="bg-white rounded-xl shadow-2xl p-8">
+              <h2 className="text-2xl font-bold text-slate-900 mb-6">Let's Discuss Your Growth Goals</h2>
               
-              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+              <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Basic Information */}
-                <fieldset className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <legend className="sr-only">Basic Information</legend>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Full Name <span className="text-red-500" aria-label="required">*</span>
+                      Full Name *
                     </label>
                     <div className="relative">
                       <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -308,15 +297,13 @@ export function Contact() {
                         className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                         placeholder="John Smith"
                         required
-                        aria-describedby="name-help"
                       />
-                      <div id="name-help" className="sr-only">Enter your full name for contact purposes</div>
                     </div>
                   </div>
                   
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Email Address <span className="text-red-500" aria-label="required">*</span>
+                      Email Address *
                     </label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -328,17 +315,15 @@ export function Contact() {
                         className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                         placeholder="john@company.com"
                         required
-                        aria-describedby="email-help"
                       />
-                      <div id="email-help" className="sr-only">Enter your business email address</div>
                     </div>
                   </div>
-                </fieldset>
+                </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Company Name <span className="text-red-500" aria-label="required">*</span>
+                      Company Name *
                     </label>
                     <div className="relative">
                       <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
@@ -350,9 +335,7 @@ export function Contact() {
                         className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                         placeholder="Acme SaaS Ltd"
                         required
-                        aria-describedby="company-help"
                       />
-                      <div id="company-help" className="sr-only">Enter your company name</div>
                     </div>
                   </div>
                   
@@ -389,8 +372,7 @@ export function Contact() {
                 </div>
 
                 {/* Project Details */}
-                <fieldset className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <legend className="sr-only">Project Details</legend>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       Engagement Type
@@ -400,7 +382,6 @@ export function Contact() {
                       value={formData.projectType}
                       onChange={handleInputChange}
                       className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
-                      aria-describedby="project-type-help"
                     >
                       <option value="growth-strategy">Growth Strategy Sprint</option>
                       <option value="demand-generation">Demand Generation Sprint</option>
@@ -408,7 +389,6 @@ export function Contact() {
                       <option value="sprint-based">Sprint-based Project</option>
                       <option value="full-engagement">Full CMO Partnership</option>
                     </select>
-                    <div id="project-type-help" className="sr-only">Select the type of engagement you're interested in</div>
                   </div>
                   
                   <div>
@@ -423,14 +403,12 @@ export function Contact() {
                         value={formData.budget}
                         onChange={handleInputChange}
                         className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
-                        aria-describedby="budget-help"
                       >
                         <option value="4k-8k">£4K - £8K (Sprint)</option>
                         <option value="8k-20k">£8K - £20K/month</option>
                         <option value="20k-40k">£20K - £40K/month</option>
                         <option value="40k+">£40K+/month</option>
                       </select>
-                      <div id="budget-help" className="sr-only">Select your budget range for transparent pricing</div>
                     </div>
                   </div>
                   
