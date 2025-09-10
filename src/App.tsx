@@ -4,9 +4,8 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Analytics } from './components/Analytics';
 import { PerformanceMonitor } from './components/PerformanceMonitor';
-import { ErrorToast, useErrorToast, NetworkStatus } from './components/ui/ErrorToast';
+import { ErrorToastProvider, useErrorToast, NetworkStatus } from './components/ui/ErrorToast';
 import { OfflineIndicator } from './components/ui/OfflineIndicator';
-import { ErrorBoundaryWrapper } from './components/ui/ErrorBoundaryWrapper';
 import { initializeErrorHandling } from './lib/errorHandling';
 import { Layout } from './components/Layout';
 import { AuthForm } from './components/AuthForm';
@@ -91,18 +90,6 @@ function AppContent() {
     <Suspense fallback={<PageLoadingFallback />}>
       <NetworkStatus />
       <OfflineIndicator onRetry={() => window.location.reload()} />
-      <ErrorToast 
-        toasts={toasts} 
-        onClose={closeToast}
-        onRetry={(error) => {
-          console.log('Retrying operation:', error);
-          window.location.reload();
-        }}
-        onAction={(error, action) => {
-          console.log('Error action:', action, error);
-          // Handle specific actions based on error type
-        }}
-      />
       <Routes>
         {/* Public landing page */}
         <Route 
@@ -340,13 +327,15 @@ function AppContent() {
 function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <Router>
-          <Analytics trackingId={import.meta.env.VITE_GA_TRACKING_ID} />
-          <PerformanceMonitor />
-          <AppContent />
-        </Router>
-      </AuthProvider>
+      <ErrorToastProvider>
+        <AuthProvider>
+          <Router>
+            <Analytics trackingId={import.meta.env.VITE_GA_TRACKING_ID} />
+            <PerformanceMonitor />
+            <AppContent />
+          </Router>
+        </AuthProvider>
+      </ErrorToastProvider>
     </ErrorBoundary>
   );
 }
