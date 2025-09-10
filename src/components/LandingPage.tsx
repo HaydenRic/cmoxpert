@@ -41,7 +41,14 @@ import {
   Database,
   Cloud,
   ShoppingCart,
-  AlertCircle
+  AlertCircle,
+  Brain,
+  Activity,
+  Sparkles,
+  ChevronRight,
+  Monitor,
+  Smartphone,
+  Tablet
 } from 'lucide-react';
 
 interface Video {
@@ -63,7 +70,6 @@ export function LandingPage() {
 
   const loadFeaturedVideo = async () => {
     try {
-      // Import configuration status
       const { isSupabaseConfigured } = await import('../lib/supabase');
       
       if (!isSupabaseConfigured) {
@@ -91,7 +97,6 @@ export function LandingPage() {
       }
     } catch (error) {
       console.log('Could not load featured video (this is normal in development)');
-      // Silently fail - don't show error to user for missing featured video
     }
   };
 
@@ -101,7 +106,7 @@ export function LandingPage() {
         .from('video_views')
         .insert([{
           video_id: videoId,
-          ip_address: 'anonymous', // In production, you might want to get actual IP
+          ip_address: 'anonymous',
           user_agent: navigator.userAgent
         }]);
     } catch (error) {
@@ -119,871 +124,739 @@ export function LandingPage() {
   const handleGetStarted = () => {
     trackEvent('cta_click', {
       cta_location: 'hero',
-      cta_text: 'Get Started'
+      cta_text: 'Request Demo'
     });
     navigate('/auth');
   };
 
-  const handleContactCMO = () => {
+  const handleLearnMore = () => {
     trackEvent('cta_click', {
       cta_location: 'hero',
-      cta_text: 'Fractional CMO'
+      cta_text: 'Learn More'
     });
-    navigate('/contact');
+    const featuresSection = document.getElementById('features');
+    featuresSection?.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Email submitted:', email);
+    trackFormSubmission('newsletter_signup', { email });
     navigate('/auth');
   };
 
-  const features = [
+  // Core platform capabilities with data-driven focus
+  const capabilities = [
     {
-      icon: Eye,
-      title: "Real-Time Competitive Intelligence",
-      description: "Monitor competitor moves, pricing changes, and market positioning 24/7 with AI-powered alerts.",
-      color: "bg-dark_moss_green-500"
+      icon: Brain,
+      title: "AI Market Analysis",
+      description: "Automated competitive intelligence and market opportunity identification",
+      metric: "80% faster insights",
+      color: "from-charcoal-500 to-slate_blue-600"
     },
     {
       icon: TrendingUp,
-      title: "Predictive Demand Generation",
-      description: "Identify market opportunities before your competitors with predictive analytics and trend forecasting.",
-      color: "bg-pakistan_green-500"
+      title: "Predictive Analytics",
+      description: "Forecast market trends and demand patterns with machine learning",
+      metric: "95% accuracy rate",
+      color: "from-slate_blue-500 to-charcoal-600"
     },
     {
       icon: Target,
-      title: "Dynamic Messaging Optimization",
-      description: "AI-powered A/B testing and messaging optimization that adapts in real-time to market responses.",
-      color: "bg-tiger_s_eye-500"
+      title: "Strategic Positioning",
+      description: "Data-driven positioning recommendations and messaging optimization",
+      metric: "3.2x conversion lift",
+      color: "from-tan-500 to-olive-600"
     },
     {
-      icon: PoundSterling,
-      title: "Adaptive Pricing Recommendations",
-      description: "Get data-driven pricing strategies that maximize revenue while staying competitive.",
-      color: "bg-pakistan_green-500"
-    },
-    {
-      icon: Search,
-      title: "Micro-Niche Identification",
-      description: "Discover untapped market segments and underserved customer needs with precision targeting.",
-      color: "bg-earth_yellow-500"
-    },
+      icon: Eye,
+      title: "Competitive Monitoring",
+      description: "Real-time competitor tracking and market intelligence alerts",
+      metric: "24/7 monitoring",
+      color: "from-olive-500 to-tan-600"
+    }
+  ];
+
+  // Key metrics and social proof
+  const metrics = [
+    { value: "150+", label: "B2B SaaS Companies", sublabel: "Trust our platform" },
+    { value: "3.2x", label: "Average ROI Increase", sublabel: "Within 90 days" },
+    { value: "80%", label: "Time Saved", sublabel: "On market research" },
+    { value: "24/7", label: "Market Monitoring", sublabel: "Automated alerts" }
+  ];
+
+  // Feature grid with data visualization focus
+  const features = [
     {
       icon: BarChart3,
-      title: "Automated Market Analysis",
-      description: "Generate comprehensive market reports in minutes, not weeks, with our advanced AI engine.",
-      color: "bg-tiger_s_eye-500"
-    }
-  ];
-
-  const antiAgencyBenefits = [
-    {
-      icon: UserCheck,
-      title: "Direct Access to Expertise",
-      description: "No junior account managers. No diluted communication. You work directly with me, every single time."
+      title: "Real-Time Market Intelligence",
+      description: "Monitor competitor moves, pricing changes, and market positioning with AI-powered alerts and comprehensive dashboards.",
+      benefits: ["Automated competitor tracking", "Price monitoring alerts", "Market share analysis"]
     },
     {
-      icon: Shield,
-      title: "Radical Transparency",
-      description: "Crystal-clear pricing, documented processes, and 'look over my shoulder' visibility into every decision."
-    },
-    {
-      icon: Timer,
-      title: "Sprint-Based Delivery",
-      description: "Focused 2-week marketing sprints that tackle specific challenges and deliver tangible results quickly."
-    },
-    {
-      icon: Lightbulb,
-      title: "Agile Partnership",
-      description: "Adaptable engagement models that scale with your needs – no rigid contracts or unnecessary overhead."
-    }
-  ];
-
-  const gtmPhases = [
-    {
-      icon: MapPin,
-      phase: "01",
-      title: "Market Intelligence & Positioning",
-      duration: "Week 1",
-      description: "Deep competitor analysis, market sizing, and unique value proposition development",
-      deliverables: ["Competitive landscape map", "Market opportunity assessment", "Value proposition framework"]
+      icon: Brain,
+      title: "AI-Powered Insights",
+      description: "Transform raw market data into actionable strategic recommendations using advanced machine learning algorithms.",
+      benefits: ["Predictive trend analysis", "Opportunity identification", "Risk assessment"]
     },
     {
       icon: Target,
-      phase: "02", 
-      title: "Audience Definition & Messaging",
-      duration: "Week 2",
-      description: "Precise ICP definition, messaging hierarchy, and channel strategy development",
-      deliverables: ["Ideal customer profiles", "Messaging architecture", "Channel priority matrix"]
+      title: "Strategic Positioning",
+      description: "Optimize your market position with data-driven messaging and competitive differentiation strategies.",
+      benefits: ["Message optimization", "Positioning analysis", "Differentiation mapping"]
     },
     {
       icon: Rocket,
-      phase: "03",
-      title: "Launch Strategy & Execution",
-      duration: "Week 3-4",
-      description: "Launch sequence planning, content creation, and performance tracking setup",
-      deliverables: ["90-day launch plan", "Content calendar", "KPI dashboard"]
-    },
-    {
-      icon: Gauge,
-      phase: "04",
-      title: "Optimization & Scale",
-      duration: "Week 5-8",
-      description: "Performance analysis, conversion optimization, and growth acceleration tactics",
-      deliverables: ["Performance report", "Optimization roadmap", "Scale strategy"]
-    }
-  ];
-
-  const gtmBenefits = [
-    {
-      icon: Clock,
-      title: "8-Week Timeline",
-      description: "Complete GTM strategy and initial execution in just 8 weeks"
-    },
-    {
-      icon: Award,
-      title: "Proven Framework",
-      description: "Battle-tested methodology used by 50+ successful B2B SaaS launches"
-    },
-    {
-      icon: Shield,
-      title: "Risk Mitigation",
-      description: "Reduce launch risk by 70% through systematic market validation"
-    },
-    {
-      icon: TrendingUp,
-      title: "Faster Results",
-      description: "Achieve product-market fit 3x faster than traditional approaches"
-    }
-  ];
-
-  // Micro-niche ICPs for cmoxpert
-  const targetICPs = [
-    {
-      icon: Code,
-      category: "Developer Tools SaaS",
-      title: "API & Infrastructure Platforms",
-      description: "B2B SaaS companies serving developers with APIs, infrastructure tools, or development platforms",
-      challenges: ["Technical buyers with long evaluation cycles", "Bottom-up adoption strategies", "Developer community building"],
-      opportunity: "£2.5M+ ARR potential",
-      companies: "10-50 employees"
-    },
-    {
-      icon: Shield,
-      category: "Cybersecurity SaaS",
-      title: "SME Security Solutions",
-      description: "Cybersecurity platforms targeting 50-500 employee companies with compliance requirements",
-      challenges: ["High-stakes purchase decisions", "Complex stakeholder buy-in", "Regulatory compliance messaging"],
-      opportunity: "£5M+ ARR potential", 
-      companies: "20-100 employees"
-    },
-    {
-      icon: Database,
-      category: "Data & Analytics SaaS",
-      title: "Vertical-Specific Analytics",
-      description: "Data platforms built for specific industries like healthcare, fintech, or logistics",
-      challenges: ["Industry-specific positioning", "Data privacy concerns", "ROI demonstration"],
-      opportunity: "£3M+ ARR potential",
-      companies: "15-75 employees"
+      title: "Growth Acceleration",
+      description: "Implement proven growth strategies with clear metrics and performance tracking for measurable results.",
+      benefits: ["Growth strategy development", "Performance tracking", "ROI optimization"]
     },
     {
       icon: Users,
-      category: "HR & People Ops SaaS",
-      title: "Remote-First Workforce Tools",
-      description: "HR technology for distributed teams, focusing on engagement, performance, and culture",
-      challenges: ["People-centric value props", "Cultural fit messaging", "Manager vs. employee personas"],
-      opportunity: "£4M+ ARR potential",
-      companies: "25-150 employees"
+      title: "Team Collaboration",
+      description: "Centralize marketing intelligence and enable cross-functional collaboration with shared insights and reports.",
+      benefits: ["Shared dashboards", "Team insights", "Collaborative planning"]
     },
     {
-      icon: Briefcase,
-      category: "Professional Services SaaS", 
-      title: "Industry-Specific Workflows",
-      description: "SaaS tools designed for specific professional services like legal, accounting, or consulting",
-      challenges: ["Traditional industry adoption", "Workflow disruption concerns", "Professional credibility"],
-      opportunity: "£2M+ ARR potential",
-      companies: "10-50 employees"
-    },
-    {
-      icon: ShoppingCart,
-      category: "E-commerce Infrastructure",
-      title: "Merchant & Seller Tools",
-      description: "Backend SaaS solutions for e-commerce operations, inventory, logistics, or marketplace sellers",
-      challenges: ["Transaction-based value propositions", "Integration complexity", "Multi-channel strategies"],
-      opportunity: "£6M+ ARR potential",
-      companies: "20-100 employees"
-    }
-  ];
-
-  const microNicheBenefits = [
-    {
-      icon: Target,
-      title: "Precision Targeting",
-      description: "Focus on highly specific market segments with tailored messaging and positioning strategies"
-    },
-    {
-      icon: Gauge,
-      title: "Faster Market Penetration", 
-      description: "Dominate smaller, well-defined markets before expanding to adjacent segments"
-    },
-    {
-      icon: DollarSign,
-      title: "Higher Conversion Rates",
-      description: "Industry-specific expertise leads to more relevant solutions and better prospect engagement"
-    },
-    {
-      icon: Rocket,
-      title: "Reduced Competition",
-      description: "Operate in spaces too niche for large agencies but too specific for generalist consultants"
+      icon: Shield,
+      title: "Enterprise Security",
+      description: "Bank-level security with SOC 2 compliance, ensuring your sensitive market data remains protected.",
+      benefits: ["SOC 2 certified", "Data encryption", "Access controls"]
     }
   ];
 
   const testimonials = [
     {
       name: "Sarah Chen",
-      role: "VP Marketing, TechFlow SaaS",
-      content: "cmoxpert cut our market research time by 80% and helped us identify 3 new revenue streams we never saw coming.",
+      role: "VP Marketing",
+      company: "TechFlow SaaS",
+      content: "cmoxpert transformed our market research process. We now identify opportunities 80% faster and our strategic decisions are backed by real-time data.",
       rating: 5,
-      avatar: "SC"
+      avatar: "SC",
+      metric: "80% faster insights"
     },
     {
-      name: "Marcus Rodriguez",
-      role: "Head of Growth, DataSync Pro",
-      content: "The competitive intelligence alone has saved us from 2 major pricing mistakes. ROI was immediate.",
+      name: "Marcus Rodriguez", 
+      role: "Head of Growth",
+      company: "DataSync Pro",
+      content: "The competitive intelligence alone has prevented multiple pricing mistakes. The ROI was immediate and continues to compound.",
       rating: 5,
-      avatar: "MR"
+      avatar: "MR",
+      metric: "3.2x ROI increase"
     },
     {
       name: "Jennifer Park",
-      role: "CMO, CloudScale Systems",
-      content: "Finally, a tool that thinks like a seasoned strategist. It's like having a senior marketing consultant on-demand.",
+      role: "CMO",
+      company: "CloudScale Systems", 
+      content: "Finally, a platform that thinks strategically. It's like having a senior marketing consultant available 24/7 with perfect data recall.",
       rating: 5,
-      avatar: "JP"
+      avatar: "JP",
+      metric: "24/7 availability"
     }
   ];
 
-  const stats = [
-    { value: "3.2x", label: "Average Revenue Growth" },
-    { value: "80%", label: "Time Saved on Research" },
-    { value: "150+", label: "B2B SaaS Companies" },
-    { value: "24/7", label: "Market Monitoring" }
-  ];
-
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-cornsilk-50">
       {/* Skip to main content link */}
       <a 
         href="#main-content" 
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-slate-900 text-white px-4 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-charcoal-900 text-white px-4 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
       >
         Skip to main content
       </a>
 
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-cream-300" role="banner">
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-cream-200" role="banner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-20">
             <div className="flex items-center space-x-3">
               <BrandLogo />
               <div>
-                <h1 className="text-xl font-bold text-slate-900">cmoxpert</h1>
-                <p className="text-xs text-slate-500">AI Marketing Co-Pilot</p>
+                <h1 className="text-xl font-bold text-charcoal-900">cmoxpert</h1>
+                <p className="text-xs text-slate_blue-600">AI Marketing Co-Pilot</p>
               </div>
             </div>
             
-            <nav className="flex items-center space-x-4" role="navigation" aria-label="Header navigation">
+            <nav className="flex items-center space-x-6" role="navigation" aria-label="Header navigation">
               <Link 
                 to="/auth" 
-                className="text-slate_blue-600 hover:text-charcoal-900 font-medium flex items-center space-x-2"
+                className="text-charcoal-700 hover:text-charcoal-900 font-medium flex items-center space-x-2 transition-colors"
               >
                 <LogIn className="w-4 h-4" />
                 <span>Sign In</span>
               </Link>
               <button
                 onClick={handleGetStarted}
-                className="bg-gradient-to-r from-slate_blue-600 to-charcoal-800 hover:from-slate_blue-700 hover:to-charcoal-900 text-white px-6 py-2 rounded-lg font-medium transition-all shadow-lg hover:shadow-xl"
+                className="bg-gradient-to-r from-slate_blue-600 to-charcoal-700 hover:from-slate_blue-700 hover:to-charcoal-800 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl flex items-center space-x-2"
               >
-                Get Started
+                <span>Request Demo</span>
+                <ArrowRight className="w-4 h-4" />
               </button>
             </nav>
           </div>
         </div>
       </header>
 
-      {/* Main content wrapper */}
       <main id="main-content" role="main" tabIndex={-1}>
-      {/* Hero Section */}
-      <section 
-        className="pt-20 pb-16 bg-gradient-to-br from-charcoal-900 via-slate_blue-800 to-slate_blue-900"
-        aria-labelledby="hero-heading"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-full text-sm font-medium mb-6 border border-white/20">
-                <Zap className="w-4 h-4 mr-2 text-tan-300" />
-                AI-Powered Expert Partnership
-              </div>
-              
-              <h1 id="hero-heading" className="text-5xl font-bold text-white mb-6 leading-tight">
-                Turn Market Data Into 
-                <span className="bg-gradient-to-r from-tan-300 to-cream-200 bg-clip-text text-transparent"> Strategic Advantage</span>
-              </h1>
-              
-              <p className="text-xl text-white mb-8 leading-relaxed">
-                <strong className="text-white">You get me, and only me.</strong> <span className="text-cream-100">No junior account managers, no diluted communication, no bait-and-switch. Just direct access to expert-level marketing intelligence powered by AI, delivered with radical transparency.</span>
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 mb-8">
-                <button
-                  onClick={handleGetStarted}
-                  className="bg-gradient-to-r from-tan-600 to-olive-600 hover:from-tan-700 hover:to-olive-700 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
-                >
-                  <span>Start Your Strategy Session</span>
-                  <ArrowRight className="w-5 h-5" />
-                </button>
+        {/* Hero Section */}
+        <section className="pt-20 pb-24 bg-white" aria-labelledby="hero-heading">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div className="space-y-8">
+                <div className="space-y-6">
+                  <div className="inline-flex items-center px-4 py-2 bg-slate_blue-50 text-slate_blue-700 rounded-full text-sm font-medium border border-slate_blue-200">
+                    <Sparkles className="w-4 h-4 mr-2" />
+                    AI-Powered Marketing Intelligence
+                  </div>
+                  
+                  <h1 id="hero-heading" className="text-5xl lg:text-6xl font-bold text-charcoal-900 leading-tight">
+                    Transform Market Data Into
+                    <span className="block text-slate_blue-600">Strategic Advantage</span>
+                  </h1>
+                  
+                  <p className="text-xl text-charcoal-600 leading-relaxed max-w-xl">
+                    AI-powered competitive intelligence and market analysis platform designed for B2B SaaS marketing teams who need strategic insights, not just data.
+                  </p>
+                </div>
                 
-                <button 
-                  onClick={() => {
-                    const videoSection = document.getElementById('demo-video');
-                    videoSection?.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="border-2 border-white/30 hover:border-white/50 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-all flex items-center justify-center space-x-2 backdrop-blur-sm"
-                >
-                  <Play className="w-5 h-5" />
-                  <span>Watch Demo</span>
-                </button>
-
-                <button
-                  onClick={handleContactCMO}
-                  className="bg-gradient-to-r from-olive-600 to-tan-600 hover:from-olive-700 hover:to-tan-700 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
-                >
-                  <Users className="w-5 h-5" />
-                  <span>Fractional CMO</span>
-                </button>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <button
+                    onClick={handleGetStarted}
+                    className="bg-gradient-to-r from-slate_blue-600 to-charcoal-700 hover:from-slate_blue-700 hover:to-charcoal-800 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all flex items-center justify-center space-x-2"
+                  >
+                    <span>Request Demo</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                  
+                  <button 
+                    onClick={handleLearnMore}
+                    className="border-2 border-charcoal-300 hover:border-charcoal-400 text-charcoal-700 hover:text-charcoal-900 px-8 py-4 rounded-lg font-semibold text-lg transition-all flex items-center justify-center space-x-2"
+                  >
+                    <span>Learn More</span>
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+                </div>
+                
+                <div className="flex items-center space-x-8 text-sm text-charcoal-500">
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="w-4 h-4 text-slate_blue-600" />
+                    <span>Free 14-day trial</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="w-4 h-4 text-slate_blue-600" />
+                    <span>No setup fees</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <CheckCircle className="w-4 h-4 text-slate_blue-600" />
+                    <span>Cancel anytime</span>
+                  </div>
+                </div>
               </div>
               
-              <div className="flex items-center space-x-8 text-sm text-cornsilk-300">
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-tan-300" />
-                  <span>No hidden fees</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-tan-300" />
-                  <span>Results in 5 minutes</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <CheckCircle className="w-4 h-4 text-tan-300" />
-                  <span>Direct expert access</span>
-                </div>
-              </div>
-            </div>
-            
-            <div className="relative">
-              <div className="bg-white/10 backdrop-blur-sm rounded-2xl shadow-2xl p-8 relative z-10 border border-white/20">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+              {/* Hero Visual - Data Dashboard Preview */}
+              <div className="relative">
+                <div className="bg-white rounded-2xl shadow-2xl border border-cream-200 p-8 relative z-10">
+                  {/* Dashboard Header */}
+                  <div className="flex items-center justify-between mb-6 pb-4 border-b border-cream-200">
                     <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 bg-tan-500 rounded-full flex items-center justify-center">
-                        <TrendingUp className="w-5 h-5 text-white" />
+                      <div className="w-8 h-8 bg-slate_blue-100 rounded-lg flex items-center justify-center">
+                        <BarChart3 className="w-4 h-4 text-slate_blue-700" />
                       </div>
                       <div>
-                        <p className="font-semibold text-white">Market Opportunity Detected</p>
-                        <p className="text-sm text-cornsilk-300">Direct expert analysis</p>
+                        <h3 className="font-semibold text-charcoal-900">Market Intelligence Dashboard</h3>
+                        <p className="text-xs text-charcoal-500">Real-time competitive analysis</p>
                       </div>
                     </div>
-                    <div className="text-tan-300 font-bold">+32% ROI</div>
-                  </div>
-                  
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-                      <p className="text-2xl font-bold text-white">156%</p>
-                      <p className="text-sm text-cornsilk-300">Growth Potential</p>
-                    </div>
-                    <div className="p-4 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-                      <p className="text-2xl font-bold text-white">4.2x</p>
-                      <p className="text-sm text-cornsilk-300">Market Share</p>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                      <span className="text-xs text-charcoal-500">Live</span>
                     </div>
                   </div>
                   
-                  <div className="p-4 bg-tan-500/30 rounded-lg border border-tan-300/50">
-                    <p className="text-sm font-medium text-tan-100 mb-2">Transparent Recommendation</p>
-                    <p className="text-sm text-white">Sprint focus: Target "enterprise security" segment. 14-day timeline with clear deliverables.</p>
+                  {/* Key Metrics Cards */}
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="bg-slate_blue-50 rounded-lg p-4 border border-slate_blue-100">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-medium text-slate_blue-700">Market Share</span>
+                        <TrendingUp className="w-3 h-3 text-slate_blue-600" />
+                      </div>
+                      <div className="text-2xl font-bold text-charcoal-900">23.4%</div>
+                      <div className="text-xs text-green-600">+12% vs last quarter</div>
+                    </div>
+                    
+                    <div className="bg-tan-50 rounded-lg p-4 border border-tan-100">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-medium text-tan-700">Competitive Alerts</span>
+                        <Eye className="w-3 h-3 text-tan-600" />
+                      </div>
+                      <div className="text-2xl font-bold text-charcoal-900">7</div>
+                      <div className="text-xs text-orange-600">3 high priority</div>
+                    </div>
+                  </div>
+                  
+                  {/* Chart Visualization */}
+                  <div className="bg-cornsilk-50 rounded-lg p-4 border border-cream-200">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-xs font-medium text-charcoal-700">Traffic Trends</span>
+                      <span className="text-xs text-charcoal-500">Last 30 days</span>
+                    </div>
+                    
+                    {/* Simple SVG chart visualization */}
+                    <div className="h-20 relative">
+                      <svg className="w-full h-full" viewBox="0 0 300 80">
+                        <defs>
+                          <linearGradient id="chartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stopColor="#22333B" stopOpacity="0.3"/>
+                            <stop offset="100%" stopColor="#22333B" stopOpacity="0.1"/>
+                          </linearGradient>
+                        </defs>
+                        <path
+                          d="M0,60 Q75,45 150,35 T300,25"
+                          stroke="#22333B"
+                          strokeWidth="2"
+                          fill="none"
+                        />
+                        <path
+                          d="M0,60 Q75,45 150,35 T300,25 L300,80 L0,80 Z"
+                          fill="url(#chartGradient)"
+                        />
+                        <circle cx="300" cy="25" r="3" fill="#22333B"/>
+                      </svg>
+                    </div>
+                    
+                    <div className="flex items-center justify-between mt-2 text-xs">
+                      <span className="text-charcoal-500">Jan</span>
+                      <span className="text-charcoal-500">Feb</span>
+                      <span className="text-charcoal-500">Mar</span>
+                      <span className="font-medium text-slate_blue-700">+156% growth</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-              
-              {/* Floating elements */}
-              <div className="absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-tan-400 to-tan-600 rounded-full flex items-center justify-center shadow-lg">
-                <Zap className="w-10 h-10 text-white" />
-              </div>
-              <div className="absolute -bottom-4 -left-4 w-16 h-16 bg-gradient-to-br from-olive-400 to-olive-600 rounded-full flex items-center justify-center shadow-lg">
-                <Target className="w-8 h-8 text-white" />
+                
+                {/* Floating elements */}
+                <div className="absolute -top-6 -right-6 w-16 h-16 bg-gradient-to-br from-slate_blue-500 to-charcoal-600 rounded-2xl flex items-center justify-center shadow-lg">
+                  <Brain className="w-8 h-8 text-white" />
+                </div>
+                <div className="absolute -bottom-6 -left-6 w-12 h-12 bg-gradient-to-br from-tan-500 to-olive-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Zap className="w-6 h-6 text-white" />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-4xl font-bold text-slate-900 mb-2">{stat.value}</div>
-                <div className="text-slate-600">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Anti-Agency Section */}
-      <section className="py-20 bg-gradient-to-br from-charcoal-900 via-slate_blue-900 to-cream-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              The Anti-Agency Approach
-            </h2>
-            <p className="text-xl text-cornsilk-200 max-w-3xl mx-auto">
-              Tired of agency overhead, junior execution, and opaque processes? Get direct access to expert-level marketing strategy with radical transparency and agile delivery.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {antiAgencyBenefits.map((benefit, index) => (
-              <div key={index} className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center mb-4">
-                  <benefit.icon className="w-6 h-6 text-tan-200" />
+        {/* Metrics Section */}
+        <section className="py-16 bg-cornsilk-50 border-y border-cream-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+              {metrics.map((metric, index) => (
+                <div key={index} className="text-center">
+                  <div className="text-4xl lg:text-5xl font-bold text-charcoal-900 mb-2">{metric.value}</div>
+                  <div className="text-sm font-medium text-charcoal-700 mb-1">{metric.label}</div>
+                  <div className="text-xs text-charcoal-500">{metric.sublabel}</div>
                 </div>
-                <h3 className="text-lg font-semibold mb-3 text-tan-100">{benefit.title}</h3>
-                <p className="text-sm leading-relaxed text-cream-100">{benefit.description}</p>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+        </section>
 
-          <div className="mt-16 text-center">
-            <div className="inline-block bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
-              <h3 className="text-2xl font-bold mb-4 text-tan-100">Sprint-Based Engagement Model</h3>
-              <p className="mb-6 max-w-2xl text-cream-100">
-                Instead of long-term contracts with unclear deliverables, engage in focused 2-week "marketing sprints" that tackle specific challenges with measurable outcomes.
+        {/* Core Capabilities */}
+        <section className="py-20 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-charcoal-900 mb-4">
+                AI-Powered Marketing Intelligence
+              </h2>
+              <p className="text-xl text-charcoal-600 max-w-3xl mx-auto">
+                Transform raw market data into strategic insights with our advanced AI platform designed specifically for B2B SaaS marketing teams.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <div className="bg-white/20 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-tan-100">2 weeks</div>
-                  <div className="text-sm text-cream-200">Sprint duration</div>
-                </div>
-                <div className="bg-white/20 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-tan-100">Clear ROI</div>
-                  <div className="text-sm text-cream-200">Measurable results</div>
-                </div>
-                <div className="bg-white/20 rounded-lg p-4">
-                  <div className="text-2xl font-bold text-tan-100">100%</div>
-                  <div className="text-sm text-cream-200">Transparency</div>
-                </div>
-              </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Go-to-Market as a Service Section */}
-      <section className="py-20 bg-gradient-to-br from-cream-50 via-tan-50 to-olive-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 bg-tan-100 text-olive-900 rounded-full text-sm font-medium mb-6">
-              <Rocket className="w-4 h-4 mr-2" />
-              Signature Methodology
-            </div>
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
-              Go-to-Market as a Service
-            </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-8">
-              Launch new products or enter new markets with confidence using my proven 8-week GTM framework. Designed specifically for B2B SaaS companies ready to accelerate growth without the typical launch risks.
-            </p>
-            <div className="flex items-center justify-center space-x-8 text-sm text-slate-500">
-              <div className="flex items-center space-x-2">
-                <Calendar className="w-4 h-4 text-slate_blue-600" />
-                <span>8-week delivery</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Shield className="w-4 h-4 text-slate_blue-600" />
-                <span>Risk mitigation</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Award className="w-4 h-4 text-slate_blue-600" />
-                <span>Proven framework</span>
-              </div>
-            </div>
-          </div>
-
-          {/* GTM Phases */}
-          <div className="mb-16">
-            <h3 className="text-2xl font-bold text-slate-900 text-center mb-12">The 4-Phase GTM Framework</h3>
+            
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {gtmPhases.map((phase, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-cream-200 relative">
-                  <div className="absolute -top-4 -right-4 w-12 h-12 bg-gradient-to-br from-olive-500 to-tan-500 rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-sm">{phase.phase}</span>
-                  </div>
-                  
-                  <div className="w-12 h-12 bg-gradient-to-br from-tan-100 to-olive-100 rounded-lg flex items-center justify-center mb-4">
-                    <phase.icon className="w-6 h-6 text-slate_blue-700" />
-                  </div>
-                  
-                  <div className="mb-4">
-                    <div className="text-sm text-slate_blue-700 font-medium mb-1">{phase.duration}</div>
-                    <h4 className="text-lg font-semibold text-slate-900 mb-2">{phase.title}</h4>
-                    <p className="text-slate-600 text-sm mb-4">{phase.description}</p>
-                  </div>
-                  
-                  <div>
-                    <h5 className="text-sm font-medium text-slate-900 mb-2">Key Deliverables:</h5>
-                    <ul className="space-y-1">
-                      {phase.deliverables.map((deliverable, idx) => (
-                        <li key={idx} className="text-xs text-slate-600 flex items-start">
-                          <CheckCircle className="w-3 h-3 text-slate_blue-600 mr-2 mt-0.5 flex-shrink-0" />
-                          {deliverable}
-                        </li>
-                      ))}
-                    </ul>
+              {capabilities.map((capability, index) => (
+                <div key={index} className="group">
+                  <div className="bg-white rounded-xl p-8 shadow-lg border border-cream-200 hover:shadow-xl transition-all duration-300 h-full">
+                    <div className={`w-14 h-14 bg-gradient-to-br ${capability.color} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                      <capability.icon className="w-7 h-7 text-white" />
+                    </div>
+                    <h3 className="text-xl font-bold text-charcoal-900 mb-3">{capability.title}</h3>
+                    <p className="text-charcoal-600 mb-4 leading-relaxed">{capability.description}</p>
+                    <div className="inline-flex items-center px-3 py-1 bg-slate_blue-50 text-slate_blue-700 rounded-full text-sm font-medium">
+                      {capability.metric}
+                    </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
+        </section>
 
-          {/* GTM Benefits */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {gtmBenefits.map((benefit, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-tan-200">
-                <div className="w-12 h-12 bg-gradient-to-br from-tan-100 to-olive-100 rounded-lg flex items-center justify-center mb-4">
-                  <benefit.icon className="w-6 h-6 text-slate_blue-700" />
-                </div>
-                <h4 className="text-lg font-semibold text-slate-900 mb-2">{benefit.title}</h4>
-                <p className="text-slate-600 text-sm">{benefit.description}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* GTM Pricing & CTA */}
-          <div className="bg-gradient-to-r from-olive-600 to-tan-600 rounded-2xl p-8 text-center text-white">
-            <h3 className="text-3xl font-bold mb-4">Ready to Launch with Confidence?</h3>
-            <p className="text-cornsilk-100 mb-6 max-w-2xl mx-auto">
-              Get your complete Go-to-Market strategy and initial execution in just 8 weeks. Transparent pricing, clear deliverables, direct expert access.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-6">
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl font-bold">£18K</div>
-                <div className="text-sm text-cornsilk-200">Complete GTM Package</div>
-              </div>
-              <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4">
-                <div className="text-2xl font-bold">8 weeks</div>
-                <div className="text-sm text-cornsilk-200">From strategy to execution</div>
-              </div>
+        {/* Features Grid */}
+        <section id="features" className="py-20 bg-cornsilk-50" aria-labelledby="features-heading">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 id="features-heading" className="text-4xl font-bold text-charcoal-900 mb-4">
+                Everything You Need for Strategic Marketing
+              </h2>
+              <p className="text-xl text-charcoal-600 max-w-3xl mx-auto">
+                Comprehensive tools and insights to outmaneuver competitors and accelerate growth with data-driven decision making.
+              </p>
             </div>
             
-            <button
-              onClick={handleContactCMO}
-              className="bg-white text-olive-700 px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all hover:bg-cream-50"
-            >
-              Book GTM Strategy Call
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
-              AI-Powered Marketing Intelligence
-            </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Get the strategic insights you need to outmaneuver competitors and capture market opportunities before they become obvious.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200 hover:shadow-xl transition-shadow">
-                <div className={`w-12 h-12 ${feature.color} rounded-lg flex items-center justify-center mb-4`}>
-                  <feature.icon className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-900 mb-3">{feature.title}</h3>
-                <p className="text-slate-600">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Micro-Niche Specialization Section */}
-      <section className="py-20 bg-gradient-to-br from-slate-50 to-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center px-4 py-2 bg-slate-200 text-slate-700 rounded-full text-sm font-medium mb-6">
-              <Target className="w-4 h-4 mr-2" />
-              Micro-Niche Expertise
-            </div>
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
-              Specialized B2B SaaS Market Intelligence
-            </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-8">
-              I focus exclusively on specific B2B SaaS market segments where I can deliver the deepest insights and most relevant strategies. No generalist approach—just laser-focused expertise.
-            </p>
-          </div>
-
-          {/* Target ICPs Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {targetICPs.map((icp, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200 hover:shadow-xl transition-shadow">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg flex items-center justify-center">
-                    <icp.icon className="w-6 h-6 text-slate-600" />
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {features.map((feature, index) => (
+                <div key={index} className="bg-white rounded-xl p-8 shadow-lg border border-cream-200 hover:shadow-xl transition-shadow duration-300">
+                  <div className="w-12 h-12 bg-gradient-to-br from-slate_blue-100 to-charcoal-100 rounded-lg flex items-center justify-center mb-6">
+                    <feature.icon className="w-6 h-6 text-slate_blue-700" />
                   </div>
-                  <div className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded-full">
-                    {icp.companies}
-                  </div>
-                </div>
-                
-                <div className="mb-4">
-                  <div className="text-xs text-slate-500 font-medium mb-1">{icp.category}</div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">{icp.title}</h3>
-                  <p className="text-slate-600 text-sm mb-4">{icp.description}</p>
-                </div>
-                
-                <div className="mb-4">
-                  <h4 className="text-sm font-medium text-slate-900 mb-2">Key Challenges:</h4>
-                  <ul className="space-y-1">
-                    {icp.challenges.map((challenge, idx) => (
-                      <li key={idx} className="text-xs text-slate-600 flex items-start">
-                        <AlertCircle className="w-3 h-3 text-slate-400 mr-2 mt-0.5 flex-shrink-0" />
-                        {challenge}
+                  <h3 className="text-xl font-bold text-charcoal-900 mb-3">{feature.title}</h3>
+                  <p className="text-charcoal-600 mb-6 leading-relaxed">{feature.description}</p>
+                  
+                  <ul className="space-y-2">
+                    {feature.benefits.map((benefit, idx) => (
+                      <li key={idx} className="flex items-center text-sm text-charcoal-600">
+                        <CheckCircle className="w-4 h-4 text-slate_blue-600 mr-2 flex-shrink-0" />
+                        {benefit}
                       </li>
                     ))}
                   </ul>
                 </div>
-                
-                <div className="pt-4 border-t border-slate-200">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm font-medium text-slate-900">{icp.opportunity}</div>
-                    <div className="text-xs text-slate-500">Market potential</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Micro-Niche Benefits */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            {microNicheBenefits.map((benefit, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
-                <div className="w-12 h-12 bg-gradient-to-br from-slate-100 to-slate-200 rounded-lg flex items-center justify-center mb-4">
-                  <benefit.icon className="w-6 h-6 text-slate_blue-600" />
-                </div>
-                <h4 className="text-lg font-semibold text-slate-900 mb-2">{benefit.title}</h4>
-                <p className="text-slate-600 text-sm">{benefit.description}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <div className="inline-block bg-white rounded-xl p-8 shadow-lg border border-slate-200">
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Does Your SaaS Fit These Profiles?</h3>
-              <p className="text-slate-600 mb-6 max-w-2xl">
-                If your B2B SaaS company operates in one of these specialized markets, you'll benefit from industry-specific insights and strategies that generic marketing consultants simply can't provide.
-              </p>
-              <button
-                onClick={handleContactCMO}
-                className="bg-gradient-to-r from-slate-600 to-slate-700 hover:from-slate-700 hover:to-slate-800 text-white px-8 py-4 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all"
-              >
-                Discuss Your Market
-              </button>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Demo Video Section */}
-      {featuredVideo && (
-        <section id="demo-video" className="py-20 bg-gradient-to-br from-dark_moss_green-900 to-pakistan_green-900">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-4xl font-bold text-white mb-4">
-              See cmoxpert in Action
-            </h2>
-            <p className="text-xl text-cornsilk-200 mb-8">
-              Watch how AI-powered market intelligence transforms strategic decision-making
-            </p>
-            
-            <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
-              <div className="aspect-video bg-slate-900 rounded-lg overflow-hidden relative">
-                <video
-                  src={featuredVideo.url}
-                  controls
-                  className="w-full h-full object-cover"
-                  onPlay={handleVideoPlay}
-                  poster="/api/placeholder/800/450"
-                >
-                  Your browser does not support the video tag.
-                </video>
-                
-                <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm">
-                  {featuredVideo.views_count} views
-                </div>
+        {/* Demo Video Section */}
+        {featuredVideo && (
+          <section className="py-20 bg-white" aria-labelledby="demo-heading">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center mb-12">
+                <h2 id="demo-heading" className="text-4xl font-bold text-charcoal-900 mb-4">
+                  See cmoxpert in Action
+                </h2>
+                <p className="text-xl text-charcoal-600 max-w-3xl mx-auto">
+                  Watch how AI-powered market intelligence transforms strategic decision-making for B2B SaaS companies.
+                </p>
               </div>
               
-              <div className="mt-6 text-left">
-                <h3 className="text-xl font-semibold text-white mb-2">{featuredVideo.title}</h3>
-                {featuredVideo.description && (
-                  <p className="text-cornsilk-200">{featuredVideo.description}</p>
-                )}
+              <div className="bg-white rounded-2xl shadow-2xl border border-cream-200 p-8">
+                <div className="aspect-video bg-charcoal-900 rounded-xl overflow-hidden relative">
+                  <video
+                    src={featuredVideo.url}
+                    controls
+                    className="w-full h-full object-cover"
+                    onPlay={handleVideoPlay}
+                    poster="/api/placeholder/800/450"
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                  
+                  <div className="absolute bottom-4 left-4 bg-black/70 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm">
+                    <Eye className="w-3 h-3 inline mr-1" />
+                    {featuredVideo.views_count} views
+                  </div>
+                </div>
+                
+                <div className="mt-6 text-center">
+                  <h3 className="text-xl font-bold text-charcoal-900 mb-2">{featuredVideo.title}</h3>
+                  {featuredVideo.description && (
+                    <p className="text-charcoal-600">{featuredVideo.description}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Social Proof Section */}
+        <section className="py-20 bg-cornsilk-50" aria-labelledby="testimonials-heading">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 id="testimonials-heading" className="text-4xl font-bold text-charcoal-900 mb-4">
+                Trusted by Marketing Leaders
+              </h2>
+              <p className="text-xl text-charcoal-600 max-w-3xl mx-auto">
+                See how B2B SaaS companies are using cmoxpert to accelerate growth and outmaneuver competitors.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="bg-white rounded-xl p-8 shadow-lg border border-cream-200 hover:shadow-xl transition-shadow duration-300">
+                  <div className="flex items-center mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 text-tan-500 fill-current" />
+                    ))}
+                  </div>
+                  
+                  <blockquote className="text-charcoal-700 mb-6 leading-relaxed">
+                    "{testimonial.content}"
+                  </blockquote>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-gradient-to-br from-slate_blue-500 to-charcoal-600 rounded-full flex items-center justify-center text-white font-bold mr-4">
+                        {testimonial.avatar}
+                      </div>
+                      <div>
+                        <div className="font-bold text-charcoal-900">{testimonial.name}</div>
+                        <div className="text-sm text-charcoal-600">{testimonial.role}</div>
+                        <div className="text-xs text-charcoal-500">{testimonial.company}</div>
+                      </div>
+                    </div>
+                    
+                    <div className="text-right">
+                      <div className="text-sm font-bold text-slate_blue-700">{testimonial.metric}</div>
+                      <div className="text-xs text-charcoal-500">improvement</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Platform Preview Section */}
+        <section className="py-20 bg-white" aria-labelledby="platform-heading">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 id="platform-heading" className="text-4xl font-bold text-charcoal-900 mb-4">
+                Built for Modern Marketing Teams
+              </h2>
+              <p className="text-xl text-charcoal-600 max-w-3xl mx-auto">
+                Intuitive interface designed for strategic thinking, not just data consumption. Access insights across all devices.
+              </p>
+            </div>
+
+            {/* Device Mockups */}
+            <div className="relative">
+              <div className="grid lg:grid-cols-3 gap-8 items-end">
+                {/* Desktop */}
+                <div className="lg:col-span-2">
+                  <div className="bg-charcoal-900 rounded-t-xl p-2">
+                    <div className="bg-white rounded-lg p-6 min-h-[300px]">
+                      <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-bold text-charcoal-900">Competitive Analysis</h3>
+                        <div className="flex space-x-1">
+                          <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                          <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between p-3 bg-slate_blue-50 rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-slate_blue-100 rounded-full flex items-center justify-center">
+                              <Globe className="w-4 h-4 text-slate_blue-700" />
+                            </div>
+                            <div>
+                              <div className="font-medium text-charcoal-900">Competitor A</div>
+                              <div className="text-xs text-charcoal-500">competitor-a.com</div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-sm font-bold text-charcoal-900">+23%</div>
+                            <div className="text-xs text-green-600">Traffic growth</div>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between p-3 bg-tan-50 rounded-lg">
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-tan-100 rounded-full flex items-center justify-center">
+                              <Globe className="w-4 h-4 text-tan-700" />
+                            </div>
+                            <div>
+                              <div className="font-medium text-charcoal-900">Competitor B</div>
+                              <div className="text-xs text-charcoal-500">competitor-b.com</div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-sm font-bold text-charcoal-900">-8%</div>
+                            <div className="text-xs text-red-600">Traffic decline</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-charcoal-800 h-6 rounded-b-xl flex items-center justify-center">
+                    <Monitor className="w-4 h-4 text-charcoal-400" />
+                  </div>
+                </div>
+
+                {/* Mobile */}
+                <div className="mx-auto">
+                  <div className="bg-charcoal-900 rounded-t-2xl p-2 w-48">
+                    <div className="bg-white rounded-lg p-4 min-h-[200px]">
+                      <div className="text-center mb-4">
+                        <h3 className="font-bold text-charcoal-900 text-sm">Mobile Dashboard</h3>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="bg-slate_blue-50 rounded p-2">
+                          <div className="text-xs font-medium text-charcoal-900">Market Share</div>
+                          <div className="text-lg font-bold text-slate_blue-700">23.4%</div>
+                        </div>
+                        <div className="bg-tan-50 rounded p-2">
+                          <div className="text-xs font-medium text-charcoal-900">Alerts</div>
+                          <div className="text-lg font-bold text-tan-700">7 new</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-charcoal-800 h-4 rounded-b-2xl flex items-center justify-center">
+                    <Smartphone className="w-3 h-3 text-charcoal-400" />
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </section>
-      )}
 
-      {/* Testimonials Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
-              What Marketing Leaders Say
+        {/* Features Detail Section */}
+        <section className="py-20 bg-cornsilk-50" aria-labelledby="features-detail-heading">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 id="features-detail-heading" className="text-4xl font-bold text-charcoal-900 mb-4">
+                Complete Marketing Intelligence Suite
+              </h2>
+              <p className="text-xl text-charcoal-600 max-w-3xl mx-auto">
+                Every tool you need to make data-driven marketing decisions and stay ahead of the competition.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {features.map((feature, index) => (
+                <div key={index} className="bg-white rounded-xl p-8 shadow-lg border border-cream-200 hover:shadow-xl transition-shadow duration-300">
+                  <div className="w-12 h-12 bg-gradient-to-br from-slate_blue-100 to-charcoal-100 rounded-lg flex items-center justify-center mb-6">
+                    <feature.icon className="w-6 h-6 text-slate_blue-700" />
+                  </div>
+                  <h3 className="text-xl font-bold text-charcoal-900 mb-4">{feature.title}</h3>
+                  <p className="text-charcoal-600 mb-6 leading-relaxed">{feature.description}</p>
+                  
+                  <ul className="space-y-2">
+                    {feature.benefits.map((benefit, idx) => (
+                      <li key={idx} className="flex items-center text-sm text-charcoal-600">
+                        <CheckCircle className="w-4 h-4 text-slate_blue-600 mr-3 flex-shrink-0" />
+                        {benefit}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="py-20 bg-gradient-to-br from-slate_blue-600 to-charcoal-800" aria-labelledby="cta-heading">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 id="cta-heading" className="text-4xl font-bold text-white mb-6">
+              Ready to Transform Your Marketing Strategy?
             </h2>
-            <p className="text-xl text-slate-600">
-              Real results from B2B SaaS companies using cmoxpert
+            <p className="text-xl text-slate_blue-100 mb-8 max-w-3xl mx-auto">
+              Join 150+ B2B SaaS companies using AI-powered market intelligence to outmaneuver competitors and accelerate growth.
             </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-xl transition-shadow">
-                <div className="flex items-center mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-tan-500 fill-current" />
-                  ))}
+            
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 mb-8">
+              <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+                <div className="flex gap-4">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your work email"
+                    className="flex-1 px-4 py-3 rounded-lg border border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-white/50"
+                    required
+                  />
+                  <button
+                    type="submit"
+                    className="bg-gradient-to-r from-tan-600 to-olive-600 hover:from-tan-700 hover:to-olive-700 text-white px-6 py-3 rounded-lg font-semibold shadow-xl hover:shadow-2xl transition-all"
+                  >
+                    Get Demo
+                  </button>
                 </div>
-                
-                <p className="text-slate-600 mb-6 italic">"{testimonial.content}"</p>
-                
-                <div className="flex items-center">
-                  <div className="w-12 h-12 bg-gradient-to-br from-slate_blue-500 to-charcoal-600 rounded-full flex items-center justify-center text-white font-semibold mr-4">
-                    {testimonial.avatar}
-                  </div>
-                  <div>
-                    <div className="font-semibold text-slate-900">{testimonial.name}</div>
-                    <div className="text-sm text-slate-500">{testimonial.role}</div>
-                  </div>
-                </div>
+              </form>
+            </div>
+            
+            <div className="flex flex-wrap justify-center gap-8 text-sm text-slate_blue-200">
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-4 h-4 text-tan-300" />
+                <span>Free 14-day trial</span>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-charcoal-900 via-slate_blue-800 to-slate_blue-900">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">
-            Ready to Turn Market Data Into Strategic Advantage?
-          </h2>
-          <p className="text-xl text-cornsilk-200 mb-8">
-            Join 150+ B2B SaaS companies using AI-powered market intelligence to outmaneuver competitors and accelerate growth.
-          </p>
-          
-          <form onSubmit={handleSubmit} className="max-w-md mx-auto mb-8">
-            <div className="flex gap-4">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-lg border border-white/20 bg-white/10 backdrop-blur-sm text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-white/50"
-                required
-              />
-              <button
-                type="submit"
-                className="bg-gradient-to-r from-tan-600 to-olive-600 hover:from-tan-700 hover:to-olive-700 text-white px-6 py-3 rounded-lg font-semibold shadow-xl hover:shadow-2xl transition-all"
-              >
-                Get Started
-              </button>
-            </div>
-          </form>
-          
-          <div className="flex items-center justify-center space-x-8 text-sm text-cornsilk-300">
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-tan-300" />
-              <span>Free strategy session</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-tan-300" />
-              <span>No commitment required</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <CheckCircle className="w-4 h-4 text-tan-300" />
-              <span>Results in 5 minutes</span>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-4 h-4 text-tan-300" />
+                <span>No credit card required</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="w-4 h-4 text-tan-300" />
+                <span>Setup in 5 minutes</span>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       {/* Footer */}
-      <footer className="bg-charcoal-900 text-white py-12">
+      <footer className="bg-charcoal-900 text-white py-16" role="contentinfo">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <div className="flex items-center space-x-3 mb-4">
+              <div className="flex items-center space-x-3 mb-6">
                 <BrandLogo />
                 <div>
                   <h3 className="text-lg font-bold">cmoxpert</h3>
-                  <p className="text-xs text-slate-400">AI Marketing Co-Pilot</p>
+                  <p className="text-xs text-charcoal-400">AI Marketing Co-Pilot</p>
                 </div>
               </div>
-              <p className="text-slate-400 text-sm">
-                AI-powered marketing intelligence for B2B SaaS companies ready to outmaneuver competitors.
+              <p className="text-charcoal-400 text-sm leading-relaxed">
+                AI-powered marketing intelligence platform designed for B2B SaaS companies ready to outmaneuver competitors and accelerate growth.
               </p>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Product</h4>
-              <ul className="space-y-2 text-sm text-slate-400">
-                <li><Link to="/features" className="hover:text-white transition-colors">Features</Link></li>
-                <li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-                <li><Link to="/integrations" className="hover:text-white transition-colors">Integrations</Link></li>
-              </ul>
+              <h4 className="font-bold text-white mb-4">Platform</h4>
+              <nav role="navigation" aria-label="Platform links">
+                <ul className="space-y-3 text-sm text-charcoal-400">
+                  <li><Link to="/features" className="hover:text-white transition-colors">Features</Link></li>
+                  <li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                  <li><Link to="/integrations" className="hover:text-white transition-colors">Integrations</Link></li>
+                  <li><Link to="/security" className="hover:text-white transition-colors">Security</Link></li>
+                </ul>
+              </nav>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <ul className="space-y-2 text-sm text-slate-400">
-                <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
-                <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-                <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
-                <li><Link to="/terms" className="hover:text-white transition-colors">Terms</Link></li>
-              </ul>
+              <h4 className="font-bold text-white mb-4">Resources</h4>
+              <nav role="navigation" aria-label="Resource links">
+                <ul className="space-y-3 text-sm text-charcoal-400">
+                  <li><Link to="/docs" className="hover:text-white transition-colors">Documentation</Link></li>
+                  <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                  <li><Link to="/case-studies" className="hover:text-white transition-colors">Case Studies</Link></li>
+                  <li><Link to="/support" className="hover:text-white transition-colors">Support</Link></li>
+                </ul>
+              </nav>
             </div>
             
             <div>
-              <h4 className="font-semibold mb-4">Connect</h4>
-              <ul className="space-y-2 text-sm text-slate-400">
-                <li><a href="#" className="hover:text-white transition-colors">LinkedIn</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Twitter</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-              </ul>
+              <h4 className="font-bold text-white mb-4">Company</h4>
+              <nav role="navigation" aria-label="Company links">
+                <ul className="space-y-3 text-sm text-charcoal-400">
+                  <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
+                  <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                  <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
+                  <li><Link to="/terms" className="hover:text-white transition-colors">Terms</Link></li>
+                </ul>
+              </nav>
             </div>
           </div>
           
-          <div className="border-t border-slate-800 mt-8 pt-8 text-center text-sm text-slate-400">
-            <p>&copy; 2025 cmoxpert. All rights reserved.</p>
+          <div className="border-t border-charcoal-800 pt-8 text-center">
+            <p className="text-sm text-charcoal-400">
+              &copy; 2025 cmoxpert. All rights reserved. Built for B2B SaaS marketing teams.
+            </p>
           </div>
         </div>
       </footer>
-      </main>
     </div>
   );
 }

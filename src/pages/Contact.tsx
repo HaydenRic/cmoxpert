@@ -20,7 +20,10 @@ import {
   Timer,
   Eye,
   PoundSterling,
-  Zap
+  Zap,
+  BarChart3,
+  Brain,
+  Activity
 } from 'lucide-react';
 
 export function Contact() {
@@ -43,7 +46,6 @@ export function Contact() {
     e.preventDefault();
     setLoading(true);
     
-    // Track form submission
     trackFormSubmission('contact_form', {
       project_type: formData.projectType,
       budget: formData.budget,
@@ -51,12 +53,10 @@ export function Contact() {
       company: formData.company
     });
     
-    // Simulate form submission
     setTimeout(() => {
       setSubmitted(true);
       setLoading(false);
       
-      // Track conversion
       trackEvent('contact_form_completed', {
         form_type: 'contact',
         project_type: formData.projectType
@@ -82,7 +82,7 @@ export function Contact() {
 
   const challenges = [
     'Lead generation not meeting targets',
-    'High customer acquisition costs',
+    'High customer acquisition costs', 
     'Low conversion rates',
     'Unclear marketing ROI',
     'Ineffective content strategy',
@@ -93,59 +93,62 @@ export function Contact() {
 
   const services = [
     {
-      icon: Zap,
-      title: "Strategic Planning",
-      description: "Comprehensive marketing strategy and roadmap development with transparent sprint-based delivery"
+      icon: Brain,
+      title: "AI Market Analysis",
+      description: "Comprehensive market intelligence and competitive analysis powered by advanced AI algorithms",
+      metric: "80% faster insights"
     },
     {
       icon: TrendingUp,
-      title: "Growth Optimization",
-      description: "Revenue growth acceleration and funnel optimization with documented processes and clear metrics"
+      title: "Growth Strategy",
+      description: "Data-driven growth strategies with clear metrics and performance tracking for measurable results",
+      metric: "3.2x average ROI"
     },
     {
       icon: Target,
-      title: "Team Leadership",
-      description: "Marketing team guidance and capability building with 'look over my shoulder' transparency"
+      title: "Strategic Consulting",
+      description: "Expert marketing guidance with transparent processes and direct access to senior-level expertise",
+      metric: "Direct expert access"
     }
   ];
 
-  const antiAgencyValue = [
+  const valueProps = [
     {
       icon: UserCheck,
       title: "Direct Expert Access",
-      description: "You work directly with me – no junior staff, no account managers, no diluted communication"
+      description: "Work directly with senior marketing strategists – no junior staff or account managers"
     },
     {
       icon: Shield,
-      title: "Radical Transparency",
-      description: "Every decision documented, every process visible, complete pricing clarity upfront"
+      title: "Transparent Pricing",
+      description: "Clear, upfront pricing with no hidden fees or surprise charges"
     },
     {
       icon: Timer,
-      title: "Sprint-Based Delivery",
-      description: "Focused 2-week engagements with specific deliverables and measurable outcomes"
+      title: "Rapid Implementation",
+      description: "See results in weeks, not months, with our proven sprint-based methodology"
     },
     {
-      icon: Eye,
-      title: "Process Visibility",
-      description: "Watch me work through challenges with recorded sessions and live collaboration"
+      icon: BarChart3,
+      title: "Data-Driven Results",
+      description: "Every recommendation backed by real market data and competitive intelligence"
     }
   ];
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-cornsilk-50 via-cornsilk-100 to-cornsilk-200 flex items-center justify-center p-4">
-        <div className="max-w-md w-full bg-white rounded-xl shadow-2xl p-8 text-center">
-          <div className="w-16 h-16 bg-pakistan_green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle className="w-8 h-8 text-pakistan_green-600" />
+      <div className="min-h-screen bg-cornsilk-50 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-xl shadow-2xl p-8 text-center border border-cream-200">
+          <div className="w-16 h-16 bg-slate_blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <CheckCircle className="w-8 h-8 text-slate_blue-600" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Thank You!</h2>
-          <p className="text-slate-600 mb-6">
-            Your inquiry has been received. I'll personally review your requirements and get back to you within 24 hours to discuss how we can accelerate your marketing results together.
+          <h2 className="text-2xl font-bold text-charcoal-900 mb-4">Thank You!</h2>
+          <p className="text-charcoal-600 mb-6 leading-relaxed">
+            Your inquiry has been received. I'll personally review your requirements and get back to you within 24 hours to discuss how we can accelerate your marketing results.
           </p>
           <Link 
             to="/"
-            className="bg-gradient-to-r from-dark_moss_green-600 to-pakistan_green-600 hover:from-dark_moss_green-700 hover:to-pakistan_green-700 text-white px-6 py-3 rounded-lg font-medium transition-all"
+            className="bg-gradient-to-r from-slate_blue-600 to-charcoal-700 hover:from-slate_blue-700 hover:to-charcoal-800 text-white px-6 py-3 rounded-lg font-semibold transition-all shadow-lg hover:shadow-xl"
           >
             Return to Homepage
           </Link>
@@ -155,355 +158,489 @@ export function Contact() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cornsilk-50 via-cornsilk-100 to-cornsilk-200">
+    <div className="min-h-screen bg-cornsilk-50">
+      {/* Skip to main content link */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-charcoal-900 text-white px-4 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+      >
+        Skip to main content
+      </a>
+
       {/* Header */}
-      <header className="bg-white/95 backdrop-blur-sm border-b border-slate-200">
+      <header className="bg-white/95 backdrop-blur-sm border-b border-cream-200" role="banner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+          <div className="flex items-center justify-between h-20">
             <Link to="/" className="flex items-center space-x-3">
               <BrandLogo />
               <div>
-                <h1 className="text-xl font-bold text-slate-900">cmoxpert</h1>
-                <p className="text-xs text-slate-500">AI Marketing Co-Pilot</p>
+                <h1 className="text-xl font-bold text-charcoal-900">cmoxpert</h1>
+                <p className="text-xs text-slate_blue-600">AI Marketing Co-Pilot</p>
               </div>
             </Link>
             
-            <Link 
-              to="/" 
-              className="text-slate-600 hover:text-slate-900 font-medium flex items-center space-x-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              <span>Back to Home</span>
-            </Link>
+            <nav className="flex items-center space-x-6" role="navigation" aria-label="Header navigation">
+              <Link 
+                to="/" 
+                className="text-charcoal-600 hover:text-charcoal-900 font-medium flex items-center space-x-2 transition-colors"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back to Home</span>
+              </Link>
+            </nav>
           </div>
         </div>
       </header>
 
       <main id="main-content" role="main" tabIndex={-1}>
-      <div className="pt-16 pb-20">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Hero Section */}
-          <div className="text-center mb-16">
-            <h1 className="text-5xl font-bold text-slate-900 mb-6">
-              Skip the Agency Overhead.<br/>
-              <span className="bg-gradient-to-r from-tiger_s_eye-600 to-earth_yellow-600 bg-clip-text text-transparent">Get Direct Expert Access.</span>
-            </h1>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-8">
-              Partner with a fractional CMO who combines 15+ years of strategic expertise with AI-powered insights. Expect transparent, results-driven marketing leadership. There's no junior staff, no hidden fees, and no lengthy contracts.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-slate-500">
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="w-4 h-4 text-pakistan_green-600" />
-                <span>Direct access guaranteed</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="w-4 h-4 text-pakistan_green-600" />
-                <span>Sprint-based delivery</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <CheckCircle className="w-4 h-4 text-pakistan_green-600" />
-                <span>Radical transparency</span>
+        {/* Hero Section */}
+        <section className="pt-20 pb-16 bg-white" aria-labelledby="contact-hero-heading">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h1 id="contact-hero-heading" className="text-5xl font-bold text-charcoal-900 mb-6 leading-tight">
+                Get Strategic Marketing Intelligence
+                <span className="block text-slate_blue-600">That Drives Results</span>
+              </h1>
+              <p className="text-xl text-charcoal-600 max-w-4xl mx-auto mb-8 leading-relaxed">
+                Partner with AI-powered marketing intelligence designed for B2B SaaS companies. Get the strategic insights you need to outmaneuver competitors and accelerate growth.
+              </p>
+              <div className="flex flex-wrap justify-center gap-6 text-sm text-charcoal-500">
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-slate_blue-600" />
+                  <span>Free strategy consultation</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-slate_blue-600" />
+                  <span>Custom demo available</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-4 h-4 text-slate_blue-600" />
+                  <span>Results in 24 hours</span>
+                </div>
               </div>
             </div>
           </div>
+        </section>
 
-          {/* Anti-Agency Benefits */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-slate-900 text-center mb-12">Why Choose the Anti-Agency Approach?</h2>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {antiAgencyValue.map((benefit, index) => (
-                <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-slate-200">
-                  <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center mb-4">
-                    <benefit.icon className="w-6 h-6 text-dark_moss_green-700" />
+        {/* Value Proposition Cards */}
+        <section className="py-16 bg-cornsilk-50" aria-labelledby="value-props-heading">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 id="value-props-heading" className="text-3xl font-bold text-charcoal-900 text-center mb-12">
+              Why Marketing Teams Choose cmoxpert
+            </h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {valueProps.map((prop, index) => (
+                <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-cream-200 text-center hover:shadow-xl transition-shadow duration-300">
+                  <div className="w-12 h-12 bg-gradient-to-br from-slate_blue-100 to-charcoal-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                    <prop.icon className="w-6 h-6 text-slate_blue-700" />
                   </div>
-                  <h3 className="text-lg font-semibold text-slate-900 mb-2">{benefit.title}</h3>
-                  <p className="text-slate-600 text-sm">{benefit.description}</p>
+                  <h3 className="text-lg font-bold text-charcoal-900 mb-3">{prop.title}</h3>
+                  <p className="text-charcoal-600 text-sm leading-relaxed">{prop.description}</p>
                 </div>
               ))}
             </div>
           </div>
+        </section>
 
-          <div className="grid lg:grid-cols-2 gap-12">
-            {/* Services Overview */}
-            <div>
-              <h2 className="text-3xl font-bold text-slate-900 mb-8">How I Help B2B SaaS Companies</h2>
-              
-              <div className="space-y-6 mb-8">
-                {services.map((service, index) => (
-                  <div key={index} className="flex space-x-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-earth_yellow-100 to-tiger_s_eye-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <service.icon className="w-6 h-6 text-dark_moss_green-700" />
+        {/* Services & Contact Form */}
+        <section className="py-20 bg-white" aria-labelledby="contact-form-heading">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid lg:grid-cols-2 gap-16">
+              {/* Services Overview */}
+              <div className="space-y-8">
+                <div>
+                  <h2 id="contact-form-heading" className="text-3xl font-bold text-charcoal-900 mb-6">
+                    How We Accelerate Your Growth
+                  </h2>
+                  <p className="text-lg text-charcoal-600 leading-relaxed">
+                    Our AI-powered platform combines advanced market intelligence with strategic expertise to deliver actionable insights that drive measurable results.
+                  </p>
+                </div>
+                
+                <div className="space-y-6">
+                  {services.map((service, index) => (
+                    <div key={index} className="bg-cornsilk-50 rounded-xl p-6 border border-cream-200">
+                      <div className="flex items-start space-x-4">
+                        <div className="w-12 h-12 bg-gradient-to-br from-slate_blue-100 to-charcoal-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <service.icon className="w-6 h-6 text-slate_blue-700" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between mb-2">
+                            <h3 className="text-xl font-bold text-charcoal-900">{service.title}</h3>
+                            <span className="text-xs font-medium text-slate_blue-700 bg-slate_blue-50 px-2 py-1 rounded-full">
+                              {service.metric}
+                            </span>
+                          </div>
+                          <p className="text-charcoal-600 leading-relaxed">{service.description}</p>
+                        </div>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="text-xl font-semibold text-slate-900 mb-2">{service.title}</h3>
-                      <p className="text-slate-600">{service.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
 
-              <div className="bg-gradient-to-r from-earth_yellow-50 to-tiger_s_eye-50 rounded-xl p-6 border border-earth_yellow-100">
-                <h3 className="text-lg font-semibold text-slate-900 mb-3">Typical Engagement Results</h3>
-                <div className="grid grid-cols-2 gap-4 text-sm">
-                  <div>
-                    <div className="text-2xl font-bold text-dark_moss_green-700">3.2x</div>
-                    <div className="text-slate-600">Average ROI improvement</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-dark_moss_green-700">65%</div>
-                    <div className="text-slate-600">Conversion rate increase</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-dark_moss_green-700">40%</div>
-                    <div className="text-slate-600">Faster growth velocity</div>
-                  </div>
-                  <div>
-                    <div className="text-2xl font-bold text-dark_moss_green-700">90%</div>
-                    <div className="text-slate-600">Client satisfaction rate</div>
+                {/* Results Preview */}
+                <div className="bg-gradient-to-br from-slate_blue-50 to-charcoal-50 rounded-xl p-6 border border-slate_blue-100">
+                  <h3 className="text-lg font-bold text-charcoal-900 mb-4 flex items-center">
+                    <Activity className="w-5 h-5 mr-2 text-slate_blue-600" />
+                    Typical Engagement Results
+                  </h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-slate_blue-700">3.2x</div>
+                      <div className="text-sm text-charcoal-600">ROI Improvement</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-slate_blue-700">80%</div>
+                      <div className="text-sm text-charcoal-600">Time Saved</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-slate_blue-700">65%</div>
+                      <div className="text-sm text-charcoal-600">Conversion Increase</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-2xl font-bold text-slate_blue-700">24h</div>
+                      <div className="text-sm text-charcoal-600">Response Time</div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="mt-8 p-6 bg-gradient-to-r from-cornsilk-50 to-cornsilk-100 rounded-xl border border-cornsilk-200">
-                <h3 className="text-lg font-semibold text-slate-900 mb-3 flex items-center">
-                  <Shield className="w-5 h-5 mr-2 text-dark_moss_green-600" />
-                  Transparent Pricing Promise
-                </h3>
-                <p className="text-slate-700 text-sm">
-                  We offer project-based pricing with clear deliverables. You'll find no hidden fees or surprise charges. 
-                  Sprint engagements start at £4K, with specific outcomes defined upfront. 
-                  You'll always know what to expect and when.
-                </p>
+              {/* Contact Form */}
+              <div className="bg-white rounded-2xl shadow-2xl border border-cream-200 p-8">
+                <div className="mb-8">
+                  <h2 className="text-2xl font-bold text-charcoal-900 mb-3">Request Your Strategy Demo</h2>
+                  <p className="text-charcoal-600">
+                    Get a personalized demo showing how cmoxpert can accelerate your marketing results with AI-powered insights.
+                  </p>
+                </div>
+                
+                <form onSubmit={handleSubmit} className="space-y-6" role="form" aria-label="Contact form">
+                  <fieldset>
+                    <legend className="sr-only">Contact Information</legend>
+                    
+                    {/* Basic Information */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                      <div>
+                        <label className="block text-sm font-semibold text-charcoal-700 mb-2">
+                          Full Name <span className="text-red-500" aria-label="required">*</span>
+                        </label>
+                        <div className="relative">
+                          <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+                          <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            className="w-full pl-10 pr-4 py-3 border border-cream-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-slate_blue-500 transition-all"
+                            placeholder="John Smith"
+                            required
+                          />
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-semibold text-charcoal-700 mb-2">
+                          Work Email <span className="text-red-500" aria-label="required">*</span>
+                        </label>
+                        <div className="relative">
+                          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleInputChange}
+                            className="w-full pl-10 pr-4 py-3 border border-cream-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-slate_blue-500 transition-all"
+                            placeholder="john@company.com"
+                            required
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                      <div>
+                        <label className="block text-sm font-semibold text-charcoal-700 mb-2">
+                          Company Name <span className="text-red-500" aria-label="required">*</span>
+                        </label>
+                        <div className="relative">
+                          <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+                          <input
+                            type="text"
+                            name="company"
+                            value={formData.company}
+                            onChange={handleInputChange}
+                            className="w-full pl-10 pr-4 py-3 border border-cream-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-slate_blue-500 transition-all"
+                            placeholder="Acme SaaS Ltd"
+                            required
+                          />
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-semibold text-charcoal-700 mb-2">
+                          Phone Number
+                        </label>
+                        <div className="relative">
+                          <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+                          <input
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleInputChange}
+                            className="w-full pl-10 pr-4 py-3 border border-cream-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-slate_blue-500 transition-all"
+                            placeholder="+44 20 7123 4567"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mb-6">
+                      <label className="block text-sm font-semibold text-charcoal-700 mb-2">
+                        Company Website
+                      </label>
+                      <input
+                        type="url"
+                        name="website"
+                        value={formData.website}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-3 border border-cream-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-slate_blue-500 transition-all"
+                        placeholder="https://yourcompany.com"
+                      />
+                    </div>
+                  </fieldset>
+
+                  <fieldset>
+                    <legend className="sr-only">Project Details</legend>
+                    
+                    {/* Project Details */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                      <div>
+                        <label className="block text-sm font-semibold text-charcoal-700 mb-2">
+                          Service Type
+                        </label>
+                        <select
+                          name="projectType"
+                          value={formData.projectType}
+                          onChange={handleInputChange}
+                          className="w-full px-4 py-3 border border-cream-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-slate_blue-500 transition-all"
+                        >
+                          <option value="growth-strategy">Growth Strategy</option>
+                          <option value="market-analysis">Market Analysis</option>
+                          <option value="competitive-intelligence">Competitive Intelligence</option>
+                          <option value="platform-demo">Platform Demo</option>
+                          <option value="consulting">Strategic Consulting</option>
+                        </select>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-semibold text-charcoal-700 mb-2">
+                          Budget Range
+                        </label>
+                        <div className="relative">
+                          <PoundSterling className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+                          <select
+                            name="budget"
+                            value={formData.budget}
+                            onChange={handleInputChange}
+                            className="w-full pl-10 pr-4 py-3 border border-cream-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-slate_blue-500 transition-all"
+                          >
+                            <option value="5k-10k">£5K - £10K</option>
+                            <option value="10k-25k">£10K - £25K</option>
+                            <option value="25k-50k">£25K - £50K</option>
+                            <option value="50k+">£50K+</option>
+                          </select>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-semibold text-charcoal-700 mb-2">
+                          Timeline
+                        </label>
+                        <div className="relative">
+                          <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-charcoal-400" />
+                          <select
+                            name="timeline"
+                            value={formData.timeline}
+                            onChange={handleInputChange}
+                            className="w-full pl-10 pr-4 py-3 border border-cream-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-slate_blue-500 transition-all"
+                          >
+                            <option value="immediate">Start immediately</option>
+                            <option value="1-month">Within 1 month</option>
+                            <option value="1-3-months">1-3 months</option>
+                            <option value="planning">Just exploring</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  {/* Current Challenges */}
+                  <div className="mb-6">
+                    <label className="block text-sm font-semibold text-charcoal-700 mb-3">
+                      Current Marketing Challenges (select all that apply)
+                    </label>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {challenges.map((challenge) => (
+                        <label key={challenge} className="flex items-center space-x-3 cursor-pointer p-3 rounded-lg hover:bg-cornsilk-50 transition-colors">
+                          <input
+                            type="checkbox"
+                            checked={formData.currentChallenges.includes(challenge)}
+                            onChange={() => handleChallengeToggle(challenge)}
+                            className="w-4 h-4 text-slate_blue-600 border-cream-300 rounded focus:ring-slate_blue-500"
+                          />
+                          <span className="text-sm text-charcoal-700">{challenge}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Message */}
+                  <div className="mb-8">
+                    <label className="block text-sm font-semibold text-charcoal-700 mb-2">
+                      Tell us about your goals and current situation
+                    </label>
+                    <div className="relative">
+                      <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-charcoal-400" />
+                      <textarea
+                        name="message"
+                        value={formData.message}
+                        onChange={handleInputChange}
+                        rows={4}
+                        className="w-full pl-10 pr-4 py-3 border border-cream-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-slate_blue-500 transition-all"
+                        placeholder="Describe your current marketing challenges, goals, and what success looks like for your business. We'll provide specific recommendations tailored to your situation."
+                      />
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="w-full bg-gradient-to-r from-slate_blue-600 to-charcoal-700 hover:from-slate_blue-700 hover:to-charcoal-800 disabled:opacity-50 disabled:cursor-not-allowed text-white py-4 px-6 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all"
+                  >
+                    {loading ? (
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>Sending Request...</span>
+                      </div>
+                    ) : (
+                      'Request Strategy Demo'
+                    )}
+                  </button>
+
+                  <p className="text-xs text-charcoal-500 text-center mt-4 leading-relaxed">
+                    We'll review your information and respond within 24 hours with a personalized demo and strategic recommendations for your specific situation.
+                  </p>
+                </form>
               </div>
             </div>
+          </div>
+        </section>
 
-            {/* Contact Form */}
-            <div className="bg-white rounded-xl shadow-2xl p-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-6">Let's Discuss Your Growth Goals</h2>
-              
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Basic Information */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Full Name *
-                    </label>
-                    <div className="relative">
-                      <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
-                        placeholder="John Smith"
-                        required
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Email Address *
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
-                        placeholder="john@company.com"
-                        required
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Company Name *
-                    </label>
-                    <div className="relative">
-                      <Building className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      <input
-                        type="text"
-                        name="company"
-                        value={formData.company}
-                        onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
-                        placeholder="Acme SaaS Ltd"
-                        required
-                      />
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Phone Number
-                    </label>
-                    <div className="relative">
-                      <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      <input
-                        type="tel"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
-                        placeholder="+44 20 7123 4567"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Company Website
-                  </label>
-                  <input
-                    type="url"
-                    name="website"
-                    value={formData.website}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
-                    placeholder="https://yourcompany.co.uk"
-                  />
-                </div>
-
-                {/* Project Details */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Engagement Type
-                    </label>
-                    <select
-                      name="projectType"
-                      value={formData.projectType}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
-                    >
-                      <option value="growth-strategy">Growth Strategy Sprint</option>
-                      <option value="demand-generation">Demand Generation Sprint</option>
-                      <option value="brand-positioning">Brand Positioning Sprint</option>
-                      <option value="sprint-based">Sprint-based Project</option>
-                      <option value="full-engagement">Full CMO Partnership</option>
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Budget Range
-                      <span className="text-xs text-pakistan_green-700 block">Transparent pricing</span>
-                    </label>
-                    <div className="relative">
-                      <PoundSterling className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      <select
-                        name="budget"
-                        value={formData.budget}
-                        onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
-                      >
-                        <option value="4k-8k">£4K - £8K (Sprint)</option>
-                        <option value="8k-20k">£8K - £20K/month</option>
-                        <option value="20k-40k">£20K - £40K/month</option>
-                        <option value="40k+">£40K+/month</option>
-                      </select>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
-                      Timeline
-                    </label>
-                    <div className="relative">
-                      <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                      <select
-                        name="timeline"
-                        value={formData.timeline}
-                        onChange={handleInputChange}
-                        className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
-                      >
-                        <option value="immediate">Start immediately</option>
-                        <option value="2-weeks">2-week sprint</option>
-                        <option value="1-3-months">1-3 months</option>
-                        <option value="planning">Just planning</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Current Challenges */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-3">
-                    Current Marketing Challenges (select all that apply)
-                  </label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                    {challenges.map((challenge) => (
-                      <label key={challenge} className="flex items-center space-x-2 cursor-pointer">
-                        <input
-                          type="checkbox"
-                          checked={formData.currentChallenges.includes(challenge)}
-                          onChange={() => handleChallengeToggle(challenge)}
-                          className="w-4 h-4 text-dark_moss_green-600 border-slate-300 rounded focus:ring-dark_moss_green-500"
-                        />
-                        <span className="text-sm text-slate-700">{challenge}</span>
-                      </label>
+        {/* Trust Indicators */}
+        <section className="py-16 bg-cornsilk-50" aria-labelledby="trust-heading">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 id="trust-heading" className="text-3xl font-bold text-charcoal-900 text-center mb-12">
+              Trusted by Leading B2B SaaS Companies
+            </h2>
+            
+            <div className="grid md:grid-cols-3 gap-8">
+              {testimonials.map((testimonial, index) => (
+                <div key={index} className="bg-white rounded-xl p-6 shadow-lg border border-cream-200 hover:shadow-xl transition-shadow duration-300">
+                  <div className="flex items-center mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 text-tan-500 fill-current" />
                     ))}
                   </div>
-                </div>
-
-                {/* Message */}
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
-                    Tell me about your goals and current situation
-                  </label>
-                  <div className="relative">
-                    <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
-                    <textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      rows={4}
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
-                      placeholder="Describe your current marketing challenges, goals, and what success looks like for your business. I'll personally review your situation and provide specific recommendations."
-                      aria-describedby="message-help"
-                    />
-                    <div id="message-help" className="sr-only">
-                      Provide details about your marketing goals and challenges for personalized recommendations
+                  
+                  <blockquote className="text-charcoal-700 mb-6 leading-relaxed">
+                    "{testimonial.content}"
+                  </blockquote>
+                  
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <div className="w-12 h-12 bg-gradient-to-br from-slate_blue-500 to-charcoal-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
+                        {testimonial.avatar}
+                      </div>
+                      <div>
+                        <div className="font-bold text-charcoal-900">{testimonial.name}</div>
+                        <div className="text-sm text-charcoal-600">{testimonial.role}</div>
+                        <div className="text-xs text-charcoal-500">{testimonial.company}</div>
+                      </div>
+                    </div>
+                    
+                    <div className="text-right">
+                      <div className="text-sm font-bold text-slate_blue-700">{testimonial.metric}</div>
+                      <div className="text-xs text-charcoal-500">achieved</div>
                     </div>
                   </div>
                 </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-full bg-gradient-to-r from-tiger_s_eye-600 to-earth_yellow-600 hover:from-tiger_s_eye-700 hover:to-earth_yellow-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-4 px-6 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all"
-                  aria-describedby="submit-help"
-                >
-                  {loading ? (
-                    <div className="flex items-center justify-center space-x-2">
-                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                      <span>Sending...</span>
-                    </div>
-                  ) : (
-                    'Schedule Direct Strategy Discussion'
-                  )}
-                </button>
-                <div id="submit-help" className="sr-only">
-                  Submit your information to schedule a direct strategy discussion
-                </div>
-
-                <p className="text-xs text-slate-500 text-center">
-                  Direct access guaranteed. I personally review every inquiry and respond within 24 hours with specific recommendations for your situation.
-                </p>
-              </form>
+              ))}
             </div>
           </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-charcoal-900 text-white py-16" role="contentinfo">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            <div>
+              <div className="flex items-center space-x-3 mb-6">
+                <BrandLogo />
+                <div>
+                  <h3 className="text-lg font-bold">cmoxpert</h3>
+                  <p className="text-xs text-charcoal-400">AI Marketing Co-Pilot</p>
+                </div>
+              </div>
+              <p className="text-charcoal-400 text-sm leading-relaxed">
+                AI-powered marketing intelligence platform designed for B2B SaaS companies ready to outmaneuver competitors and accelerate growth.
+              </p>
+            </div>
+            
+            <div>
+              <h4 className="font-bold text-white mb-4">Platform</h4>
+              <nav role="navigation" aria-label="Platform links">
+                <ul className="space-y-3 text-sm text-charcoal-400">
+                  <li><Link to="/features" className="hover:text-white transition-colors">Features</Link></li>
+                  <li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
+                  <li><Link to="/integrations" className="hover:text-white transition-colors">Integrations</Link></li>
+                  <li><Link to="/security" className="hover:text-white transition-colors">Security</Link></li>
+                </ul>
+              </nav>
+            </div>
+            
+            <div>
+              <h4 className="font-bold text-white mb-4">Resources</h4>
+              <nav role="navigation" aria-label="Resource links">
+                <ul className="space-y-3 text-sm text-charcoal-400">
+                  <li><Link to="/docs" className="hover:text-white transition-colors">Documentation</Link></li>
+                  <li><Link to="/blog" className="hover:text-white transition-colors">Blog</Link></li>
+                  <li><Link to="/case-studies" className="hover:text-white transition-colors">Case Studies</Link></li>
+                  <li><Link to="/support" className="hover:text-white transition-colors">Support</Link></li>
+                </ul>
+              </nav>
+            </div>
+            
+            <div>
+              <h4 className="font-bold text-white mb-4">Company</h4>
+              <nav role="navigation" aria-label="Company links">
+                <ul className="space-y-3 text-sm text-charcoal-400">
+                  <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
+                  <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                  <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
+                  <li><Link to="/terms" className="hover:text-white transition-colors">Terms</Link></li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+          
+          <div className="border-t border-charcoal-800 pt-8 text-center">
+            <p className="text-sm text-charcoal-400">
+              &copy; 2025 cmoxpert. All rights reserved. Built for B2B SaaS marketing teams.
+            </p>
           </div>
         </div>
-      </main>
+      </footer>
     </div>
   );
 }
