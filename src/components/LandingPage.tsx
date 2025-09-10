@@ -268,13 +268,7 @@ export function LandingPage() {
       <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-cream-200" role="banner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            <div className="flex items-center space-x-3">
-              <BrandLogo />
-              <div>
-                <h1 className="text-xl font-bold text-charcoal-900">cmoxpert</h1>
-                <p className="text-xs text-slate_blue-600">AI Marketing Co-Pilot</p>
-              </div>
-            </div>
+            <BrandLogo />
             
             <nav className="flex items-center space-x-6" role="navigation" aria-label="Header navigation">
               <Link 
