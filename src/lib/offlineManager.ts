@@ -166,14 +166,15 @@ export class OfflineManager {
     return this.pendingOperations.length;
   }
 
-  static getStorageUsage(): { used: number; total: number } {
+  static getStorageUsage(): { used: number; total: number; percentage: number } {
     try {
       const storage = localStorage.getItem('cmoxpert_offline_data');
       const used = storage ? storage.length : 0;
       const total = 5 * 1024 * 1024; // 5MB
-      return { used, total };
+      const percentage = (used / total) * 100;
+      return { used, total, percentage };
     } catch {
-      return { used: 0, total: 5 * 1024 * 1024 };
+      return { used: 0, total: 5 * 1024 * 1024, percentage: 0 };
     }
   }
 
@@ -200,7 +201,7 @@ export class OfflineManager {
     this.pendingOperations = [];
   }
 
-  static getCachedData(key: string): any | null {
+  static getCachedData<T>(key: string): T | null {
     return OfflineStorage.load(key);
   }
 

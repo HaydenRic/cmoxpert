@@ -1,82 +1,5 @@
-// Re-export from new modular error handling system
-export * from './errorTypes';
-export * from './errorHandler';
-export * from './offlineManager';
-export * from './validationUtils';
-
-export * from './offlineManager';
-export * from './validationUtils';
-
-// Network monitoring utility
-export class NetworkMonitor {
-  private static instance: NetworkMonitor;
-  private isOnline = navigator.onLine;
-  private listeners: ((isOnline: boolean) => void)[] = [];
-
-  static init(): NetworkMonitor {
-    if (!this.instance) {
-      this.instance = new NetworkMonitor();
-    }
-    return this.instance;
-  }
-
-  private constructor() {
-    window.addEventListener('online', () => {
-      this.isOnline = true;
-      this.notifyListeners();
-    });
-
-    window.addEventListener('offline', () => {
-      this.isOnline = false;
-      this.notifyListeners();
-    });
-  }
-
-  static get isOnline(): boolean {
-    return this.init().isOnline;
-  }
-
-  static addListener(callback: (isOnline: boolean) => void): void {
-    this.init().listeners.push(callback);
-  }
-
-  static removeListener(callback: (isOnline: boolean) => void): void {
-    const instance = this.init();
-    instance.listeners = instance.listeners.filter(listener => listener !== callback);
-  }
-
-  private notifyListeners(): void {
-    this.listeners.forEach(listener => listener(this.isOnline));
-  }
-}
-
-// Error types
-export enum ErrorType {
-  NETWORK = 'NETWORK',
-  VALIDATION = 'VALIDATION',
-  AUTHENTICATION = 'AUTHENTICATION',
-  AUTHORIZATION = 'AUTHORIZATION',
-  NOT_FOUND = 'NOT_FOUND',
-  SERVER = 'SERVER',
-  CLIENT = 'CLIENT',
-  UNKNOWN = 'UNKNOWN'
-}
-
-export enum ErrorSeverity {
-  LOW = 'LOW',
-  MEDIUM = 'MEDIUM',
-  HIGH = 'HIGH',
-  CRITICAL = 'CRITICAL'
-}
-
-export interface AppError extends Error {
-  type: ErrorType;
-  severity: ErrorSeverity;
-  userMessage: string;
-  retryable: boolean;
-  action?: string;
-  context?: Record<string, any>;
-}
+import { AppError, ErrorType, ErrorSeverity } from './errorTypes';
+import { NetworkMonitor } from './offlineManager';
 
 // Error reporting function (placeholder)
 const reportError = (error: any, context: any) => {
@@ -149,35 +72,38 @@ export class ErrorHandler {
       retryable = false;
       action = 'login';
     } else if (error?.status === 403) {
-      type = ErrorType.AUTHORIZATION;
+      type = ErrorType.PERMISSION;
       severity = ErrorSeverity.MEDIUM;
       userMessage = 'You do not have permission to perform this action.';
       retryable = false;
     } else if (error?.status === 404) {
-      type = ErrorType.NOT_FOUND;
+      type = ErrorType.API;
       severity = ErrorSeverity.LOW;
       userMessage = 'The requested resource was not found.';
       retryable = false;
     } else if (error?.status >= 500) {
-      type = ErrorType.SERVER;
+      type = ErrorType.API;
       severity = ErrorSeverity.HIGH;
       userMessage = 'Server error. Please try again later.';
       retryable = true;
       action = 'retry';
     } else if (error?.status >= 400) {
-      type = ErrorType.CLIENT;
+      type = ErrorType.API;
       severity = ErrorSeverity.MEDIUM;
       userMessage = 'Invalid request. Please check your input.';
       retryable = false;
     }
 
     return Object.assign(baseError, {
+      id: Math.random().toString(36).substr(2, 9),
       type,
+      category: 'SYSTEM_ERROR',
       severity,
       userMessage,
       retryable,
       action,
-      context
+      context,
+      timestamp: Date.now()
     });
   }
 
@@ -236,179 +162,6 @@ export async function safeApiCall<T>(
   }
 }
 
-// Form validation utilities
-export class ValidationError extends Error {
-  constructor(
-    message: string,
-    public field?: string,
-    public code?: string
-  ) {
-    super(message);
-    this.name = 'ValidationError';
-  }
-}
-
-export const validateEmail = (email: string): void => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!email) {
-    throw new ValidationError('Email is required', 'email', 'REQUIRED');
-  }
-  if (!emailRegex.test(email)) {
-    throw new ValidationError('Please enter a valid email address', 'email', 'INVALID_FORMAT');
-  }
-};
-
-export const validatePassword = (password: string): void => {
-  if (!password) {
-    throw new ValidationError('Password is required', 'password', 'REQUIRED');
-  }
-  if (password.length < 8) {
-    throw new ValidationError('Password must be at least 8 characters long', 'password', 'TOO_SHORT');
-  }
-  if (!/(?=.*[a-zA-Z])(?=.*\d)/.test(password)) {
-    throw new ValidationError('Password must contain both letters and numbers', 'password', 'WEAK');
-  }
-};
-
-export const validateRequired = (value: any, fieldName: string): void => {
-  if (!value || (typeof value === 'string' && value.trim() === '')) {
-    throw new ValidationError(`${fieldName} is required`, fieldName.toLowerCase().replace(' ', '_'), 'REQUIRED');
-  }
-};
-
-export const validateUrl = (url: string, fieldName: string = 'URL'): void => {
-  if (!url) {
-    throw new ValidationError(`${fieldName} is required`, fieldName.toLowerCase().replace(' ', '_'), 'REQUIRED');
-  }
-  
-  try {
-    new URL(url);
-  } catch {
-    throw new ValidationError(`Please enter a valid ${fieldName.toLowerCase()}`, fieldName.toLowerCase().replace(' ', '_'), 'INVALID_FORMAT');
-  }
-};
-
-export const validateFileSize = (file: File, maxSizeMB: number = 5): void => {
-  const maxSizeBytes = maxSizeMB * 1024 * 1024;
-  if (file.size > maxSizeBytes) {
-    throw new ValidationError(`File is too large. Maximum size is ${maxSizeMB}MB.`, 'file', 'FILE_TOO_LARGE');
-  }
-};
-
-export const validateFileType = (file: File, allowedTypes: string[]): void => {
-  if (!allowedTypes.includes(file.type)) {
-    throw new ValidationError(
-      `Invalid file type. Allowed types: ${allowedTypes.join(', ')}`,
-      'file',
-      'INVALID_FILE_TYPE'
-    );
-  }
-};
-
-// Offline storage utilities
-export class OfflineStorage {
-  private static readonly STORAGE_KEY = 'cmoxpert_offline_data';
-  private static readonly MAX_STORAGE_SIZE = 5 * 1024 * 1024; // 5MB
-
-  static save(key: string, data: any): boolean {
-    try {
-      const storage = this.getStorage();
-      storage[key] = {
-        data,
-        timestamp: Date.now(),
-        version: '1.0'
-      };
-      
-      const serialized = JSON.stringify(storage);
-      
-      // Check storage size
-      if (serialized.length > this.MAX_STORAGE_SIZE) {
-        console.warn('Offline storage limit exceeded, cleaning old data');
-        this.cleanup();
-        return false;
-      }
-      
-      localStorage.setItem(this.STORAGE_KEY, serialized);
-      return true;
-    } catch (error) {
-      console.error('Failed to save offline data:', error);
-      return false;
-    }
-  }
-
-  static load(key: string): any | null {
-    try {
-      const storage = this.getStorage();
-      const item = storage[key];
-      
-      if (!item) return null;
-      
-      // Check if data is too old (7 days)
-      const maxAge = 7 * 24 * 60 * 60 * 1000;
-      if (Date.now() - item.timestamp > maxAge) {
-        delete storage[key];
-        this.saveStorage(storage);
-        return null;
-      }
-      
-      return item.data;
-    } catch (error) {
-      console.error('Failed to load offline data:', error);
-      return null;
-    }
-  }
-
-  static remove(key: string): void {
-    try {
-      const storage = this.getStorage();
-      delete storage[key];
-      this.saveStorage(storage);
-    } catch (error) {
-      console.error('Failed to remove offline data:', error);
-    }
-  }
-
-  static clear(): void {
-    try {
-      localStorage.removeItem(this.STORAGE_KEY);
-    } catch (error) {
-      console.error('Failed to clear offline storage:', error);
-    }
-  }
-
-  private static getStorage(): Record<string, any> {
-    try {
-      const stored = localStorage.getItem(this.STORAGE_KEY);
-      return stored ? JSON.parse(stored) : {};
-    } catch {
-      return {};
-    }
-  }
-
-  private static saveStorage(storage: Record<string, any>): void {
-    try {
-      localStorage.setItem(this.STORAGE_KEY, JSON.stringify(storage));
-    } catch (error) {
-      console.error('Failed to save storage:', error);
-    }
-  }
-
-  private static cleanup(): void {
-    try {
-      const storage = this.getStorage();
-      const entries = Object.entries(storage);
-      
-      // Sort by timestamp and keep only the 10 most recent items
-      entries.sort((a, b) => (b[1] as any).timestamp - (a[1] as any).timestamp);
-      const cleaned = Object.fromEntries(entries.slice(0, 10));
-      
-      this.saveStorage(cleaned);
-    } catch (error) {
-      console.error('Failed to cleanup storage:', error);
-    }
-  }
-}
-
 // Circuit breaker pattern for API calls
 export class CircuitBreaker {
   private failures = 0;
@@ -457,34 +210,3 @@ export class CircuitBreaker {
     return this.state === 'OPEN';
   }
 }
-
-// Global error handler initialization
-export const initializeErrorHandling = () => {
-  // Initialize network monitoring
-  NetworkMonitor.init();
-
-  // Global unhandled promise rejection handler
-  window.addEventListener('unhandledrejection', (event) => {
-    console.error('Unhandled promise rejection:', event.reason);
-    ErrorHandler.handleError(event.reason, {
-      type: 'unhandled_promise_rejection',
-      promise: event.promise
-    });
-    
-    // Prevent the default browser behavior
-    event.preventDefault();
-  });
-
-  // Global error handler
-  window.addEventListener('error', (event) => {
-    console.error('Global error:', event.error);
-    ErrorHandler.handleError(event.error, {
-      type: 'global_error',
-      filename: event.filename,
-      lineno: event.lineno,
-      colno: event.colno
-    });
-  });
-
-  console.log('Error handling initialized');
-};

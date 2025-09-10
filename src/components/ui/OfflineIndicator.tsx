@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Wifi, WifiOff, RefreshCw, AlertCircle, CheckCircle, Clock, Database, FolderSync as Sync, X } from 'lucide-react';
-import { OfflineManager } from '../lib/offlineManager';
+import { OfflineManager } from '../../lib/offlineManager';
 
 interface OfflineIndicatorProps {
   onRetry?: () => void;
