@@ -136,6 +136,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let mounted = true;
     let initTimeout: NodeJS.Timeout;
+    let subscription: { unsubscribe: () => void } | null = null;
 
     const initializeAuth = async () => {
       try {
@@ -221,34 +222,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     initializeAuth();
 
-    // Listen for auth changes
-    const {
-      data: { subscription },
-    } = (supabase?.auth?.onAuthStateChange || (() => ({ data: { subscription: { unsubscribe: () => {} } } })))(async (event, session) => {
-      if (!mounted) return;
+    // Listen for auth changes only if supabase is available
+    if (supabase?.auth?.onAuthStateChange) {
+      const {
+        data: { subscription: authSubscription },
+      } = supabase.auth.onAuthStateChange(async (event, session) => {
+        if (!mounted) return;
+        
+        console.log('Auth state change:', event, session);
+        setSession(session);
+        setUser(session?.user ?? null);
+        
+        if (session?.user) {
+          await loadProfile(session.user.id);
+          // Set user context for error reporting
+          setUserContext(session.user.id, session.user.email);
+        } else {
+          setProfile(null);
+          setError(null);
+          // Clear user context on logout
+          clearUserContext();
+        }
+        
+        setLoading(false);
+      });
       
-      console.log('Auth state change:', event, session);
-      setSession(session);
-      setUser(session?.user ?? null);
-      
-      if (session?.user) {
-        await loadProfile(session.user.id);
-        // Set user context for error reporting
-        setUserContext(session.user.id, session.user.email);
-      } else {
-        setProfile(null);
-        setError(null);
-        // Clear user context on logout
-        clearUserContext();
-      }
-      
-      setLoading(false);
-    });
+      subscription = authSubscription;
+    }
 
     return () => {
       mounted = false;
       if (initTimeout) clearTimeout(initTimeout);
-      subscription.unsubscribe();
+      if (subscription) {
+        subscription.unsubscribe();
+      }
     };
   }, []);
 

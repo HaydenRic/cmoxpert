@@ -95,7 +95,7 @@ function AppContent() {
         <Route 
           path="/" 
           element={
-            user ? <Navigate to="/dashboard\" replace /> : <LandingPage />
+            user ? <Navigate to="/dashboard" replace /> : <LandingPage />
           } 
         />
         
@@ -106,7 +106,7 @@ function AppContent() {
         <Route 
           path="/auth" 
           element={
-            user ? <Navigate to="/dashboard\" replace /> : <AuthForm />
+            user ? <Navigate to="/dashboard" replace /> : <AuthForm />
           } 
         />
         
@@ -318,7 +318,7 @@ function AppContent() {
         />
         
         {/* Fallback routes */}
-        <Route path="*" element={<Navigate to="/\" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   );
@@ -326,17 +326,17 @@ function AppContent() {
 
 function App() {
   return (
-    <ErrorBoundary>
-      <ErrorToastProvider>
-        <AuthProvider>
-          <Router>
+    <Router>
+      <ErrorBoundary>
+        <ErrorToastProvider>
+          <AuthProvider>
             <Analytics trackingId={import.meta.env.VITE_GA_TRACKING_ID} />
             <PerformanceMonitor />
             <AppContent />
-          </Router>
-        </AuthProvider>
-      </ErrorToastProvider>
-    </ErrorBoundary>
+          </AuthProvider>
+        </ErrorToastProvider>
+      </ErrorBoundary>
+    </Router>
   );
 }
 
