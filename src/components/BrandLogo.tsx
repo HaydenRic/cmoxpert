@@ -1,5 +1,4 @@
 import React from 'react';
-import { BarChart3 } from 'lucide-react';
 
 interface BrandLogoProps {
   variant?: 'default' | 'icon-only' | 'text-only';
@@ -30,7 +29,7 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     lg: 'text-base'
   };
 
-  // Abstract geometric logo symbol
+  // Simple, bold geometric X that forms an upward arrow
   const LogoSymbol = () => (
     <div className={`${sizeClasses[size]} aspect-square relative flex items-center justify-center`}>
       <svg
@@ -39,34 +38,23 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Background complex data lines */}
-        <g opacity="0.3">
-          <path d="M5 15 L12 8 L18 12 L25 5" stroke="#2D3748" strokeWidth="1" fill="none"/>
-          <path d="M8 25 L15 18 L22 22 L30 15" stroke="#2D3748" strokeWidth="1" fill="none"/>
-          <path d="M3 30 L10 23 L17 27 L24 20" stroke="#2D3748" strokeWidth="1" fill="none"/>
-          <circle cx="12" cy="8" r="1.5" fill="#2D3748"/>
-          <circle cx="25" cy="5" r="1.5" fill="#2D3748"/>
-          <circle cx="30" cy="15" r="1.5" fill="#2D3748"/>
-        </g>
-        
-        {/* Main strategic advantage shape - upward trending arrow/lens */}
+        {/* Bold geometric X that forms an upward-trending arrow */}
         <g>
-          {/* Main geometric form */}
+          {/* Left stroke of X - angled upward */}
           <path 
-            d="M10 28 L20 12 L30 16 L25 32 Z" 
-            fill="#4A90E2" 
-            stroke="#4A90E2" 
-            strokeWidth="1"
+            d="M8 32 L20 8 L24 12 L12 36 Z" 
+            fill="#4A90E2"
           />
-          {/* Strategic focus element */}
+          {/* Right stroke of X - angled upward */}
           <path 
-            d="M15 20 L25 16 L22 24 Z" 
-            fill="#2D3748" 
-            opacity="0.8"
+            d="M32 32 L20 8 L16 12 L28 36 Z" 
+            fill="#4A90E2"
           />
-          {/* Key insight points */}
-          <circle cx="20" cy="18" r="2" fill="#F7FAFC"/>
-          <circle cx="23" cy="22" r="1.5" fill="#F7FAFC"/>
+          {/* Top point - creates arrow effect */}
+          <path 
+            d="M16 12 L20 8 L24 12 L20 16 Z" 
+            fill="#2D3748"
+          />
         </g>
       </svg>
     </div>
@@ -93,10 +81,10 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
     <div className="flex items-center space-x-3">
       <LogoSymbol />
       <div className="flex flex-col">
-        <div className={`font-bold ${textSizeClasses[size]} text-gray-900`}>
-          cmo<span className="text-blue-600">x</span>pert
+        <div className={`font-bold ${textSizeClasses[size]}`} style={{ color: '#2D3748' }}>
+          cmo<span style={{ color: '#4A90E2' }}>x</span>pert
         </div>
-        <div className={`${taglineSizeClasses[size]} text-gray-600 font-medium`}>
+        <div className={`${taglineSizeClasses[size]} font-medium`} style={{ color: '#6B7280' }}>
           AI Marketing Co-Pilot
         </div>
       </div>
