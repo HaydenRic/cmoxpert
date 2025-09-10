@@ -1,4 +1,3 @@
-```typescript
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -334,4 +333,3 @@ export function withOfflineSupport<T extends object>(
     return <Component {...enhancedProps} />;
   };
 }
-```
