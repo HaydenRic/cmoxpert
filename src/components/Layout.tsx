@@ -47,12 +47,24 @@ export function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-cream-100">
+    <div className="min-h-screen bg-cream-100" role="application" aria-label="cmoxpert AI Marketing Co-Pilot">
+      {/* Skip to main content link for keyboard users */}
+      <a 
+        href="#main-content" 
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-slate-900 text-white px-4 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
+      >
+        Skip to main content
+      </a>
+
       {/* Sidebar */}
-      <div className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg">
+      <aside 
+        className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg" 
+        role="complementary"
+        aria-label="Application sidebar"
+      >
         <div className="flex flex-col h-full">
           {/* Logo */}
-          <div className="flex items-center px-6 py-8">
+          <header className="flex items-center px-6 py-8" role="banner">
             <div className="flex items-center space-x-3">
               <BrandLogo />
               <div>
@@ -60,10 +72,11 @@ export function Layout({ children }: LayoutProps) {
                 <p className="text-xs text-slate-500">AI Marketing Co-Pilot</p>
               </div>
             </div>
-          </div>
+          </header>
 
           {/* Navigation */}
-          <nav className="flex-1 px-4 space-y-2">
+          <nav className="flex-1 px-4 space-y-2" role="navigation" aria-label="Main navigation">
+            <h2 className="sr-only">Main Navigation</h2>
             {navigation.map((item) => {
               const isActive = location.pathname === item.href;
               return (
@@ -76,6 +89,7 @@ export function Layout({ children }: LayoutProps) {
                       ? 'bg-cream-200 text-slate_blue-900 border-r-2 border-slate_blue-600'
                       : 'text-slate-600 hover:bg-cornsilk-100 hover:text-slate-900'
                   )}
+                  aria-current={isActive ? 'page' : undefined}
                 >
                   <item.icon className="w-5 h-5 mr-3" />
                   {item.name}
@@ -85,7 +99,8 @@ export function Layout({ children }: LayoutProps) {
           </nav>
 
           {/* User menu */}
-          <div className="p-4 border-t border-slate-200">
+          <footer className="p-4 border-t border-slate-200" role="contentinfo">
+            <h2 className="sr-only">User Account</h2>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="w-8 h-8 bg-gradient-to-br from-tan-400 to-olive-600 rounded-full flex items-center justify-center">
@@ -106,17 +121,24 @@ export function Layout({ children }: LayoutProps) {
                 onClick={handleSignOut}
                 className="p-2 text-slate-400 hover:text-slate-600 transition-colors"
                 title="Sign out"
+                aria-label="Sign out of your account"
               >
                 <LogOut className="w-4 h-4" />
               </button>
             </div>
-          </div>
+          </footer>
         </div>
-      </div>
+      </aside>
 
       {/* Main content */}
       <div className="pl-64">
-        <main className="min-h-screen">
+        <main 
+          id="main-content"
+          className="min-h-screen" 
+          role="main"
+          aria-label="Main content area"
+          tabIndex={-1}
+        >
           {children}
         </main>
       </div>
