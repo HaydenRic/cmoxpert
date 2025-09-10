@@ -467,7 +467,11 @@ export function Contact() {
                       rows={4}
                       className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
                       placeholder="Describe your current marketing challenges, goals, and what success looks like for your business. I'll personally review your situation and provide specific recommendations."
+                      aria-describedby="message-help"
                     />
+                    <div id="message-help" className="sr-only">
+                      Provide details about your marketing goals and challenges for personalized recommendations
+                    </div>
                   </div>
                 </div>
 
@@ -475,6 +479,7 @@ export function Contact() {
                   type="submit"
                   disabled={loading}
                   className="w-full bg-gradient-to-r from-tiger_s_eye-600 to-earth_yellow-600 hover:from-tiger_s_eye-700 hover:to-earth_yellow-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-4 px-6 rounded-lg font-semibold text-lg shadow-xl hover:shadow-2xl transition-all"
+                  aria-describedby="submit-help"
                 >
                   {loading ? (
                     <div className="flex items-center justify-center space-x-2">
@@ -485,15 +490,18 @@ export function Contact() {
                     'Schedule Direct Strategy Discussion'
                   )}
                 </button>
+                <div id="submit-help" className="sr-only">
+                  Submit your information to schedule a direct strategy discussion
+                </div>
 
                 <p className="text-xs text-slate-500 text-center">
                   Direct access guaranteed. I personally review every inquiry and respond within 24 hours with specific recommendations for your situation.
                 </p>
               </form>
-            </div>
+            </section>
           </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
