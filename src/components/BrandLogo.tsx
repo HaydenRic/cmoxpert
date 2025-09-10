@@ -1,9 +1,9 @@
 import React from 'react';
-import { BarChart3 } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface BrandLogoProps {
   className?: string;
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'sm' | 'md' | 'lg' | 'xl';
   variant?: 'default' | 'icon-only' | 'text-only';
   theme?: 'light' | 'dark';
 }
@@ -15,60 +15,100 @@ export function BrandLogo({
   theme = 'light'
 }: BrandLogoProps) {
   const sizeClasses = {
-    sm: variant === 'icon-only' ? 'w-8 h-8' : 'h-8',
-    md: variant === 'icon-only' ? 'w-10 h-10' : 'h-10',
-    lg: variant === 'icon-only' ? 'w-16 h-16' : 'h-16'
-  };
-
-  const iconSizes = {
-    sm: 'w-4 h-4',
-    md: 'w-6 h-6',
-    lg: 'w-8 h-8'
+    sm: variant === 'icon-only' ? 'w-6 h-6' : 'h-6',
+    md: variant === 'icon-only' ? 'w-8 h-8' : 'h-8',
+    lg: variant === 'icon-only' ? 'w-12 h-12' : 'h-12',
+    xl: variant === 'icon-only' ? 'w-16 h-16' : 'h-16'
   };
 
   const textSizes = {
-    sm: 'text-lg',
-    md: 'text-xl',
-    lg: 'text-2xl'
+    sm: 'text-sm',
+    md: 'text-lg',
+    lg: 'text-xl',
+    xl: 'text-2xl'
+  };
+
+  const logoSizes = {
+    sm: { width: 24, height: 24 },
+    md: { width: 32, height: 32 },
+    lg: { width: 48, height: 48 },
+    xl: { width: 64, height: 64 }
   };
 
   // Color scheme based on theme
-  const logoColors = theme === 'dark' 
+  const colors = theme === 'dark' 
     ? {
-        primary: 'from-cornsilk-200 to-cream-100',
-        accent: 'from-tan-400 to-olive-400',
+        primary: '#F7FAFC',
+        accent: '#4A90E2',
         text: 'text-white',
-        iconPrimary: 'text-cornsilk-100',
         tagline: 'text-slate-300'
       }
     : {
-        primary: 'from-charcoal-700 to-slate_blue-800',
-        accent: 'from-tan-600 to-olive-600',
-        text: 'text-charcoal-900',
-        iconPrimary: 'text-white',
+        primary: '#2D3748',
+        accent: '#4A90E2',
+        text: 'text-slate-900',
         tagline: 'text-slate-500'
       };
+
+  // Abstract geometric logo mark
+  const LogoMark = ({ width, height }: { width: number; height: number }) => (
+    <svg 
+      width={width} 
+      height={height} 
+      viewBox="0 0 32 32" 
+      fill="none" 
+      xmlns="http://www.w3.org/2000/svg"
+      className="flex-shrink-0"
+    >
+      {/* Complex data lines (background) */}
+      <g opacity="0.3">
+        <path 
+          d="M2 28 L8 24 L12 26 L18 20 L22 22 L30 16" 
+          stroke={colors.primary} 
+          strokeWidth="1" 
+          fill="none"
+        />
+        <path 
+          d="M2 24 L6 22 L10 25 L16 19 L20 21 L30 14" 
+          stroke={colors.primary} 
+          strokeWidth="0.8" 
+          fill="none"
+        />
+        <path 
+          d="M2 26 L7 23 L11 24 L17 18 L21 20 L30 12" 
+          stroke={colors.primary} 
+          strokeWidth="0.6" 
+          fill="none"
+        />
+      </g>
+      
+      {/* Strategic advantage arrow/lens (foreground) */}
+      <g>
+        {/* Main geometric shape - represents focused insight */}
+        <path 
+          d="M8 20 L16 12 L24 16 L20 24 Z" 
+          fill={colors.accent}
+        />
+        
+        {/* Upward trending element */}
+        <path 
+          d="M16 12 L24 4 L28 8 L20 16 Z" 
+          fill={colors.primary}
+        />
+        
+        {/* Data point indicators */}
+        <circle cx="12" cy="16" r="1.5" fill={colors.accent} />
+        <circle cx="20" cy="20" r="1.5" fill={colors.primary} />
+        <circle cx="24" cy="12" r="1" fill={colors.accent} />
+      </g>
+    </svg>
+  );
 
   // Icon-only variant
   if (variant === 'icon-only') {
     return (
-      <div className={`${sizeClasses[size]} relative ${className}`}>
-        <div className={`w-full h-full bg-gradient-to-br ${logoColors.primary} rounded-xl shadow-lg flex items-center justify-center relative overflow-hidden`}>
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-1 right-1 w-3 h-3 bg-white rounded-full"></div>
-            <div className="absolute bottom-2 left-2 w-2 h-2 bg-white rounded-full"></div>
-            <div className="absolute top-1/2 right-2 w-1 h-1 bg-white rounded-full"></div>
-          </div>
-          
-          {/* Central icon */}
-          <div className="relative z-10">
-            <BarChart3 className={`${iconSizes[size]} ${logoColors.iconPrimary}`} />
-          </div>
-          
-          {/* Accent element */}
-          <div className={`absolute top-1 right-1 w-2 h-2 bg-gradient-to-br ${logoColors.accent} rounded-full`}></div>
-        </div>
+      <div className={cn(sizeClasses[size], className)}>
+        <LogoMark {...logoSizes[size]} />
       </div>
     );
   }
@@ -76,9 +116,9 @@ export function BrandLogo({
   // Text-only variant
   if (variant === 'text-only') {
     return (
-      <div className={`flex items-center ${className}`}>
-        <h1 className={`${textSizes[size]} font-bold ${logoColors.text} tracking-tight`}>
-          cmo<span className="text-slate_blue-600">x</span>pert
+      <div className={cn("flex items-center", className)}>
+        <h1 className={cn(textSizes[size], "font-bold tracking-tight", colors.text)}>
+          cmo<span style={{ color: colors.accent }}>x</span>pert
         </h1>
       </div>
     );
@@ -86,33 +126,18 @@ export function BrandLogo({
 
   // Default full logo
   return (
-    <div className={`flex items-center space-x-3 ${className}`}>
-      {/* Icon container */}
-      <div className={`${sizeClasses[size]} relative`}>
-        <div className={`w-full h-full bg-gradient-to-br ${logoColors.primary} rounded-xl shadow-lg flex items-center justify-center relative overflow-hidden`}>
-          {/* Background pattern for data theme */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-1 right-1 w-3 h-3 bg-white rounded-full"></div>
-            <div className="absolute bottom-2 left-2 w-2 h-2 bg-white rounded-full"></div>
-            <div className="absolute top-1/2 right-2 w-1 h-1 bg-white rounded-full"></div>
-          </div>
-          
-          {/* Central icon - represents data intelligence */}
-          <div className="relative z-10">
-            <BarChart3 className={`${iconSizes[size]} ${logoColors.iconPrimary}`} />
-          </div>
-          
-          {/* Accent dot for AI/intelligence theme */}
-          <div className={`absolute top-1 right-1 w-2 h-2 bg-gradient-to-br ${logoColors.accent} rounded-full`}></div>
-        </div>
-      </div>
+    <div className={cn("flex items-center space-x-3", className)}>
+      <LogoMark {...logoSizes[size]} />
       
-      {/* Text logo */}
       <div className="flex flex-col">
-        <h1 className={`${textSizes[size]} font-bold ${logoColors.text} tracking-tight leading-none`}>
-          cmo<span className="text-slate_blue-600">x</span>pert
+        <h1 className={cn(textSizes[size], "font-bold tracking-tight leading-none", colors.text)}>
+          cmo<span style={{ color: colors.accent }}>x</span>pert
         </h1>
-        <p className={`${size === 'lg' ? 'text-sm' : 'text-xs'} ${logoColors.tagline} leading-none mt-0.5`}>
+        <p className={cn(
+          size === 'xl' ? 'text-sm' : size === 'lg' ? 'text-xs' : 'text-xs', 
+          "leading-none mt-0.5", 
+          colors.tagline
+        )}>
           AI Marketing Co-Pilot
         </p>
       </div>
