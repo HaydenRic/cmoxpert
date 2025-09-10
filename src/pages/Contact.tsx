@@ -498,7 +498,7 @@ export function Contact() {
                   Direct access guaranteed. I personally review every inquiry and respond within 24 hours with specific recommendations for your situation.
                 </p>
               </form>
-            </section>
+            </div>
           </div>
         </div>
       </main>
