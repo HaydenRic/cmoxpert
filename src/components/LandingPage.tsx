@@ -527,12 +527,11 @@ export function LandingPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 bg-white" aria-labelledby="stats-heading">
-        <h2 id="stats-heading" className="sr-only">Company Statistics</h2>
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
-              <div key={index} className="text-center" role="img" aria-label={`${stat.value} ${stat.label}`}>
+              <div key={index} className="text-center">
                 <div className="text-4xl font-bold text-slate-900 mb-2">{stat.value}</div>
                 <div className="text-slate-600">{stat.label}</div>
               </div>
@@ -542,13 +541,10 @@ export function LandingPage() {
       </section>
 
       {/* Anti-Agency Section */}
-      <section 
-        className="py-20 bg-gradient-to-br from-charcoal-900 via-slate_blue-900 to-cream-100"
-        aria-labelledby="anti-agency-heading"
-      >
+      <section className="py-20 bg-gradient-to-br from-charcoal-900 via-slate_blue-900 to-cream-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 id="anti-agency-heading" className="text-4xl font-bold text-white mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               The Anti-Agency Approach
             </h2>
             <p className="text-xl text-cornsilk-200 max-w-3xl mx-auto">
@@ -594,17 +590,14 @@ export function LandingPage() {
       </section>
 
       {/* Go-to-Market as a Service Section */}
-      <section 
-        className="py-20 bg-gradient-to-br from-cream-50 via-tan-50 to-olive-50"
-        aria-labelledby="gtm-heading"
-      >
+      <section className="py-20 bg-gradient-to-br from-cream-50 via-tan-50 to-olive-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 bg-tan-100 text-olive-900 rounded-full text-sm font-medium mb-6">
               <Rocket className="w-4 h-4 mr-2" />
               Signature Methodology
             </div>
-            <h2 id="gtm-heading" className="text-4xl font-bold text-slate-900 mb-4">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
               Go-to-Market as a Service
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-8">
@@ -704,10 +697,10 @@ export function LandingPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-white" aria-labelledby="features-heading">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 id="features-heading" className="text-4xl font-bold text-slate-900 mb-4">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
               AI-Powered Marketing Intelligence
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
@@ -730,17 +723,14 @@ export function LandingPage() {
       </section>
 
       {/* Micro-Niche Specialization Section */}
-      <section 
-        className="py-20 bg-gradient-to-br from-slate-50 to-slate-100"
-        aria-labelledby="specialization-heading"
-      >
+      <section className="py-20 bg-gradient-to-br from-slate-50 to-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center px-4 py-2 bg-slate-200 text-slate-700 rounded-full text-sm font-medium mb-6">
               <Target className="w-4 h-4 mr-2" />
               Micro-Niche Expertise
             </div>
-            <h2 id="specialization-heading" className="text-4xl font-bold text-slate-900 mb-4">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
               Specialized B2B SaaS Market Intelligence
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-8">
@@ -821,13 +811,9 @@ export function LandingPage() {
 
       {/* Demo Video Section */}
       {featuredVideo && (
-        <section 
-          id="demo-video" 
-          className="py-20 bg-gradient-to-br from-dark_moss_green-900 to-pakistan_green-900"
-          aria-labelledby="demo-heading"
-        >
+        <section id="demo-video" className="py-20 bg-gradient-to-br from-dark_moss_green-900 to-pakistan_green-900">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 id="demo-heading" className="text-4xl font-bold text-white mb-4">
+            <h2 className="text-4xl font-bold text-white mb-4">
               See cmoxpert in Action
             </h2>
             <p className="text-xl text-cornsilk-200 mb-8">
@@ -863,10 +849,10 @@ export function LandingPage() {
       )}
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-white" aria-labelledby="testimonials-heading">
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 id="testimonials-heading" className="text-4xl font-bold text-slate-900 mb-4">
+            <h2 className="text-4xl font-bold text-slate-900 mb-4">
               What Marketing Leaders Say
             </h2>
             <p className="text-xl text-slate-600">
@@ -901,12 +887,9 @@ export function LandingPage() {
       </section>
 
       {/* CTA Section */}
-      <section 
-        className="py-20 bg-gradient-to-br from-charcoal-900 via-slate_blue-800 to-slate_blue-900"
-        aria-labelledby="cta-heading"
-      >
+      <section className="py-20 bg-gradient-to-br from-charcoal-900 via-slate_blue-800 to-slate_blue-900">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 id="cta-heading" className="text-4xl font-bold text-white mb-6">
+          <h2 className="text-4xl font-bold text-white mb-6">
             Ready to Turn Market Data Into Strategic Advantage?
           </h2>
           <p className="text-xl text-cornsilk-200 mb-8">
@@ -948,12 +931,10 @@ export function LandingPage() {
           </div>
         </div>
       </section>
-      </main>
 
       {/* Footer */}
-      <footer className="bg-charcoal-900 text-white py-12" role="contentinfo">
+      <footer className="bg-charcoal-900 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="sr-only">Footer</h2>
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-3 mb-4">
@@ -968,33 +949,33 @@ export function LandingPage() {
               </p>
             </div>
             
-            <nav aria-labelledby="product-nav">
-              <h4 id="product-nav" className="font-semibold mb-4">Product</h4>
+            <div>
+              <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-2 text-sm text-slate-400">
                 <li><Link to="/features" className="hover:text-white transition-colors">Features</Link></li>
                 <li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
                 <li><Link to="/integrations" className="hover:text-white transition-colors">Integrations</Link></li>
               </ul>
-            </nav>
+            </div>
             
-            <nav aria-labelledby="company-nav">
-              <h4 id="company-nav" className="font-semibold mb-4">Company</h4>
+            <div>
+              <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-2 text-sm text-slate-400">
                 <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
                 <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
                 <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
                 <li><Link to="/terms" className="hover:text-white transition-colors">Terms</Link></li>
               </ul>
-            </nav>
+            </div>
             
-            <nav aria-labelledby="connect-nav">
-              <h4 id="connect-nav" className="font-semibold mb-4">Connect</h4>
+            <div>
+              <h4 className="font-semibold mb-4">Connect</h4>
               <ul className="space-y-2 text-sm text-slate-400">
                 <li><a href="#" className="hover:text-white transition-colors">LinkedIn</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Twitter</a></li>
                 <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
               </ul>
-            </nav>
+            </div>
           </div>
           
           <div className="border-t border-slate-800 mt-8 pt-8 text-center text-sm text-slate-400">
@@ -1002,6 +983,7 @@ export function LandingPage() {
           </div>
         </div>
       </footer>
+      </main>
     </div>
   );
 }
