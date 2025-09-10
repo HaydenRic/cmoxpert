@@ -7,7 +7,7 @@ interface BrandLogoProps {
 }
 
 export const BrandLogo: React.FC<BrandLogoProps> = ({ 
-  variant = 'default', 
+  variant = 'text-only', 
   size = 'md',
   theme = 'light'
 }) => {
@@ -18,15 +18,15 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   };
 
   const textSizeClasses = {
-    sm: 'text-lg',
-    md: 'text-xl',
-    lg: 'text-2xl'
+    sm: 'text-2xl',
+    md: 'text-3xl',
+    lg: 'text-4xl'
   };
 
   const taglineSizeClasses = {
-    sm: 'text-xs',
-    md: 'text-sm',
-    lg: 'text-base'
+    sm: 'text-sm',
+    md: 'text-base',
+    lg: 'text-lg'
   };
 
   // Brand colors from your palette
