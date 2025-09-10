@@ -138,6 +138,13 @@ export function LandingPage() {
     featuresSection?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const trackFormSubmission = (formType: string, data: any) => {
+    trackEvent('form_submission', {
+      form_type: formType,
+      ...data
+    });
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     trackFormSubmission('newsletter_signup', { email });
@@ -292,7 +299,6 @@ export function LandingPage() {
 
       <main id="main-content" role="main" tabIndex={-1}>
         {/* Hero Section */}
-        <section className="pt-20 pb-24 bg-white" aria-labelledby="hero-heading">
         <section className="pt-20 pb-32 bg-cream-100" aria-labelledby="hero-heading">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
