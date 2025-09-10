@@ -144,3 +144,67 @@ export class OfflineStorage {
     }
   }
 }
+
+// Main OfflineManager class that combines network monitoring and storage
+export class OfflineManager {
+  private static networkMonitor: NetworkMonitor;
+  private static pendingOperations: any[] = [];
+
+  static init(): void {
+    this.networkMonitor = NetworkMonitor.init();
+  }
+
+  static addNetworkListener(callback: (isOnline: boolean) => void): void {
+    NetworkMonitor.addListener(callback);
+  }
+
+  static removeNetworkListener(callback: (isOnline: boolean) => void): void {
+    NetworkMonitor.removeListener(callback);
+  }
+
+  static getPendingOperationsCount(): number {
+    return this.pendingOperations.length;
+  }
+
+  static getStorageUsage(): { used: number; total: number } {
+    try {
+      const storage = localStorage.getItem('cmoxpert_offline_data');
+      const used = storage ? storage.length : 0;
+      const total = 5 * 1024 * 1024; // 5MB
+      return { used, total };
+    } catch {
+      return { used: 0, total: 5 * 1024 * 1024 };
+    }
+  }
+
+  static async syncWhenOnline(): Promise<void> {
+    if (!NetworkMonitor.isOnline) return;
+    
+    // Process pending operations
+    const operations = [...this.pendingOperations];
+    this.pendingOperations = [];
+    
+    for (const operation of operations) {
+      try {
+        // Execute the operation
+        await operation();
+      } catch (error) {
+        // Re-add failed operations back to queue
+        this.pendingOperations.push(operation);
+        console.error('Failed to sync operation:', error);
+      }
+    }
+  }
+
+  static clearPendingOperations(): void {
+    this.pendingOperations = [];
+  }
+
+  static getCachedData(key: string): any | null {
+    return OfflineStorage.load(key);
+  }
+
+  static cacheData(key: string, data: any): boolean {
+    return OfflineStorage.save(key, data);
+  }
+}
