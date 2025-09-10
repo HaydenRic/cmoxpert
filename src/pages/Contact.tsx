@@ -179,6 +179,7 @@ export function Contact() {
         </div>
       </header>
 
+      <main id="main-content" role="main" tabIndex={-1}>
       <div className="pt-16 pb-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Hero Section */}
