@@ -32,82 +32,84 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   // Brand colors from your palette
   const colors = {
     light: {
-      primary: '#22333B',    // slate_blue
-      accent: '#0A0908',     // charcoal
-      text: '#0A0908',       // charcoal
-      textMuted: '#5E503F'   // olive
+      mark: '#22333B',       // slate_blue for the owl mark
+      text: '#0A0908',       // charcoal for main text
+      accent: '#22333B',     // slate_blue for the 'x'
+      tagline: '#5E503F'     // olive for tagline
     },
     dark: {
-      primary: '#EAE0D5',    // cream
-      accent: '#C6AC8F',     // tan
-      text: '#EAE0D5',       // cream
-      textMuted: '#C6AC8F'   // tan
+      mark: '#EAE0D5',       // cream for dark backgrounds
+      text: '#EAE0D5',       // cream for main text
+      accent: '#C6AC8F',     // tan for the 'x'
+      tagline: '#C6AC8F'     // tan for tagline
     }
   };
 
   const currentColors = colors[theme];
 
-  // Geometric Owl Mark - minimalist and abstract
-  const OwlMark = () => (
+  // Minimalist Geometric Owl - inspired by clean, simple design
+  const GeometricOwl = () => (
     <div className={`${sizeClasses[size]} aspect-square relative flex items-center justify-center`}>
       <svg
-        viewBox="0 0 40 40"
+        viewBox="0 0 32 32"
         className="w-full h-full"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Geometric Owl constructed from simple shapes */}
+        {/* Minimalist Geometric Owl */}
         <g>
-          {/* Head - main circle */}
-          <circle 
-            cx="20" 
-            cy="18" 
-            r="14" 
-            fill={currentColors.primary}
+          {/* Main body - rounded square/circle hybrid */}
+          <rect 
+            x="6" 
+            y="8" 
+            width="20" 
+            height="20" 
+            rx="10"
+            fill={currentColors.mark}
           />
           
-          {/* Eyes - two smaller circles positioned for owl-like appearance */}
+          {/* Eyes - two perfect circles positioned for owl character */}
           <circle 
-            cx="16" 
-            cy="15" 
-            r="3" 
+            cx="13" 
+            cy="16" 
+            r="2.5" 
             fill={theme === 'light' ? '#EAE0D5' : '#22333B'}
           />
           <circle 
-            cx="24" 
-            cy="15" 
-            r="3" 
+            cx="19" 
+            cy="16" 
+            r="2.5" 
             fill={theme === 'light' ? '#EAE0D5' : '#22333B'}
           />
           
-          {/* Eye pupils - tiny circles for focus/intelligence */}
+          {/* Eye pupils - tiny dots for focus */}
           <circle 
-            cx="16" 
-            cy="15" 
-            r="1" 
-            fill={currentColors.primary}
+            cx="13" 
+            cy="16" 
+            r="0.8" 
+            fill={currentColors.mark}
           />
           <circle 
-            cx="24" 
-            cy="15" 
-            r="1" 
-            fill={currentColors.primary}
+            cx="19" 
+            cy="16" 
+            r="0.8" 
+            fill={currentColors.mark}
           />
           
-          {/* Beak - simple triangle pointing down */}
+          {/* Beak - simple triangle */}
           <path 
-            d="M20 18 L18 22 L22 22 Z" 
+            d="M16 19 L14.5 22 L17.5 22 Z" 
             fill={theme === 'light' ? '#EAE0D5' : '#22333B'}
           />
           
-          {/* Ear tufts - two triangular shapes for owl character */}
+          {/* Ear tufts - two small triangles for owl character */}
           <path 
-            d="M12 8 L16 4 L20 8 Z" 
-            fill={currentColors.primary}
+            d="M10 6 L12 2 L14 6 Z" 
+            fill={currentColors.mark}
           />
           <path 
-            d="M20 8 L24 4 L28 8 Z" 
-            fill={currentColors.primary}
+            d="M18 6 L20 2 L22 6 Z" 
+            fill={currentColors.mark}
           />
         </g>
       </svg>
@@ -115,16 +117,16 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
   );
 
   if (variant === 'icon-only') {
-    return <OwlMark />;
+    return <GeometricOwl />;
   }
 
   if (variant === 'text-only') {
     return (
       <div className="flex flex-col">
         <div className={`font-bold ${textSizeClasses[size]}`} style={{ color: currentColors.text }}>
-          cmo<span style={{ color: currentColors.primary }}>x</span>pert
+          cmo<span style={{ color: currentColors.accent }}>x</span>pert
         </div>
-        <div className={`${taglineSizeClasses[size]} font-medium`} style={{ color: currentColors.textMuted }}>
+        <div className={`${taglineSizeClasses[size]} font-medium`} style={{ color: currentColors.tagline }}>
           AI Marketing Co-Pilot
         </div>
       </div>
@@ -133,12 +135,12 @@ export const BrandLogo: React.FC<BrandLogoProps> = ({
 
   return (
     <div className="flex items-center space-x-3">
-      <OwlMark />
+      <GeometricOwl />
       <div className="flex flex-col">
         <div className={`font-bold ${textSizeClasses[size]}`} style={{ color: currentColors.text }}>
-          cmo<span style={{ color: currentColors.primary }}>x</span>pert
+          cmo<span style={{ color: currentColors.accent }}>x</span>pert
         </div>
-        <div className={`${taglineSizeClasses[size]} font-medium`} style={{ color: currentColors.textMuted }}>
+        <div className={`${taglineSizeClasses[size]} font-medium`} style={{ color: currentColors.tagline }}>
           AI Marketing Co-Pilot
         </div>
       </div>
