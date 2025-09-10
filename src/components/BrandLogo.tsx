@@ -38,14 +38,14 @@ export function BrandLogo({
   // Color scheme based on theme
   const colors = theme === 'dark' 
     ? {
-        primary: '#F7FAFC',
-        accent: '#4A90E2',
+        primary: '#EAE0D5', // cornsilk
+        accent: '#22333B', // dark_moss_green
         text: 'text-white',
         tagline: 'text-slate-300'
       }
     : {
-        primary: '#2D3748',
-        accent: '#4A90E2',
+        primary: '#22333B', // dark_moss_green (deep charcoal from site)
+        accent: '#5E503F', // tiger_s_eye (strategic accent from site)
         text: 'text-slate-900',
         tagline: 'text-slate-500'
       };
