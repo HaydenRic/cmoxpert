@@ -3,15 +3,16 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { initializeErrorReporting } from './lib/monitoring';
-
-// Initialize error reporting for production
-initializeErrorReporting();
-
-// Initialize comprehensive error handling
-initializeErrorHandling();
+import { initializeErrorHandling } from './lib/errorHandling';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />
   </StrictMode>
 );
+
+// Initialize error reporting for production
+initializeErrorReporting();
+
+// Initialize comprehensive error handling
+initializeErrorHandling();
