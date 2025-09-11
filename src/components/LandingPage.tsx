@@ -857,7 +857,6 @@ export function LandingPage() {
               </nav>
             </div>
           </div>
-          
           <div className="border-t border-charcoal-800 pt-8 text-center">
             <p className="text-sm text-charcoal-400">
               &copy; 2025 cmoxpert. All rights reserved. Built for B2B SaaS marketing teams.

@@ -64,7 +64,6 @@ export function StaticPageLayout({ children, title }: StaticPageLayoutProps) {
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center space-x-3 mb-4 md:mb-0">
               <BrandLogo variant="text-only" size="sm" />
-              <div>
             </div>
             <nav className="flex items-center space-x-6 text-slate-400" aria-label="Footer navigation">
               <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
