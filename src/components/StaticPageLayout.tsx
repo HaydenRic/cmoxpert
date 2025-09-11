@@ -80,3 +80,5 @@ export function StaticPageLayout({ children, title }: StaticPageLayoutProps) {
     </div>
   );
 }
+  )
+}
