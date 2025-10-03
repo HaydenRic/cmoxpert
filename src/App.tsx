@@ -35,6 +35,7 @@ const Settings = lazy(() => import('./components/StaticPages').then(module => ({
 const Privacy = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Privacy })));
 const Terms = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Terms })));
 const Support = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Support })));
+const Security = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Security })));
 
 // Initialize error handling
 initializeErrorHandling();
@@ -371,30 +372,38 @@ function AppContent() {
           }
         />
 
-        {/* Placeholder routes for Privacy, Terms, and Support */}
-        <Route 
-          path="/privacy" 
+        {/* Placeholder routes for Privacy, Terms, Support, and Security */}
+        <Route
+          path="/privacy"
           element={
             <Suspense fallback={<PageLoadingFallback />}>
               <Privacy />
             </Suspense>
-          } 
+          }
         />
-        <Route 
-          path="/terms" 
+        <Route
+          path="/terms"
           element={
             <Suspense fallback={<PageLoadingFallback />}>
               <Terms />
             </Suspense>
-          } 
+          }
         />
-        <Route 
-          path="/support" 
+        <Route
+          path="/support"
           element={
             <Suspense fallback={<PageLoadingFallback />}>
               <Support />
             </Suspense>
-          } 
+          }
+        />
+        <Route
+          path="/security"
+          element={
+            <Suspense fallback={<PageLoadingFallback />}>
+              <Security />
+            </Suspense>
+          }
         />
         
         {/* Fallback routes */}

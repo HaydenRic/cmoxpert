@@ -285,3 +285,232 @@ export function Support() {
     </StaticPageLayout>
   );
 }
+
+export function Security() {
+  return (
+    <StaticPageLayout title="Security">
+      <p><strong>Last updated:</strong> 8 January 2025</p>
+      <p>At cmoxpert, security is not just a feature—it's the foundation of everything we build. We understand that you trust us with your most sensitive business intelligence, competitive data, and strategic marketing insights. This document outlines our comprehensive approach to protecting your data.</p>
+
+      <h2>1. Infrastructure Security</h2>
+      <h3>Cloud Infrastructure</h3>
+      <ul>
+        <li><strong>Hosting:</strong> Our application is hosted on enterprise-grade cloud infrastructure with 99.9% uptime SLA</li>
+        <li><strong>Data Centers:</strong> Multiple geographically distributed data centers with automatic failover</li>
+        <li><strong>Network Security:</strong> DDoS protection, Web Application Firewall (WAF), and intrusion detection systems</li>
+        <li><strong>Load Balancing:</strong> Automatic traffic distribution for optimal performance and reliability</li>
+      </ul>
+
+      <h3>Database Security</h3>
+      <ul>
+        <li><strong>Encryption at Rest:</strong> All data is encrypted using AES-256 encryption</li>
+        <li><strong>Encryption in Transit:</strong> TLS 1.3 for all data transmission</li>
+        <li><strong>Automated Backups:</strong> Daily encrypted backups with 30-day retention</li>
+        <li><strong>Point-in-Time Recovery:</strong> Restore data to any point within the last 30 days</li>
+        <li><strong>Geographic Redundancy:</strong> Data replicated across multiple regions</li>
+      </ul>
+
+      <h2>2. Application Security</h2>
+      <h3>Authentication & Access Control</h3>
+      <ul>
+        <li><strong>Secure Authentication:</strong> Industry-standard authentication powered by Supabase Auth</li>
+        <li><strong>Password Requirements:</strong> Enforced strong password policies</li>
+        <li><strong>Session Management:</strong> Secure session handling with automatic timeout</li>
+        <li><strong>Two-Factor Authentication (2FA):</strong> Optional 2FA for enhanced account security</li>
+        <li><strong>Single Sign-On (SSO):</strong> Enterprise SSO support (SAML 2.0) available</li>
+      </ul>
+
+      <h3>Authorization & Permissions</h3>
+      <ul>
+        <li><strong>Row Level Security (RLS):</strong> Database-level access controls ensure users only access their own data</li>
+        <li><strong>Role-Based Access Control (RBAC):</strong> Granular permissions for admin, user, and client roles</li>
+        <li><strong>Principle of Least Privilege:</strong> Users receive only the minimum permissions necessary</li>
+        <li><strong>Audit Logging:</strong> All access and modifications are logged for security auditing</li>
+      </ul>
+
+      <h3>API Security</h3>
+      <ul>
+        <li><strong>API Authentication:</strong> OAuth 2.0 and JWT tokens for API access</li>
+        <li><strong>Rate Limiting:</strong> Protection against abuse and DDoS attacks</li>
+        <li><strong>Input Validation:</strong> Comprehensive validation to prevent injection attacks</li>
+        <li><strong>CORS Configuration:</strong> Strict cross-origin resource sharing policies</li>
+      </ul>
+
+      <h2>3. Data Protection</h2>
+      <h3>Data Privacy</h3>
+      <ul>
+        <li><strong>Data Isolation:</strong> Complete separation of customer data using multi-tenant architecture</li>
+        <li><strong>Data Ownership:</strong> You own your data—we never sell or share it with third parties</li>
+        <li><strong>Data Portability:</strong> Export your data at any time in standard formats</li>
+        <li><strong>Data Deletion:</strong> Permanent deletion upon account closure within 30 days</li>
+      </ul>
+
+      <h3>Compliance</h3>
+      <ul>
+        <li><strong>GDPR Compliance:</strong> Full compliance with EU General Data Protection Regulation</li>
+        <li><strong>UK GDPR:</strong> Compliance with UK data protection requirements</li>
+        <li><strong>Data Processing Agreement:</strong> Available for enterprise customers</li>
+        <li><strong>Privacy by Design:</strong> Privacy considerations built into every feature</li>
+        <li><strong>SOC 2 Type II:</strong> In progress - expected completion Q2 2025</li>
+      </ul>
+
+      <h2>4. Third-Party Integrations</h2>
+      <h3>Integration Security</h3>
+      <ul>
+        <li><strong>OAuth 2.0:</strong> Secure authorization for third-party platform connections</li>
+        <li><strong>Credential Encryption:</strong> All API keys and credentials encrypted at rest</li>
+        <li><strong>Minimal Permissions:</strong> Request only necessary scopes from integrated services</li>
+        <li><strong>Regular Audits:</strong> Quarterly security reviews of all integrations</li>
+      </ul>
+
+      <h3>Vetted Partners</h3>
+      <ul>
+        <li><strong>Security Reviews:</strong> All integration partners undergo security assessment</li>
+        <li><strong>Compliance Verification:</strong> Partners must meet our security standards</li>
+        <li><strong>Data Processing Agreements:</strong> Legal agreements govern data handling</li>
+      </ul>
+
+      <h2>5. Security Operations</h2>
+      <h3>Monitoring & Detection</h3>
+      <ul>
+        <li><strong>24/7 Monitoring:</strong> Continuous security monitoring and alerting</li>
+        <li><strong>Intrusion Detection:</strong> Automated detection of suspicious activity</li>
+        <li><strong>Log Analysis:</strong> Real-time analysis of security logs</li>
+        <li><strong>Anomaly Detection:</strong> Machine learning-based threat identification</li>
+      </ul>
+
+      <h3>Incident Response</h3>
+      <ul>
+        <li><strong>Response Team:</strong> Dedicated security team available 24/7</li>
+        <li><strong>Incident Protocol:</strong> Documented procedures for security incidents</li>
+        <li><strong>Customer Notification:</strong> Prompt notification in case of data breaches</li>
+        <li><strong>Post-Incident Review:</strong> Thorough analysis and remediation after incidents</li>
+      </ul>
+
+      <h3>Vulnerability Management</h3>
+      <ul>
+        <li><strong>Regular Scanning:</strong> Automated vulnerability scanning of infrastructure</li>
+        <li><strong>Penetration Testing:</strong> Annual third-party security assessments</li>
+        <li><strong>Patch Management:</strong> Rapid deployment of security patches</li>
+        <li><strong>Bug Bounty Program:</strong> Rewarding security researchers (launching Q2 2025)</li>
+      </ul>
+
+      <h2>6. Development Security</h2>
+      <h3>Secure Development Lifecycle</h3>
+      <ul>
+        <li><strong>Security Training:</strong> Regular security training for all developers</li>
+        <li><strong>Code Reviews:</strong> Mandatory security-focused code reviews</li>
+        <li><strong>Static Analysis:</strong> Automated code security scanning</li>
+        <li><strong>Dependency Scanning:</strong> Regular audits of third-party libraries</li>
+      </ul>
+
+      <h3>Deployment Security</h3>
+      <ul>
+        <li><strong>CI/CD Security:</strong> Secure continuous integration and deployment pipelines</li>
+        <li><strong>Environment Isolation:</strong> Separate development, staging, and production environments</li>
+        <li><strong>Access Controls:</strong> Strict controls on production access</li>
+        <li><strong>Change Management:</strong> Formal process for production changes</li>
+      </ul>
+
+      <h2>7. Physical & Operational Security</h2>
+      <h3>Data Center Security</h3>
+      <ul>
+        <li><strong>Physical Access:</strong> Biometric access controls and 24/7 security personnel</li>
+        <li><strong>Environmental Controls:</strong> Climate control and fire suppression systems</li>
+        <li><strong>Power Redundancy:</strong> Uninterruptible power supply and backup generators</li>
+        <li><strong>Certifications:</strong> ISO 27001, SOC 2 certified data centers</li>
+      </ul>
+
+      <h3>Employee Security</h3>
+      <ul>
+        <li><strong>Background Checks:</strong> Comprehensive screening for all employees</li>
+        <li><strong>Security Training:</strong> Mandatory security awareness training</li>
+        <li><strong>Access Reviews:</strong> Quarterly review of employee access rights</li>
+        <li><strong>Confidentiality Agreements:</strong> All employees sign NDAs</li>
+      </ul>
+
+      <h2>8. Business Continuity</h2>
+      <h3>Disaster Recovery</h3>
+      <ul>
+        <li><strong>Recovery Point Objective (RPO):</strong> Maximum 1 hour data loss</li>
+        <li><strong>Recovery Time Objective (RTO):</strong> Service restoration within 4 hours</li>
+        <li><strong>Disaster Recovery Plan:</strong> Documented and regularly tested</li>
+        <li><strong>Geographic Redundancy:</strong> Multi-region failover capability</li>
+      </ul>
+
+      <h3>High Availability</h3>
+      <ul>
+        <li><strong>Uptime SLA:</strong> 99.9% availability guarantee</li>
+        <li><strong>Auto-Scaling:</strong> Automatic resource scaling for peak loads</li>
+        <li><strong>Health Monitoring:</strong> Continuous service health checks</li>
+        <li><strong>Status Page:</strong> Real-time status updates at status.cmoxpert.com</li>
+      </ul>
+
+      <h2>9. Customer Security Controls</h2>
+      <h3>What You Can Do</h3>
+      <ul>
+        <li><strong>Strong Passwords:</strong> Use unique, complex passwords for your account</li>
+        <li><strong>Enable 2FA:</strong> Add an extra layer of security to your account</li>
+        <li><strong>Review Access:</strong> Regularly audit team member access and permissions</li>
+        <li><strong>Monitor Activity:</strong> Review audit logs for suspicious activity</li>
+        <li><strong>Secure Integrations:</strong> Revoke unused third-party integrations</li>
+        <li><strong>Report Issues:</strong> Contact us immediately if you suspect a security issue</li>
+      </ul>
+
+      <h2>10. Reporting Security Issues</h2>
+      <p>We take security vulnerabilities seriously and appreciate the security research community's efforts in keeping cmoxpert secure.</p>
+
+      <h3>Responsible Disclosure</h3>
+      <p>If you discover a security vulnerability, please:</p>
+      <ul>
+        <li><strong>Email:</strong> security@cmoxpert.com with details of the vulnerability</li>
+        <li><strong>Allow Time:</strong> Give us reasonable time to address the issue before public disclosure</li>
+        <li><strong>Act Responsibly:</strong> Do not access or modify customer data</li>
+      </ul>
+
+      <h3>What to Include</h3>
+      <ul>
+        <li>Description of the vulnerability and its potential impact</li>
+        <li>Steps to reproduce the issue</li>
+        <li>Any supporting screenshots or proof-of-concept code</li>
+        <li>Your contact information for follow-up</li>
+      </ul>
+
+      <h2>11. Security Certifications & Audits</h2>
+      <h3>Current Status</h3>
+      <ul>
+        <li><strong>Infrastructure:</strong> Hosted on SOC 2 Type II certified cloud providers</li>
+        <li><strong>Annual Security Audit:</strong> Third-party penetration testing (most recent: January 2025)</li>
+        <li><strong>In Progress:</strong> SOC 2 Type II certification (expected Q2 2025)</li>
+      </ul>
+
+      <h3>Future Certifications</h3>
+      <ul>
+        <li><strong>ISO 27001:</strong> Information security management (planned 2025)</li>
+        <li><strong>PCI DSS:</strong> If payment processing features are added</li>
+        <li><strong>HIPAA:</strong> For healthcare industry expansion</li>
+      </ul>
+
+      <h2>12. Security Resources</h2>
+      <h3>Additional Information</h3>
+      <ul>
+        <li><Link to="/privacy" className="text-slate_blue-600 hover:underline">Privacy Policy</Link> - How we handle your personal data</li>
+        <li><Link to="/terms" className="text-slate_blue-600 hover:underline">Terms of Service</Link> - Legal terms governing service use</li>
+        <li><strong>Trust Center:</strong> Detailed security documentation (coming soon)</li>
+        <li><strong>Status Page:</strong> Real-time service status at status.cmoxpert.com</li>
+      </ul>
+
+      <h3>Contact Security Team</h3>
+      <ul>
+        <li><strong>Security Issues:</strong> security@cmoxpert.com</li>
+        <li><strong>Privacy Questions:</strong> privacy@cmoxpert.com</li>
+        <li><strong>Compliance:</strong> compliance@cmoxpert.com</li>
+        <li><strong>General Support:</strong> <Link to="/contact" className=\"text-slate_blue-600 hover:underline">Contact Form</Link></li>
+      </ul>
+
+      <p className="mt-8 p-4 bg-green-50 rounded-lg border border-green-200">
+        <strong className="text-green-900">Security is a shared responsibility.</strong> <span className="text-green-800">While we implement industry-leading security measures, we encourage all customers to follow security best practices and report any concerns immediately. Together, we can maintain the highest standards of security for your sensitive business data.</span>
+      </p>
+    </StaticPageLayout>
+  );
+}
