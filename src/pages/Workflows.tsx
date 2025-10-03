@@ -1,28 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-import {
-  Zap,
-  Plus,
-  Play,
-  Pause,
-  Trash2,
-  Edit2,
-  Clock,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Calendar,
-  Mail,
-  Bell,
-  FileText,
-  TrendingUp,
-  Users,
-  Target,
-  ArrowRight,
-  Settings,
-  Activity
-} from 'lucide-react';
+import { Zap, Plus, Play, Pause, Trash2, CreditCard as Edit2, Clock, CheckCircle, XCircle, AlertCircle, Calendar, Mail, Bell, FileText, TrendingUp, Users, Target, ArrowRight, Settings, Activity } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface Workflow {
