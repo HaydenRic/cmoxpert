@@ -24,6 +24,11 @@ const MarketingAnalytics = lazy(() => import('./pages/MarketingAnalytics').then(
 const ContentHub = lazy(() => import('./pages/ContentHub').then(module => ({ default: module.ContentHub })));
 const CompetitiveIntelligence = lazy(() => import('./pages/CompetitiveIntelligence').then(module => ({ default: module.CompetitiveIntelligence })));
 const Admin = lazy(() => import('./pages/Admin').then(module => ({ default: module.Admin })));
+const Integrations = lazy(() => import('./pages/Integrations').then(module => ({ default: module.Integrations })));
+const ClientPortal = lazy(() => import('./pages/ClientPortal').then(module => ({ default: module.ClientPortal })));
+const Workflows = lazy(() => import('./pages/Workflows').then(module => ({ default: module.Workflows })));
+const AlertRules = lazy(() => import('./pages/AlertRules').then(module => ({ default: module.AlertRules })));
+const Forecasting = lazy(() => import('./pages/Forecasting').then(module => ({ default: module.Forecasting })));
 
 // Lazy load placeholder pages
 const Settings = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Settings })));
@@ -276,9 +281,84 @@ function AppContent() {
           } 
         />
         
-        <Route 
-          path="/settings" 
-          element={ 
+        <Route
+          path="/integrations"
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <Integrations />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/client-portal"
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <ClientPortal />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/workflows"
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <Workflows />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/alert-rules"
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <AlertRules />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/forecasting"
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <Forecasting />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/settings"
+          element={
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -288,7 +368,7 @@ function AppContent() {
             ) : (
               <Navigate to="/auth" replace />
             )
-          } 
+          }
         />
 
         {/* Placeholder routes for Privacy, Terms, and Support */}

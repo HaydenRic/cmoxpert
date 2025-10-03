@@ -2,20 +2,25 @@
 import React from 'react';
 import { BrandLogo } from './BrandLogo';
 import { useAuth } from '../contexts/AuthContext';
-import { 
-  LayoutDashboard, 
+import {
+  LayoutDashboard,
   Rocket,
   BarChart3,
   DollarSign,
   Eye,
   FileText,
-  Users, 
+  Users,
   Sparkles,
-  BookOpen, 
-  Settings, 
+  BookOpen,
+  Settings,
   LogOut,
   Compass,
-  Shield
+  Shield,
+  Plug,
+  UserPlus,
+  Zap,
+  Bell,
+  TrendingUp
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
@@ -30,14 +35,18 @@ export function Layout({ children }: LayoutProps) {
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Performance', href: '/performance', icon: BarChart3 },
-    { name: 'Marketing Analytics', href: '/marketing-analytics', icon: DollarSign },
-    { name: 'Competitive Intel', href: '/competitive-intelligence', icon: Eye },
-    { name: 'Content Hub', href: '/content', icon: Sparkles },
     { name: 'Clients', href: '/clients', icon: Users },
-    { name: 'Onboarding', href: '/onboarding', icon: Rocket },
     { name: 'Reports', href: '/reports', icon: FileText },
     { name: 'Playbooks', href: '/playbooks', icon: BookOpen },
+    { name: 'Performance', href: '/performance', icon: BarChart3 },
+    { name: 'Marketing Analytics', href: '/marketing-analytics', icon: DollarSign },
+    { name: 'Forecasting', href: '/forecasting', icon: TrendingUp },
+    { name: 'Competitive Intel', href: '/competitive-intelligence', icon: Eye },
+    { name: 'Content Hub', href: '/content', icon: Sparkles },
+    { name: 'Integrations', href: '/integrations', icon: Plug },
+    { name: 'Workflows', href: '/workflows', icon: Zap },
+    { name: 'Alerts', href: '/alert-rules', icon: Bell },
+    { name: 'Client Portal', href: '/client-portal', icon: UserPlus },
     ...(isAdmin ? [{ name: 'Admin', href: '/admin', icon: Shield }] : []),
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
