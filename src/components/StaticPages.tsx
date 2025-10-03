@@ -505,7 +505,7 @@ export function Security() {
         <li><strong>Security Issues:</strong> security@cmoxpert.com</li>
         <li><strong>Privacy Questions:</strong> privacy@cmoxpert.com</li>
         <li><strong>Compliance:</strong> compliance@cmoxpert.com</li>
-        <li><strong>General Support:</strong> <Link to="/contact" className=\"text-slate_blue-600 hover:underline">Contact Form</Link></li>
+        <li><strong>General Support:</strong> <Link to="/contact">Contact Form</Link></li>
       </ul>
 
       <p className="mt-8 p-4 bg-green-50 rounded-lg border border-green-200">
