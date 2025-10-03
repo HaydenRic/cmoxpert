@@ -617,7 +617,7 @@ export function Contact() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center space-x-3 mb-6">
-                <BrandLogo variant="text-only" />
+                <BrandLogo variant="text-only" theme="dark" />
               </div>
               <p className="text-charcoal-400 text-sm leading-relaxed">
                 AI-powered marketing intelligence platform designed for B2B SaaS companies ready to outmaneuver competitors and accelerate growth.
