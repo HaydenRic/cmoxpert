@@ -1,24 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-import {
-  Users,
-  Plus,
-  Mail,
-  Shield,
-  Eye,
-  Edit,
-  Share2,
-  Trash2,
-  CheckCircle,
-  XCircle,
-  Clock,
-  MessageSquare,
-  Link as LinkIcon,
-  Copy,
-  Send,
-  UserPlus
-} from 'lucide-react';
+import { Users, Plus, Mail, Shield, Eye, CreditCard as Edit, Share2, Trash2, CheckCircle, XCircle, Clock, MessageSquare, Link as LinkIcon, Copy, Send, UserPlus } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 
