@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { BrandLogo } from '../components/BrandLogo';
 import { trackFormSubmission, trackEvent } from '../components/Analytics';
-import { 
-  ArrowLeft, 
-  Mail, 
-  Phone, 
-  Calendar, 
-  MessageSquare, 
+import {
+  ArrowLeft,
+  Mail,
+  Phone,
+  Calendar,
+  MessageSquare,
   CheckCircle,
   User,
   Building,
@@ -23,7 +23,8 @@ import {
   Zap,
   BarChart3,
   Brain,
-  Activity
+  Activity,
+  Star
 } from 'lucide-react';
 
 export function Contact() {
@@ -132,6 +133,36 @@ export function Contact() {
       icon: BarChart3,
       title: "Data-Driven Results",
       description: "Every recommendation backed by real market data and competitive intelligence"
+    }
+  ];
+
+  const testimonials = [
+    {
+      name: "Sarah Chen",
+      role: "VP Marketing",
+      company: "TechFlow SaaS",
+      content: "cmoxpert transformed our market research process. We now identify opportunities 80% faster and our strategic decisions are backed by real-time data.",
+      rating: 5,
+      avatar: "SC",
+      metric: "80% faster insights"
+    },
+    {
+      name: "Marcus Rodriguez",
+      role: "Head of Growth",
+      company: "DataSync Pro",
+      content: "The competitive intelligence alone has prevented multiple pricing mistakes. The ROI was immediate and continues to compound.",
+      rating: 5,
+      avatar: "MR",
+      metric: "3.2x ROI increase"
+    },
+    {
+      name: "Jennifer Park",
+      role: "CMO",
+      company: "CloudScale Systems",
+      content: "Finally, a platform that thinks strategically. It's like having a senior marketing consultant available 24/7 with perfect data recall.",
+      rating: 5,
+      avatar: "JP",
+      metric: "24/7 availability"
     }
   ];
 
