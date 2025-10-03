@@ -52,7 +52,7 @@ export function StaticPageLayout({ children, title }: StaticPageLayoutProps) {
         tabIndex={-1}
       >
         <h1 className="text-4xl font-bold text-slate-900 mb-8 text-center" id="page-title">{title}</h1>
-        <article className="bg-white rounded-xl shadow-lg p-8 prose prose-lg max-w-none" aria-labelledby="page-title">
+        <article className="bg-white rounded-xl shadow-lg p-8 static-page-content" aria-labelledby="page-title">
           {children}
         </article>
       </main>

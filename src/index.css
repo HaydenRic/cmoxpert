@@ -7,8 +7,50 @@
   body {
     font-family: 'Assistant', sans-serif;
   }
-  
+
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Archivo', sans-serif;
+  }
+}
+
+@layer components {
+  .static-page-content {
+    @apply text-slate-700 text-lg leading-relaxed;
+  }
+
+  .static-page-content h2 {
+    @apply text-2xl font-bold text-slate-900 mt-8 mb-4;
+  }
+
+  .static-page-content h3 {
+    @apply text-xl font-semibold text-slate-800 mt-6 mb-3;
+  }
+
+  .static-page-content p {
+    @apply mb-4;
+  }
+
+  .static-page-content ul {
+    @apply list-disc pl-6 mb-4 space-y-2;
+  }
+
+  .static-page-content ol {
+    @apply list-decimal pl-6 mb-4 space-y-2;
+  }
+
+  .static-page-content li {
+    @apply mb-2;
+  }
+
+  .static-page-content li ul {
+    @apply mt-2;
+  }
+
+  .static-page-content strong {
+    @apply font-semibold text-slate-900;
+  }
+
+  .static-page-content a {
+    @apply text-slate_blue-600 hover:text-slate_blue-700 underline;
   }
 }
