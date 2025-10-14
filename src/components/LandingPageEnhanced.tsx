@@ -542,9 +542,9 @@ export function LandingPageEnhanced() {
 
       <footer className="bg-gray-900 text-gray-300 py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <BrandLogo />
-            <p className="mt-4 text-gray-400">
+          <div className="flex flex-col items-center space-y-4">
+            <BrandLogo theme="dark" size="md" variant="text-only" />
+            <p className="text-gray-400 text-sm">
               © 2025 CMO Compass. All rights reserved.
             </p>
           </div>
