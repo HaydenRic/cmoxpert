@@ -82,7 +82,7 @@ export function Integrations() {
       type: 'seo',
       icon: Search,
       description: 'Access keyword rankings, backlinks, and competitor data',
-      color: 'bg-indigo-500',
+      color: 'bg-slate_blue-500',
       features: ['Keyword rankings', 'Backlink analysis', 'Competitor research', 'SEO audit'],
       available: true
     },
@@ -109,7 +109,7 @@ export function Integrations() {
       type: 'communication',
       icon: MessageSquare,
       description: 'Receive alerts and notifications in your Slack workspace',
-      color: 'bg-purple-600',
+      color: 'bg-tan-600',
       features: ['Real-time alerts', 'Report sharing', 'Team notifications', 'Custom webhooks'],
       available: true
     },

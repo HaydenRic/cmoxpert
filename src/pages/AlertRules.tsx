@@ -54,7 +54,7 @@ export function AlertRules() {
       label: 'Competitor Pricing Change',
       icon: DollarSign,
       description: 'Alert when competitor pricing is updated',
-      color: 'bg-purple-500'
+      color: 'bg-tan-500'
     },
     {
       value: 'traffic_spike',

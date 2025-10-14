@@ -434,7 +434,7 @@ export function Performance() {
   const alertTypeColors = {
     new_content: 'bg-blue-100 text-blue-800',
     pricing_change: 'bg-orange-100 text-orange-800',
-    ad_campaign: 'bg-purple-100 text-purple-800',
+    ad_campaign: 'bg-tan-100 text-tan-800',
     product_update: 'bg-green-100 text-green-800',
     website_change: 'bg-gray-100 text-gray-800'
   };

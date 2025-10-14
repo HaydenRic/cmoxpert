@@ -118,7 +118,7 @@ export function CompetitiveIntelligence() {
   const alertTypes = [
     { value: 'new_content', label: 'New Content', color: 'bg-blue-100 text-blue-800' },
     { value: 'pricing_change', label: 'Pricing Change', color: 'bg-orange-100 text-orange-800' },
-    { value: 'ad_campaign', label: 'Ad Campaign', color: 'bg-purple-100 text-purple-800' },
+    { value: 'ad_campaign', label: 'Ad Campaign', color: 'bg-tan-100 text-tan-800' },
     { value: 'product_update', label: 'Product Update', color: 'bg-green-100 text-green-800' },
     { value: 'website_change', label: 'Website Change', color: 'bg-gray-100 text-gray-800' }
   ];

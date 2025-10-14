@@ -78,7 +78,7 @@ export function Workflows() {
         { type: 'send_email', config: { template: 'report_ready', recipient: 'client' } }
       ],
       icon: FileText,
-      color: 'bg-purple-500'
+      color: 'bg-tan-500'
     },
     {
       name: 'Competitive Alert Notification',
@@ -102,7 +102,7 @@ export function Workflows() {
         { type: 'send_notification', config: { message: 'New playbook generated' } }
       ],
       icon: Target,
-      color: 'bg-indigo-500'
+      color: 'bg-slate_blue-500'
     }
   ];
 

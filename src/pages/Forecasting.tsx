@@ -69,7 +69,7 @@ export function Forecasting() {
   const metrics = [
     { value: 'revenue', label: 'Revenue', icon: DollarSign, color: 'text-green-600' },
     { value: 'leads', label: 'Leads', icon: Users, color: 'text-blue-600' },
-    { value: 'conversions', label: 'Conversions', icon: Target, color: 'text-purple-600' },
+    { value: 'conversions', label: 'Conversions', icon: Target, color: 'text-tan-600' },
     { value: 'traffic', label: 'Website Traffic', icon: Activity, color: 'text-orange-600' },
     { value: 'engagement', label: 'Engagement', icon: Zap, color: 'text-cyan-600' }
   ];
@@ -385,12 +385,12 @@ export function Forecasting() {
           </div>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg shadow-sm border border-blue-200 p-6">
+        <div className="bg-gradient-to-br from-slate_blue-50 to-tan-50 rounded-lg shadow-sm border border-slate_blue-200 p-6">
           <div className="flex items-start space-x-3 mb-4">
-            <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-slate_blue-600 flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-bold text-blue-900 mb-2">Forecasting Insights</h3>
-              <ul className="space-y-2 text-sm text-blue-800">
+              <h3 className="font-bold text-slate_blue-900 mb-2">Forecasting Insights</h3>
+              <ul className="space-y-2 text-sm text-slate_blue-800">
                 <li>• AI-powered predictions based on historical data</li>
                 <li>• Confidence levels indicate forecast reliability</li>
                 <li>• Use forecasts for budget planning and goal setting</li>

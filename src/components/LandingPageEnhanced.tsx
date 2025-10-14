@@ -117,28 +117,28 @@ export function LandingPageEnhanced() {
       title: "AI Market Analysis",
       description: "Automated competitive intelligence and market opportunity identification",
       metric: "80% faster insights",
-      color: "from-blue-500 to-blue-600"
+      color: "from-slate_blue-500 to-slate_blue-600"
     },
     {
       icon: TrendingUp,
       title: "Predictive Analytics",
       description: "Forecast market trends and demand patterns with machine learning",
       metric: "95% accuracy rate",
-      color: "from-purple-500 to-purple-600"
+      color: "from-charcoal-500 to-charcoal-600"
     },
     {
       icon: Target,
       title: "Strategic Positioning",
       description: "Data-driven positioning recommendations and messaging optimization",
       metric: "3.2x conversion lift",
-      color: "from-indigo-500 to-indigo-600"
+      color: "from-tan-500 to-tan-600"
     },
     {
       icon: Eye,
       title: "Competitive Monitoring",
       description: "Real-time competitor tracking and market intelligence alerts",
       metric: "24/7 monitoring",
-      color: "from-cyan-500 to-cyan-600"
+      color: "from-olive-500 to-olive-600"
     }
   ];
 
@@ -219,7 +219,7 @@ export function LandingPageEnhanced() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/30">
+    <div className="min-h-screen bg-cornsilk-50">
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-gray-900 text-white px-4 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
@@ -254,13 +254,13 @@ export function LandingPageEnhanced() {
 
       <main id="main-content" role="main" tabIndex={-1}>
         <section className="pt-32 pb-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden" aria-labelledby="hero-heading">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-600/5 via-purple-600/5 to-cyan-600/5 pointer-events-none"></div>
-          <div className="absolute top-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-          <div className="absolute bottom-20 left-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
+          <div className="absolute inset-0 bg-gradient-to-br from-slate_blue-600/5 via-charcoal-600/5 to-tan-600/5 pointer-events-none"></div>
+          <div className="absolute top-20 right-10 w-96 h-96 bg-slate_blue-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+          <div className="absolute bottom-20 left-10 w-96 h-96 bg-tan-500/10 rounded-full blur-3xl animate-pulse-slow" style={{animationDelay: '1s'}}></div>
 
           <div className="max-w-7xl mx-auto relative">
             <div className="text-center space-y-8 animate-fade-in">
-              <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-200 rounded-full px-6 py-3 text-sm font-semibold text-blue-700 shadow-sm">
+              <div className="inline-flex items-center space-x-2 bg-slate_blue-50 border border-slate_blue-200 rounded-full px-6 py-3 text-sm font-semibold text-slate_blue-700 shadow-sm">
                 <Sparkles className="w-4 h-4" />
                 <span>AI-Powered Marketing Intelligence Platform</span>
               </div>
@@ -317,7 +317,7 @@ export function LandingPageEnhanced() {
               <div className="glass-card rounded-3xl p-8 shadow-2xl transform hover:scale-[1.02] transition-transform duration-500">
                 <div className="flex items-center justify-between mb-8 pb-6 border-b border-gray-200">
                   <div className="flex items-center space-x-4">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
+                    <div className="w-12 h-12 bg-gradient-to-br from-slate_blue-600 to-charcoal-700 rounded-2xl flex items-center justify-center shadow-lg">
                       <Brain className="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -332,10 +332,10 @@ export function LandingPageEnhanced() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200 card-hover">
+                  <div className="bg-gradient-to-br from-slate_blue-50 to-slate_blue-100 rounded-2xl p-6 border border-slate_blue-200 card-hover">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-bold text-blue-700 uppercase tracking-wide">Competitive Edge</span>
-                      <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+                      <span className="text-sm font-bold text-slate_blue-700 uppercase tracking-wide">Competitive Edge</span>
+                      <div className="w-10 h-10 bg-slate_blue-600 rounded-xl flex items-center justify-center">
                         <TrendingUp className="w-5 h-5 text-white" />
                       </div>
                     </div>
@@ -343,10 +343,10 @@ export function LandingPageEnhanced() {
                     <div className="text-sm font-semibold text-green-600">Market opportunity identified</div>
                   </div>
 
-                  <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200 card-hover">
+                  <div className="bg-gradient-to-br from-tan-50 to-tan-100 rounded-2xl p-6 border border-tan-200 card-hover">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-bold text-purple-700 uppercase tracking-wide">Intelligence Alerts</span>
-                      <div className="w-10 h-10 bg-purple-600 rounded-xl flex items-center justify-center">
+                      <span className="text-sm font-bold text-tan-700 uppercase tracking-wide">Intelligence Alerts</span>
+                      <div className="w-10 h-10 bg-tan-600 rounded-xl flex items-center justify-center">
                         <Eye className="w-5 h-5 text-white" />
                       </div>
                     </div>
@@ -365,8 +365,8 @@ export function LandingPageEnhanced() {
                     <svg className="w-full h-full" viewBox="0 0 320 128">
                       <defs>
                         <linearGradient id="growth-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                          <stop offset="0%" stopColor="#3B82F6" stopOpacity="0.3"/>
-                          <stop offset="100%" stopColor="#3B82F6" stopOpacity="0.05"/>
+                          <stop offset="0%" stopColor="#22333B" stopOpacity="0.3"/>
+                          <stop offset="100%" stopColor="#22333B" stopOpacity="0.05"/>
                         </linearGradient>
                       </defs>
                       <path
@@ -376,8 +376,8 @@ export function LandingPageEnhanced() {
                         fill="none"
                       />
                       <linearGradient id="growth-gradient-line" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stopColor="#3B82F6"/>
-                        <stop offset="100%" stopColor="#8B5CF6"/>
+                        <stop offset="0%" stopColor="#22333B"/>
+                        <stop offset="100%" stopColor="#0A0908"/>
                       </linearGradient>
                       <path
                         d="M0,90 Q80,60 160,40 Q240,20 320,10"
@@ -389,10 +389,10 @@ export function LandingPageEnhanced() {
                         d="M0,90 Q80,60 160,40 Q240,20 320,10 L320,128 L0,128 Z"
                         fill="url(#growth-gradient)"
                       />
-                      <circle cx="80" cy="60" r="4" fill="#3B82F6" className="animate-pulse"/>
-                      <circle cx="160" cy="40" r="4" fill="#6366F1" className="animate-pulse" style={{animationDelay: '0.2s'}}/>
-                      <circle cx="240" cy="20" r="4" fill="#8B5CF6" className="animate-pulse" style={{animationDelay: '0.4s'}}/>
-                      <circle cx="320" cy="10" r="5" fill="#A855F7" className="animate-pulse" style={{animationDelay: '0.6s'}}/>
+                      <circle cx="80" cy="60" r="4" fill="#22333B" className="animate-pulse"/>
+                      <circle cx="160" cy="40" r="4" fill="#557387" className="animate-pulse" style={{animationDelay: '0.2s'}}/>
+                      <circle cx="240" cy="20" r="4" fill="#C6AC8F" className="animate-pulse" style={{animationDelay: '0.4s'}}/>
+                      <circle cx="320" cy="10" r="5" fill="#5E503F" className="animate-pulse" style={{animationDelay: '0.6s'}}/>
                     </svg>
                   </div>
 
@@ -428,7 +428,7 @@ export function LandingPageEnhanced() {
           </div>
         </section>
 
-        <section id="features" className="py-24 bg-gradient-to-br from-gray-50 to-blue-50/30">
+        <section id="features" className="py-24 bg-cream-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16 animate-fade-in">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
@@ -446,7 +446,7 @@ export function LandingPageEnhanced() {
                   className="glass-card rounded-2xl p-8 card-hover animate-fade-in"
                   style={{animationDelay: `${index * 0.1}s`}}
                 >
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                  <div className="w-14 h-14 bg-gradient-to-br from-slate_blue-600 to-charcoal-700 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
                     <feature.icon className="w-7 h-7 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">{feature.title}</h3>
@@ -490,7 +490,7 @@ export function LandingPageEnhanced() {
                   </div>
                   <p className="text-gray-700 mb-6 leading-relaxed">{testimonial.content}</p>
                   <div className="flex items-center space-x-4 pt-4 border-t border-gray-200">
-                    <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
+                    <div className="w-12 h-12 bg-gradient-to-br from-slate_blue-600 to-charcoal-700 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
                       {testimonial.avatar}
                     </div>
                     <div>
@@ -509,20 +509,20 @@ export function LandingPageEnhanced() {
           </div>
         </section>
 
-        <section className="py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-600 bg-[length:200%_auto] animate-gradient relative overflow-hidden">
+        <section className="py-24 bg-gradient-to-br from-slate_blue-600 to-charcoal-800 relative overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_50%)]"></div>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <div className="animate-fade-in">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
                 Ready to Transform Your Marketing Strategy?
               </h2>
-              <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
+              <p className="text-xl text-slate_blue-100 mb-10 max-w-2xl mx-auto">
                 Join 150+ B2B SaaS companies using AI-powered intelligence to win their markets
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
                   onClick={handleGetStarted}
-                  className="bg-white text-blue-600 px-12 py-5 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl transition-all hover:scale-105 flex items-center justify-center space-x-2"
+                  className="bg-white text-slate_blue-600 px-12 py-5 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl transition-all hover:scale-105 flex items-center justify-center space-x-2"
                 >
                   <span>Get Started Free</span>
                   <ArrowRight className="w-5 h-5" />
