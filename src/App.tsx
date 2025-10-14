@@ -9,7 +9,7 @@ import { OfflineIndicator } from './components/ui/OfflineIndicator';
 import { initializeErrorHandling } from './lib/errorHandling';
 import { Layout } from './components/Layout';
 import { AuthForm } from './components/AuthForm';
-import { LandingPage } from './components/LandingPage';
+import { LandingPageEnhanced as LandingPage } from './components/LandingPageEnhanced';
 import { Contact } from './pages/Contact';
 
 // Lazy load all non-critical route components
