@@ -230,7 +230,7 @@ export function LandingPageEnhanced() {
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 shadow-sm" role="banner">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
-            <BrandLogo />
+            <BrandLogo theme="light" size="md" variant="text-only" />
 
             <nav className="flex items-center space-x-6" role="navigation" aria-label="Header navigation">
               <Link
