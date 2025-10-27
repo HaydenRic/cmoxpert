@@ -1,10 +1,18 @@
 import React from 'react';
-import { Shield, Lock, Eye, Database, Mail, UserCheck } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Shield, Lock, Eye, Database, Mail, UserCheck, ArrowLeft } from 'lucide-react';
 
 export function Privacy() {
   return (
     <div className="min-h-screen bg-cream-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
+        <Link
+          to="/"
+          className="inline-flex items-center text-slate-600 hover:text-slate-900 transition-colors mb-6 group"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
+          Back to Home
+        </Link>
         <div className="bg-white rounded-xl shadow-lg p-8 md:p-12">
           <div className="flex items-center space-x-3 mb-8">
             <div className="w-12 h-12 bg-slate_blue-100 rounded-lg flex items-center justify-center">
