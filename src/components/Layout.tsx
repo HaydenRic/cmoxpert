@@ -41,7 +41,7 @@ export function Layout({ children }: LayoutProps) {
     { name: 'Playbooks', href: '/playbooks', icon: BookOpen },
     { name: 'Performance', href: '/performance', icon: BarChart3 },
     { name: 'Marketing Analytics', href: '/marketing-analytics', icon: DollarSign },
-    { name: 'Revenue Attribution', href: '/revenue-attribution', icon: Target },
+    { name: 'Revenue Attribution', href: '/revenue-attribution', icon: Target, badge: 'NEW', badgeColor: 'bg-green-500' },
     { name: 'Forecasting', href: '/forecasting', icon: TrendingUp },
     { name: 'Competitive Intel', href: '/competitive-intelligence', icon: Eye },
     { name: 'Content Hub', href: '/content', icon: Sparkles },
@@ -95,15 +95,25 @@ export function Layout({ children }: LayoutProps) {
                   key={item.name}
                   to={item.href}
                   className={clsx(
-                    'flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200',
+                    'flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200',
                     isActive
                       ? 'bg-cream-200 text-slate_blue-900 border-r-2 border-slate_blue-600'
                       : 'text-slate-600 hover:bg-cornsilk-100 hover:text-slate-900'
                   )}
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  <item.icon className="w-5 h-5 mr-3" />
-                  {item.name}
+                  <div className="flex items-center">
+                    <item.icon className="w-5 h-5 mr-3" />
+                    {item.name}
+                  </div>
+                  {(item as any).badge && (
+                    <span className={clsx(
+                      'px-2 py-0.5 text-xs font-bold text-white rounded-full',
+                      (item as any).badgeColor || 'bg-slate_blue-500'
+                    )}>
+                      {(item as any).badge}
+                    </span>
+                  )}
                 </Link>
               );
             })}
