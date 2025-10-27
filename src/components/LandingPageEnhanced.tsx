@@ -545,7 +545,7 @@ export function LandingPageEnhanced() {
           <div className="flex flex-col items-center space-y-4">
             <BrandLogo theme="dark" size="md" variant="text-only" />
             <p className="text-gray-400 text-sm">
-              © 2025 CMO Compass. All rights reserved.
+              © 2025 cmoxpert. All rights reserved.
             </p>
           </div>
         </div>
