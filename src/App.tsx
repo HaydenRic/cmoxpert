@@ -29,6 +29,7 @@ const ClientPortal = lazy(() => import('./pages/ClientPortal').then(module => ({
 const Workflows = lazy(() => import('./pages/Workflows').then(module => ({ default: module.Workflows })));
 const AlertRules = lazy(() => import('./pages/AlertRules').then(module => ({ default: module.AlertRules })));
 const Forecasting = lazy(() => import('./pages/Forecasting').then(module => ({ default: module.Forecasting })));
+const RevenueAttribution = lazy(() => import('./pages/RevenueAttribution').then(module => ({ default: module.RevenueAttribution })));
 
 // Lazy load placeholder pages
 const Settings = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Settings })));
@@ -349,6 +350,21 @@ function AppContent() {
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
                   <Forecasting />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/revenue-attribution"
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <RevenueAttribution />
                 </Suspense>
               </Layout>
             ) : (

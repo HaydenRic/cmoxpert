@@ -20,7 +20,8 @@ import {
   UserPlus,
   Zap,
   Bell,
-  TrendingUp
+  TrendingUp,
+  Target
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
@@ -40,6 +41,7 @@ export function Layout({ children }: LayoutProps) {
     { name: 'Playbooks', href: '/playbooks', icon: BookOpen },
     { name: 'Performance', href: '/performance', icon: BarChart3 },
     { name: 'Marketing Analytics', href: '/marketing-analytics', icon: DollarSign },
+    { name: 'Revenue Attribution', href: '/revenue-attribution', icon: Target },
     { name: 'Forecasting', href: '/forecasting', icon: TrendingUp },
     { name: 'Competitive Intel', href: '/competitive-intelligence', icon: Eye },
     { name: 'Content Hub', href: '/content', icon: Sparkles },
