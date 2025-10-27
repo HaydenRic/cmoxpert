@@ -33,8 +33,8 @@ const RevenueAttribution = lazy(() => import('./pages/RevenueAttribution').then(
 
 // Lazy load placeholder pages
 const Settings = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Settings })));
-const Privacy = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Privacy })));
-const Terms = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Terms })));
+const Privacy = lazy(() => import('./pages/Privacy').then(module => ({ default: module.Privacy })));
+const Terms = lazy(() => import('./pages/Terms').then(module => ({ default: module.Terms })));
 const Support = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Support })));
 const Security = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Security })));
 
