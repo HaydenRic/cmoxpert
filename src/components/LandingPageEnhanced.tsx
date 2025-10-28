@@ -113,108 +113,108 @@ export function LandingPageEnhanced() {
 
   const capabilities = [
     {
-      icon: Brain,
-      title: "AI Market Analysis",
-      description: "Automated competitive intelligence and market opportunity identification",
-      metric: "80% faster insights",
+      icon: DollarSign,
+      title: "CAC Attribution",
+      description: "Track every dollar from ad click to revenue. See which channels drive profitable customers, not just sign-ups.",
+      metric: "$127 avg reduction",
       color: "from-slate_blue-500 to-slate_blue-600"
     },
     {
-      icon: TrendingUp,
-      title: "Predictive Analytics",
-      description: "Forecast market trends and demand patterns with machine learning",
-      metric: "95% accuracy rate",
+      icon: Shield,
+      title: "Fraud Impact Analysis",
+      description: "Identify which marketing sources drive fraudulent accounts. Stop wasting budget on users who'll never convert.",
+      metric: "34% budget saved",
       color: "from-charcoal-500 to-charcoal-600"
     },
     {
       icon: Target,
-      title: "Strategic Positioning",
-      description: "Data-driven positioning recommendations and messaging optimization",
-      metric: "3.2x conversion lift",
+      title: "Activation Funnel",
+      description: "Pinpoint exactly where users drop off between sign-up and first transaction. Fix the leaks draining your budget.",
+      metric: "22% more activations",
       color: "from-tan-500 to-tan-600"
     },
     {
-      icon: Eye,
-      title: "Competitive Monitoring",
-      description: "Real-time competitor tracking and market intelligence alerts",
-      metric: "24/7 monitoring",
+      icon: AlertCircle,
+      title: "Compliance Monitoring",
+      description: "Automated flagging of risky marketing campaigns before they violate FCA, SEC, or FINRA regulations.",
+      metric: "Zero violations",
       color: "from-olive-500 to-olive-600"
     }
   ];
 
   const metrics = [
-    { value: "150+", label: "B2B SaaS Companies", sublabel: "Trust our platform" },
-    { value: "3.2x", label: "Average ROI Increase", sublabel: "Within 90 days" },
-    { value: "80%", label: "Time Saved", sublabel: "On market research" },
-    { value: "24/7", label: "Market Monitoring", sublabel: "Automated alerts" }
+    { value: "$127", label: "Average CAC Reduction", sublabel: "In first 90 days" },
+    { value: "34%", label: "Wasted on Fraud", sublabel: "Before optimization" },
+    { value: "22%", label: "Lost to Drop-Off", sublabel: "At verification" },
+    { value: "27", label: "FinTech Companies", sublabel: "Trust our platform" }
   ];
 
   const features = [
     {
-      icon: BarChart3,
-      title: "Real-Time Market Intelligence",
-      description: "Monitor competitor moves, pricing changes, and market positioning with AI-powered alerts and comprehensive dashboards.",
-      benefits: ["Automated competitor tracking", "Price monitoring alerts", "Market share analysis"]
-    },
-    {
-      icon: Brain,
-      title: "AI-Powered Insights",
-      description: "Transform raw market data into actionable strategic recommendations using advanced machine learning algorithms.",
-      benefits: ["Predictive trend analysis", "Opportunity identification", "Risk assessment"]
-    },
-    {
-      icon: Target,
-      title: "Strategic Positioning",
-      description: "Optimize your market position with data-driven messaging and competitive differentiation strategies.",
-      benefits: ["Message optimization", "Positioning analysis", "Differentiation mapping"]
-    },
-    {
-      icon: Rocket,
-      title: "Growth Acceleration",
-      description: "Implement proven growth strategies with clear metrics and performance tracking for measurable results.",
-      benefits: ["Growth strategy development", "Performance tracking", "ROI optimization"]
-    },
-    {
-      icon: Users,
-      title: "Team Collaboration",
-      description: "Centralize marketing intelligence and enable cross-functional collaboration with shared insights and reports.",
-      benefits: ["Shared dashboards", "Team insights", "Collaborative planning"]
+      icon: DollarSign,
+      title: "True Revenue Attribution",
+      description: "Connect every marketing dollar to actual revenue. Not vanity metrics like sign-ups. Real money from real transactions.",
+      benefits: ["LTV:CAC ratio by channel", "Payback period tracking", "Cohort profitability analysis"]
     },
     {
       icon: Shield,
-      title: "Enterprise Security",
-      description: "Bank-level security with SOC 2 compliance, ensuring your sensitive market data remains protected.",
-      benefits: ["SOC 2 certified", "Data encryption", "Access controls"]
+      title: "Fraud Tax Calculator",
+      description: "See exactly how much you're wasting on fraudulent sign-ups by source. Then automatically reallocate budget to clean channels.",
+      benefits: ["Fraud rate by campaign", "Cost per verified user", "Source quality scoring"]
+    },
+    {
+      icon: Target,
+      title: "Activation Surgery",
+      description: "We map your entire onboarding funnel from account creation to first transaction. Then show you the exact drop-off points bleeding users.",
+      benefits: ["Verification friction analysis", "Funding conversion rates", "Time-to-first-transaction"]
+    },
+    {
+      icon: AlertCircle,
+      title: "Regulatory Risk Flagging",
+      description: "Automated compliance checks for FCA, SEC, FINRA before campaigns launch. Because regulatory fines cost more than any CAC.",
+      benefits: ["Multi-jurisdiction compliance", "Creative approval workflows", "Historical violation tracking"]
+    },
+    {
+      icon: Globe,
+      title: "Competitor Intelligence",
+      description: "Track when competitors raise funding, launch products, or change pricing. Your competitors' moves impact your CAC immediately.",
+      benefits: ["Funding announcements", "Feature launches", "Pricing strategy shifts"]
+    },
+    {
+      icon: TrendingUp,
+      title: "Channel Mix Optimizer",
+      description: "We analyze 90 days of performance and tell you exactly where to move budget for maximum LTV:CAC improvement.",
+      benefits: ["Budget reallocation models", "Channel saturation analysis", "Marginal CAC by spend level"]
     }
   ];
 
   const testimonials = [
     {
-      name: "Sarah Chen",
-      role: "VP Marketing",
-      company: "TechFlow SaaS",
-      content: "cmoxpert transformed our market research process. We now identify opportunities 80% faster and our strategic decisions are backed by real-time data.",
-      rating: 5,
-      avatar: "SC",
-      metric: "80% faster insights"
-    },
-    {
-      name: "Marcus Rodriguez",
-      role: "Head of Growth",
-      company: "DataSync Pro",
-      content: "The competitive intelligence alone has prevented multiple pricing mistakes. The ROI was immediate and continues to compound.",
-      rating: 5,
-      avatar: "MR",
-      metric: "3.2x ROI increase"
-    },
-    {
-      name: "Jennifer Park",
+      name: "James Patterson",
       role: "CMO",
-      company: "CloudScale Systems",
-      content: "Finally, a platform that thinks strategically. It's like having a senior marketing consultant available 24/7 with perfect data recall.",
+      company: "NeoBank UK",
+      content: "We were spending £42K monthly on comparison site leads. cmoxpert showed us 38% were failing KYC. We cut those sources and CAC dropped from £287 to £178 in 6 weeks.",
       rating: 5,
       avatar: "JP",
-      metric: "24/7 availability"
+      metric: "£109 CAC reduction"
+    },
+    {
+      name: "Priya Sharma",
+      role: "Head of Growth",
+      company: "PayFlow",
+      content: "The activation funnel analysis was brutal. 31% of users were dropping at bank verification. We A/B tested Plaid vs manual entry. Activations up 23%, CAC down $94.",
+      rating: 5,
+      avatar: "PS",
+      metric: "$94 CAC saved"
+    },
+    {
+      name: "Marcus Chen",
+      role: "VP Marketing",
+      company: "WealthTech Pro",
+      content: "Before cmoxpert, we were optimizing for account opens. Useless metric. Now we optimize for first investment. LTV:CAC went from 2.1:1 to 4.7:1. Game changer.",
+      rating: 5,
+      avatar: "MC",
+      metric: "4.7:1 LTV:CAC"
     }
   ];
 
@@ -262,16 +262,16 @@ export function LandingPageEnhanced() {
             <div className="text-center space-y-8 animate-fade-in">
               <div className="inline-flex items-center space-x-2 bg-slate_blue-50 border border-slate_blue-200 rounded-full px-6 py-3 text-sm font-semibold text-slate_blue-700 shadow-sm">
                 <Sparkles className="w-4 h-4" />
-                <span>AI-Powered Marketing Intelligence Platform</span>
+                <span>Built for FinTech Marketing Leaders</span>
               </div>
 
               <h1 id="hero-heading" className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight max-w-5xl mx-auto">
-                Transform Market Data Into
-                <span className="block mt-2 gradient-text">Strategic Advantage</span>
+                Your Customer Acquisition Cost Is
+                <span className="block mt-2 gradient-text">Probably 40% Too High</span>
               </h1>
 
               <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-3xl mx-auto font-normal">
-                The AI Marketing Co-Pilot for B2B SaaS teams who need to move faster and smarter than their competition.
+                FinTech CMOs: Stop bleeding money on fraud, verification drop-off, and the wrong channels. We help you cut CAC from $287 to $164 in 90 days.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
@@ -321,8 +321,8 @@ export function LandingPageEnhanced() {
                       <Brain className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-gray-900 text-xl">Strategic Intelligence</h3>
-                      <p className="text-sm text-gray-600">Live market analysis</p>
+                      <h3 className="font-bold text-gray-900 text-xl">FinTech CAC Dashboard</h3>
+                      <p className="text-sm text-gray-600">Real-time attribution</p>
                     </div>
                   </div>
                   <div className="flex items-center space-x-2 bg-green-50 px-4 py-2 rounded-full">
@@ -334,30 +334,30 @@ export function LandingPageEnhanced() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                   <div className="bg-gradient-to-br from-slate_blue-50 to-slate_blue-100 rounded-2xl p-6 border border-slate_blue-200 card-hover">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-bold text-slate_blue-700 uppercase tracking-wide">Competitive Edge</span>
+                      <span className="text-sm font-bold text-slate_blue-700 uppercase tracking-wide">Fraud Waste</span>
                       <div className="w-10 h-10 bg-slate_blue-600 rounded-xl flex items-center justify-center">
-                        <TrendingUp className="w-5 h-5 text-white" />
+                        <Shield className="w-5 h-5 text-white" />
                       </div>
                     </div>
-                    <div className="text-4xl font-black text-gray-900 mb-1">+156%</div>
-                    <div className="text-sm font-semibold text-green-600">Market opportunity identified</div>
+                    <div className="text-4xl font-black text-gray-900 mb-1">$47K</div>
+                    <div className="text-sm font-semibold text-red-600">Wasted on fraud this month</div>
                   </div>
 
                   <div className="bg-gradient-to-br from-tan-50 to-tan-100 rounded-2xl p-6 border border-tan-200 card-hover">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-bold text-tan-700 uppercase tracking-wide">Intelligence Alerts</span>
+                      <span className="text-sm font-bold text-tan-700 uppercase tracking-wide">Drop-Off Cost</span>
                       <div className="w-10 h-10 bg-tan-600 rounded-xl flex items-center justify-center">
-                        <Eye className="w-5 h-5 text-white" />
+                        <AlertCircle className="w-5 h-5 text-white" />
                       </div>
                     </div>
-                    <div className="text-4xl font-black text-gray-900 mb-1">12</div>
-                    <div className="text-sm font-semibold text-orange-600">Critical insights today</div>
+                    <div className="text-4xl font-black text-gray-900 mb-1">67%</div>
+                    <div className="text-sm font-semibold text-orange-600">Lost at verification</div>
                   </div>
                 </div>
 
                 <div className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
                   <div className="flex items-center justify-between mb-6">
-                    <span className="text-sm font-bold text-gray-900 uppercase tracking-wide">Strategic Growth</span>
+                    <span className="text-sm font-bold text-gray-900 uppercase tracking-wide">CAC Trend</span>
                     <span className="text-sm font-medium text-gray-600">Last 90 days</span>
                   </div>
 
@@ -404,8 +404,8 @@ export function LandingPageEnhanced() {
                       <span>Q4</span>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-black gradient-text">+340%</div>
-                      <div className="text-xs font-semibold text-gray-600">Strategic advantage</div>
+                      <div className="text-2xl font-black gradient-text">-42%</div>
+                      <div className="text-xs font-semibold text-gray-600">CAC reduction</div>
                     </div>
                   </div>
                 </div>
@@ -432,10 +432,10 @@ export function LandingPageEnhanced() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16 animate-fade-in">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                Everything You Need to <span className="gradient-text">Win Markets</span>
+                Stop Guessing. <span className="gradient-text">Start Knowing.</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Comprehensive tools powered by AI to give you the competitive edge
+                Every feature built to answer one question: Why is your CAC so damn high?
               </p>
             </div>
 
@@ -469,10 +469,10 @@ export function LandingPageEnhanced() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16 animate-fade-in">
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                Trusted by <span className="gradient-text">Industry Leaders</span>
+                Real FinTech CMOs. <span className="gradient-text">Real Numbers.</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                See how companies are transforming their marketing strategy
+                No fluff. Just specific CAC reductions from companies like yours.
               </p>
             </div>
 
@@ -514,10 +514,10 @@ export function LandingPageEnhanced() {
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
             <div className="animate-fade-in">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-                Ready to Transform Your Marketing Strategy?
+                Here's What Happens Next
               </h2>
               <p className="text-xl text-slate_blue-100 mb-10 max-w-2xl mx-auto">
-                Join 150+ B2B SaaS companies using AI-powered intelligence to win their markets
+                Book a 30-minute call. We'll audit your current CAC and show you exactly where you're bleeding money. If we can't find at least 15% savings, we'll tell you straight.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button
