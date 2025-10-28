@@ -22,7 +22,10 @@ import {
   Bell,
   TrendingUp,
   Target,
-  AlertTriangle
+  AlertTriangle,
+  TrendingDown,
+  FileCheck,
+  Sliders
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
@@ -45,6 +48,8 @@ export function Layout({ children }: LayoutProps) {
     { name: 'Revenue Attribution', href: '/revenue-attribution', icon: Target, badge: 'NEW', badgeColor: 'bg-green-500' },
     { name: 'Fraud Analysis', href: '/fraud-analysis', icon: AlertTriangle, badge: 'NEW', badgeColor: 'bg-red-500' },
     { name: 'Activation Funnel', href: '/activation-funnel', icon: TrendingDown, badge: 'NEW', badgeColor: 'bg-purple-500' },
+    { name: 'Compliance Checker', href: '/compliance-checker', icon: FileCheck, badge: 'NEW', badgeColor: 'bg-blue-500' },
+    { name: 'Spend Optimizer', href: '/spend-optimizer', icon: Sliders, badge: 'NEW', badgeColor: 'bg-orange-500' },
     { name: 'Forecasting', href: '/forecasting', icon: TrendingUp },
     { name: 'Competitive Intel', href: '/competitive-intelligence', icon: Eye },
     { name: 'Content Hub', href: '/content', icon: Sparkles },

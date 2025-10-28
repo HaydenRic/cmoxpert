@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-import { 
-  TrendingUp, 
+import {
+  TrendingUp,
   Rocket,
-  Users, 
-  FileText, 
+  Users,
+  FileText,
   Clock,
   Activity,
   ArrowUpRight,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Shield,
+  Target,
+  DollarSign,
+  TrendingDown
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 
 // Lazy load the Spline component for better performance
-const SplineSceneBasic = React.lazy(() => 
+const SplineSceneBasic = React.lazy(() =>
   import('../components/ui/spline-demo').then(module => ({ default: module.SplineSceneBasic }))
 );
 
@@ -27,6 +31,18 @@ interface DashboardStats {
   completedReports: number;
   pendingReports: number;
   recentActivity: any[];
+  fraudMetrics?: {
+    totalTransactions: number;
+    fraudulentCount: number;
+    fraudRate: number;
+    estimatedLoss: number;
+  };
+  activationMetrics?: {
+    totalRegistrations: number;
+    completedActivations: number;
+    completionRate: number;
+    avgDropOffStage: string;
+  };
 }
 
 export function Dashboard() {
@@ -88,13 +104,68 @@ export function Dashboard() {
         .order('created_at', { ascending: false })
         .limit(5);
 
+      // Get first client for fraud/activation metrics
+      const { data: clients } = await supabase
+        .from('clients')
+        .select('id')
+        .eq('user_id', user!.id)
+        .limit(1);
+
+      let fraudMetrics = undefined;
+      let activationMetrics = undefined;
+
+      if (clients && clients.length > 0) {
+        const clientId = clients[0].id;
+
+        // Load fraud metrics
+        const { data: fraudData } = await supabase
+          .from('fintech_transactions')
+          .select('id, is_fraudulent, amount')
+          .eq('client_id', clientId);
+
+        if (fraudData && fraudData.length > 0) {
+          const fraudulentCount = fraudData.filter(t => t.is_fraudulent).length;
+          const estimatedLoss = fraudData
+            .filter(t => t.is_fraudulent)
+            .reduce((sum, t) => sum + (t.amount || 0), 0);
+
+          fraudMetrics = {
+            totalTransactions: fraudData.length,
+            fraudulentCount,
+            fraudRate: (fraudulentCount / fraudData.length) * 100,
+            estimatedLoss
+          };
+        }
+
+        // Load activation metrics
+        const { data: eventData } = await supabase
+          .from('fintech_user_events')
+          .select('user_id, event_type')
+          .eq('client_id', clientId);
+
+        if (eventData && eventData.length > 0) {
+          const uniqueUsers = new Set(eventData.map(e => e.user_id));
+          const registrations = eventData.filter(e => e.event_type === 'registration').length;
+          const completions = eventData.filter(e => e.event_type === 'first_transaction').length;
+
+          activationMetrics = {
+            totalRegistrations: registrations,
+            completedActivations: completions,
+            completionRate: registrations > 0 ? (completions / registrations) * 100 : 0,
+            avgDropOffStage: 'KYC Verification'
+          };
+        }
+      }
+
       setStats({
         clientsNeedingOnboarding: onboardingData?.length || 0,
         totalClients: clientCount || 0,
         totalReports: reportCount || 0,
         completedReports,
         pendingReports,
-        recentActivity: recentActivity || []
+        recentActivity: recentActivity || [],
+        fraudMetrics,
+        activationMetrics
       });
     } catch (error) {
       console.error('Error loading dashboard data:', error);
@@ -199,7 +270,7 @@ export function Dashboard() {
               <div className="text-right">
                 <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
                 <div className={`text-sm ${
-                  stat.changeType === 'positive' ? 'text-pakistan_green-600' : 
+                  stat.changeType === 'positive' ? 'text-pakistan_green-600' :
                   stat.changeType === 'negative' ? 'text-red-600' : 'text-slate-500'
                 }`}>
                   {stat.change}
@@ -210,6 +281,81 @@ export function Dashboard() {
           </div>
         ))}
       </div>
+
+      {/* FinTech Insights Cards */}
+      {(stats.fraudMetrics || stats.activationMetrics) && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          {stats.fraudMetrics && (
+            <Link to="/fraud-analysis" className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl shadow-sm border-2 border-red-200 p-6 hover:shadow-lg transition-all group">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-14 h-14 bg-red-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Shield className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex items-center text-red-700 text-sm font-semibold bg-red-100 px-3 py-1 rounded-full">
+                  NEW
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Fraud Analysis</h3>
+              <div className="space-y-3 mb-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Total Transactions</span>
+                  <span className="text-lg font-bold text-gray-900">{stats.fraudMetrics.totalTransactions.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Fraudulent</span>
+                  <span className="text-lg font-bold text-red-600">{stats.fraudMetrics.fraudulentCount.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Fraud Rate</span>
+                  <span className="text-lg font-bold text-red-600">{stats.fraudMetrics.fraudRate.toFixed(1)}%</span>
+                </div>
+                <div className="flex justify-between items-center pt-2 border-t border-red-200">
+                  <span className="text-sm font-medium text-gray-700">Estimated Loss</span>
+                  <span className="text-xl font-bold text-red-700">${stats.fraudMetrics.estimatedLoss.toLocaleString()}</span>
+                </div>
+              </div>
+              <div className="flex items-center text-red-600 font-medium group-hover:translate-x-1 transition-transform">
+                View Detailed Analysis <ArrowUpRight className="w-4 h-4 ml-1" />
+              </div>
+            </Link>
+          )}
+
+          {stats.activationMetrics && (
+            <Link to="/activation-funnel" className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-sm border-2 border-blue-200 p-6 hover:shadow-lg transition-all group">
+              <div className="flex items-start justify-between mb-4">
+                <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
+                  <Target className="w-7 h-7 text-white" />
+                </div>
+                <div className="flex items-center text-blue-700 text-sm font-semibold bg-blue-100 px-3 py-1 rounded-full">
+                  NEW
+                </div>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Activation Funnel</h3>
+              <div className="space-y-3 mb-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Total Registrations</span>
+                  <span className="text-lg font-bold text-gray-900">{stats.activationMetrics.totalRegistrations.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Completed Activation</span>
+                  <span className="text-lg font-bold text-green-600">{stats.activationMetrics.completedActivations.toLocaleString()}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-gray-600">Completion Rate</span>
+                  <span className="text-lg font-bold text-blue-600">{stats.activationMetrics.completionRate.toFixed(1)}%</span>
+                </div>
+                <div className="flex justify-between items-center pt-2 border-t border-blue-200">
+                  <span className="text-sm font-medium text-gray-700">Biggest Drop-off</span>
+                  <span className="text-sm font-bold text-orange-600">{stats.activationMetrics.avgDropOffStage}</span>
+                </div>
+              </div>
+              <div className="flex items-center text-blue-600 font-medium group-hover:translate-x-1 transition-transform">
+                View Full Funnel <ArrowUpRight className="w-4 h-4 ml-1" />
+              </div>
+            </Link>
+          )}
+        </div>
+      )}
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

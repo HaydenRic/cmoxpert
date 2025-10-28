@@ -19,7 +19,11 @@ import {
   ExternalLink,
   Settings,
   Trash2,
-  Activity
+  Activity,
+  CreditCard,
+  Shield,
+  Link as LinkIcon,
+  Zap
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -49,7 +53,46 @@ export function Integrations() {
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState<string | null>(null);
 
-  const availableIntegrations: IntegrationTemplate[] = [
+  const fintechIntegrations: IntegrationTemplate[] = [
+    {
+      name: 'Stripe',
+      type: 'payments',
+      icon: CreditCard,
+      description: 'Track payments, revenue, and transaction data. Essential for fraud analysis.',
+      color: 'bg-indigo-600',
+      features: ['Payment tracking', 'Revenue analytics', 'Fraud detection', 'Subscription metrics'],
+      available: true
+    },
+    {
+      name: 'Plaid',
+      type: 'banking',
+      icon: LinkIcon,
+      description: 'Monitor bank account connections and funding conversion rates.',
+      color: 'bg-teal-600',
+      features: ['Bank linking', 'Account verification', 'Balance checks', 'Transaction history'],
+      available: true
+    },
+    {
+      name: 'Jumio',
+      type: 'kyc',
+      icon: Shield,
+      description: 'Track KYC verification rates and identity fraud prevention.',
+      color: 'bg-red-600',
+      features: ['Identity verification', 'Document scanning', 'Fraud screening', 'Compliance reporting'],
+      available: true
+    },
+    {
+      name: 'Segment',
+      type: 'analytics',
+      icon: Zap,
+      description: 'Collect and route user event data across your fintech stack.',
+      color: 'bg-green-600',
+      features: ['Event tracking', 'User journeys', 'Data routing', 'Integration hub'],
+      available: true
+    }
+  ];
+
+  const marketingIntegrations: IntegrationTemplate[] = [
     {
       name: 'Google Analytics',
       type: 'analytics',
@@ -263,7 +306,7 @@ export function Integrations() {
           </div>
           <div className="divide-y divide-charcoal-200">
             {integrations.map((integration) => {
-              const template = availableIntegrations.find(
+              const template = [...fintechIntegrations, ...marketingIntegrations].find(
                 t => t.name.toLowerCase().replace(/\s+/g, '_') === integration.service_name
               );
               const Icon = template?.icon || Plug;
@@ -317,13 +360,72 @@ export function Integrations() {
         </div>
       )}
 
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg shadow-sm border-2 border-blue-200 p-6 mb-6">
+        <div className="flex items-start gap-4 mb-6">
+          <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+            <Shield className="w-6 h-6 text-white" />
+          </div>
+          <div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">FinTech Data Stack</h2>
+            <p className="text-sm text-gray-700">
+              Essential integrations for fraud analysis, activation funnels, and revenue attribution.
+              Connect your payment processor, KYC provider, and banking platform.
+            </p>
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+          {fintechIntegrations.map((template) => {
+            const isConnected = integrations.some(
+              i => i.service_name === template.name.toLowerCase().replace(/\s+/g, '_')
+            );
+            const Icon = template.icon;
+
+            return (
+              <div
+                key={template.name}
+                className="bg-white border-2 border-gray-200 rounded-lg p-4 hover:shadow-md transition-all hover:border-blue-300"
+              >
+                <div className="flex items-start justify-between mb-3">
+                  <div className={`p-2 ${template.color} rounded-lg`}>
+                    <Icon className="w-5 h-5 text-white" />
+                  </div>
+                  {isConnected && (
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                  )}
+                </div>
+                <h3 className="font-bold text-gray-900 text-sm mb-1">{template.name}</h3>
+                <p className="text-xs text-gray-600 mb-3 line-clamp-2">{template.description}</p>
+                <button
+                  onClick={() => connectIntegration(template)}
+                  disabled={isConnected}
+                  className={`w-full py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+                    isConnected
+                      ? 'bg-green-100 text-green-700 cursor-not-allowed'
+                      : 'bg-blue-600 text-white hover:bg-blue-700'
+                  }`}
+                >
+                  {isConnected ? (
+                    <span className="flex items-center justify-center gap-1">
+                      <CheckCircle className="w-4 h-4" />
+                      Connected
+                    </span>
+                  ) : (
+                    'Connect'
+                  )}
+                </button>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="bg-white rounded-lg shadow-sm border border-charcoal-200">
         <div className="p-6 border-b border-charcoal-200">
-          <h2 className="text-lg font-bold text-charcoal-900">Available Integrations</h2>
+          <h2 className="text-lg font-bold text-charcoal-900">Marketing & Analytics Integrations</h2>
           <p className="text-sm text-charcoal-600 mt-1">Connect popular marketing and analytics platforms</p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
-          {availableIntegrations.map((template) => {
+          {marketingIntegrations.map((template) => {
             const isConnected = integrations.some(
               i => i.service_name === template.name.toLowerCase().replace(/\s+/g, '_')
             );

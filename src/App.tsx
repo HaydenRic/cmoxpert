@@ -32,6 +32,8 @@ const Forecasting = lazy(() => import('./pages/Forecasting').then(module => ({ d
 const RevenueAttribution = lazy(() => import('./pages/RevenueAttribution').then(module => ({ default: module.RevenueAttribution })));
 const FraudAnalysis = lazy(() => import('./pages/FraudAnalysis').then(module => ({ default: module.default })));
 const ActivationFunnel = lazy(() => import('./pages/ActivationFunnel').then(module => ({ default: module.default })));
+const ComplianceChecker = lazy(() => import('./pages/ComplianceChecker').then(module => ({ default: module.default })));
+const SpendOptimizer = lazy(() => import('./pages/SpendOptimizer').then(module => ({ default: module.default })));
 
 // Lazy load placeholder pages
 const Settings = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Settings })));
@@ -292,6 +294,36 @@ function AppContent() {
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
                   <ActivationFunnel />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/compliance-checker"
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <ComplianceChecker />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/spend-optimizer"
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <SpendOptimizer />
                 </Suspense>
               </Layout>
             ) : (
