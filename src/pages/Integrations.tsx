@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { initiateOAuthFlow } from '../lib/integrations/oauth';
+import { refreshGoogleAdsData } from '../lib/integrations/googleAds';
+import { refreshMetaAdsData } from '../lib/integrations/metaAds';
 import {
   Plug,
   Plus,
@@ -197,11 +200,22 @@ export function Integrations() {
     }
 
     try {
+      const serviceName = template.name.toLowerCase().replace(/\s+/g, '_');
+
+      if (serviceName === 'google_ads' || serviceName === 'meta_ads' || serviceName === 'linkedin_ads') {
+        const oauthUrl = await initiateOAuthFlow(
+          serviceName as 'google_ads' | 'meta_ads' | 'linkedin_ads',
+          user!.id
+        );
+        window.location.href = oauthUrl;
+        return;
+      }
+
       const { data, error } = await supabase
         .from('integrations')
         .insert({
           user_id: user!.id,
-          service_name: template.name.toLowerCase().replace(/\s+/g, '_'),
+          service_name: serviceName,
           service_type: template.type,
           status: 'pending',
           config: { features: template.features }
@@ -222,12 +236,26 @@ export function Integrations() {
   const syncIntegration = async (integrationId: string) => {
     setSyncing(integrationId);
     try {
+      const { data: integration } = await supabase
+        .from('integrations')
+        .select('service_name')
+        .eq('id', integrationId)
+        .single();
+
+      if (integration) {
+        if (integration.service_name === 'google_ads') {
+          await refreshGoogleAdsData(integrationId);
+        } else if (integration.service_name === 'meta_ads') {
+          await refreshMetaAdsData(integrationId);
+        }
+      }
+
       const { error: syncError } = await supabase
         .from('integration_syncs')
         .insert({
           integration_id: integrationId,
           sync_type: 'incremental',
-          status: 'running'
+          status: 'completed'
         });
 
       if (syncError) throw syncError;

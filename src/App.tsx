@@ -25,6 +25,7 @@ const ContentHub = lazy(() => import('./pages/ContentHub').then(module => ({ def
 const CompetitiveIntelligence = lazy(() => import('./pages/CompetitiveIntelligence').then(module => ({ default: module.CompetitiveIntelligence })));
 const Admin = lazy(() => import('./pages/Admin').then(module => ({ default: module.Admin })));
 const Integrations = lazy(() => import('./pages/Integrations').then(module => ({ default: module.Integrations })));
+const OAuthCallback = lazy(() => import('./pages/OAuthCallback').then(module => ({ default: module.OAuthCallback })));
 const ClientPortal = lazy(() => import('./pages/ClientPortal').then(module => ({ default: module.ClientPortal })));
 const Workflows = lazy(() => import('./pages/Workflows').then(module => ({ default: module.Workflows })));
 const AlertRules = lazy(() => import('./pages/AlertRules').then(module => ({ default: module.AlertRules })));
@@ -359,6 +360,15 @@ function AppContent() {
             ) : (
               <Navigate to="/auth" replace />
             )
+          }
+        />
+
+        <Route
+          path="/integrations/oauth/callback"
+          element={
+            <Suspense fallback={<PageLoadingFallback />}>
+              <OAuthCallback />
+            </Suspense>
           }
         />
 
