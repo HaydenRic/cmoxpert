@@ -1,5 +1,10 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { corsHeaders } from '../_shared/cors.ts';
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
+};
 
 interface FraudAnalysisRequest {
   client_id: string;
@@ -42,7 +47,6 @@ Deno.serve(async (req: Request) => {
 
     const { client_id, date_range, channels }: FraudAnalysisRequest = await req.json();
 
-    // Get fraud events and marketing spend by channel
     const { data: fraudData, error: fraudError } = await supabase
       .from('fraud_events')
       .select(`
@@ -57,7 +61,6 @@ Deno.serve(async (req: Request) => {
 
     if (fraudError) throw fraudError;
 
-    // Get marketing metrics
     const { data: metricsData, error: metricsError } = await supabase
       .from('fintech_metrics_daily')
       .select(`
@@ -75,7 +78,6 @@ Deno.serve(async (req: Request) => {
 
     if (metricsError) throw metricsError;
 
-    // Aggregate by channel
     const channelMap = new Map<string, {
       spend: number;
       fraud_waste: number;
@@ -99,7 +101,6 @@ Deno.serve(async (req: Request) => {
       });
     });
 
-    // Calculate totals
     let total_spend = 0;
     let total_fraud_waste = 0;
     let total_registrations = 0;
@@ -129,7 +130,6 @@ Deno.serve(async (req: Request) => {
 
     const cac_improvement = dirty_cac - clean_cac;
 
-    // Build channel breakdown
     const by_channel = Array.from(channelMap.entries()).map(([channel, data]) => {
       const channel_fraud_rate = data.registrations > 0
         ? data.fraud_count / data.registrations
@@ -152,10 +152,8 @@ Deno.serve(async (req: Request) => {
     })
     .sort((a, b) => b.fraud_waste - a.fraud_waste);
 
-    // Generate recommendations
     const recommendations: string[] = [];
 
-    // High fraud channels
     const high_fraud_channels = by_channel.filter(c => c.fraud_rate > 0.25);
     if (high_fraud_channels.length > 0) {
       recommendations.push(
@@ -164,7 +162,6 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Budget reallocation
     const low_fraud_channels = by_channel.filter(c => c.fraud_rate < 0.10 && c.registrations > 50);
     if (low_fraud_channels.length > 0 && total_fraud_waste > 1000) {
       recommendations.push(
@@ -173,7 +170,6 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Overall fraud rate warning
     if (fraud_rate > 0.20) {
       recommendations.push(
         `Overall fraud rate of ${(fraud_rate * 100).toFixed(1)}% is dangerously high. ` +
@@ -181,7 +177,6 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Positive reinforcement
     if (fraud_rate < 0.05) {
       recommendations.push(
         `Excellent fraud management. Your fraud rate of ${(fraud_rate * 100).toFixed(1)}% ` +
@@ -196,7 +191,7 @@ Deno.serve(async (req: Request) => {
       clean_cac: clean_cac,
       dirty_cac: dirty_cac,
       cac_improvement: cac_improvement,
-      by_channel: by_channel.slice(0, 10), // Top 10 channels
+      by_channel: by_channel.slice(0, 10),
       recommendations,
     };
 

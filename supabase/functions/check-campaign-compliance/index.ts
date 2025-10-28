@@ -1,5 +1,10 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { corsHeaders } from '../_shared/cors.ts';
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'GET, POST, OPTIONS, PUT, DELETE',
+};
 
 interface ComplianceCheckRequest {
   campaign_id: string;
@@ -9,8 +14,8 @@ interface ComplianceCheckRequest {
     call_to_action: string;
     landing_page_url?: string;
   };
-  target_jurisdictions: string[]; // ['UK', 'US', 'EU']
-  product_type: string; // 'banking', 'lending', 'investment', 'payments'
+  target_jurisdictions: string[];
+  product_type: string;
 }
 
 interface ViolationDetail {
@@ -26,7 +31,7 @@ interface ViolationDetail {
 interface ComplianceCheckResult {
   campaign_id: string;
   overall_status: 'compliant' | 'needs_review' | 'violations_found' | 'blocked';
-  risk_score: number; // 0-100
+  risk_score: number;
   violations: ViolationDetail[];
   warnings: string[];
   recommendations: string[];
@@ -54,7 +59,6 @@ Deno.serve(async (req: Request) => {
       product_type,
     }: ComplianceCheckRequest = await req.json();
 
-    // Get applicable compliance rules
     const { data: rules, error: rulesError } = await supabase
       .from('compliance_rules')
       .select('*')
@@ -67,22 +71,18 @@ Deno.serve(async (req: Request) => {
     const warnings: string[] = [];
     const recommendations: string[] = [];
 
-    // Combine all campaign content for analysis
     const full_content = `
       ${campaign_content.headline}
       ${campaign_content.body_text}
       ${campaign_content.call_to_action}
     `.toLowerCase();
 
-    // Check each rule
     rules?.forEach((rule: any) => {
-      // Check if rule applies to this product type
       const applies_to = rule.applies_to_products || [];
       if (applies_to.length > 0 && !applies_to.includes(product_type)) {
-        return; // Skip this rule
+        return;
       }
 
-      // Check prohibited keywords
       if (rule.keywords_prohibited && rule.keywords_prohibited.length > 0) {
         rule.keywords_prohibited.forEach((keyword: string) => {
           if (full_content.includes(keyword.toLowerCase())) {
@@ -99,7 +99,6 @@ Deno.serve(async (req: Request) => {
         });
       }
 
-      // Check required keywords
       if (rule.keywords_required && rule.keywords_required.length > 0) {
         rule.keywords_required.forEach((keyword: string) => {
           if (!full_content.includes(keyword.toLowerCase())) {
@@ -122,7 +121,6 @@ Deno.serve(async (req: Request) => {
         });
       }
 
-      // Check regex patterns
       if (rule.pattern_regex) {
         try {
           const regex = new RegExp(rule.pattern_regex, 'gi');
@@ -144,7 +142,6 @@ Deno.serve(async (req: Request) => {
       }
     });
 
-    // Calculate risk score (0-100)
     let risk_score = 0;
     violations.forEach(v => {
       switch (v.severity) {
@@ -156,7 +153,6 @@ Deno.serve(async (req: Request) => {
     });
     risk_score = Math.min(risk_score, 100);
 
-    // Determine overall status
     let overall_status: 'compliant' | 'needs_review' | 'violations_found' | 'blocked';
     if (violations.some(v => v.severity === 'critical')) {
       overall_status = 'blocked';
@@ -168,7 +164,6 @@ Deno.serve(async (req: Request) => {
       overall_status = 'compliant';
     }
 
-    // Generate recommendations
     if (overall_status === 'blocked') {
       recommendations.push(
         'CRITICAL: This campaign cannot launch until critical violations are resolved.'
@@ -205,7 +200,6 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    // Save compliance check to database
     const { data: checkData, error: checkError } = await supabase
       .from('campaign_compliance_checks')
       .insert({
