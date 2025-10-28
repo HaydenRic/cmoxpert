@@ -21,7 +21,8 @@ import {
   Zap,
   Bell,
   TrendingUp,
-  Target
+  Target,
+  AlertTriangle
 } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
@@ -42,6 +43,7 @@ export function Layout({ children }: LayoutProps) {
     { name: 'Performance', href: '/performance', icon: BarChart3 },
     { name: 'Marketing Analytics', href: '/marketing-analytics', icon: DollarSign },
     { name: 'Revenue Attribution', href: '/revenue-attribution', icon: Target, badge: 'NEW', badgeColor: 'bg-green-500' },
+    { name: 'Fraud Analysis', href: '/fraud-analysis', icon: AlertTriangle, badge: 'NEW', badgeColor: 'bg-red-500' },
     { name: 'Forecasting', href: '/forecasting', icon: TrendingUp },
     { name: 'Competitive Intel', href: '/competitive-intelligence', icon: Eye },
     { name: 'Content Hub', href: '/content', icon: Sparkles },

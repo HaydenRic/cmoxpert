@@ -30,6 +30,7 @@ const Workflows = lazy(() => import('./pages/Workflows').then(module => ({ defau
 const AlertRules = lazy(() => import('./pages/AlertRules').then(module => ({ default: module.AlertRules })));
 const Forecasting = lazy(() => import('./pages/Forecasting').then(module => ({ default: module.Forecasting })));
 const RevenueAttribution = lazy(() => import('./pages/RevenueAttribution').then(module => ({ default: module.RevenueAttribution })));
+const FraudAnalysis = lazy(() => import('./pages/FraudAnalysis').then(module => ({ default: module.default })));
 
 // Lazy load placeholder pages
 const Settings = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Settings })));
@@ -253,9 +254,9 @@ function AppContent() {
           } 
         />
         
-        <Route 
-          path="/playbooks" 
-          element={ 
+        <Route
+          path="/playbooks"
+          element={
             user ? (
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
@@ -265,10 +266,25 @@ function AppContent() {
             ) : (
               <Navigate to="/auth" replace />
             )
-          } 
+          }
         />
-        
-        <Route 
+
+        <Route
+          path="/fraud-analysis"
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <FraudAnalysis />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
+        <Route
           path="/admin" 
           element={ 
             user ? (
