@@ -36,6 +36,11 @@ const ActivationFunnel = lazy(() => import('./pages/ActivationFunnel').then(modu
 const ComplianceChecker = lazy(() => import('./pages/ComplianceChecker').then(module => ({ default: module.default })));
 const SpendOptimizer = lazy(() => import('./pages/SpendOptimizer').then(module => ({ default: module.default })));
 
+// Lazy load pitch system pages
+const PitchDemo = lazy(() => import('./pages/PitchDemo').then(module => ({ default: module.default })));
+const Pricing = lazy(() => import('./pages/Pricing').then(module => ({ default: module.default })));
+const PitchAnalytics = lazy(() => import('./pages/PitchAnalytics').then(module => ({ default: module.default })));
+
 // Lazy load placeholder pages
 const Settings = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Settings })));
 const Privacy = lazy(() => import('./pages/Privacy').then(module => ({ default: module.Privacy })));
@@ -113,13 +118,32 @@ function AppContent() {
         
         {/* Contact page */}
         <Route path="/contact" element={<Contact />} />
-        
+
+        {/* Pitch system public pages */}
+        <Route
+          path="/pitch"
+          element={
+            <Suspense fallback={<PageLoadingFallback />}>
+              <PitchDemo />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/pricing"
+          element={
+            <Suspense fallback={<PageLoadingFallback />}>
+              <Pricing />
+            </Suspense>
+          }
+        />
+
         {/* Auth routes */}
-        <Route 
-          path="/auth" 
+        <Route
+          path="/auth"
           element={
             user ? <Navigate to="/dashboard" replace /> : <AuthForm />
-          } 
+          }
         />
         
         {/* Protected app routes with lazy loading */}
@@ -439,6 +463,21 @@ function AppContent() {
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
                   <RevenueAttribution />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/pitch-analytics"
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <PitchAnalytics />
                 </Suspense>
               </Layout>
             ) : (
