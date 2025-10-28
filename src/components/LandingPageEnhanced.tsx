@@ -89,6 +89,14 @@ export function LandingPageEnhanced() {
     navigate('/auth');
   };
 
+  const handleLiveDemo = () => {
+    trackEvent('cta_click', {
+      cta_location: 'hero',
+      cta_text: 'Try Live Demo'
+    });
+    navigate('/auth?demo=true');
+  };
+
   const handleLearnMore = () => {
     trackEvent('cta_click', {
       cta_location: 'hero',
@@ -276,18 +284,22 @@ export function LandingPageEnhanced() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
                 <button
-                  onClick={handleGetStarted}
-                  className="btn-primary text-lg px-12 py-5"
+                  onClick={handleLiveDemo}
+                  className="btn-primary text-lg px-12 py-5 relative overflow-hidden group"
                 >
-                  <span>Request a Demo</span>
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                  <span className="relative z-10 flex items-center">
+                    Try Live Demo
+                    <Play className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" />
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-green-600 to-green-700 opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </button>
 
                 <button
-                  onClick={handleLearnMore}
+                  onClick={handleGetStarted}
                   className="btn-secondary text-lg px-12 py-5"
                 >
-                  <span>Learn More</span>
+                  <span>Request a Demo</span>
+                  <ArrowRight className="w-5 h-5 ml-2" />
                 </button>
               </div>
 

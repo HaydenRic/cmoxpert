@@ -1,17 +1,58 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { Compass, Mail, Lock, AlertCircle, ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Compass, Mail, Lock, AlertCircle, ArrowLeft, Play } from 'lucide-react';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 
 export function AuthForm() {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const isDemoMode = searchParams.get('demo') === 'true';
+
   const [isSignIn, setIsSignIn] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [demoInProgress, setDemoInProgress] = useState(false);
 
   const { signIn, signUp } = useAuth();
+
+  useEffect(() => {
+    if (isDemoMode) {
+      handleQuickDemo();
+    }
+  }, [isDemoMode]);
+
+  const handleQuickDemo = async () => {
+    setDemoInProgress(true);
+    setError('');
+
+    const demoEmail = `demo-${Date.now()}@cmoxpert-demo.com`;
+    const demoPassword = 'DemoPassword123!';
+
+    try {
+      const { error: signUpError } = await signUp(demoEmail, demoPassword);
+
+      if (signUpError) {
+        setError('Could not create demo account. Please try manual sign up.');
+        setDemoInProgress(false);
+        return;
+      }
+
+      const { error: signInError } = await signIn(demoEmail, demoPassword);
+
+      if (!signInError) {
+        navigate('/fraud-analysis');
+      } else {
+        setError('Demo account created but sign in failed. Please try signing in manually.');
+      }
+    } catch (err) {
+      setError('An error occurred while setting up your demo.');
+    } finally {
+      setDemoInProgress(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,11 +77,29 @@ export function AuthForm() {
     }
   };
 
+  if (demoInProgress) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-slate_blue-800 to-slate_blue-900 flex items-center justify-center p-4">
+        <div className="text-center bg-white rounded-xl shadow-2xl p-12 max-w-md">
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+            <Play className="w-8 h-8 text-green-600" />
+          </div>
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Setting Up Your Live Demo</h2>
+          <p className="text-gray-600 mb-6">Creating your demo account with pre-loaded data...</p>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="bg-green-600 h-2 rounded-full animate-pulse" style={{ width: '75%' }}></div>
+          </div>
+          <p className="text-sm text-gray-500 mt-4">This will only take a few seconds</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-slate_blue-800 to-slate_blue-900 flex items-center justify-center p-4">
       {/* Skip to main content link */}
-      <a 
-        href="#main-content" 
+      <a
+        href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-white text-slate-900 px-4 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
       >
         Skip to main content
@@ -49,8 +108,8 @@ export function AuthForm() {
       <div className="w-full max-w-md">
         {/* Back to Home Link */}
         <nav className="mb-4" role="navigation" aria-label="Breadcrumb">
-          <Link 
-            to="/" 
+          <Link
+            to="/"
             className="inline-flex items-center text-cornsilk-200 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
@@ -59,6 +118,16 @@ export function AuthForm() {
         </nav>
 
         <main id="main-content" role="main" tabIndex={-1}>
+          {isDemoMode && (
+            <div className="mb-6 bg-green-50 border-2 border-green-200 rounded-lg p-4 text-center">
+              <div className="flex items-center justify-center gap-2 text-green-800 font-semibold mb-1">
+                <Play className="w-5 h-5" />
+                <span>Live Demo Mode</span>
+              </div>
+              <p className="text-sm text-green-700">Preparing your demo account with sample data...</p>
+            </div>
+          )}
+
           {/* Logo and heading */}
           <header className="text-center mb-8" role="banner">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-cream-100 rounded-2xl shadow-lg mb-6">

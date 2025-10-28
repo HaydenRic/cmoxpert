@@ -31,6 +31,7 @@ const AlertRules = lazy(() => import('./pages/AlertRules').then(module => ({ def
 const Forecasting = lazy(() => import('./pages/Forecasting').then(module => ({ default: module.Forecasting })));
 const RevenueAttribution = lazy(() => import('./pages/RevenueAttribution').then(module => ({ default: module.RevenueAttribution })));
 const FraudAnalysis = lazy(() => import('./pages/FraudAnalysis').then(module => ({ default: module.default })));
+const ActivationFunnel = lazy(() => import('./pages/ActivationFunnel').then(module => ({ default: module.default })));
 
 // Lazy load placeholder pages
 const Settings = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Settings })));
@@ -276,6 +277,21 @@ function AppContent() {
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
                   <FraudAnalysis />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/activation-funnel"
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <ActivationFunnel />
                 </Suspense>
               </Layout>
             ) : (
