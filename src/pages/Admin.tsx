@@ -989,7 +989,7 @@ export function Admin() {
             <form onSubmit={handleAISettingsSave} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  OpenAI API Key
+                  OpenAI API Key (Optional)
                 </label>
                 <input
                   type="password"
@@ -998,10 +998,11 @@ export function Admin() {
                   className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700"
                   placeholder="sk-..."
                 />
+                <p className="text-xs text-slate-500 mt-1">Required for AI content generation and analysis</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Google Gemini API Key
+                  Google Gemini API Key (Optional)
                 </label>
                 <input
                   type="password"
@@ -1010,10 +1011,11 @@ export function Admin() {
                   className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700"
                   placeholder="AI..."
                 />
+                <p className="text-xs text-slate-500 mt-1">Alternative AI provider for content generation</p>
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  SEMrush API Key
+                  SEMrush API Key (Optional)
                 </label>
                 <input
                   type="password"
@@ -1022,6 +1024,7 @@ export function Admin() {
                   className="w-full border border-slate-300 rounded-lg px-3 py-2 text-slate-700"
                   placeholder="Enter SEMrush API key"
                 />
+                <p className="text-xs text-slate-500 mt-1">Required for SEO and competitive analysis features</p>
               </div>
               <div className="flex items-center">
                 <input
@@ -1037,7 +1040,7 @@ export function Admin() {
               </div>
               <div className="bg-earth_yellow-50 border border-earth_yellow-200 rounded-lg p-3">
                 <p className="text-xs text-dark_moss_green-800">
-                  <strong>Note:</strong> API keys are stored securely and encrypted. Changes will take effect after the next deployment.
+                  <strong>Note:</strong> Each API key is optional. You can configure only the services you need. API keys are stored securely and encrypted.
                 </p>
               </div>
               <div className="flex space-x-3 pt-4">
