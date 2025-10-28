@@ -88,7 +88,7 @@ export function Admin() {
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [showBrandForm, setShowBrandForm] = useState(false);
   const [showAIForm, setShowAIForm] = useState(false);
-  const [activeTab, setActiveTab] = useState<'videos' | 'analytics' | 'branding' | 'ai-settings'>('videos');
+  const [activeTab, setActiveTab] = useState<'videos' | 'analytics' | 'branding' | 'ai-settings' | 'integrations'>('videos');
   const [newVideo, setNewVideo] = useState({
     title: '',
     description: '',
@@ -97,6 +97,9 @@ export function Admin() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedLogo, setSelectedLogo] = useState<File | null>(null);
   const [selectedFavicon, setSelectedFavicon] = useState<File | null>(null);
+  const [gscConnected, setGscConnected] = useState(false);
+  const [gscProperties, setGscProperties] = useState<any[]>([]);
+  const [connectingGSC, setConnectingGSC] = useState(false);
 
   useEffect(() => {
     if (user && isAdmin) {
@@ -385,7 +388,7 @@ export function Admin() {
       // In a real implementation, these would be saved to secure environment variables
       // For demo purposes, we'll simulate saving
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
+
       setShowAIForm(false);
       alert('AI settings saved successfully! Changes will take effect after the next deployment.');
     } catch (error) {
@@ -395,6 +398,86 @@ export function Admin() {
       setSavingAI(false);
     }
   };
+
+  const handleConnectGSC = async () => {
+    setConnectingGSC(true);
+    try {
+      const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+      const redirectUri = import.meta.env.VITE_GOOGLE_REDIRECT_URI || `${window.location.origin}/auth/google/callback`;
+      const scope = 'https://www.googleapis.com/auth/webmasters.readonly';
+
+      if (!clientId) {
+        alert('Google OAuth is not configured. Please add VITE_GOOGLE_CLIENT_ID to your environment variables.');
+        return;
+      }
+
+      // Build OAuth URL
+      const authUrl = new URL('https://accounts.google.com/o/oauth2/v2/auth');
+      authUrl.searchParams.set('client_id', clientId);
+      authUrl.searchParams.set('redirect_uri', redirectUri);
+      authUrl.searchParams.set('response_type', 'code');
+      authUrl.searchParams.set('scope', scope);
+      authUrl.searchParams.set('access_type', 'offline');
+      authUrl.searchParams.set('prompt', 'consent');
+      authUrl.searchParams.set('state', user?.id || '');
+
+      // Redirect to Google OAuth
+      window.location.href = authUrl.toString();
+    } catch (error) {
+      console.error('Error connecting to GSC:', error);
+      alert('Failed to connect to Google Search Console');
+    } finally {
+      setConnectingGSC(false);
+    }
+  };
+
+  const handleDisconnectGSC = async () => {
+    try {
+      const { error } = await supabase
+        .from('google_oauth_tokens')
+        .delete()
+        .eq('user_id', user?.id);
+
+      if (error) throw error;
+
+      setGscConnected(false);
+      setGscProperties([]);
+      alert('Google Search Console disconnected successfully');
+    } catch (error) {
+      console.error('Error disconnecting GSC:', error);
+      alert('Failed to disconnect Google Search Console');
+    }
+  };
+
+  const loadGSCStatus = async () => {
+    try {
+      const { data: tokenData } = await supabase
+        .from('google_oauth_tokens')
+        .select('*')
+        .eq('user_id', user?.id)
+        .maybeSingle();
+
+      if (tokenData) {
+        setGscConnected(true);
+
+        // Load properties
+        const { data: properties } = await supabase
+          .from('google_search_console_properties')
+          .select('*')
+          .eq('user_id', user?.id);
+
+        setGscProperties(properties || []);
+      }
+    } catch (error) {
+      console.error('Error loading GSC status:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (user && activeTab === 'integrations') {
+      loadGSCStatus();
+    }
+  }, [user, activeTab]);
 
   const toggleFeatured = async (videoId: string, currentStatus: boolean) => {
     try {
@@ -492,7 +575,8 @@ export function Admin() {
     { id: 'videos', label: 'Videos', icon: Video },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'branding', label: 'Branding', icon: Settings },
-    { id: 'ai-settings', label: 'AI Settings', icon: Brain }
+    { id: 'ai-settings', label: 'AI Settings', icon: Brain },
+    { id: 'integrations', label: 'Integrations', icon: Globe }
   ];
 
   return (
@@ -847,6 +931,128 @@ export function Admin() {
                       <span className="text-xs px-2 py-1 rounded-full bg-pakistan_green-100 text-pakistan_green-800">
                         Active
                       </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Integrations Tab */}
+          {activeTab === 'integrations' && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-semibold text-slate-900 flex items-center">
+                    <Globe className="w-5 h-5 mr-2" />
+                    Third-Party Integrations
+                  </h2>
+                  <p className="text-sm text-slate-600 mt-1">Connect external services to enhance your analytics</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 gap-6">
+                {/* Google Search Console Card */}
+                <div className="bg-white rounded-lg border border-slate-200 p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center mb-2">
+                        <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3">
+                          <Globe className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-slate-900">Google Search Console</h3>
+                          <p className="text-xs text-slate-500">FREE - Real SEO data for your clients</p>
+                        </div>
+                      </div>
+                      <p className="text-sm text-slate-600 mb-4">
+                        Connect Google Search Console to access real search performance data, including clicks, impressions, CTR, and keyword rankings for your clients' websites.
+                      </p>
+
+                      {gscConnected ? (
+                        <div className="space-y-3">
+                          <div className="flex items-center space-x-2">
+                            <CheckCircle className="w-5 h-5 text-pakistan_green-600" />
+                            <span className="text-sm font-medium text-pakistan_green-700">Connected</span>
+                          </div>
+                          {gscProperties.length > 0 && (
+                            <div className="bg-slate-50 rounded-lg p-3">
+                              <p className="text-xs font-medium text-slate-700 mb-2">
+                                Connected Properties ({gscProperties.length}):
+                              </p>
+                              <ul className="space-y-1">
+                                {gscProperties.slice(0, 3).map((prop: any, idx: number) => (
+                                  <li key={idx} className="text-xs text-slate-600 flex items-center">
+                                    <CheckCircle className="w-3 h-3 mr-1 text-pakistan_green-500" />
+                                    {prop.property_url}
+                                  </li>
+                                ))}
+                                {gscProperties.length > 3 && (
+                                  <li className="text-xs text-slate-500 italic">
+                                    +{gscProperties.length - 3} more
+                                  </li>
+                                )}
+                              </ul>
+                            </div>
+                          )}
+                          <button
+                            onClick={handleDisconnectGSC}
+                            className="text-sm text-red-600 hover:text-red-700 font-medium"
+                          >
+                            Disconnect
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={handleConnectGSC}
+                          disabled={connectingGSC}
+                          className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 disabled:opacity-50"
+                        >
+                          {connectingGSC ? (
+                            <>
+                              <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                              <span>Connecting...</span>
+                            </>
+                          ) : (
+                            <>
+                              <Globe className="w-4 h-4" />
+                              <span>Connect Google Search Console</span>
+                            </>
+                          )}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="mt-4 pt-4 border-t border-slate-200">
+                    <div className="flex items-start space-x-2">
+                      <CheckCircle className="w-4 h-4 text-pakistan_green-600 mt-0.5" />
+                      <div className="flex-1">
+                        <p className="text-xs font-medium text-slate-700">What you get:</p>
+                        <ul className="text-xs text-slate-600 space-y-1 mt-1">
+                          <li>• Real search performance data (clicks, impressions, CTR)</li>
+                          <li>• Actual keyword rankings and positions</li>
+                          <li>• Top performing pages and queries</li>
+                          <li>• Geographic and device breakdowns</li>
+                          <li>• 100% FREE - No API costs</li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* SEMrush Note Card */}
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
+                  <div className="flex items-start space-x-3">
+                    <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5" />
+                    <div className="flex-1">
+                      <h4 className="text-sm font-semibold text-amber-900 mb-1">SEMrush Integration (Optional)</h4>
+                      <p className="text-xs text-amber-800 mb-2">
+                        SEMrush provides competitor analysis and keyword research but costs $120-500/month. For most clients, Google Search Console data (FREE) provides sufficient insights.
+                      </p>
+                      <p className="text-xs text-amber-700 font-medium">
+                        💡 Recommendation: Start with Google Search Console, upgrade to SEMrush only if clients need advanced competitive intelligence.
+                      </p>
                     </div>
                   </div>
                 </div>
