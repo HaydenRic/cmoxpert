@@ -47,6 +47,7 @@ const Privacy = lazy(() => import('./pages/Privacy').then(module => ({ default: 
 const Terms = lazy(() => import('./pages/Terms').then(module => ({ default: module.Terms })));
 const Support = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Support })));
 const Security = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Security })));
+const DebugAuth = lazy(() => import('./pages/DebugAuth').then(module => ({ default: module.DebugAuth })));
 
 // Initialize error handling
 initializeErrorHandling();
@@ -534,7 +535,16 @@ function AppContent() {
             </Suspense>
           }
         />
-        
+
+        <Route
+          path="/debug"
+          element={
+            <Suspense fallback={<PageLoadingFallback />}>
+              <DebugAuth />
+            </Suspense>
+          }
+        />
+
         {/* Fallback routes */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
