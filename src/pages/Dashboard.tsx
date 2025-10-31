@@ -66,23 +66,17 @@ export function Dashboard() {
   const loadDashboardData = async () => {
     try {
       // Get client count
-      const { count: clientCount } = await supabase
+      const { count: clientCount, error: clientError } = await supabase
         .from('clients')
         .select('id', { count: 'exact', head: true })
         .eq('user_id', user!.id);
 
-      // Get clients needing onboarding
-      const { data: onboardingData } = await supabase
-        .from('onboarding_progress')
-        .select(`
-          client_id,
-          is_completed
-        `)
-        .eq('user_id', user!.id)
-        .eq('is_completed', false);
+      if (clientError) {
+        console.error('Error loading clients:', clientError);
+      }
 
       // Get report stats
-      const { data: reports, count: reportCount } = await supabase
+      const { data: reports, count: reportCount, error: reportsError } = await supabase
         .from('reports')
         .select(`
           *,
@@ -90,11 +84,15 @@ export function Dashboard() {
         `, { count: 'exact' })
         .eq('clients.user_id', user!.id);
 
+      if (reportsError) {
+        console.error('Error loading reports:', reportsError);
+      }
+
       const completedReports = reports?.filter(r => r.status === 'completed').length || 0;
       const pendingReports = reports?.filter(r => r.status === 'pending').length || 0;
 
       // Get recent activity (latest reports with client names)
-      const { data: recentActivity } = await supabase
+      const { data: recentActivity, error: activityError } = await supabase
         .from('reports')
         .select(`
           *,
@@ -104,12 +102,20 @@ export function Dashboard() {
         .order('created_at', { ascending: false })
         .limit(5);
 
+      if (activityError) {
+        console.error('Error loading activity:', activityError);
+      }
+
       // Get first client for fraud/activation metrics
-      const { data: clients } = await supabase
+      const { data: clients, error: clientsQueryError } = await supabase
         .from('clients')
         .select('id')
         .eq('user_id', user!.id)
         .limit(1);
+
+      if (clientsQueryError) {
+        console.error('Error loading clients for metrics:', clientsQueryError);
+      }
 
       let fraudMetrics = undefined;
       let activationMetrics = undefined;
@@ -117,13 +123,15 @@ export function Dashboard() {
       if (clients && clients.length > 0) {
         const clientId = clients[0].id;
 
-        // Load fraud metrics
-        const { data: fraudData } = await supabase
+        // Load fraud metrics (gracefully handle missing table)
+        const { data: fraudData, error: fraudError } = await supabase
           .from('fintech_transactions')
           .select('id, is_fraudulent, amount')
           .eq('client_id', clientId);
 
-        if (fraudData && fraudData.length > 0) {
+        if (fraudError) {
+          console.log('Fraud metrics not available:', fraudError.message);
+        } else if (fraudData && fraudData.length > 0) {
           const fraudulentCount = fraudData.filter(t => t.is_fraudulent).length;
           const estimatedLoss = fraudData
             .filter(t => t.is_fraudulent)
@@ -137,13 +145,15 @@ export function Dashboard() {
           };
         }
 
-        // Load activation metrics
-        const { data: eventData } = await supabase
+        // Load activation metrics (gracefully handle missing table)
+        const { data: eventData, error: eventError } = await supabase
           .from('fintech_user_events')
           .select('user_id, event_type')
           .eq('client_id', clientId);
 
-        if (eventData && eventData.length > 0) {
+        if (eventError) {
+          console.log('Activation metrics not available:', eventError.message);
+        } else if (eventData && eventData.length > 0) {
           const uniqueUsers = new Set(eventData.map(e => e.user_id));
           const registrations = eventData.filter(e => e.event_type === 'registration').length;
           const completions = eventData.filter(e => e.event_type === 'first_transaction').length;
@@ -158,7 +168,7 @@ export function Dashboard() {
       }
 
       setStats({
-        clientsNeedingOnboarding: onboardingData?.length || 0,
+        clientsNeedingOnboarding: 0, // Removed dependency on missing onboarding_progress table
         totalClients: clientCount || 0,
         totalReports: reportCount || 0,
         completedReports,
