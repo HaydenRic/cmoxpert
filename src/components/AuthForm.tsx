@@ -60,12 +60,12 @@ export function AuthForm() {
     setError('');
 
     try {
-      const { error } = isSignIn 
+      const result = isSignIn
         ? await signIn(email, password)
         : await signUp(email, password);
 
-      if (error) {
-        setError(error.message);
+      if (result.error) {
+        setError(result.error.message);
       } else if (!isSignIn && result.data?.user && !result.data.session) {
         // Handle case where email confirmation is required
         setError('Please check your email and click the confirmation link to complete registration.');
