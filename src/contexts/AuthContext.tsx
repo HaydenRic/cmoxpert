@@ -141,24 +141,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const initializeAuth = async () => {
       try {
         console.log('Initializing auth...');
-        
-        // Check if Supabase is configured before attempting auth
-        const { isSupabaseConfigured } = await import('../lib/supabase');
-        
-        if (!isSupabaseConfigured) {
-          console.log('Supabase not configured, skipping auth initialization');
-          setLoading(false);
-          return;
-        }
-        
-        const { supabase } = await import('../lib/supabase');
-        
-        if (!supabase) {
-          console.log('Supabase client not available, skipping auth initialization');
-          setLoading(false);
-          return;
-        }
-        
+
         // Set a maximum initialization time
         initTimeout = setTimeout(() => {
           if (mounted) {
@@ -222,33 +205,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     initializeAuth();
 
-    // Listen for auth changes only if supabase is available
-    if (supabase?.auth?.onAuthStateChange) {
-      const {
-        data: { subscription: authSubscription },
-      } = supabase.auth.onAuthStateChange(async (event, session) => {
-        if (!mounted) return;
-        
-        console.log('Auth state change:', event, session);
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          await loadProfile(session.user.id);
-          // Set user context for error reporting
-          setUserContext(session.user.id, session.user.email);
-        } else {
-          setProfile(null);
-          setError(null);
-          // Clear user context on logout
-          clearUserContext();
-        }
-        
-        setLoading(false);
-      });
-      
-      subscription = authSubscription;
-    }
+    // Listen for auth changes
+    const {
+      data: { subscription: authSubscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (!mounted) return;
+
+      console.log('Auth state change:', event, session);
+      setSession(session);
+      setUser(session?.user ?? null);
+
+      if (session?.user) {
+        await loadProfile(session.user.id);
+        // Set user context for error reporting
+        setUserContext(session.user.id, session.user.email);
+      } else {
+        setProfile(null);
+        setError(null);
+        // Clear user context on logout
+        clearUserContext();
+      }
+
+      setLoading(false);
+    });
+
+    subscription = authSubscription;
 
     return () => {
       mounted = false;

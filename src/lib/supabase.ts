@@ -22,8 +22,8 @@ if (!isSupabaseConfigured) {
   console.warn('Supabase not properly configured - running in offline mode');
 }
 
-// Create Supabase client only if properly configured
-export const supabase = isSupabaseConfigured ? createClient(supabaseUrl, supabaseAnonKey, {
+// Create Supabase client - always create it with the provided credentials
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
@@ -45,7 +45,7 @@ export const supabase = isSupabaseConfigured ? createClient(supabaseUrl, supabas
       eventsPerSecond: 2
     }
   }
-}) : null;
+});
 
 // Export configuration status
 export { isSupabaseConfigured };
