@@ -70,20 +70,6 @@ export function LandingPage() {
 
   const loadFeaturedVideo = async () => {
     try {
-      const { isSupabaseConfigured } = await import('../lib/supabase');
-      
-      if (!isSupabaseConfigured) {
-        console.log('Supabase not configured, skipping featured video load');
-        return;
-      }
-
-      const { supabase } = await import('../lib/supabase');
-      
-      if (!supabase) {
-        console.log('Supabase client not available, skipping featured video load');
-        return;
-      }
-
       const { data } = await supabase
         .from('videos')
         .select('*')
@@ -96,7 +82,7 @@ export function LandingPage() {
         setFeaturedVideo(data[0]);
       }
     } catch (error) {
-      console.log('Could not load featured video (this is normal in development)');
+      console.log('Could not load featured video:', error);
     }
   };
 
