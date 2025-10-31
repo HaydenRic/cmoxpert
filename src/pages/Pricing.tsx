@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Check, Sparkles, Mail, ArrowRight } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import DemoBookingForm from '../components/DemoBookingForm';
+import { SEOHead, pageMeta } from '../components/SEOHead';
 
 interface PricingTier {
   id: string;
@@ -83,7 +84,9 @@ export default function Pricing() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
+    <>
+      <SEOHead {...pageMeta.pricing} />
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
@@ -278,5 +281,6 @@ export default function Pricing() {
         </div>
       </div>
     </div>
+    </>
   );
 }

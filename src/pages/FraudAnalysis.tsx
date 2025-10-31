@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
+import { SEOHead, pageMeta } from '../components/SEOHead';
 import {
   AlertTriangle,
   DollarSign,
@@ -162,7 +163,9 @@ export default function FraudAnalysis() {
   }
 
   return (
-    <div className="space-y-6">
+    <>
+      <SEOHead {...pageMeta.fraudAnalysis} />
+      <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Fraud Tax Analysis</h1>
@@ -488,5 +491,6 @@ export default function FraudAnalysis() {
         </div>
       )}
     </div>
+    </>
   );
 }
