@@ -8,44 +8,56 @@ if (import.meta.env.DEV) {
   console.log('Supabase config:', {
     url: supabaseUrl ? 'Set' : 'Missing',
     key: supabaseAnonKey ? 'Set' : 'Missing',
-    configured: !!(supabaseUrl && supabaseAnonKey)
+    configured: !!(supabaseUrl && supabaseAnonKey),
+    actualUrl: supabaseUrl,
+    actualKeyLength: supabaseAnonKey.length
   });
 }
 
 // Check if Supabase is properly configured
-const isSupabaseConfigured = supabaseUrl && supabaseAnonKey && 
-  supabaseUrl.startsWith('https://') && 
+const isSupabaseConfigured = supabaseUrl && supabaseAnonKey &&
+  supabaseUrl.startsWith('https://') &&
   supabaseUrl.includes('.supabase.co') &&
   supabaseAnonKey.length > 50;
 
 if (!isSupabaseConfigured) {
-  console.warn('Supabase not properly configured - running in offline mode');
+  console.error('Supabase NOT properly configured!', {
+    hasUrl: !!supabaseUrl,
+    hasKey: !!supabaseAnonKey,
+    urlValid: supabaseUrl.startsWith('https://') && supabaseUrl.includes('.supabase.co'),
+    keyLength: supabaseAnonKey.length
+  });
 }
 
 // Create Supabase client - always create it with the provided credentials
-export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: true,
-    persistSession: true,
-    detectSessionInUrl: false,
-    flowType: 'pkce',
-    debug: false,
-    storageKey: 'cmoxpert-auth'
-  },
-  global: {
-    headers: {
-      'X-Client-Info': 'cmoxpert-web'
-    }
-  },
-  db: {
-    schema: 'public'
-  },
-  realtime: {
-    params: {
-      eventsPerSecond: 2
+// If credentials are missing, this will still create a client but it won't work
+export const supabase = createClient(
+  supabaseUrl || 'https://placeholder.supabase.co',
+  supabaseAnonKey || 'placeholder-key',
+  {
+    auth: {
+      autoRefreshToken: true,
+      persistSession: true,
+      detectSessionInUrl: false,
+      flowType: 'pkce',
+      debug: false,
+      storageKey: 'cmoxpert-auth'
+    },
+    global: {
+      headers: {
+        'X-Client-Info': 'cmoxpert-web'
+      }
+    },
+    db: {
+      schema: 'public'
+    },
+    realtime: {
+      params: {
+        eventsPerSecond: 2
+      }
     }
   }
-});
+);
 
 // Export configuration status
 export { isSupabaseConfigured };
