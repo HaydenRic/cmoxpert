@@ -3,31 +3,10 @@ import { createClient } from '@supabase/supabase-js';
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
 
-// Only log in development
-if (import.meta.env.DEV) {
-  console.log('Supabase config:', {
-    url: supabaseUrl ? 'Set' : 'Missing',
-    key: supabaseAnonKey ? 'Set' : 'Missing',
-    configured: !!(supabaseUrl && supabaseAnonKey),
-    actualUrl: supabaseUrl,
-    actualKeyLength: supabaseAnonKey.length
-  });
-}
-
-// Check if Supabase is properly configured
 const isSupabaseConfigured = supabaseUrl && supabaseAnonKey &&
   supabaseUrl.startsWith('https://') &&
   supabaseUrl.includes('.supabase.co') &&
   supabaseAnonKey.length > 50;
-
-if (!isSupabaseConfigured) {
-  console.error('Supabase NOT properly configured!', {
-    hasUrl: !!supabaseUrl,
-    hasKey: !!supabaseAnonKey,
-    urlValid: supabaseUrl.startsWith('https://') && supabaseUrl.includes('.supabase.co'),
-    keyLength: supabaseAnonKey.length
-  });
-}
 
 // Create Supabase client - always create it with the provided credentials
 // If credentials are missing, this will still create a client but it won't work

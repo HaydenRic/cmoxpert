@@ -130,7 +130,7 @@ export function Dashboard() {
           .eq('client_id', clientId);
 
         if (fraudError) {
-          console.log('Fraud metrics not available:', fraudError.message);
+          // Fraud metrics table not yet created
         } else if (fraudData && fraudData.length > 0) {
           const fraudulentCount = fraudData.filter(t => t.is_fraudulent).length;
           const estimatedLoss = fraudData
@@ -152,7 +152,7 @@ export function Dashboard() {
           .eq('client_id', clientId);
 
         if (eventError) {
-          console.log('Activation metrics not available:', eventError.message);
+          // Activation metrics table not yet created
         } else if (eventData && eventData.length > 0) {
           const uniqueUsers = new Set(eventData.map(e => e.user_id));
           const registrations = eventData.filter(e => e.event_type === 'registration').length;

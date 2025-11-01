@@ -88,6 +88,7 @@ export function Admin() {
   const [showUploadForm, setShowUploadForm] = useState(false);
   const [showBrandForm, setShowBrandForm] = useState(false);
   const [showAIForm, setShowAIForm] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [activeTab, setActiveTab] = useState<'videos' | 'analytics' | 'branding' | 'ai-settings' | 'integrations'>('videos');
   const [newVideo, setNewVideo] = useState({
     title: '',
@@ -108,6 +109,13 @@ export function Admin() {
       loadAISettings();
     }
   }, [user, isAdmin]);
+
+  useEffect(() => {
+    if (toast) {
+      const timer = setTimeout(() => setToast(null), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [toast]);
 
   const loadAdminData = async () => {
     try {
@@ -226,16 +234,15 @@ export function Admin() {
 
   const handleVideoUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!selectedFile || !newVideo.title) {
-      alert('Please select a file and provide a title');
+      setToast({ message: 'Please select a file and provide a title', type: 'error' });
       return;
     }
 
     setUploading(true);
 
     try {
-      // Upload file to Supabase Storage
       const fileExt = selectedFile.name.split('.').pop();
       const fileName = `${Date.now()}.${fileExt}`;
       const filePath = `videos/${fileName}`;
@@ -246,12 +253,10 @@ export function Admin() {
 
       if (uploadError) throw uploadError;
 
-      // Get public URL
       const { data } = supabase.storage
         .from('videos')
         .getPublicUrl(filePath);
 
-      // Insert video metadata
       const { error: insertError } = await supabase
         .from('videos')
         .insert([{
@@ -264,17 +269,16 @@ export function Admin() {
 
       if (insertError) throw insertError;
 
-      // Reset form
       setNewVideo({ title: '', description: '', is_featured: false });
       setSelectedFile(null);
       setShowUploadForm(false);
-      
-      // Reload data
+      setToast({ message: 'Video uploaded successfully', type: 'success' });
+
       loadAdminData();
 
     } catch (error) {
       console.error('Error uploading video:', error);
-      alert('Error uploading video. Please try again.');
+      setToast({ message: 'Error uploading video. Please try again.', type: 'error' });
     } finally {
       setUploading(false);
     }
@@ -282,9 +286,9 @@ export function Admin() {
 
   const handleBrandUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!selectedLogo && !selectedFavicon) {
-      alert('Please select at least one file to upload');
+      setToast({ message: 'Please select at least one file to upload', type: 'error' });
       return;
     }
 
@@ -370,11 +374,11 @@ export function Admin() {
       setShowBrandForm(false);
       await loadBrandSettings();
 
-      alert('Brand assets uploaded successfully!');
+      setToast({ message: 'Brand assets uploaded successfully', type: 'success' });
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error uploading brand assets:', error);
-      alert(`Error uploading brand assets: ${error.message}`);
+      setToast({ message: `Error uploading brand assets: ${error.message}`, type: 'error' });
     } finally {
       setUploadingBrand(false);
     }
@@ -390,10 +394,10 @@ export function Admin() {
       await new Promise(resolve => setTimeout(resolve, 1000));
 
       setShowAIForm(false);
-      alert('AI settings saved successfully! Changes will take effect after the next deployment.');
+      setToast({ message: 'AI settings saved successfully', type: 'success' });
     } catch (error) {
       console.error('Error saving AI settings:', error);
-      alert('Error saving AI settings. Please try again.');
+      setToast({ message: 'Error saving AI settings. Please try again.', type: 'error' });
     } finally {
       setSavingAI(false);
     }
@@ -407,7 +411,7 @@ export function Admin() {
       const scope = 'https://www.googleapis.com/auth/webmasters.readonly';
 
       if (!clientId) {
-        alert('Google OAuth is not configured. Please add VITE_GOOGLE_CLIENT_ID to your environment variables.');
+        setToast({ message: 'Google OAuth is not configured', type: 'error' });
         return;
       }
 
@@ -425,7 +429,7 @@ export function Admin() {
       window.location.href = authUrl.toString();
     } catch (error) {
       console.error('Error connecting to GSC:', error);
-      alert('Failed to connect to Google Search Console');
+      setToast({ message: 'Failed to connect to Google Search Console', type: 'error' });
     } finally {
       setConnectingGSC(false);
     }
@@ -442,10 +446,10 @@ export function Admin() {
 
       setGscConnected(false);
       setGscProperties([]);
-      alert('Google Search Console disconnected successfully');
+      setToast({ message: 'Google Search Console disconnected successfully', type: 'success' });
     } catch (error) {
       console.error('Error disconnecting GSC:', error);
-      alert('Failed to disconnect Google Search Console');
+      setToast({ message: 'Failed to disconnect Google Search Console', type: 'error' });
     }
   };
 
@@ -1276,6 +1280,31 @@ export function Admin() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Toast Notification */}
+      {toast && (
+        <div className="fixed bottom-4 right-4 z-50 animate-in slide-in-from-bottom-5">
+          <div className={`flex items-center space-x-3 px-6 py-4 rounded-lg shadow-lg ${
+            toast.type === 'success'
+              ? 'bg-pakistan_green-600 text-white'
+              : 'bg-red-600 text-white'
+          }`}>
+            {toast.type === 'success' ? (
+              <CheckCircle className="w-5 h-5" />
+            ) : (
+              <AlertCircle className="w-5 h-5" />
+            )}
+            <span className="font-medium">{toast.message}</span>
+            <button
+              onClick={() => setToast(null)}
+              className="ml-4 p-1 hover:bg-white/20 rounded transition-colors"
+              aria-label="Close notification"
+            >
+              ×
+            </button>
           </div>
         </div>
       )}

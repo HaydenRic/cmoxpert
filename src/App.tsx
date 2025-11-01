@@ -66,13 +66,6 @@ function AppContent() {
   const { user, loading, error, skipLoading } = useAuth();
   const { toasts, closeToast } = useErrorToast();
 
-  console.log('App state:', { 
-    user: !!user, 
-    loading, 
-    userEmail: user?.email,
-    timestamp: new Date().toISOString()
-  });
-
   if (loading) {
     return (
       <div className="min-h-screen bg-cornsilk-500 flex items-center justify-center">
