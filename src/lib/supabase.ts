@@ -1,18 +1,33 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-const isSupabaseConfigured = supabaseUrl && supabaseAnonKey &&
-  supabaseUrl.startsWith('https://') &&
-  supabaseUrl.includes('.supabase.co') &&
-  supabaseAnonKey.length > 50;
+// Validate that environment variables are properly configured
+if (!supabaseUrl || !supabaseAnonKey) {
+  console.error('CRITICAL: Supabase environment variables are not configured!');
+  console.error('VITE_SUPABASE_URL:', supabaseUrl ? 'SET' : 'MISSING');
+  console.error('VITE_SUPABASE_ANON_KEY:', supabaseAnonKey ? 'SET' : 'MISSING');
+  throw new Error('Supabase configuration is missing. Check your .env file.');
+}
 
-// Create Supabase client - always create it with the provided credentials
-// If credentials are missing, this will still create a client but it won't work
+// Additional validation
+if (!supabaseUrl.startsWith('https://') || !supabaseUrl.includes('.supabase.co')) {
+  console.error('CRITICAL: Invalid Supabase URL format:', supabaseUrl);
+  throw new Error('Invalid Supabase URL. Must be a valid Supabase project URL.');
+}
+
+if (supabaseUrl.includes('placeholder')) {
+  console.error('CRITICAL: Supabase URL is still set to placeholder value!');
+  throw new Error('Supabase URL must be updated from placeholder to actual project URL.');
+}
+
+const isSupabaseConfigured = true;
+
+// Create Supabase client with validated credentials
 export const supabase = createClient(
-  supabaseUrl || 'https://placeholder.supabase.co',
-  supabaseAnonKey || 'placeholder-key',
+  supabaseUrl,
+  supabaseAnonKey,
   {
     auth: {
       autoRefreshToken: true,
