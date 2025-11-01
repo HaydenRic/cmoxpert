@@ -44,13 +44,34 @@ export const OAUTH_CONFIGS = {
   }
 };
 
+// Generate PKCE code verifier and challenge
+function generateCodeVerifier(): string {
+  const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  return btoa(String.fromCharCode(...array))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+}
+
+async function generateCodeChallenge(verifier: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(verifier);
+  const hash = await crypto.subtle.digest('SHA-256', data);
+  return btoa(String.fromCharCode(...new Uint8Array(hash)))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+}
+
 export function generateOAuthUrl(
   provider: 'google_ads' | 'meta_ads' | 'linkedin_ads',
-  state: string
+  state: string,
+  codeChallenge?: string
 ): string {
   const config = OAUTH_CONFIGS[provider];
 
-  const params = new URLSearchParams({
+  const params: Record<string, string> = {
     client_id: config.clientId,
     redirect_uri: config.redirectUri,
     scope: config.scopes.join(' '),
@@ -58,9 +79,16 @@ export function generateOAuthUrl(
     state: state,
     access_type: 'offline',
     prompt: 'consent'
-  });
+  };
 
-  return `${config.authorizationUrl}?${params.toString()}`;
+  // Add PKCE for Google OAuth (best practice)
+  if (provider === 'google_ads' && codeChallenge) {
+    params.code_challenge = codeChallenge;
+    params.code_challenge_method = 'S256';
+  }
+
+  const searchParams = new URLSearchParams(params);
+  return `${config.authorizationUrl}?${searchParams.toString()}`;
 }
 
 export async function initiateOAuthFlow(
@@ -68,14 +96,22 @@ export async function initiateOAuthFlow(
   userId: string,
   clientId?: string
 ): Promise<string> {
+  // Generate PKCE code verifier and challenge
+  const codeVerifier = generateCodeVerifier();
+  const codeChallenge = await generateCodeChallenge(codeVerifier);
+
+  // Generate cryptographically secure state with CSRF token
+  const csrfToken = crypto.randomUUID();
   const state = btoa(JSON.stringify({
     provider,
     userId,
     clientId,
     timestamp: Date.now(),
-    nonce: crypto.randomUUID()
+    nonce: crypto.randomUUID(),
+    csrf: csrfToken
   }));
 
+  // Store state and PKCE verifier in database with shorter expiration (5 minutes)
   const { error } = await supabase
     .from('oauth_states')
     .insert({
@@ -83,14 +119,16 @@ export async function initiateOAuthFlow(
       provider,
       user_id: userId,
       client_id: clientId,
-      expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString()
+      code_verifier: codeVerifier,
+      csrf_token: csrfToken,
+      expires_at: new Date(Date.now() + 5 * 60 * 1000).toISOString() // 5 minutes
     });
 
   if (error) {
     throw new Error('Failed to initiate OAuth flow');
   }
 
-  return generateOAuthUrl(provider, state);
+  return generateOAuthUrl(provider, state, codeChallenge);
 }
 
 export async function handleOAuthCallback(
@@ -98,24 +136,52 @@ export async function handleOAuthCallback(
   state: string
 ): Promise<{ success: boolean; integrationId?: string; error?: string }> {
   try {
-    const stateData = JSON.parse(atob(state));
+    // Validate state format
+    let stateData;
+    try {
+      stateData = JSON.parse(atob(state));
+    } catch {
+      return { success: false, error: 'Invalid state format' };
+    }
 
+    // Verify state exists in database and hasn't been used (prevents replay attacks)
     const { data: stateRecord, error: stateError } = await supabase
       .from('oauth_states')
       .select('*')
       .eq('state', state)
+      .eq('used', false)
       .maybeSingle();
 
     if (stateError || !stateRecord) {
-      return { success: false, error: 'Invalid or expired state' };
+      return { success: false, error: 'Invalid or already used state' };
     }
 
+    // Verify state hasn't expired
     if (new Date(stateRecord.expires_at) < new Date()) {
+      // Clean up expired state
+      await supabase.from('oauth_states').delete().eq('state', state);
       return { success: false, error: 'OAuth state expired' };
     }
 
-    const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/oauth-exchange-token`;
+    // Verify CSRF token matches
+    if (stateRecord.csrf_token !== stateData.csrf) {
+      return { success: false, error: 'CSRF token mismatch' };
+    }
+
+    // Verify user matches
     const { data: sessionData } = await supabase.auth.getSession();
+    if (sessionData.session?.user.id !== stateData.userId) {
+      return { success: false, error: 'User mismatch' };
+    }
+
+    // Mark state as used immediately to prevent replay
+    await supabase
+      .from('oauth_states')
+      .update({ used: true })
+      .eq('state', state);
+
+    // Exchange code for tokens via Edge Function
+    const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/oauth-exchange-token`;
 
     const response = await fetch(apiUrl, {
       method: 'POST',
@@ -126,7 +192,8 @@ export async function handleOAuthCallback(
       body: JSON.stringify({
         code,
         provider: stateData.provider,
-        redirect_uri: OAUTH_CONFIGS[stateData.provider as keyof typeof OAUTH_CONFIGS].redirectUri
+        redirect_uri: OAUTH_CONFIGS[stateData.provider as keyof typeof OAUTH_CONFIGS].redirectUri,
+        code_verifier: stateRecord.code_verifier // Pass PKCE verifier
       })
     });
 
@@ -137,6 +204,7 @@ export async function handleOAuthCallback(
 
     const tokenData = await response.json();
 
+    // Save integration with encrypted tokens (handled by database)
     const { data: integration, error: integrationError } = await supabase
       .from('integrations')
       .insert({
@@ -160,6 +228,7 @@ export async function handleOAuthCallback(
       return { success: false, error: 'Failed to save integration' };
     }
 
+    // Clean up used state
     await supabase
       .from('oauth_states')
       .delete()

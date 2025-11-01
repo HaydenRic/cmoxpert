@@ -10,15 +10,14 @@
     "preview": "vite preview",
     "docs:generate": "node docs/api/tools/documentation-generator.js generate",
     "docs:validate": "node docs/api/tools/documentation-generator.js validate",
-    "docs:serve": "npx http-server docs/api -p 3001",
-    "docs:build": "redoc-cli build docs/api/schemas/openapi.yaml --output docs/api/index.html"
+    "docs:serve": "npx http-server docs/api -p 3001"
   },
   "dependencies": {
-    "@sentry/react": "^7.99.0",
-    "@sentry/tracing": "^7.99.0",
+    "@sentry/react": "^10.22.0",
+    "@sentry/tracing": "^7.120.4",
     "@splinetool/react-spline": "^2.2.6",
     "@splinetool/runtime": "^1.0.14",
-    "@supabase/supabase-js": "^2.39.3",
+    "@supabase/supabase-js": "^2.78.0",
     "clsx": "^2.1.0",
     "date-fns": "^3.3.1",
     "framer-motion": "^10.16.16",
@@ -41,8 +40,6 @@
     "globals": "^15.9.0",
     "js-yaml": "^4.1.0",
     "postcss": "^8.4.35",
-    "redoc-cli": "^0.13.21",
-    "swagger-ui-react": "^5.28.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.3.0",
