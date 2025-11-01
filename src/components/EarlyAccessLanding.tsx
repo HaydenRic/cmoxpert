@@ -433,7 +433,7 @@ export function EarlyAccessLanding() {
 
           <div className="grid md:grid-cols-3 gap-8">
             <div className="p-6 bg-cornsilk-100 rounded-xl border border-tan-200 text-center">
-              <div className="text-4xl font-bold text-slate_blue-600 mb-2">$127</div>
+              <div className="text-4xl font-bold text-slate_blue-600 mb-2">£127</div>
               <div className="text-slate_blue-600">Average CAC reduction in first 90 days</div>
               <div className="text-sm text-slate_blue-500 mt-2">(Pilot data • 3 companies)</div>
             </div>
