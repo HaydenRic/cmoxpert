@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-import { 
-  BarChart3, 
-  TrendingUp, 
-  TrendingDown, 
-  DollarSign, 
-  Target, 
-  Calendar, 
-  Filter, 
-  Plus, 
-  Edit2, 
-  Trash2, 
-  RefreshCw, 
-  PieChart, 
+import {
+  BarChart3,
+  TrendingUp,
+  TrendingDown,
+  DollarSign,
+  Target,
+  Calendar,
+  Filter,
+  Plus,
+  Edit2,
+  Trash2,
+  RefreshCw,
+  PieChart,
   LineChart as LineChartIcon,
-  ArrowUpRight, 
-  ArrowDownRight, 
+  ArrowUpRight,
+  ArrowDownRight,
   Minus,
   CheckCircle,
   Clock,
@@ -28,7 +28,8 @@ import {
   Zap,
   Globe,
   Mail,
-  MessageSquare
+  MessageSquare,
+  FileText
 } from 'lucide-react';
 import { format, parseISO, isAfter, isBefore, subDays, subMonths } from 'date-fns';
 import { 
