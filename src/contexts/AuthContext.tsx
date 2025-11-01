@@ -42,11 +42,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const skipLoading = () => setLoading(false);
   const clearLoginSuccess = () => setLoginSuccess(false);
 
-  const loadProfile = async (userId: string, retryCount = 0) => {
+  const loadProfile = async (userId: string, userEmail: string, retryCount = 0, maxRetries = 3) => {
     try {
-      console.log('[AUTH] Loading profile for user:', userId, 'Retry:', retryCount);
+      console.log('[AUTH] Loading profile for user:', userId, 'Email:', userEmail, 'Retry:', retryCount);
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 8000);
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
 
       try {
         const { data, error } = await supabase
@@ -59,47 +59,115 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         clearTimeout(timeoutId);
 
         if (error) {
-          if (retryCount === 0) {
-            setTimeout(() => loadProfile(userId, 1), 1000);
+          console.error('[AUTH] Profile query error:', error);
+
+          // Retry with exponential backoff
+          if (retryCount < maxRetries) {
+            const delay = Math.min(1000 * Math.pow(2, retryCount), 5000);
+            console.log(`[AUTH] Retrying profile load in ${delay}ms...`);
+            setTimeout(() => loadProfile(userId, userEmail, retryCount + 1, maxRetries), delay);
             return;
           }
-          setError('Failed to load user profile. Please refresh the page.');
+
+          setError('Unable to load your profile. Please refresh the page or contact support.');
           return;
         }
 
         if (!data) {
-          const { data: newProfile, error: createError } = await supabase
+          console.log('[AUTH] Profile not found, attempting to create...');
+
+          // Try to use the database function to ensure profile exists
+          const { data: functionResult, error: functionError } = await supabase
+            .rpc('ensure_profile_exists', {
+              user_id: userId,
+              user_email: userEmail
+            });
+
+          if (functionError) {
+            console.error('[AUTH] RPC ensure_profile_exists failed:', functionError);
+
+            // Fallback to direct insert
+            const { data: newProfile, error: createError } = await supabase
+              .from('profiles')
+              .insert([{
+                id: userId,
+                email: userEmail,
+                role: 'user'
+              }])
+              .select()
+              .maybeSingle();
+
+            if (createError) {
+              console.error('[AUTH] Profile creation failed:', createError);
+
+              // One final retry
+              if (retryCount < maxRetries) {
+                const delay = Math.min(1000 * Math.pow(2, retryCount), 5000);
+                setTimeout(() => loadProfile(userId, userEmail, retryCount + 1, maxRetries), delay);
+                return;
+              }
+
+              setError('Failed to create your profile. Please try signing in again or contact support.');
+              return;
+            }
+
+            if (newProfile) {
+              console.log('[AUTH] Profile created successfully via insert');
+              setProfile(newProfile);
+              setError(null);
+              return;
+            }
+          }
+
+          // Fetch the created profile
+          const { data: createdProfile, error: fetchError } = await supabase
             .from('profiles')
-            .insert([{
-              id: userId,
-              email: user?.email || '',
-              role: 'user'
-            }])
-            .select()
+            .select('*')
+            .eq('id', userId)
             .maybeSingle();
 
-          if (createError) {
-            setError('Failed to create user profile. Please refresh the page.');
+          if (fetchError || !createdProfile) {
+            console.error('[AUTH] Failed to fetch created profile:', fetchError);
+            if (retryCount < maxRetries) {
+              const delay = Math.min(1000 * Math.pow(2, retryCount), 5000);
+              setTimeout(() => loadProfile(userId, userEmail, retryCount + 1, maxRetries), delay);
+              return;
+            }
+            setError('Profile creation issue. Please try signing in again.');
             return;
           }
 
-          setProfile(newProfile);
+          console.log('[AUTH] Profile loaded after creation');
+          setProfile(createdProfile);
           setError(null);
           return;
         }
 
+        console.log('[AUTH] Profile loaded successfully');
         setProfile(data);
         setError(null);
       } catch (err: any) {
         clearTimeout(timeoutId);
-        if (err.name === 'AbortError' && retryCount === 0) {
-          setTimeout(() => loadProfile(userId, 1), 1000);
+        console.error('[AUTH] Profile load exception:', err);
+
+        if (err.name === 'AbortError' && retryCount < maxRetries) {
+          const delay = Math.min(1000 * Math.pow(2, retryCount), 5000);
+          console.log(`[AUTH] Timeout, retrying in ${delay}ms...`);
+          setTimeout(() => loadProfile(userId, userEmail, retryCount + 1, maxRetries), delay);
           return;
         }
-        setError('Connection timeout. Please check your internet connection.');
+
+        if (retryCount < maxRetries) {
+          const delay = Math.min(1000 * Math.pow(2, retryCount), 5000);
+          setTimeout(() => loadProfile(userId, userEmail, retryCount + 1, maxRetries), delay);
+          return;
+        }
+
+        setError('Connection timeout. Please check your internet connection and try again.');
       }
     } catch (error: any) {
-      setError('An unexpected error occurred while loading your profile.');
+      console.error('[AUTH] Unexpected profile load error:', error);
+      setError('An unexpected error occurred. Please try again or contact support.');
     }
   };
 
@@ -143,7 +211,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         if (session?.user) {
           console.log('[AUTH] Loading user profile...');
-          await loadProfile(session.user.id);
+          await loadProfile(session.user.id, session.user.email || '');
         }
 
         console.log('[AUTH] Authentication initialization complete');
@@ -168,7 +236,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(session?.user ?? null);
 
       if (session?.user) {
-        await loadProfile(session.user.id);
+        await loadProfile(session.user.id, session.user.email || '');
         setUserContext(session.user.id, session.user.email);
       } else {
         setProfile(null);
@@ -280,7 +348,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const refreshProfile = async () => {
     if (user) {
       setError(null);
-      await loadProfile(user.id);
+      await loadProfile(user.id, user.email || '');
     }
   };
 

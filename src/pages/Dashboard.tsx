@@ -11,7 +11,8 @@ import {
   ArrowUpRight,
   CheckCircle,
   Shield,
-  Target
+  Target,
+  AlertCircle
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
@@ -49,6 +50,7 @@ export function Dashboard() {
     recentActivity: []
   });
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -59,6 +61,7 @@ export function Dashboard() {
 
   const loadDashboardData = async () => {
     try {
+      setError(null);
       // Build queries with optional client filter
       let clientCountQuery = supabase
         .from('clients')
@@ -128,10 +131,20 @@ export function Dashboard() {
       const { data: recentActivity, error: activityError } = recentActivityResult;
       const { data: clients, error: clientsQueryError } = firstClientResult;
 
-      if (clientError) console.error('Error loading clients:', clientError);
-      if (reportsError) console.error('Error loading reports:', reportsError);
-      if (activityError) console.error('Error loading activity:', activityError);
-      if (clientsQueryError) console.error('Error loading clients for metrics:', clientsQueryError);
+      // Handle errors gracefully - don't fail completely if one query fails
+      if (clientError) {
+        console.error('Error loading clients:', clientError);
+        setError('Some client data could not be loaded. Please refresh the page.');
+      }
+      if (reportsError) {
+        console.error('Error loading reports:', reportsError);
+      }
+      if (activityError) {
+        console.error('Error loading activity:', activityError);
+      }
+      if (clientsQueryError) {
+        console.error('Error loading clients for metrics:', clientsQueryError);
+      }
 
       const completedReports = reports?.filter(r => r.status === 'completed').length || 0;
       const pendingReports = reports?.filter(r => r.status === 'pending').length || 0;
@@ -139,8 +152,8 @@ export function Dashboard() {
       let fraudMetrics = undefined;
       let activationMetrics = undefined;
 
-      // Load fraud/activation metrics only if we have clients
-      if (clients && clients.length > 0) {
+      // Load fraud/activation metrics only if we have clients and no critical errors
+      if (clients && clients.length > 0 && !clientError) {
         const clientId = clients[0].id;
 
         // Execute fraud and activation queries in parallel
@@ -198,8 +211,22 @@ export function Dashboard() {
         fraudMetrics,
         activationMetrics
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error loading dashboard data:', error);
+      setError(
+        'Unable to load dashboard data. Please check your connection and refresh the page. ' +
+        (error.message || '')
+      );
+
+      // Set minimal stats to allow dashboard to render
+      setStats({
+        clientsNeedingOnboarding: 0,
+        totalClients: 0,
+        totalReports: 0,
+        completedReports: 0,
+        pendingReports: 0,
+        recentActivity: []
+      });
     } finally {
       setLoading(false);
     }
@@ -255,8 +282,62 @@ export function Dashboard() {
     );
   }
 
+  if (error && stats.totalClients === 0 && stats.totalReports === 0) {
+    return (
+      <div className="p-8">
+        <div className="bg-red-50 border border-red-200 rounded-xl p-6 max-w-2xl mx-auto">
+          <div className="flex items-start space-x-3">
+            <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-red-900 mb-2">Unable to Load Dashboard</h3>
+              <p className="text-red-700 mb-4">{error}</p>
+              <div className="flex space-x-3">
+                <button
+                  onClick={() => {
+                    setLoading(true);
+                    loadDashboardData();
+                  }}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg font-medium transition-colors"
+                >
+                  Retry
+                </button>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="px-4 py-2 bg-white hover:bg-red-50 text-red-700 border border-red-300 rounded-lg font-medium transition-colors"
+                >
+                  Reload Page
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-8">
+      {/* Error Banner */}
+      {error && stats.totalClients > 0 && (
+        <div className="mb-6 bg-yellow-50 border border-yellow-200 rounded-xl p-4">
+          <div className="flex items-center space-x-3">
+            <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0" />
+            <div className="flex-1">
+              <p className="text-yellow-800 text-sm">{error}</p>
+            </div>
+            <button
+              onClick={() => {
+                setError(null);
+                loadDashboardData();
+              }}
+              className="px-3 py-1 bg-yellow-600 hover:bg-yellow-700 text-white rounded text-sm font-medium transition-colors"
+            >
+              Retry
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-start justify-between">

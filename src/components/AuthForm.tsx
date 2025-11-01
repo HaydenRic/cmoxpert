@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { Compass, Mail, Lock, AlertCircle, ArrowLeft, Play } from 'lucide-react';
+import { Compass, Mail, Lock, AlertCircle, ArrowLeft, Play, CheckCircle } from 'lucide-react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { LoginSuccessModal } from './LoginSuccessModal';
+
+interface ValidationError {
+  field: 'email' | 'password';
+  message: string;
+}
 
 export function AuthForm() {
   const [searchParams] = useSearchParams();
@@ -15,11 +20,85 @@ export function AuthForm() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
+  const [emailValid, setEmailValid] = useState<boolean | null>(null);
   const [demoInProgress, setDemoInProgress] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successEmail, setSuccessEmail] = useState('');
 
   const { signIn, signUp, clearLoginSuccess } = useAuth();
+
+  const validateEmail = (email: string): boolean => {
+    if (!email || email.trim() === '') {
+      return false;
+    }
+
+    // Comprehensive email validation regex supporting all valid formats
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+    if (!emailRegex.test(email.trim())) {
+      return false;
+    }
+
+    // Additional validation checks
+    const parts = email.trim().split('@');
+    if (parts.length !== 2) return false;
+
+    const [localPart, domain] = parts;
+
+    // Local part validation
+    if (localPart.length === 0 || localPart.length > 64) return false;
+    if (localPart.startsWith('.') || localPart.endsWith('.')) return false;
+    if (localPart.includes('..')) return false;
+
+    // Domain validation
+    if (domain.length === 0 || domain.length > 253) return false;
+    if (domain.startsWith('-') || domain.endsWith('-')) return false;
+    if (domain.startsWith('.') || domain.endsWith('.')) return false;
+    if (!domain.includes('.')) return false;
+
+    // Check TLD length (must be at least 2 characters)
+    const tld = domain.split('.').pop();
+    if (!tld || tld.length < 2) return false;
+
+    return true;
+  };
+
+  const validatePassword = (password: string, isSignUp: boolean): string | null => {
+    if (!password) {
+      return 'Password is required';
+    }
+
+    if (isSignUp) {
+      if (password.length < 8) {
+        return 'Password must be at least 8 characters long';
+      }
+      // Optional: Add more strength requirements
+      // if (!/[A-Z]/.test(password)) return 'Password must contain an uppercase letter';
+      // if (!/[a-z]/.test(password)) return 'Password must contain a lowercase letter';
+      // if (!/[0-9]/.test(password)) return 'Password must contain a number';
+    }
+
+    return null;
+  };
+
+  const handleEmailChange = (newEmail: string) => {
+    setEmail(newEmail);
+    setValidationErrors([]);
+
+    // Real-time validation feedback
+    if (newEmail.length > 0) {
+      const isValid = validateEmail(newEmail);
+      setEmailValid(isValid);
+    } else {
+      setEmailValid(null);
+    }
+  };
+
+  const handlePasswordChange = (newPassword: string) => {
+    setPassword(newPassword);
+    setValidationErrors([]);
+  };
 
   useEffect(() => {
     if (isDemoMode) {
@@ -63,24 +142,67 @@ export function AuthForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError('');
+    setValidationErrors([]);
+
+    // Client-side validation
+    const errors: ValidationError[] = [];
+
+    // Validate email
+    if (!email || !validateEmail(email)) {
+      errors.push({
+        field: 'email',
+        message: 'Please enter a valid email address'
+      });
+    }
+
+    // Validate password
+    const passwordError = validatePassword(password, !isSignIn);
+    if (passwordError) {
+      errors.push({
+        field: 'password',
+        message: passwordError
+      });
+    }
+
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
+    setLoading(true);
 
     try {
+      const trimmedEmail = email.trim().toLowerCase();
+
       const result = isSignIn
-        ? await signIn(email, password)
-        : await signUp(email, password);
+        ? await signIn(trimmedEmail, password)
+        : await signUp(trimmedEmail, password);
 
       if (result.error) {
-        setError(result.error.message);
+        // Provide user-friendly error messages
+        let errorMessage = result.error.message;
+
+        if (errorMessage.includes('Invalid login credentials')) {
+          errorMessage = 'Invalid email or password. Please check your credentials and try again.';
+        } else if (errorMessage.includes('Email not confirmed')) {
+          errorMessage = 'Please check your email and confirm your account before signing in.';
+        } else if (errorMessage.includes('User already registered')) {
+          errorMessage = 'This email is already registered. Please sign in instead.';
+        } else if (errorMessage.includes('network') || errorMessage.includes('fetch')) {
+          errorMessage = 'Network error. Please check your internet connection and try again.';
+        }
+
+        setError(errorMessage);
       } else if (isSignIn && result.success) {
-        setSuccessEmail(email);
+        setSuccessEmail(trimmedEmail);
         setShowSuccessModal(true);
       } else if (!isSignIn && result.data?.user && !result.data.session) {
-        setError('Please check your email and click the confirmation link to complete registration.');
+        setError('Account created successfully! You can now sign in.');
       }
-    } catch (err) {
-      setError('An unexpected error occurred');
+    } catch (err: any) {
+      console.error('Authentication error:', err);
+      setError('An unexpected error occurred. Please try again or contact support if the problem persists.');
     } finally {
       setLoading(false);
     }
@@ -195,14 +317,29 @@ export function AuthForm() {
                       id="email"
                       type="email"
                       value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-transparent transition-all"
+                      onChange={(e) => handleEmailChange(e.target.value)}
+                      className={clsx(
+                        "w-full pl-10 pr-10 py-3 border rounded-lg transition-all",
+                        validationErrors.some(e => e.field === 'email')
+                          ? "border-red-500 focus:ring-2 focus:ring-red-500"
+                          : emailValid === true
+                          ? "border-green-500 focus:ring-2 focus:ring-green-500"
+                          : "border-slate-300 focus:ring-2 focus:ring-slate_blue-500 focus:border-transparent"
+                      )}
                       placeholder="you@company.com"
                       required
-                      aria-describedby="email-help"
+                      aria-describedby="email-help email-error"
                       autoComplete="email"
                     />
+                    {emailValid === true && (
+                      <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-green-500" />
+                    )}
                     <div id="email-help" className="sr-only">Enter your email address to sign in or create an account</div>
+                    {validationErrors.find(e => e.field === 'email') && (
+                      <p id="email-error" className="text-red-600 text-sm mt-1">
+                        {validationErrors.find(e => e.field === 'email')?.message}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -216,16 +353,26 @@ export function AuthForm() {
                       id="password"
                       type="password"
                       value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-slate_blue-500 focus:border-transparent transition-all"
+                      onChange={(e) => handlePasswordChange(e.target.value)}
+                      className={clsx(
+                        "w-full pl-10 pr-4 py-3 border rounded-lg transition-all",
+                        validationErrors.some(e => e.field === 'password')
+                          ? "border-red-500 focus:ring-2 focus:ring-red-500"
+                          : "border-slate-300 focus:ring-2 focus:ring-slate_blue-500 focus:border-transparent"
+                      )}
                       placeholder="••••••••"
                       required
-                      aria-describedby="password-help"
+                      aria-describedby="password-help password-error"
                       autoComplete={isSignIn ? "current-password" : "new-password"}
                     />
                     <div id="password-help" className="sr-only">
-                      {isSignIn ? 'Enter your password' : 'Create a secure password for your account'}
+                      {isSignIn ? 'Enter your password' : 'Create a secure password (at least 8 characters)'}
                     </div>
+                    {validationErrors.find(e => e.field === 'password') && (
+                      <p id="password-error" className="text-red-600 text-sm mt-1">
+                        {validationErrors.find(e => e.field === 'password')?.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               </fieldset>
