@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -10,19 +10,11 @@ import {
   Activity,
   ArrowUpRight,
   CheckCircle,
-  AlertCircle,
   Shield,
-  Target,
-  DollarSign,
-  TrendingDown
+  Target
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
-
-// Lazy load the Spline component for better performance
-const SplineSceneBasic = React.lazy(() =>
-  import('../components/ui/spline-demo').then(module => ({ default: module.SplineSceneBasic }))
-);
 
 interface DashboardStats {
   totalClients: number;
@@ -65,73 +57,89 @@ export function Dashboard() {
 
   const loadDashboardData = async () => {
     try {
-      // Get client count
-      const { count: clientCount, error: clientError } = await supabase
-        .from('clients')
-        .select('id', { count: 'exact', head: true })
-        .eq('user_id', user!.id);
+      // Execute all primary queries in parallel for better performance
+      const [
+        clientCountResult,
+        reportsResult,
+        recentActivityResult,
+        firstClientResult
+      ] = await Promise.all([
+        // Get client count
+        supabase
+          .from('clients')
+          .select('id', { count: 'exact', head: true })
+          .eq('user_id', user!.id),
 
-      if (clientError) {
-        console.error('Error loading clients:', clientError);
-      }
+        // Get report stats
+        supabase
+          .from('reports')
+          .select(`
+            id,
+            status,
+            created_at,
+            clients!inner(user_id)
+          `, { count: 'exact' })
+          .eq('clients.user_id', user!.id),
 
-      // Get report stats
-      const { data: reports, count: reportCount, error: reportsError } = await supabase
-        .from('reports')
-        .select(`
-          *,
-          clients!inner(user_id)
-        `, { count: 'exact' })
-        .eq('clients.user_id', user!.id);
+        // Get recent activity
+        supabase
+          .from('reports')
+          .select(`
+            id,
+            status,
+            created_at,
+            clients!inner(name, user_id)
+          `)
+          .eq('clients.user_id', user!.id)
+          .order('created_at', { ascending: false })
+          .limit(5),
 
-      if (reportsError) {
-        console.error('Error loading reports:', reportsError);
-      }
+        // Get first client for metrics
+        supabase
+          .from('clients')
+          .select('id')
+          .eq('user_id', user!.id)
+          .limit(1)
+      ]);
+
+      const { count: clientCount, error: clientError } = clientCountResult;
+      const { data: reports, count: reportCount, error: reportsError } = reportsResult;
+      const { data: recentActivity, error: activityError } = recentActivityResult;
+      const { data: clients, error: clientsQueryError } = firstClientResult;
+
+      if (clientError) console.error('Error loading clients:', clientError);
+      if (reportsError) console.error('Error loading reports:', reportsError);
+      if (activityError) console.error('Error loading activity:', activityError);
+      if (clientsQueryError) console.error('Error loading clients for metrics:', clientsQueryError);
 
       const completedReports = reports?.filter(r => r.status === 'completed').length || 0;
       const pendingReports = reports?.filter(r => r.status === 'pending').length || 0;
 
-      // Get recent activity (latest reports with client names)
-      const { data: recentActivity, error: activityError } = await supabase
-        .from('reports')
-        .select(`
-          *,
-          clients!inner(name, user_id)
-        `)
-        .eq('clients.user_id', user!.id)
-        .order('created_at', { ascending: false })
-        .limit(5);
-
-      if (activityError) {
-        console.error('Error loading activity:', activityError);
-      }
-
-      // Get first client for fraud/activation metrics
-      const { data: clients, error: clientsQueryError } = await supabase
-        .from('clients')
-        .select('id')
-        .eq('user_id', user!.id)
-        .limit(1);
-
-      if (clientsQueryError) {
-        console.error('Error loading clients for metrics:', clientsQueryError);
-      }
-
       let fraudMetrics = undefined;
       let activationMetrics = undefined;
 
+      // Load fraud/activation metrics only if we have clients
       if (clients && clients.length > 0) {
         const clientId = clients[0].id;
 
-        // Load fraud metrics (gracefully handle missing table)
-        const { data: fraudData, error: fraudError } = await supabase
-          .from('fintech_transactions')
-          .select('id, is_fraudulent, amount')
-          .eq('client_id', clientId);
+        // Execute fraud and activation queries in parallel
+        const [fraudResult, eventsResult] = await Promise.all([
+          supabase
+            .from('fintech_transactions')
+            .select('id, is_fraudulent, amount')
+            .eq('client_id', clientId),
 
-        if (fraudError) {
-          // Fraud metrics table not yet created
-        } else if (fraudData && fraudData.length > 0) {
+          supabase
+            .from('fintech_user_events')
+            .select('user_id, event_type')
+            .eq('client_id', clientId)
+        ]);
+
+        const { data: fraudData, error: fraudError } = fraudResult;
+        const { data: eventData, error: eventError } = eventsResult;
+
+        // Process fraud metrics
+        if (!fraudError && fraudData && fraudData.length > 0) {
           const fraudulentCount = fraudData.filter(t => t.is_fraudulent).length;
           const estimatedLoss = fraudData
             .filter(t => t.is_fraudulent)
@@ -145,16 +153,8 @@ export function Dashboard() {
           };
         }
 
-        // Load activation metrics (gracefully handle missing table)
-        const { data: eventData, error: eventError } = await supabase
-          .from('fintech_user_events')
-          .select('user_id, event_type')
-          .eq('client_id', clientId);
-
-        if (eventError) {
-          // Activation metrics table not yet created
-        } else if (eventData && eventData.length > 0) {
-          const uniqueUsers = new Set(eventData.map(e => e.user_id));
+        // Process activation metrics
+        if (!eventError && eventData && eventData.length > 0) {
           const registrations = eventData.filter(e => e.event_type === 'registration').length;
           const completions = eventData.filter(e => e.event_type === 'first_transaction').length;
 
@@ -168,7 +168,7 @@ export function Dashboard() {
       }
 
       setStats({
-        clientsNeedingOnboarding: 0, // Removed dependency on missing onboarding_progress table
+        clientsNeedingOnboarding: 0,
         totalClients: clientCount || 0,
         totalReports: reportCount || 0,
         completedReports,
@@ -369,29 +369,6 @@ export function Dashboard() {
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* 3D Interactive Demo */}
-        <div className="lg:col-span-2 mb-6">
-          <div className="mb-4">
-            <h2 className="text-xl font-semibold text-slate-900 flex items-center">
-              <Activity className="w-5 h-5 mr-2 text-slate-500" />
-              AI Marketing Intelligence
-            </h2>
-            <p className="text-slate-600 text-sm">Interactive 3D visualization of your marketing data and insights</p>
-          </div>
-          <React.Suspense 
-            fallback={
-              <div className="w-full h-[500px] bg-gradient-to-br from-slate-900 to-slate-800 rounded-xl flex items-center justify-center">
-                <div className="text-center">
-                  <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-                  <span className="text-white text-sm">Loading 3D Scene...</span>
-                </div>
-              </div>
-            }
-          >
-            <SplineSceneBasic />
-          </React.Suspense>
-        </div>
-
         {/* Recent Activity */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <div className="flex items-center justify-between mb-6">
