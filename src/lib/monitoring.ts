@@ -20,7 +20,7 @@ export const initializeErrorReporting = () => {
       dsn: import.meta.env.VITE_SENTRY_DSN,
       environment: import.meta.env.MODE,
       integrations: [
-        new Sentry.BrowserTracing(),
+        Sentry.browserTracingIntegration(),
       ],
       tracesSampleRate: 0.1, // Capture 10% of transactions for performance monitoring
       beforeSend(event) {

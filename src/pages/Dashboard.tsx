@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
+import { ClientSelector } from '../components/ClientSelector';
 
 interface DashboardStats {
   totalClients: number;
@@ -48,58 +49,78 @@ export function Dashboard() {
     recentActivity: []
   });
   const [loading, setLoading] = useState(true);
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
       loadDashboardData();
     }
-  }, [user]);
+  }, [user, selectedClientId]);
 
   const loadDashboardData = async () => {
     try {
-      // Execute all primary queries in parallel for better performance
+      // Build queries with optional client filter
+      let clientCountQuery = supabase
+        .from('clients')
+        .select('id', { count: 'exact', head: true })
+        .eq('user_id', user!.id);
+
+      if (selectedClientId) {
+        clientCountQuery = clientCountQuery.eq('id', selectedClientId);
+      }
+
+      let reportsQuery = supabase
+        .from('reports')
+        .select(`
+          id,
+          status,
+          created_at,
+          clients!inner(user_id)
+        `, { count: 'exact' })
+        .eq('clients.user_id', user!.id);
+
+      if (selectedClientId) {
+        reportsQuery = reportsQuery.eq('client_id', selectedClientId);
+      }
+
+      let recentActivityQuery = supabase
+        .from('reports')
+        .select(`
+          id,
+          status,
+          created_at,
+          clients!inner(name, user_id)
+        `)
+        .eq('clients.user_id', user!.id)
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      if (selectedClientId) {
+        recentActivityQuery = recentActivityQuery.eq('client_id', selectedClientId);
+      }
+
+      let firstClientQuery = supabase
+        .from('clients')
+        .select('id')
+        .eq('user_id', user!.id);
+
+      if (selectedClientId) {
+        firstClientQuery = firstClientQuery.eq('id', selectedClientId);
+      } else {
+        firstClientQuery = firstClientQuery.limit(1);
+      }
+
+      // Execute all queries in parallel for better performance
       const [
         clientCountResult,
         reportsResult,
         recentActivityResult,
         firstClientResult
       ] = await Promise.all([
-        // Get client count
-        supabase
-          .from('clients')
-          .select('id', { count: 'exact', head: true })
-          .eq('user_id', user!.id),
-
-        // Get report stats
-        supabase
-          .from('reports')
-          .select(`
-            id,
-            status,
-            created_at,
-            clients!inner(user_id)
-          `, { count: 'exact' })
-          .eq('clients.user_id', user!.id),
-
-        // Get recent activity
-        supabase
-          .from('reports')
-          .select(`
-            id,
-            status,
-            created_at,
-            clients!inner(name, user_id)
-          `)
-          .eq('clients.user_id', user!.id)
-          .order('created_at', { ascending: false })
-          .limit(5),
-
-        // Get first client for metrics
-        supabase
-          .from('clients')
-          .select('id')
-          .eq('user_id', user!.id)
-          .limit(1)
+        clientCountQuery,
+        reportsQuery,
+        recentActivityQuery,
+        firstClientQuery
       ]);
 
       const { count: clientCount, error: clientError } = clientCountResult;
@@ -238,12 +259,30 @@ export function Dashboard() {
     <div className="p-8">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">
-          Welcome back, {user?.email?.split('@')[0] || 'User'}
-        </h1>
-        <p className="text-slate-600">
-          Here's what's happening with your client portfolio today.
-        </p>
+        <div className="flex items-start justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 mb-2">
+              Welcome back, {user?.email?.split('@')[0] || 'User'}
+            </h1>
+            <p className="text-slate-600">
+              {selectedClientId
+                ? 'Viewing data for selected client'
+                : "Here's what's happening with your client portfolio today."}
+            </p>
+          </div>
+          <div className="w-80">
+            <label className="block text-sm font-medium text-slate-700 mb-2">
+              Filter by Client
+            </label>
+            <ClientSelector
+              value={selectedClientId}
+              onChange={(clientId) => setSelectedClientId(clientId)}
+              placeholder="All clients"
+              allowClear={true}
+              filterStatus={['active', 'inactive']}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Onboarding Banner */}

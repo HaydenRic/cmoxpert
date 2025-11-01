@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-import { 
-  Plus, 
+import {
+  Plus,
   Rocket,
-  Search, 
-  Globe, 
+  Search,
+  Globe,
   Calendar,
   MoreVertical,
   TrendingUp,
   FileText,
   Edit2,
-  Trash2
+  Trash2,
+  Filter,
+  X
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link, useSearchParams } from 'react-router-dom';
@@ -46,8 +48,10 @@ export function Clients() {
   const [clients, setClients] = useState<Client[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState<string>('all');
   const [onboardingStatus, setOnboardingStatus] = useState<OnboardingStatus[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [newClient, setNewClient] = useState({
     name: '',
     domain: '',
@@ -58,28 +62,33 @@ export function Clients() {
     if (user) {
       loadClients();
     }
-    
+
     // Check if we should show the add form
     if (searchParams.get('action') === 'new') {
       setShowAddForm(true);
       // Remove the action param
       setSearchParams({});
     }
-  }, [user, searchParams, setSearchParams]);
+  }, [user, searchParams, setSearchParams, statusFilter]);
 
   const loadClients = async () => {
     try {
-      const { data, error } = await supabase
+      let query = supabase
         .from('clients')
         .select(`
           *,
           onboarding_progress(is_completed)
         `)
-        .eq('user_id', user!.id)
-        .order('created_at', { ascending: false });
+        .eq('user_id', user!.id);
+
+      if (statusFilter !== 'all') {
+        query = query.eq('status', statusFilter);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
 
       if (error) throw error;
-      
+
       // Process clients and onboarding status
       const clientsData = data || [];
       setClients(clientsData);
@@ -119,11 +128,24 @@ export function Clients() {
     }
   };
 
-  const filteredClients = clients.filter(client =>
-    client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.domain.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    client.industry?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredClients = clients.filter(client => {
+    if (!searchTerm) return true;
+
+    const search = searchTerm.toLowerCase();
+    return (
+      client.name.toLowerCase().includes(search) ||
+      client.domain.toLowerCase().includes(search) ||
+      client.industry?.toLowerCase().includes(search) ||
+      client.status?.toLowerCase().includes(search)
+    );
+  });
+
+  const statusCounts = {
+    all: clients.length,
+    active: clients.filter(c => c.status === 'active').length,
+    inactive: clients.filter(c => c.status === 'inactive').length,
+    archived: clients.filter(c => c.status === 'archived').length
+  };
 
   if (loading) {
     return (
@@ -157,18 +179,81 @@ export function Clients() {
         </button>
       </div>
 
-      {/* Search */}
-      <div className="mb-6">
-        <div className="relative max-w-md">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-          <input
-            type="text"
-            placeholder="Search clients..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
-          />
+      {/* Search and Filters */}
+      <div className="mb-6 space-y-4">
+        <div className="flex gap-4">
+          <div className="relative flex-1 max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <input
+              type="text"
+              placeholder="Search by name, domain, or industry..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-10 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-dark_moss_green-500 focus:border-transparent"
+            />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                aria-label="Clear search"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
+          </div>
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className={clsx(
+              'px-4 py-3 rounded-lg font-medium flex items-center space-x-2 transition-colors',
+              showFilters
+                ? 'bg-dark_moss_green-100 text-dark_moss_green-700 border border-dark_moss_green-300'
+                : 'bg-white text-slate-700 border border-slate-300 hover:bg-slate-50'
+            )}
+          >
+            <Filter className="w-5 h-5" />
+            <span>Filters</span>
+          </button>
         </div>
+
+        {/* Filter Options */}
+        {showFilters && (
+          <div className="bg-white rounded-lg border border-slate-200 p-4">
+            <div className="space-y-3">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">
+                  Status
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {(['all', 'active', 'inactive', 'archived'] as const).map((status) => (
+                    <button
+                      key={status}
+                      onClick={() => setStatusFilter(status)}
+                      className={clsx(
+                        'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
+                        statusFilter === status
+                          ? 'bg-dark_moss_green-600 text-white'
+                          : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                      )}
+                    >
+                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                      <span className="ml-2 text-xs opacity-75">
+                        ({statusCounts[status]})
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Results Count */}
+        {(searchTerm || statusFilter !== 'all') && (
+          <div className="text-sm text-slate-600">
+            Showing {filteredClients.length} of {clients.length} clients
+            {searchTerm && ` matching "${searchTerm}"`}
+          </div>
+        )}
       </div>
 
       {/* Add Client Form */}
@@ -302,14 +387,43 @@ export function Clients() {
             <div className="w-16 h-16 bg-cornsilk-200 rounded-full flex items-center justify-center mx-auto mb-4">
               <Globe className="w-8 h-8 text-slate-400" />
             </div>
-            <h3 className="text-lg font-medium text-slate-900 mb-2">No clients yet</h3>
-            <p className="text-slate-600 mb-6">Add your first client to start generating market insights</p>
-            <button
-              onClick={() => setShowAddForm(true)}
-              className="bg-dark_moss_green-600 hover:bg-dark_moss_green-700 text-white px-6 py-3 rounded-lg font-medium"
-            >
-              Add Your First Client
-            </button>
+            {searchTerm || statusFilter !== 'all' ? (
+              <>
+                <h3 className="text-lg font-medium text-slate-900 mb-2">No clients found</h3>
+                <p className="text-slate-600 mb-6">
+                  {searchTerm ? `No clients match "${searchTerm}"` : `No ${statusFilter} clients`}
+                </p>
+                <div className="flex items-center justify-center gap-3">
+                  {searchTerm && (
+                    <button
+                      onClick={() => setSearchTerm('')}
+                      className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-3 rounded-lg font-medium"
+                    >
+                      Clear Search
+                    </button>
+                  )}
+                  {statusFilter !== 'all' && (
+                    <button
+                      onClick={() => setStatusFilter('all')}
+                      className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-6 py-3 rounded-lg font-medium"
+                    >
+                      Show All Clients
+                    </button>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <h3 className="text-lg font-medium text-slate-900 mb-2">No clients yet</h3>
+                <p className="text-slate-600 mb-6">Add your first client to start generating market insights</p>
+                <button
+                  onClick={() => setShowAddForm(true)}
+                  className="bg-dark_moss_green-600 hover:bg-dark_moss_green-700 text-white px-6 py-3 rounded-lg font-medium"
+                >
+                  Add Your First Client
+                </button>
+              </>
+            )}
           </div>
         )}
       </div>
