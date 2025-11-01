@@ -109,8 +109,8 @@ export function LandingPageEnhanced() {
     {
       icon: DollarSign,
       title: "CAC Attribution",
-      description: "Track every dollar from ad click to revenue. See which channels drive profitable customers, not just sign-ups.",
-      metric: "$127 avg reduction",
+      description: "Track every pound from ad click to revenue. See which channels drive profitable customers, not just sign-ups.",
+      metric: "£127 avg reduction",
       color: "from-slate_blue-500 to-slate_blue-600"
     },
     {
@@ -137,7 +137,7 @@ export function LandingPageEnhanced() {
   ];
 
   const metrics = [
-    { value: "$127", label: "Average CAC Reduction", sublabel: "In first 90 days" },
+    { value: "£127", label: "Average CAC Reduction", sublabel: "In first 90 days" },
     { value: "34%", label: "Wasted on Fraud", sublabel: "Before optimization" },
     { value: "22%", label: "Lost to Drop-Off", sublabel: "At verification" },
     { value: "27", label: "FinTech Companies", sublabel: "Trust our platform" }
@@ -196,10 +196,10 @@ export function LandingPageEnhanced() {
       name: "Priya Sharma",
       role: "Head of Growth",
       company: "PayFlow",
-      content: "The activation funnel analysis was brutal. 31% of users were dropping at bank verification. We A/B tested Plaid vs manual entry. Activations up 23%, CAC down $94.",
+      content: "The activation funnel analysis was brutal. 31% of users were dropping at bank verification. We A/B tested Plaid vs manual entry. Activations up 23%, CAC down £94.",
       rating: 5,
       avatar: "PS",
-      metric: "$94 CAC saved"
+      metric: "£94 CAC saved"
     },
     {
       name: "Marcus Chen",
@@ -265,7 +265,7 @@ export function LandingPageEnhanced() {
               </h1>
 
               <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-3xl mx-auto font-normal">
-                FinTech CMOs: Stop bleeding money on fraud, verification drop-off, and the wrong channels. We help you cut CAC from $287 to $164 in 90 days.
+                FinTech CMOs: Stop bleeding money on fraud, verification drop-off, and the wrong channels. We help you cut CAC from £287 to £164 in 90 days.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
@@ -337,7 +337,7 @@ export function LandingPageEnhanced() {
                         <Shield className="w-5 h-5 text-white" />
                       </div>
                     </div>
-                    <div className="text-4xl font-black text-gray-900 mb-1">$47K</div>
+                    <div className="text-4xl font-black text-gray-900 mb-1">£47K</div>
                     <div className="text-sm font-semibold text-red-600">Wasted on fraud this month</div>
                   </div>
 

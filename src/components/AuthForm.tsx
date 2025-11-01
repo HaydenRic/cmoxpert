@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Compass, Mail, Lock, AlertCircle, ArrowLeft, Play } from 'lucide-react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
+import { LoginSuccessModal } from './LoginSuccessModal';
 
 export function AuthForm() {
   const [searchParams] = useSearchParams();
@@ -15,8 +16,10 @@ export function AuthForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [demoInProgress, setDemoInProgress] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [successEmail, setSuccessEmail] = useState('');
 
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, clearLoginSuccess } = useAuth();
 
   useEffect(() => {
     if (isDemoMode) {
@@ -40,10 +43,14 @@ export function AuthForm() {
         return;
       }
 
-      const { error: signInError } = await signIn(demoEmail, demoPassword);
+      const result = await signIn(demoEmail, demoPassword);
 
-      if (!signInError) {
-        navigate('/fraud-analysis');
+      if (!result.error && result.success) {
+        setSuccessEmail(demoEmail);
+        setShowSuccessModal(true);
+        setTimeout(() => {
+          navigate('/fraud-analysis');
+        }, 2500);
       } else {
         setError('Demo account created but sign in failed. Please try signing in manually.');
       }
@@ -66,8 +73,10 @@ export function AuthForm() {
 
       if (result.error) {
         setError(result.error.message);
+      } else if (isSignIn && result.success) {
+        setSuccessEmail(email);
+        setShowSuccessModal(true);
       } else if (!isSignIn && result.data?.user && !result.data.session) {
-        // Handle case where email confirmation is required
         setError('Please check your email and click the confirmation link to complete registration.');
       }
     } catch (err) {
@@ -75,6 +84,12 @@ export function AuthForm() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSuccessComplete = () => {
+    clearLoginSuccess();
+    setShowSuccessModal(false);
+    navigate('/dashboard');
   };
 
   if (demoInProgress) {
@@ -96,14 +111,22 @@ export function AuthForm() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-slate_blue-800 to-slate_blue-900 flex items-center justify-center p-4">
-      {/* Skip to main content link */}
-      <a
-        href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-white text-slate-900 px-4 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
-      >
-        Skip to main content
-      </a>
+    <>
+      {showSuccessModal && (
+        <LoginSuccessModal
+          email={successEmail}
+          onComplete={handleSuccessComplete}
+        />
+      )}
+
+      <div className="min-h-screen bg-gradient-to-br from-charcoal-900 via-slate_blue-800 to-slate_blue-900 flex items-center justify-center p-4">
+        {/* Skip to main content link */}
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-white text-slate-900 px-4 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2"
+        >
+          Skip to main content
+        </a>
 
       <div className="w-full max-w-md">
         {/* Back to Home Link */}
@@ -241,5 +264,6 @@ export function AuthForm() {
         </main>
       </div>
     </div>
+    </>
   );
 }

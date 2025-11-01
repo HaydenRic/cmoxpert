@@ -18,12 +18,14 @@ interface AuthContextType {
   loading: boolean;
   isAdmin: boolean;
   error: string | null;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  loginSuccess: boolean;
+  signIn: (email: string, password: string) => Promise<{ error: any; success?: boolean }>;
   signUp: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
   clearError: () => void;
   skipLoading: () => void;
+  clearLoginSuccess: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -34,9 +36,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   const clearError = () => setError(null);
   const skipLoading = () => setLoading(false);
+  const clearLoginSuccess = () => setLoginSuccess(false);
 
   const loadProfile = async (userId: string, retryCount = 0) => {
     try {
@@ -180,13 +184,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (result.error) {
         setError(result.error.message);
+        return result;
       }
 
-      return result;
+      if (result.data.session) {
+        setLoginSuccess(true);
+      }
+
+      return { ...result, success: true };
     } catch (error: any) {
       const errorMessage = error.message || 'An error occurred during sign in';
       setError(errorMessage);
-      return { error: { message: errorMessage } };
+      return { error: { message: errorMessage }, success: false };
     } finally {
       setLoading(false);
     }
@@ -268,12 +277,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     loading,
     isAdmin: profile?.role === 'admin',
     error,
+    loginSuccess,
     signIn,
     signUp,
     signOut,
     refreshProfile,
     clearError,
     skipLoading,
+    clearLoginSuccess,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
