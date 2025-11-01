@@ -54,49 +54,62 @@ const DebugAuth = lazy(() => import('./pages/DebugAuth').then(module => ({ defau
 initializeErrorHandling();
 
 // Loading fallback component
-const PageLoadingFallback = () => (
-  <div className="min-h-screen bg-cornsilk-500 flex items-center justify-center">
-    <div className="text-center">
-      <div className="w-12 h-12 border-4 border-dark_moss_green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-      <p className="text-pakistan_green-600">Loading page...</p>
+const PageLoadingFallback = () => {
+  console.log('[APP] Rendering PageLoadingFallback');
+  return (
+    <div className="min-h-screen bg-cornsilk-500 flex items-center justify-center">
+      <div className="text-center">
+        <div className="w-12 h-12 border-4 border-dark_moss_green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-pakistan_green-600">Loading page...</p>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 function AppContent() {
   const { user, loading, error, skipLoading } = useAuth();
   const { toasts, closeToast } = useErrorToast();
 
+  console.log('[APP] Rendering AppContent - Loading:', loading, 'User:', !!user, 'Error:', error);
+
   if (loading) {
+    console.log('[APP] Showing loading screen');
     return (
       <div className="min-h-screen bg-cornsilk-500 flex items-center justify-center">
-        <div className="text-center">
+        <div className="text-center max-w-md mx-auto px-4">
           <div className="w-12 h-12 border-4 border-dark_moss_green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-pakistan_green-600">Loading cmoxpert...</p>
+          <p className="text-pakistan_green-600 font-medium text-lg">Loading cmoxpert...</p>
           <p className="text-xs text-slate-500 mt-2">Checking authentication status...</p>
           {error && (
-            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-red-700 text-sm">{error}</p>
+            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-left">
+              <p className="text-red-700 text-sm font-medium mb-2">Connection Issue</p>
+              <p className="text-red-600 text-xs">{error}</p>
             </div>
           )}
-          <div className="mt-4 space-x-2">
-            <button 
-              onClick={() => window.location.reload()} 
-              className="text-xs text-slate-400 hover:text-slate-600 underline"
+          <div className="mt-6 space-x-3">
+            <button
+              onClick={() => window.location.reload()}
+              className="text-xs text-slate-500 hover:text-slate-700 underline transition-colors"
             >
               Reload page
             </button>
-            <button 
-              onClick={skipLoading} 
-              className="text-xs text-slate-400 hover:text-slate-600 underline"
+            <button
+              onClick={() => {
+                console.log('[APP] User clicked skip loading');
+                skipLoading();
+              }}
+              className="text-xs text-dark_moss_green-600 hover:text-dark_moss_green-700 underline font-medium transition-colors"
             >
               Continue anyway
             </button>
           </div>
+          <p className="text-xs text-slate-400 mt-4">Check browser console (F12) for details</p>
         </div>
       </div>
     );
   }
+
+  console.log('[APP] Loading complete, rendering routes');
 
   return (
     <Suspense fallback={<PageLoadingFallback />}>
@@ -555,6 +568,7 @@ function AppContent() {
 }
 
 function App() {
+  console.log('[APP] Rendering App component');
   return (
     <Router>
       <ErrorBoundary>

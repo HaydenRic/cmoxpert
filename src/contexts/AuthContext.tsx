@@ -44,8 +44,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const loadProfile = async (userId: string, retryCount = 0) => {
     try {
+      console.log('[AUTH] Loading profile for user:', userId, 'Retry:', retryCount);
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      const timeoutId = setTimeout(() => controller.abort(), 8000);
 
       try {
         const { data, error } = await supabase
@@ -108,36 +109,49 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const initializeAuth = async () => {
       try {
+        console.log('[AUTH] Initializing authentication...');
+
+        // Increased timeout for slower connections
         initTimeout = setTimeout(() => {
           if (mounted) {
+            console.warn('[AUTH] Timeout reached, proceeding without authentication');
             setLoading(false);
-            setError('Connection timeout. Please refresh the page.');
+            setError('Connection timeout. You can continue without authentication or refresh the page.');
           }
-        }, 8000);
+        }, 15000);
 
+        console.log('[AUTH] Fetching session from Supabase...');
         const { data: { session }, error } = await supabase.auth.getSession();
 
         clearTimeout(initTimeout);
 
-        if (!mounted) return;
+        if (!mounted) {
+          console.log('[AUTH] Component unmounted, aborting');
+          return;
+        }
 
         if (error) {
-          setError('Authentication error. Please refresh the page.');
+          console.error('[AUTH] Session fetch error:', error);
+          setError('Authentication error. You can continue without authentication.');
           setLoading(false);
           return;
         }
 
+        console.log('[AUTH] Session retrieved:', session ? 'User logged in' : 'No active session');
         setSession(session);
         setUser(session?.user ?? null);
 
         if (session?.user) {
+          console.log('[AUTH] Loading user profile...');
           await loadProfile(session.user.id);
         }
 
+        console.log('[AUTH] Authentication initialization complete');
         setLoading(false);
       } catch (error: any) {
+        console.error('[AUTH] Initialization error:', error);
         if (mounted) {
-          setError('Failed to initialize authentication. Please refresh the page.');
+          setError('Failed to initialize authentication. You can continue without authentication.');
           setLoading(false);
         }
       }

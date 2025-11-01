@@ -3,7 +3,19 @@ import * as Sentry from '@sentry/react';
 
 // Initialize Sentry for production error reporting
 export const initializeErrorReporting = () => {
-  if (import.meta.env.PROD && import.meta.env.VITE_SENTRY_DSN) {
+  // Only initialize in production AND if Sentry DSN is configured
+  if (!import.meta.env.PROD) {
+    console.log('[MONITORING] Skipping Sentry initialization in development mode');
+    return;
+  }
+
+  if (!import.meta.env.VITE_SENTRY_DSN) {
+    console.log('[MONITORING] Sentry DSN not configured, skipping initialization');
+    return;
+  }
+
+  try {
+    console.log('[MONITORING] Initializing Sentry...');
     Sentry.init({
       dsn: import.meta.env.VITE_SENTRY_DSN,
       environment: import.meta.env.MODE,
@@ -22,6 +34,9 @@ export const initializeErrorReporting = () => {
         return event;
       },
     });
+    console.log('[MONITORING] Sentry initialized successfully');
+  } catch (error) {
+    console.error('[MONITORING] Failed to initialize Sentry:', error);
   }
 };
 

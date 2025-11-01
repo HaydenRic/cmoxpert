@@ -26,15 +26,21 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo);
-    
-    // Use enhanced error handling
-    ErrorHandler.handleError(error, {
-      componentStack: errorInfo.componentStack,
-      errorBoundary: true,
-      type: 'component_error'
-    });
-    
+    console.error('[ERROR_BOUNDARY] Error caught:', error, errorInfo);
+
+    // Use enhanced error handling only in production
+    if (import.meta.env.PROD) {
+      try {
+        ErrorHandler.handleError(error, {
+          componentStack: errorInfo.componentStack,
+          errorBoundary: true,
+          type: 'component_error'
+        });
+      } catch (handlerError) {
+        console.error('[ERROR_BOUNDARY] Error handler failed:', handlerError);
+      }
+    }
+
     this.setState({
       error,
       errorInfo
