@@ -84,13 +84,7 @@ export function Layout({ children }: LayoutProps) {
         <div className="flex flex-col h-full">
           {/* Logo */}
           <header className="flex items-center px-6 py-8" role="banner">
-            <div className="flex items-center space-x-3">
-              <BrandLogo />
-              <div>
-                <h1 className="text-xl font-bold text-slate-900">cmoxpert</h1>
-                <p className="text-xs text-slate-500">AI Marketing Co-Pilot</p>
-              </div>
-            </div>
+            <BrandLogo />
           </header>
 
           {/* Navigation */}
