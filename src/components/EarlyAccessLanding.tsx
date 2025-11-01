@@ -385,10 +385,10 @@ export function EarlyAccessLanding() {
           <div className="bg-slate-800 rounded-xl p-8 border border-slate-700">
             <div className="flex items-start gap-6">
               <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0">
-                CM
+                HR
               </div>
               <div>
-                <h3 className="text-2xl font-bold mb-2">Chris Martin, Founder</h3>
+                <h3 className="text-2xl font-bold mb-2">Hayden Richards, Founder</h3>
                 <p className="text-slate-300 mb-4">
                   Former CMO at three FinTech startups. I've burned millions on fraudulent signups,
                   watched CAC balloon while LTV stayed flat, and been fined for non-compliant marketing
@@ -406,7 +406,7 @@ export function EarlyAccessLanding() {
                 </p>
                 <div className="mt-6">
                   <a
-                    href="https://www.linkedin.com/in/yourprofile"
+                    href="https://www.linkedin.com/in/haydenrichards/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
