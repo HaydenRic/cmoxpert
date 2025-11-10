@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-import { 
-  Upload, 
-  Play, 
-  Eye, 
-  Users, 
-  FileText, 
+import { ClientPortfolioOverview } from '../components/ClientPortfolioOverview';
+import {
+  Upload,
+  Play,
+  Eye,
+  Users,
+  FileText,
   BarChart3,
   Star,
   Trash2,
@@ -22,7 +23,8 @@ import {
   Brain,
   Key,
   Zap,
-  Save
+  Save,
+  Briefcase
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -89,7 +91,7 @@ export function Admin() {
   const [showBrandForm, setShowBrandForm] = useState(false);
   const [showAIForm, setShowAIForm] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const [activeTab, setActiveTab] = useState<'videos' | 'analytics' | 'branding' | 'ai-settings' | 'integrations'>('videos');
+  const [activeTab, setActiveTab] = useState<'portfolio' | 'videos' | 'analytics' | 'branding' | 'ai-settings' | 'integrations'>('portfolio');
   const [newVideo, setNewVideo] = useState({
     title: '',
     description: '',
@@ -576,6 +578,7 @@ export function Admin() {
   ];
 
   const tabs = [
+    { id: 'portfolio', label: 'Client Portfolio', icon: Briefcase },
     { id: 'videos', label: 'Videos', icon: Video },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
     { id: 'branding', label: 'Branding', icon: Settings },
@@ -588,8 +591,8 @@ export function Admin() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Admin Panel</h1>
-          <p className="text-slate-600">Manage videos, monitor usage, customize branding, and configure AI services</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">CMO Dashboard</h1>
+          <p className="text-slate-600">Manage your FinTech client portfolio, track performance, and grow your business</p>
         </div>
       </div>
 
@@ -632,6 +635,13 @@ export function Admin() {
         </div>
 
         <div className="p-6">
+          {/* Client Portfolio Tab */}
+          {activeTab === 'portfolio' && (
+            <div>
+              <ClientPortfolioOverview />
+            </div>
+          )}
+
           {/* Videos Tab */}
           {activeTab === 'videos' && (
             <div>

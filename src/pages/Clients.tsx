@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
+import { ClientDetailModal } from '../components/ClientDetailModal';
 import {
   Plus,
   Rocket,
@@ -52,6 +53,7 @@ export function Clients() {
   const [onboardingStatus, setOnboardingStatus] = useState<OnboardingStatus[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [newClient, setNewClient] = useState({
     name: '',
     domain: '',
@@ -326,12 +328,15 @@ export function Clients() {
           filteredClients.map((client) => (
             <div key={client.id} className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
+                <div
+                  className="flex items-center space-x-4 cursor-pointer flex-1"
+                  onClick={() => setSelectedClientId(client.id)}
+                >
                   <div className="w-12 h-12 bg-gradient-to-br from-dark_moss_green-500 to-pakistan_green-500 rounded-lg flex items-center justify-center">
                     <Globe className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-slate-900">{client.name}</h3>
+                    <h3 className="text-lg font-semibold text-slate-900 hover:text-dark_moss_green-600 transition-colors">{client.name}</h3>
                     <p className="text-slate-600 text-sm">{client.domain}</p>
                     {!client.onboarding_progress?.[0]?.is_completed && (
                       <span className="inline-block mt-1 px-2 py-1 bg-orange-100 text-orange-700 text-xs rounded-full">
@@ -427,6 +432,15 @@ export function Clients() {
           </div>
         )}
       </div>
+
+      {/* Client Detail Modal */}
+      {selectedClientId && (
+        <ClientDetailModal
+          clientId={selectedClientId}
+          onClose={() => setSelectedClientId(null)}
+          onUpdate={loadClients}
+        />
+      )}
     </div>
   );
 }
