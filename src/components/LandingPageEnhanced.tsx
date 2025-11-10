@@ -182,33 +182,22 @@ export function LandingPageEnhanced() {
     }
   ];
 
-  const testimonials = [
+  // Beta testimonials - Early access program feedback
+  const betaFeedback = [
     {
-      name: "Sarah Mitchell",
-      role: "Fractional CMO",
-      company: "Growth Partners",
-      content: "I manage 8 FinTech clients. Before cmoxpert, I spent 15 hours per week just gathering data. Now I spend 2 hours and deliver better insights. My clients see results, I scale my practice.",
-      rating: 5,
-      avatar: "SM",
-      metric: "8 clients managed"
+      title: "Centralized Portfolio Management",
+      description: "Managing multiple FinTech clients in one dashboard saves consultants 10-15 hours per week on data gathering and reporting.",
+      benefit: "Time saved on admin work"
     },
     {
-      name: "James Patterson",
-      role: "CMO",
-      company: "NeoBank UK",
-      content: "We were spending £42K monthly on comparison site leads. cmoxpert showed us 38% were failing KYC. We cut those sources and CAC dropped from £287 to £178 in 6 weeks.",
-      rating: 5,
-      avatar: "JP",
-      metric: "£109 CAC reduction"
+      title: "Revenue Attribution Insights",
+      description: "Multi-touch attribution models help teams understand which channels truly drive revenue, not just leads or signups.",
+      benefit: "Better budget decisions"
     },
     {
-      name: "Marcus Chen",
-      role: "Marketing Director",
-      company: "FinTech Advisors",
-      content: "As a consultant, showing ROI is everything. cmoxpert's white-label reports let me walk into client meetings with data-backed recommendations. I've closed 3 new clients because of it.",
-      rating: 5,
-      avatar: "MC",
-      metric: "3 new clients won"
+      title: "Compliance Made Simple",
+      description: "Automated FCA, SEC, and FINRA compliance checking catches potential violations before campaigns launch.",
+      benefit: "Risk mitigation"
     }
   ];
 
@@ -544,43 +533,46 @@ export function LandingPageEnhanced() {
         <section className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16 animate-fade-in">
+              <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-2 mb-6">
+                <Sparkles className="w-5 h-5 text-blue-600" />
+                <span className="text-blue-700 font-semibold">Early Access Beta</span>
+              </div>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-                Real FinTech CMOs. <span className="gradient-text">Real Numbers.</span>
+                Built for <span className="gradient-text">FinTech Marketing Teams</span>
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                No fluff. Just specific CAC reductions from companies like yours.
+                Core features are production-ready. Join our beta program to shape the platform.
               </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              {testimonials.map((testimonial, index) => (
+              {betaFeedback.map((item, index) => (
                 <div
                   key={index}
                   className="glass-card rounded-2xl p-8 card-hover animate-fade-in"
                   style={{animationDelay: `${index * 0.1}s`}}
                 >
-                  <div className="flex items-center space-x-1 mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                    ))}
+                  <div className="w-12 h-12 bg-gradient-to-br from-slate_blue-600 to-charcoal-700 rounded-xl flex items-center justify-center text-white mb-6 shadow-lg">
+                    <CheckCircle className="w-6 h-6" />
                   </div>
-                  <p className="text-gray-700 mb-6 leading-relaxed">{testimonial.content}</p>
-                  <div className="flex items-center space-x-4 pt-4 border-t border-gray-200">
-                    <div className="w-12 h-12 bg-gradient-to-br from-slate_blue-600 to-charcoal-700 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
-                      {testimonial.avatar}
-                    </div>
-                    <div>
-                      <div className="font-bold text-gray-900">{testimonial.name}</div>
-                      <div className="text-sm text-gray-600">{testimonial.role}</div>
-                      <div className="text-sm font-semibold text-gray-500">{testimonial.company}</div>
-                    </div>
-                  </div>
-                  <div className="mt-4 inline-flex items-center space-x-2 bg-green-50 border border-green-200 rounded-full px-4 py-2 text-sm font-semibold text-green-700">
-                    <CheckCircle className="w-4 h-4" />
-                    <span>{testimonial.metric}</span>
+                  <h3 className="text-xl font-bold text-charcoal-900 mb-4">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-700 mb-6 leading-relaxed">
+                    {item.description}
+                  </p>
+                  <div className="inline-flex items-center space-x-2 bg-green-50 border border-green-200 rounded-full px-4 py-2 text-sm font-semibold text-green-700">
+                    <Target className="w-4 h-4" />
+                    <span>{item.benefit}</span>
                   </div>
                 </div>
               ))}
+            </div>
+
+            <div className="mt-12 text-center">
+              <p className="text-gray-600 italic">
+                Real customer testimonials coming soon. Be one of our first users and help us build case studies together.
+              </p>
             </div>
           </div>
         </section>

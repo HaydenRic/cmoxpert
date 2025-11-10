@@ -1,59 +1,123 @@
 # cmoxpert
 
-**Marketing Intelligence Platform for FinTech Marketing Teams & Consultants**
+**Client Portfolio Intelligence Platform for FinTech Marketing Consultants**
 
-Stop bleeding money on customer acquisition. cmoxpert helps FinTech marketing teams and the consultants who serve them cut CAC by an average of $127 in 90 days by identifying fraud waste, verification drop-off, and underperforming channels.
+> **⚠️ BETA STATUS:** cmoxpert is currently in early access beta. Core features are production-ready, while some advanced features are under active development. See [Current Capabilities](#current-capabilities) for detailed feature status.
 
-## The Problem
+## What is cmoxpert?
 
-You're spending $200K monthly on marketing. Here's the truth:
+cmoxpert is a client portfolio management platform built specifically for marketing consultants, fractional CMOs, and agencies serving FinTech companies. Manage multiple clients in one centralized dashboard, track marketing performance across portfolios, and generate professional client reports.
 
-- **34% goes to fraud** - Fake accounts that will never transact
-- **22% lost at verification** - Real users who bounce at KYC/bank linking
-- **44% makes it through** - You optimize this while ignoring the 56% bleeding money
+## The Problem We Solve
 
-Your competitors just raised Series B. Their CAC is about to drop 30%. Can you compete?
+Marketing consultants managing multiple FinTech clients face unique challenges:
 
-## The Solution
+- **Data scattered across platforms** - Spreadsheets, Google Analytics, ad platforms, CRMs
+- **Time-consuming reporting** - 10-15 hours per week just gathering data
+- **No unified view** - Hard to spot patterns across client portfolios
+- **Compliance complexity** - FinTech regulations (FCA, SEC, FINRA) require careful review
+- **Client retention** - Proving ROI and value is critical for renewals
 
-cmoxpert connects every marketing dollar to actual revenue. Not vanity metrics like sign-ups. Real money from real transactions.
+cmoxpert centralizes client data, automates reporting, and provides compliance checking specific to FinTech marketing.
 
-### Core Features
+## Current Capabilities
 
-**True Revenue Attribution**
-Track LTV:CAC ratio by channel. See which sources drive profitable customers, not just registrations.
+### ✅ Production Ready (Fully Functional)
 
-**Fraud Tax Calculator**
-Identify which campaigns drive fraudulent accounts. Reallocate budget from dirty sources to clean channels automatically.
+**Client Portfolio Management**
+- Multi-client dashboard for consultants and agencies
+- Advanced client search with full-text capabilities
+- Client contracts, health scores, and meeting tracking
+- Role-based access control
+- Real-time data sync across all views
 
-**Activation Surgery**
-Map your entire funnel from account creation to first transaction. See exact drop-off points bleeding users.
+**Revenue Attribution System**
+- 6 attribution models: First Touch, Last Touch, Linear, Time Decay, U-Shaped, W-Shaped
+- Advanced ML attribution: Shapley Value and Markov Chain models
+- Deal pipeline tracking with stage velocity analysis
+- Multi-touch attribution across all marketing channels
+- Automated ROI calculations per channel
 
-**Regulatory Risk Flagging**
-Automated compliance checks for FCA, SEC, FINRA before campaigns launch. Zero violations.
+**Fraud Impact Analysis**
+- Channel-level fraud rate calculations
+- Clean CAC vs. Dirty CAC analysis
+- Fraud waste quantification by marketing source
+- Automated recommendations for budget reallocation
+- *Requires integration with your fraud detection data*
 
-**Competitor Intelligence**
-Track when competitors raise funding, launch products, change pricing. Your CAC reacts immediately.
+**Compliance Checker**
+- Regex-based rule checking for FCA, SEC, FINRA regulations
+- 20+ predefined compliance rules
+- Severity categorization (Critical, High, Medium, Low)
+- Real-time campaign content scanning
+- Rule-based analysis (not AI)
 
-**Channel Mix Optimizer**
-We analyze 90 days and tell you exactly where to move budget for maximum LTV:CAC improvement.
+**Report Generation**
+- Client-ready marketing reports
+- Market analysis documentation
+- Performance dashboards
+- Export functionality
 
-## Results
+**User Management**
+- Secure authentication with Supabase Auth
+- Profile management
+- Multi-user support
+- Session management
 
-**Real FinTech CMOs. Real Numbers.**
+### 🔄 Beta (Functional with Limitations)
 
-- **NeoBank UK**: Cut CAC from £287 to £178 in 6 weeks ($109 reduction)
-- **PayFlow**: Increased activations 23%, reduced CAC by $94 through verification optimization
-- **WealthTech Pro**: LTV:CAC improved from 2.1:1 to 4.7:1
+**AI-Assisted Playbook Generation**
+- Generates marketing playbooks for clients
+- **Without OpenAI API key:** Uses sophisticated template-based generation
+- **With OpenAI API key:** Full AI-powered personalized playbooks
+- Template quality is production-ready for MVP use
+- See [AI Setup Guide](./AI_SETUP_GUIDE.md) for configuration
+
+**Market Analysis Generation**
+- Client market opportunity analysis
+- Competitive landscape overview
+- Strategic recommendations
+- **Without OpenAI API key:** Template-based analysis
+- **With OpenAI API key:** AI-powered custom analysis
+
+**Data Integrations**
+- OAuth flows for Google Ads, Meta Ads, Google Analytics
+- Token management and refresh
+- Basic data sync capabilities
+- *Full sync depth under active development*
+
+**Competitive Intelligence**
+- Competitor tracking database
+- Alert system architecture
+- Manual data entry and display
+- *Automated scraping coming in Q2 2025*
+
+### 🚧 In Development (Not Yet Functional)
+
+**Real-Time Fraud Detection**
+- Live API integration with fraud providers
+- Automated fraud event capture
+- *Estimated completion: Q2 2025*
+
+**Automated Budget Optimization**
+- ML-based spend reallocation recommendations
+- Predictive performance modeling
+- *Estimated completion: Q3 2025*
+
+**Advanced Workflow Automation**
+- Multi-step workflow builder
+- Conditional logic and branching
+- *Estimated completion: Q2 2025*
 
 ## Technology Stack
 
-- React + TypeScript for type-safe frontend development
-- Vite for lightning-fast builds and hot module replacement
-- Supabase for PostgreSQL database, auth, and real-time features
-- TailwindCSS for responsive, production-ready UI
-- Recharts for data visualization and analytics dashboards
-- Framer Motion for smooth animations and transitions
+- **Frontend:** React 18 + TypeScript + Vite
+- **Backend:** Supabase (PostgreSQL + Edge Functions)
+- **Authentication:** Supabase Auth with JWT
+- **Styling:** TailwindCSS
+- **Charts:** Recharts
+- **Animations:** Framer Motion
+- **AI (Optional):** OpenAI GPT-4 for analysis and playbook generation
 
 ## Getting Started
 
@@ -61,6 +125,7 @@ We analyze 90 days and tell you exactly where to move budget for maximum LTV:CAC
 
 - Node.js 18+ and npm
 - Supabase account (free tier available)
+- Optional: OpenAI API key for AI features
 
 ### Installation
 
@@ -76,8 +141,8 @@ npm install
 cp .env.example .env
 # Add your Supabase credentials to .env
 
-# Run database migrations
-# (migrations are in supabase/migrations/)
+# Apply database migrations
+# Run each migration file in supabase/migrations/ through Supabase Dashboard SQL Editor
 
 # Start development server
 npm run dev
@@ -92,6 +157,10 @@ VITE_SUPABASE_URL=your_supabase_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 ```
 
+Optional for AI features:
+- Configure `OPENAI_API_KEY` in Supabase Edge Function environment (not in .env)
+- See [AI Setup Guide](./AI_SETUP_GUIDE.md) for details
+
 ## Project Structure
 
 ```
@@ -104,32 +173,38 @@ src/
 └── styles/           # Global styles and Tailwind config
 
 supabase/
-├── migrations/       # Database schema migrations
+├── migrations/       # Database schema migrations (50+ tables)
 └── functions/        # Edge functions for AI analysis
 ```
 
-## Key Features
+## Key Features for Consultants
 
-### For FinTech Marketing Teams
+### Multi-Client Portfolio Management
+- Centralized dashboard for all clients
+- Quick client switching
+- Portfolio-level analytics
+- Health score tracking
+- Contract and meeting management
 
-- **CAC Attribution**: Connect marketing spend to revenue, not just sign-ups
-- **Fraud Impact Analysis**: See which sources drive fraudulent accounts
-- **Activation Funnel**: Identify drop-off points from sign-up to first transaction
-- **Compliance Monitoring**: Automated flagging of risky campaigns
-- **Competitor Tracking**: Monitor funding rounds, product launches, pricing changes
+### Client Reporting
+- Professional, client-ready reports
+- Market analysis with competitive intelligence
+- AI-assisted strategic playbooks
+- Performance dashboards
+- Export and sharing capabilities
 
-### Built for Both In-House Teams & Consultants
+### FinTech-Specific Features
+- Fraud impact analysis
+- Compliance checking (FCA, SEC, FINRA)
+- Activation funnel analysis
+- Revenue attribution (not just lead attribution)
+- CAC optimization across the full funnel
 
-**For In-House Teams:**
-- Single-company optimization and tracking
-- Board and investor reporting
-- Internal team collaboration
-
-**For Consultants & Agencies:**
-- **Client Dashboard**: Manage multiple FinTech clients in one platform
-- **Automated Reports**: Generate client-ready reports on CAC optimization
-- **Benchmark Data**: Compare client performance to industry standards
-- **White-Label Ready**: Present insights under your brand
+### Time Savings
+- Automated data collection (when integrations are configured)
+- Template-based or AI-powered report generation
+- Centralized client data vs. scattered spreadsheets
+- Estimated time savings: 10-15 hours per week per consultant
 
 ## Development
 
@@ -155,6 +230,8 @@ The platform is optimized for deployment on:
 - **Vercel** - Optimized for React applications
 - **Any static host** - Just deploy the `dist/` folder
 
+See [Deployment Guide](./DEPLOYMENT.md) for detailed instructions.
+
 ## Architecture
 
 ### Frontend
@@ -164,30 +241,29 @@ The platform is optimized for deployment on:
 - Error boundaries for graceful error handling
 
 ### Backend
-- Supabase PostgreSQL for data persistence
+- Supabase PostgreSQL with 50+ tables
 - Row Level Security (RLS) for data protection
 - Real-time subscriptions for live updates
 - Edge functions for AI-powered analysis
 
 ### Security
-- JWT-based authentication with PKCE flow
+- JWT-based authentication
 - Database-level security with RLS policies
 - Environment variable protection
-- SOC 2 compliance ready
+- Supabase SOC 2 compliance
 
 ## Target Market
 
-**Two Key Audiences:**
+### Primary Audience: Marketing Consultants & Agencies
 
-### In-House FinTech Teams
-Companies with:
-- $50K+ monthly marketing spend
-- Complex customer acquisition funnels
-- Fraud and verification challenges
-- Regulatory compliance requirements
-- Need for true revenue attribution
+**Ideal Users:**
+- Fractional CMOs managing 3-10 FinTech clients
+- Marketing consultants specializing in FinTech
+- Growth agencies with FinTech portfolios
+- Independent marketing consultants
+- Small teams managing multiple clients
 
-Industries served:
+**Client Industries:**
 - Neobanks and digital banks
 - Payment processors and platforms
 - Lending platforms (consumer & business)
@@ -195,26 +271,66 @@ Industries served:
 - Crypto and blockchain financial services
 - B2B financial software companies
 
-### Marketing Consultants & Agencies
-Professionals serving FinTech clients:
-- Fractional CMOs
-- Marketing consultants
-- Growth agencies
-- Digital marketing firms specializing in FinTech
-- Multi-client portfolio management needs
-- White-label reporting requirements
+### Secondary Audience: In-House Teams
 
-## Pricing Strategy
+**Suitable For:**
+- Small FinTech marketing teams (1-5 people)
+- Companies needing compliance checking
+- Teams wanting better attribution
+- Organizations seeking centralized reporting
 
-- **Growth Stage**: $2,500/month (50-150K monthly marketing spend)
-- **Scale Stage**: $5,000/month (150-500K monthly marketing spend)
-- **Enterprise**: $10,000+/month (500K+ monthly marketing spend)
+**Less Suitable For:**
+- Enterprise teams with custom BI tools
+- Companies needing real-time fraud detection (not yet available)
+- Organizations requiring automated budget optimization (in development)
 
-Positioned as 3-5% of marketing budget for complete intelligence layer.
+## Beta Pricing
+
+> **Note:** Pricing subject to change. Early adopters receive locked-in rates for 12 months.
+
+- **Beta Access**: Free for first 50 users
+- **Starter**: $199/month (up to 3 clients)
+- **Professional**: $399/month (up to 10 clients)
+- **Agency**: $699/month (up to 25 clients)
+
+Pricing increases to standard rates after beta period.
+
+## Documentation
+
+- [Current Capabilities](./CURRENT_CAPABILITIES.md) - Feature status matrix
+- [AI Setup Guide](./AI_SETUP_GUIDE.md) - Configure AI features
+- [Backend Setup Guide](./BACKEND_SETUP_GUIDE.md) - Database and edge functions
+- [Deployment Guide](./DEPLOYMENT.md) - Production deployment
+- [Security Checklist](./SECURITY_CHECKLIST.md) - Security best practices
+
+## Roadmap
+
+### Q1 2025 (Current)
+- ✅ Core portfolio management
+- ✅ Revenue attribution system
+- ✅ AI-assisted report generation
+- ✅ Compliance checking
+- 🔄 Beta launch and user feedback
+
+### Q2 2025
+- Real-time fraud detection API integration
+- Advanced workflow automation
+- Automated competitive intelligence scraping
+- Mobile app (iOS/Android)
+- Enhanced data integrations
+
+### Q3 2025
+- ML-based budget optimization
+- Predictive analytics
+- White-label options for agencies
+- Advanced forecasting models
+- API access for custom integrations
 
 ## Contributing
 
-This is a private commercial project. For bug reports or feature requests, please contact the development team.
+This is a commercial project currently in private beta. For bug reports or feature requests, please contact:
+- Email: support@cmoxpert.com
+- GitHub Issues: (for beta testers only)
 
 ## License
 
@@ -222,11 +338,18 @@ Proprietary - All rights reserved
 
 ## Support
 
-For technical support or sales inquiries:
+**For Beta Users:**
 - Email: support@cmoxpert.com
-- Documentation: https://docs.cmoxpert.com
-- Book a demo: https://cmoxpert.com/demo
+- Response time: 24-48 hours
+- Dedicated Slack channel for beta testers
+
+**Documentation:**
+- Setup guides in repository
+- Video tutorials (coming soon)
+- Knowledge base (under construction)
 
 ---
 
-**cmoxpert** - Marketing Intelligence for FinTech Companies Who Refuse to Waste Money
+**cmoxpert** - Client Portfolio Intelligence for FinTech Marketing Consultants
+
+*Built by marketers, for marketers. Currently in beta.*
