@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import {
-  DollarSign,
+  PoundSterling,
   TrendingUp,
   Target,
   Clock,
@@ -793,7 +793,7 @@ export function RevenueAttribution() {
             <div className="bg-white rounded-xl shadow-sm border border-cream-200 p-6">
               <div className="flex items-center justify-between mb-4">
                 <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                  <DollarSign className="w-6 h-6 text-white" />
+                  <PoundSterling className="w-6 h-6 text-white" />
                 </div>
                 <div className="text-right">
                   <div className="text-2xl font-bold text-slate-900">

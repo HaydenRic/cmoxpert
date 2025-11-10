@@ -6,7 +6,7 @@ import { BrandLogo } from './BrandLogo';
 import {
   Compass, TrendingUp, Zap, Target, Eye, Search, ArrowRight, Play, CheckCircle, Star,
   Clock, BarChart3, Users, Globe, LogIn, UserCheck, Shield, Lightbulb, Timer, Rocket,
-  MapPin, Layers, Gauge, Award, Calendar, Building, Briefcase, DollarSign, Code,
+  MapPin, Layers, Gauge, Award, Calendar, Building, Briefcase, PoundSterling, Code,
   Megaphone, FileText, BookOpen, Cpu, Database, Cloud, ShoppingCart, AlertCircle,
   Brain, Activity, Sparkles, ChevronRight, Monitor, Smartphone, Tablet, Check
 } from 'lucide-react';
@@ -107,7 +107,7 @@ export function LandingPageEnhanced() {
 
   const capabilities = [
     {
-      icon: DollarSign,
+      icon: PoundSterling,
       title: "CAC Attribution",
       description: "Track every pound from ad click to revenue. Perfect for in-house teams optimizing their own channels or consultants delivering ROI reports to clients.",
       metric: "£127 avg reduction",
@@ -145,7 +145,7 @@ export function LandingPageEnhanced() {
 
   const features = [
     {
-      icon: DollarSign,
+      icon: PoundSterling,
       title: "True Revenue Attribution",
       description: "Connect every marketing dollar to actual revenue. Whether managing your own campaigns or delivering insights to clients, track real money from real transactions, not vanity metrics.",
       benefits: ["LTV:CAC ratio by channel", "White-label client reports", "Cohort profitability analysis"]

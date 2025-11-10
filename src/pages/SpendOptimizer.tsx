@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { supabase } from '../lib/supabase';
 import {
-  DollarSign,
+  PoundSterling,
   TrendingUp,
   TrendingDown,
   RefreshCw,
@@ -245,7 +245,7 @@ export default function SpendOptimizer() {
         <div className="flex-1 min-w-[200px]">
           <label className="block text-sm font-medium text-gray-700 mb-2">Monthly Budget</label>
           <div className="relative">
-            <DollarSign className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <PoundSterling className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <input
               type="number"
               value={totalBudget}
@@ -280,7 +280,7 @@ export default function SpendOptimizer() {
             <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg shadow-sm border-2 border-green-200 p-6">
               <div className="flex items-center justify-between mb-2">
                 <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                  <DollarSign className="w-6 h-6 text-white" />
+                  <PoundSterling className="w-6 h-6 text-white" />
                 </div>
               </div>
               <h3 className="text-2xl font-bold text-gray-900">

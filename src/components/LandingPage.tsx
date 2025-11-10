@@ -32,7 +32,7 @@ import {
   Calendar,
   Building,
   Briefcase,
-  DollarSign,
+  PoundSterling,
   Code,
   Megaphone,
   FileText,

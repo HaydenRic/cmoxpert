@@ -6,7 +6,7 @@ import {
   TrendingDown,
   AlertTriangle,
   CheckCircle,
-  DollarSign,
+  PoundSterling,
   Calendar,
   Activity,
   Users,
@@ -195,7 +195,7 @@ export function ClientPortfolioOverview() {
               <p className="text-xs text-gray-500 mt-1">Monthly recurring</p>
             </div>
             <div className="bg-green-100 p-3 rounded-lg">
-              <DollarSign className="w-6 h-6 text-green-600" />
+              <PoundSterling className="w-6 h-6 text-green-600" />
             </div>
           </div>
         </div>

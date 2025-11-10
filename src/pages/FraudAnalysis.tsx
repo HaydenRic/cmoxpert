@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase';
 import { SEOHead, pageMeta } from '../components/SEOHead';
 import {
   AlertTriangle,
-  DollarSign,
+  PoundSterling,
   TrendingDown,
   TrendingUp,
   Filter,
@@ -295,7 +295,7 @@ export default function FraudAnalysis() {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <div className="flex items-center justify-between mb-2">
                 <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <DollarSign className="w-6 h-6 text-blue-600" />
+                  <PoundSterling className="w-6 h-6 text-blue-600" />
                 </div>
                 <span className="text-sm font-medium text-gray-600">Total</span>
               </div>

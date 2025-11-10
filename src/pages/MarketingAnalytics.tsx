@@ -5,7 +5,7 @@ import {
   BarChart3,
   TrendingUp,
   TrendingDown,
-  DollarSign,
+  PoundSterling,
   Target,
   Calendar,
   Filter,
@@ -513,7 +513,7 @@ export function MarketingAnalytics() {
       value: formatCurrency(stats.totalRevenue),
       change: formatPercentage(15.2), // Mock growth rate
       changeType: 'positive',
-      icon: DollarSign,
+      icon: PoundSterling,
       color: 'bg-green-600'
     },
     {

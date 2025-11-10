@@ -8,7 +8,7 @@ import {
   Calendar,
   FileText,
   AlertCircle,
-  DollarSign,
+  PoundSterling,
   Users,
   TrendingUp,
   Building,

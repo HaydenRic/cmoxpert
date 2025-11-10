@@ -5,7 +5,7 @@ import {
   TrendingUp, 
   TrendingDown,
   Target,
-  DollarSign,
+  PoundSterling,
   Users,
   Eye,
   AlertTriangle,
@@ -402,7 +402,7 @@ export function Performance() {
       value: formatCurrency(stats.totalRevenue),
       change: formatPercentage(stats.revenueGrowth),
       changeType: stats.revenueGrowth >= 0 ? 'positive' : 'negative',
-      icon: DollarSign,
+      icon: PoundSterling,
       color: 'bg-slate_blue-600'
     },
     {

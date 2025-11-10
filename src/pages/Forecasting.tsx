@@ -7,7 +7,7 @@ import {
   Target,
   Calendar,
   BarChart3,
-  DollarSign,
+  PoundSterling,
   Users,
   Activity,
   Zap,
@@ -67,7 +67,7 @@ export function Forecasting() {
   const [selectedPeriod, setSelectedPeriod] = useState('next_quarter');
 
   const metrics = [
-    { value: 'revenue', label: 'Revenue', icon: DollarSign, color: 'text-green-600' },
+    { value: 'revenue', label: 'Revenue', icon: PoundSterling, color: 'text-green-600' },
     { value: 'leads', label: 'Leads', icon: Users, color: 'text-blue-600' },
     { value: 'conversions', label: 'Conversions', icon: Target, color: 'text-tan-600' },
     { value: 'traffic', label: 'Website Traffic', icon: Activity, color: 'text-orange-600' },

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
-import { Bell, Plus, CreditCard as Edit2, Trash2, CheckCircle, XCircle, Mail, MessageSquare, Smartphone, AlertTriangle, TrendingUp, TrendingDown, Target, Search, DollarSign, Clock } from 'lucide-react';
+import { Bell, Plus, CreditCard as Edit2, Trash2, CheckCircle, XCircle, Mail, MessageSquare, Smartphone, AlertTriangle, TrendingUp, TrendingDown, Target, Search, PoundSterling, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 
 interface AlertRule {
@@ -52,7 +52,7 @@ export function AlertRules() {
     {
       value: 'pricing_change',
       label: 'Competitor Pricing Change',
-      icon: DollarSign,
+      icon: PoundSterling,
       description: 'Alert when competitor pricing is updated',
       color: 'bg-tan-500'
     },
