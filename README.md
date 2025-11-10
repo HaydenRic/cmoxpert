@@ -1,8 +1,8 @@
 # cmoxpert
 
-**Marketing Intelligence Platform for FinTech Companies**
+**Marketing Intelligence Platform for FinTech Marketing Teams & Consultants**
 
-Stop bleeding money on customer acquisition. cmoxpert helps FinTech CMOs cut CAC by an average of $127 in 90 days by showing exactly where marketing spend is wasted on fraud, verification drop-off, and underperforming channels.
+Stop bleeding money on customer acquisition. cmoxpert helps FinTech marketing teams and the consultants who serve them cut CAC by an average of $127 in 90 days by identifying fraud waste, verification drop-off, and underperforming channels.
 
 ## The Problem
 
@@ -118,8 +118,14 @@ supabase/
 - **Compliance Monitoring**: Automated flagging of risky campaigns
 - **Competitor Tracking**: Monitor funding rounds, product launches, pricing changes
 
-### Built for Fractional CMOs
+### Built for Both In-House Teams & Consultants
 
+**For In-House Teams:**
+- Single-company optimization and tracking
+- Board and investor reporting
+- Internal team collaboration
+
+**For Consultants & Agencies:**
 - **Client Dashboard**: Manage multiple FinTech clients in one platform
 - **Automated Reports**: Generate client-ready reports on CAC optimization
 - **Benchmark Data**: Compare client performance to industry standards
@@ -171,20 +177,32 @@ The platform is optimized for deployment on:
 
 ## Target Market
 
-**FinTech companies with**:
+**Two Key Audiences:**
+
+### In-House FinTech Teams
+Companies with:
 - $50K+ monthly marketing spend
 - Complex customer acquisition funnels
 - Fraud and verification challenges
 - Regulatory compliance requirements
 - Need for true revenue attribution
 
-**Typical customers**:
+Industries served:
 - Neobanks and digital banks
 - Payment processors and platforms
 - Lending platforms (consumer & business)
 - Wealth management and investment apps
 - Crypto and blockchain financial services
 - B2B financial software companies
+
+### Marketing Consultants & Agencies
+Professionals serving FinTech clients:
+- Fractional CMOs
+- Marketing consultants
+- Growth agencies
+- Digital marketing firms specializing in FinTech
+- Multi-client portfolio management needs
+- White-label reporting requirements
 
 ## Pricing Strategy
 

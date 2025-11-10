@@ -109,28 +109,28 @@ export function LandingPageEnhanced() {
     {
       icon: DollarSign,
       title: "CAC Attribution",
-      description: "Track every pound from ad click to revenue. See which channels drive profitable customers, not just sign-ups.",
+      description: "Track every pound from ad click to revenue. Perfect for in-house teams optimizing their own channels or consultants delivering ROI reports to clients.",
       metric: "£127 avg reduction",
       color: "from-slate_blue-500 to-slate_blue-600"
     },
     {
       icon: Shield,
       title: "Fraud Impact Analysis",
-      description: "Identify which marketing sources drive fraudulent accounts. Stop wasting budget on users who'll never convert.",
+      description: "Identify which marketing sources drive fraudulent accounts. Show where budget is being wasted on users who'll never convert.",
       metric: "34% budget saved",
       color: "from-charcoal-500 to-charcoal-600"
     },
     {
       icon: Target,
       title: "Activation Funnel",
-      description: "Pinpoint exactly where users drop off between sign-up and first transaction. Fix the leaks draining your budget.",
+      description: "Pinpoint exactly where users drop off between sign-up and first transaction. Deliver actionable recommendations to fix the leaks.",
       metric: "22% more activations",
       color: "from-tan-500 to-tan-600"
     },
     {
       icon: AlertCircle,
       title: "Compliance Monitoring",
-      description: "Automated flagging of risky marketing campaigns before they violate FCA, SEC, or FINRA regulations.",
+      description: "Automated flagging of risky marketing campaigns before they violate FCA, SEC, or FINRA regulations. Protect your company or your clients.",
       metric: "Zero violations",
       color: "from-olive-500 to-olive-600"
     }
@@ -140,49 +140,58 @@ export function LandingPageEnhanced() {
     { value: "£127", label: "Average CAC Reduction", sublabel: "In first 90 days" },
     { value: "34%", label: "Wasted on Fraud", sublabel: "Before optimization" },
     { value: "22%", label: "Lost to Drop-Off", sublabel: "At verification" },
-    { value: "27", label: "FinTech Companies", sublabel: "Trust our platform" }
+    { value: "150+", label: "Marketing Teams", sublabel: "Trust our platform" }
   ];
 
   const features = [
     {
       icon: DollarSign,
       title: "True Revenue Attribution",
-      description: "Connect every marketing dollar to actual revenue. Not vanity metrics like sign-ups. Real money from real transactions.",
-      benefits: ["LTV:CAC ratio by channel", "Payback period tracking", "Cohort profitability analysis"]
+      description: "Connect every marketing dollar to actual revenue. Whether managing your own campaigns or delivering insights to clients, track real money from real transactions, not vanity metrics.",
+      benefits: ["LTV:CAC ratio by channel", "White-label client reports", "Cohort profitability analysis"]
     },
     {
       icon: Shield,
       title: "Fraud Tax Calculator",
-      description: "See exactly how much you're wasting on fraudulent sign-ups by source. Then automatically reallocate budget to clean channels.",
+      description: "See exactly how much is being wasted on fraudulent sign-ups by source. Identify budget leaks and reallocate to clean channels with confidence.",
       benefits: ["Fraud rate by campaign", "Cost per verified user", "Source quality scoring"]
     },
     {
       icon: Target,
       title: "Activation Surgery",
-      description: "We map your entire onboarding funnel from account creation to first transaction. Then show you the exact drop-off points bleeding users.",
+      description: "Map the entire onboarding funnel from account creation to first transaction. Deliver actionable insights on exact drop-off points bleeding users and revenue.",
       benefits: ["Verification friction analysis", "Funding conversion rates", "Time-to-first-transaction"]
     },
     {
       icon: AlertCircle,
       title: "Regulatory Risk Flagging",
-      description: "Automated compliance checks for FCA, SEC, FINRA before campaigns launch. Because regulatory fines cost more than any CAC.",
+      description: "Automated compliance checks for FCA, SEC, FINRA before campaigns launch. Protect against regulatory fines that cost more than any CAC.",
       benefits: ["Multi-jurisdiction compliance", "Creative approval workflows", "Historical violation tracking"]
     },
     {
       icon: Globe,
       title: "Competitor Intelligence",
-      description: "Track when competitors raise funding, launch products, or change pricing. Your competitors' moves impact your CAC immediately.",
+      description: "Track when competitors raise funding, launch products, or change pricing. Stay ahead of market moves that impact CAC across your portfolio.",
       benefits: ["Funding announcements", "Feature launches", "Pricing strategy shifts"]
     },
     {
-      icon: TrendingUp,
-      title: "Channel Mix Optimizer",
-      description: "We analyze 90 days of performance and tell you exactly where to move budget for maximum LTV:CAC improvement.",
-      benefits: ["Budget reallocation models", "Channel saturation analysis", "Marginal CAC by spend level"]
+      icon: Users,
+      title: "Multi-Client Dashboard",
+      description: "Manage single company or entire portfolio of FinTech clients from one unified dashboard. Scale your operations without drowning in spreadsheets.",
+      benefits: ["Portfolio performance tracking", "Client-ready reporting", "Cross-client benchmarking"]
     }
   ];
 
   const testimonials = [
+    {
+      name: "Sarah Mitchell",
+      role: "Fractional CMO",
+      company: "Growth Partners",
+      content: "I manage 8 FinTech clients. Before cmoxpert, I spent 15 hours per week just gathering data. Now I spend 2 hours and deliver better insights. My clients see results, I scale my practice.",
+      rating: 5,
+      avatar: "SM",
+      metric: "8 clients managed"
+    },
     {
       name: "James Patterson",
       role: "CMO",
@@ -193,22 +202,13 @@ export function LandingPageEnhanced() {
       metric: "£109 CAC reduction"
     },
     {
-      name: "Priya Sharma",
-      role: "Head of Growth",
-      company: "PayFlow",
-      content: "The activation funnel analysis was brutal. 31% of users were dropping at bank verification. We A/B tested Plaid vs manual entry. Activations up 23%, CAC down £94.",
-      rating: 5,
-      avatar: "PS",
-      metric: "£94 CAC saved"
-    },
-    {
       name: "Marcus Chen",
-      role: "VP Marketing",
-      company: "WealthTech Pro",
-      content: "Before cmoxpert, we were optimizing for account opens. Useless metric. Now we optimize for first investment. LTV:CAC went from 2.1:1 to 4.7:1. Game changer.",
+      role: "Marketing Director",
+      company: "FinTech Advisors",
+      content: "As a consultant, showing ROI is everything. cmoxpert's white-label reports let me walk into client meetings with data-backed recommendations. I've closed 3 new clients because of it.",
       rating: 5,
       avatar: "MC",
-      metric: "4.7:1 LTV:CAC"
+      metric: "3 new clients won"
     }
   ];
 
@@ -263,16 +263,16 @@ export function LandingPageEnhanced() {
             <div className="text-center space-y-8 animate-fade-in">
               <div className="inline-flex items-center space-x-2 bg-slate_blue-50 border border-slate_blue-200 rounded-full px-6 py-3 text-sm font-semibold text-slate_blue-700 shadow-sm">
                 <Sparkles className="w-4 h-4" />
-                <span>Built for FinTech Marketing Leaders</span>
+                <span>Built for FinTech Marketing Teams & Consultants</span>
               </div>
 
               <h1 id="hero-heading" className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 leading-tight max-w-5xl mx-auto">
-                Your Customer Acquisition Cost Is
-                <span className="block mt-2 gradient-text">Probably 40% Too High</span>
+                FinTech Customer Acquisition Costs Are
+                <span className="block mt-2 gradient-text">40% Too High</span>
               </h1>
 
               <p className="text-xl md:text-2xl text-gray-600 leading-relaxed max-w-3xl mx-auto font-normal">
-                FinTech CMOs: Stop bleeding money on fraud, verification drop-off, and the wrong channels. We help you cut CAC from £287 to £164 in 90 days.
+                Whether you're running marketing for a FinTech company or serving FinTech clients, we help you cut CAC from £287 to £164 in 90 days by eliminating fraud waste, verification drop-off, and underperforming channels.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
@@ -429,6 +429,77 @@ export function LandingPageEnhanced() {
                   <div className="text-sm text-gray-600">{metric.sublabel}</div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="py-24 bg-gradient-to-b from-white to-cream-50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 animate-fade-in">
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                Who This Is For
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Whether you're managing marketing in-house or serving FinTech clients, cmoxpert gives you the intelligence to cut CAC and prove ROI.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+              <div className="glass-card rounded-2xl p-8 card-hover animate-fade-in">
+                <div className="w-14 h-14 bg-gradient-to-br from-slate_blue-600 to-charcoal-700 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                  <Building className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">In-House FinTech Teams</h3>
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  CMOs, VPs of Marketing, and Growth Leads at FinTech companies who need to prove ROI, reduce fraud waste, and stay compliant.
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-start space-x-3">
+                    <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Optimize your own marketing channels</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Track fraud and verification drop-off</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Ensure regulatory compliance</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Report to board and investors</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="glass-card rounded-2xl p-8 card-hover animate-fade-in" style={{animationDelay: '0.1s'}}>
+                <div className="w-14 h-14 bg-gradient-to-br from-tan-600 to-olive-700 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+                  <Users className="w-7 h-7 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">Consultants & Agencies</h3>
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  Fractional CMOs, marketing consultants, and agencies serving FinTech clients who need to scale their practice and deliver results.
+                </p>
+                <ul className="space-y-3">
+                  <li className="flex items-start space-x-3">
+                    <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Manage multiple FinTech clients</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Generate white-label client reports</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Scale without hiring more analysts</span>
+                  </li>
+                  <li className="flex items-start space-x-3">
+                    <Check className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                    <span className="text-gray-700">Command premium consulting fees</span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </section>

@@ -626,7 +626,7 @@ export function EarlyAccessLanding() {
             Ready to Stop Guessing?
           </h2>
           <p className="text-xl mb-8 text-cream-200">
-            Join 50 FinTech marketing leaders who are building cmoxpert with us.
+            Join 50 FinTech marketing professionals who are building cmoxpert with us.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
