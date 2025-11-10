@@ -372,7 +372,7 @@ export type Database = {
 // AI Services Integration Helper
 export class AIServicesManager {
   private static readonly EDGE_FUNCTION_URL = `${supabaseUrl}/functions/v1`;
-  
+
   static async generateMarketAnalysis(payload: {
     reportId: string;
     clientId: string;
@@ -380,26 +380,34 @@ export class AIServicesManager {
     industry?: string;
   }) {
     try {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        throw new Error('User is not authenticated. Please log in.');
+      }
+
       const response = await fetch(`${this.EDGE_FUNCTION_URL}/generate-market-analysis`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${supabaseAnonKey}`,
+          'Authorization': `Bearer ${session.access_token}`,
+          'apikey': supabaseAnonKey,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload)
       });
-      
+
       if (!response.ok) {
-        throw new Error(`AI Analysis failed: ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({ error: response.statusText }));
+        throw new Error(`AI Analysis failed: ${errorData.error || response.statusText}`);
       }
-      
+
       return response.json();
     } catch (error) {
       console.error('AI Services error:', error);
       throw error;
     }
   }
-  
+
   static async generatePlaybook(payload: {
     clientId: string;
     userId: string;
@@ -407,19 +415,27 @@ export class AIServicesManager {
     reportId?: string;
   }) {
     try {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        throw new Error('User is not authenticated. Please log in.');
+      }
+
       const response = await fetch(`${this.EDGE_FUNCTION_URL}/generate-playbook`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${supabaseAnonKey}`,
+          'Authorization': `Bearer ${session.access_token}`,
+          'apikey': supabaseAnonKey,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(payload)
       });
-      
+
       if (!response.ok) {
-        throw new Error(`AI Playbook generation failed: ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({ error: response.statusText }));
+        throw new Error(`AI Playbook generation failed: ${errorData.error || response.statusText}`);
       }
-      
+
       return response.json();
     } catch (error) {
       console.error('AI Playbook generation error:', error);
