@@ -146,23 +146,37 @@ export default function BetaLanding() {
           <div className="max-w-7xl mx-auto">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <div className="inline-flex items-center space-x-2 bg-earth_yellow-500/20 border border-earth_yellow-400/30 rounded-full px-4 py-2 mb-6">
-                  <Sparkles className="w-5 h-5 text-earth_yellow-400" />
-                  <span className="text-earth_yellow-300 font-semibold">Beta Program - Core Features Production-Ready</span>
+                <div className="inline-flex items-center space-x-2 bg-green-500/20 border border-green-400/30 rounded-full px-4 py-2 mb-6 animate-pulse">
+                  <Sparkles className="w-5 h-5 text-green-400" />
+                  <span className="text-green-300 font-semibold">Early Access Beta • Save 10-15 Hours/Week</span>
                 </div>
 
                 <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                  Manage Multiple<br />
+                  Stop Juggling<br />
                   <span className="bg-gradient-to-r from-earth_yellow-400 to-tan-400 bg-clip-text text-transparent">
-                    FinTech Clients
+                    Spreadsheets
                   </span><br />
-                  In One Dashboard
+                  For Every Client
                 </h1>
 
                 <p className="text-xl text-cornsilk-300 mb-8 leading-relaxed">
-                  Built for marketing consultants and fractional CMOs managing multiple FinTech clients.
-                  Core portfolio management and attribution features are production-ready today.
+                  One dashboard to manage all your FinTech clients. Track performance, prove ROI, and generate professional reports without the manual busywork.
                 </p>
+
+                <div className="flex flex-wrap gap-4 mb-8">
+                  <div className="flex items-center space-x-2 text-cornsilk-200">
+                    <Clock className="w-5 h-5 text-green-400" />
+                    <span className="font-medium">Save 10-15 hrs/week</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-cornsilk-200">
+                    <Users className="w-5 h-5 text-green-400" />
+                    <span className="font-medium">First 10 users FREE</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-cornsilk-200">
+                    <Shield className="w-5 h-5 text-green-400" />
+                    <span className="font-medium">Production ready</span>
+                  </div>
+                </div>
 
                 <div className="grid sm:grid-cols-2 gap-4 mb-8">
                   <div className="flex items-start space-x-3">
@@ -667,22 +681,25 @@ export default function BetaLanding() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center">
-                <div className="text-4xl font-bold text-earth_yellow-400 mb-2">£127</div>
-                <div className="text-cornsilk-300">Average CAC reduction in first 90 days</div>
-                <div className="text-sm text-cornsilk-500 mt-2">(Pilot data • 3 companies)</div>
+              <div className="p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center hover:border-green-500 transition-all">
+                <Clock className="w-8 h-8 text-earth_yellow-400 mx-auto mb-3" />
+                <div className="text-4xl font-bold text-earth_yellow-400 mb-2">10-15hrs</div>
+                <div className="text-cornsilk-300">Saved per week on manual reporting</div>
+                <div className="text-sm text-cornsilk-500 mt-2">(Early user feedback)</div>
               </div>
 
-              <div className="p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center">
-                <div className="text-4xl font-bold text-green-400 mb-2">34%</div>
-                <div className="text-cornsilk-300">Marketing budget wasted on fraud (average)</div>
-                <div className="text-sm text-cornsilk-500 mt-2">(Based on 5 pilot partners)</div>
+              <div className="p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center hover:border-green-500 transition-all">
+                <TrendingUp className="w-8 h-8 text-green-400 mx-auto mb-3" />
+                <div className="text-4xl font-bold text-green-400 mb-2">6+</div>
+                <div className="text-cornsilk-300">Attribution models including ML-based</div>
+                <div className="text-sm text-cornsilk-500 mt-2">(Production ready today)</div>
               </div>
 
-              <div className="p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center">
-                <div className="text-4xl font-bold text-tan-400 mb-2">14hrs</div>
-                <div className="text-cornsilk-300">Saved per month on manual compliance checks</div>
-                <div className="text-sm text-cornsilk-500 mt-2">(Pilot data • 2 companies)</div>
+              <div className="p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center hover:border-green-500 transition-all">
+                <Shield className="w-8 h-8 text-tan-400 mx-auto mb-3" />
+                <div className="text-4xl font-bold text-tan-400 mb-2">FCA+SEC</div>
+                <div className="text-cornsilk-300">Built-in compliance checking</div>
+                <div className="text-sm text-cornsilk-500 mt-2">(FINRA rules included)</div>
               </div>
             </div>
 
