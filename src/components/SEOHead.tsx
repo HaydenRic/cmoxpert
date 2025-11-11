@@ -12,10 +12,10 @@ interface SEOHeadProps {
 }
 
 const defaultMeta = {
-  title: 'cmoxpert - Marketing Intelligence for FinTech Companies | Cut CAC by $127',
-  description: 'Stop wasting marketing budget on fraud and verification drop-off. cmoxpert helps FinTech CMOs cut CAC by $127 in 90 days with AI-powered fraud detection, activation funnel optimization, and FCA/SEC compliance monitoring.',
+  title: 'cmoxpert - Marketing Intelligence for FinTech Companies | Cut CAC by £127',
+  description: 'Stop wasting marketing budget on fraud and verification drop-off. cmoxpert helps FinTech CMOs cut CAC by £127 in 90 days with AI-powered fraud detection, activation funnel optimization, and FCA/SEC compliance monitoring.',
   keywords: 'fintech marketing analytics, reduce CAC fintech, marketing fraud detection, customer acquisition cost reduction, fintech compliance marketing, verification drop-off optimization, FCA SEC FINRA compliance, fintech cmo tools',
-  ogTitle: 'cmoxpert - Cut FinTech CAC by $127 in 90 Days',
+  ogTitle: 'cmoxpert - Cut FinTech CAC by £127 in 90 Days',
   ogDescription: '34% of your marketing budget goes to fraud. 22% lost at verification. cmoxpert shows FinTech CMOs exactly where money is wasted and how to fix it. Real revenue attribution, not vanity metrics.',
   ogImage: 'https://cmoxpert.com/og-image.jpg',
 };
@@ -85,13 +85,13 @@ function updateLink(rel: string, href: string) {
 
 export const pageMeta = {
   home: {
-    title: 'cmoxpert - Marketing Intelligence for FinTech Companies | Cut CAC by $127',
-    description: 'Stop wasting marketing budget on fraud and verification drop-off. cmoxpert helps FinTech CMOs cut CAC by $127 in 90 days with AI-powered fraud detection, activation funnel optimization, and FCA/SEC compliance monitoring.',
+    title: 'cmoxpert - Marketing Intelligence for FinTech Companies | Cut CAC by £127',
+    description: 'Stop wasting marketing budget on fraud and verification drop-off. cmoxpert helps FinTech CMOs cut CAC by £127 in 90 days with AI-powered fraud detection, activation funnel optimization, and FCA/SEC compliance monitoring.',
     keywords: 'fintech marketing analytics, reduce CAC fintech, marketing fraud detection, customer acquisition cost reduction, fintech compliance marketing'
   },
   pricing: {
-    title: 'Pricing - cmoxpert Marketing Intelligence for FinTech | From $2,500/mo',
-    description: 'Transparent pricing for FinTech marketing intelligence. Growth Stage ($2,500/mo), Scale Stage ($5,000/mo), Enterprise (custom). ROI-focused pricing based on marketing spend. No setup fees.',
+    title: 'Pricing - cmoxpert Marketing Intelligence for FinTech | From £1,999/mo',
+    description: 'Transparent pricing for FinTech marketing intelligence. Growth Stage (£1,999/mo), Scale Stage (£3,999/mo), Enterprise (custom). ROI-focused pricing based on marketing spend. No setup fees.',
     keywords: 'fintech marketing software pricing, cac reduction cost, marketing analytics pricing, fintech saas pricing'
   },
   fraudAnalysis: {

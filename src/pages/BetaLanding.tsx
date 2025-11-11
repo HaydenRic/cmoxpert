@@ -215,7 +215,7 @@ export default function BetaLanding() {
                     </li>
                     <li className="flex items-center space-x-2">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span><strong>Next 40 users:</strong> $99/month (75% off standard pricing)</span>
+                      <span><strong>Next 40 users:</strong> £79/month (75% off standard pricing)</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
@@ -554,7 +554,7 @@ export default function BetaLanding() {
               </div>
 
               <div className="bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl p-6">
-                <div className="text-3xl font-bold text-white mb-2">$99<span className="text-lg text-cornsilk-400">/mo</span></div>
+                <div className="text-3xl font-bold text-white mb-2">£79<span className="text-lg text-cornsilk-400">/mo</span></div>
                 <div className="text-cornsilk-400 mb-4">Next 40 users</div>
                 <ul className="space-y-2 text-sm text-cornsilk-300 text-left">
                   <li className="flex items-start space-x-2">
@@ -577,7 +577,7 @@ export default function BetaLanding() {
               </div>
 
               <div className="bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl p-6">
-                <div className="text-3xl font-bold text-white mb-2">$199<span className="text-lg text-cornsilk-400">/mo</span></div>
+                <div className="text-3xl font-bold text-white mb-2">£159<span className="text-lg text-cornsilk-400">/mo</span></div>
                 <div className="text-cornsilk-400 mb-4">Beta access</div>
                 <ul className="space-y-2 text-sm text-cornsilk-300 text-left">
                   <li className="flex items-start space-x-2">
@@ -601,7 +601,7 @@ export default function BetaLanding() {
             </div>
 
             <p className="text-cornsilk-400 text-sm">
-              Standard pricing after beta: Starting at $399/month. Beta users keep their rate.
+              Standard pricing after beta: Starting at £319/month. Beta users keep their rate.
             </p>
           </div>
         </section>
