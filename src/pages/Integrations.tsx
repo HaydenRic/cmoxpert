@@ -62,7 +62,7 @@ export function Integrations() {
       type: 'payments',
       icon: CreditCard,
       description: 'Track payments, revenue, and transaction data. Essential for fraud analysis.',
-      color: 'bg-indigo-600',
+      color: 'bg-blue-600',
       features: ['Payment tracking', 'Revenue analytics', 'Fraud detection', 'Subscription metrics'],
       available: true
     },

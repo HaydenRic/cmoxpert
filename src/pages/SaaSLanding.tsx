@@ -136,7 +136,7 @@ export default function SaaSLanding() {
 
           <p className="text-xl text-cream-100 mb-12 max-w-3xl mx-auto leading-relaxed">
             Track MRR, CAC, LTV, and churn across all your B2B SaaS clients.
-            Stop jumping between Stripe dashboards and spreadsheets.
+            Stop jumping between payment platforms and spreadsheets.
             <strong className="text-white"> Get the full picture in seconds.</strong>
           </p>
 
@@ -187,7 +187,7 @@ export default function SaaSLanding() {
               </div>
               <h3 className="text-xl font-semibold text-white mb-2">10+ Logins</h3>
               <p className="text-cream-100">
-                Different Stripe accounts, Google Analytics, and CRMs for each client
+                Different payment platforms, Google Analytics, and CRMs for each client
               </p>
             </div>
             <div className="text-center">
@@ -230,12 +230,12 @@ export default function SaaSLanding() {
             </div>
             <h3 className="text-2xl font-bold text-white mb-3">SaaS Metrics Dashboard</h3>
             <p className="text-cream-100 mb-4">
-              MRR, ARR, churn rate, LTV, and CAC across all clients. Updated in real-time from Stripe.
+              MRR, ARR, churn rate, LTV, and CAC across all clients. Updated in real-time from your payment platforms.
             </p>
             <ul className="space-y-2">
               <li className="flex items-start text-cream-100">
                 <CheckCircle className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0 text-green-400" />
-                <span>Automatic Stripe sync for all clients</span>
+                <span>Automatic payment data sync (Stripe, PayPal, Paddle, Chargebee)</span>
               </li>
               <li className="flex items-start text-cream-100">
                 <CheckCircle className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0 text-green-400" />
@@ -352,7 +352,7 @@ export default function SaaSLanding() {
               </li>
               <li className="flex items-start text-cream-100">
                 <CheckCircle className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0 text-green-400" />
-                <span>Stripe integration</span>
+                <span>Payment platform integrations</span>
               </li>
               <li className="flex items-start text-cream-100">
                 <CheckCircle className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0 text-green-400" />
