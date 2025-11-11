@@ -110,8 +110,8 @@ For established agencies
 ### 1. Sign Up
 Visit [cmoxpert.com](https://cmoxpert.com) and start your free trial.
 
-### 2. Connect Stripe
-Link your clients' Stripe accounts for automatic MRR/churn tracking.
+### 2. Connect Payment Processor
+Link your clients' Stripe or PayPal accounts for automatic MRR/churn tracking.
 
 ### 3. Add Clients
 Import your SaaS client portfolio and start tracking metrics.
@@ -136,7 +136,8 @@ Create beautiful, branded reports for your clients in one click.
 - **Edge Functions** for serverless compute
 
 ### Integrations
-- **Stripe** - Automatic subscription & revenue tracking
+- **Stripe or PayPal** - Automatic subscription & revenue tracking (choose your preferred processor)
+- **Square** - Coming soon
 - **Google Analytics** - Traffic and conversion data
 - **HubSpot/Salesforce** - CRM pipeline integration
 - **OpenAI** (optional) - AI-powered insights
@@ -190,8 +191,10 @@ Create beautiful, branded reports for your clients in one click.
 
 ### Coming in Q1 2025
 - ✅ Stripe integration (automatic MRR tracking)
+- ✅ PayPal integration (subscription management)
 - ✅ Multi-client dashboard
 - ✅ White-label reports
+- 🚧 Square payment processor
 - 🚧 HubSpot CRM integration
 - 🚧 LinkedIn Ads integration
 
@@ -219,10 +222,10 @@ cmoxpert is in active beta with **real customers managing real SaaS portfolios**
 - Revenue attribution and tracking
 - Report generation
 - Client management
-- Basic Stripe integration
+- Stripe and PayPal payment processing
 
 **What's coming soon:**
-- Full Stripe automation (currently requires some manual data entry)
+- Square payment processor integration
 - HubSpot/Salesforce deep integrations
 - Advanced AI insights
 

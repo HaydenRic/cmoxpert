@@ -13,6 +13,7 @@
     "docs:serve": "npx http-server docs/api -p 3001"
   },
   "dependencies": {
+    "@paypal/checkout-server-sdk": "^1.0.3",
     "@sentry/react": "^10.22.0",
     "@sentry/tracing": "^7.120.4",
     "@splinetool/react-spline": "^2.2.6",

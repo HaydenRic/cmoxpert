@@ -61,10 +61,28 @@ export function Integrations() {
       name: 'Stripe',
       type: 'payments',
       icon: CreditCard,
-      description: 'Track payments, revenue, and transaction data. Essential for fraud analysis.',
+      description: 'Track payments, revenue, and subscription data. Automatic MRR tracking.',
       color: 'bg-blue-600',
-      features: ['Payment tracking', 'Revenue analytics', 'Fraud detection', 'Subscription metrics'],
+      features: ['Payment tracking', 'Revenue analytics', 'Subscription metrics', 'Customer data'],
       available: true
+    },
+    {
+      name: 'PayPal',
+      type: 'payments',
+      icon: CreditCard,
+      description: 'Accept PayPal payments and track subscription revenue.',
+      color: 'bg-indigo-600',
+      features: ['PayPal payments', 'Subscription billing', 'Revenue tracking', 'Customer management'],
+      available: true
+    },
+    {
+      name: 'Square',
+      type: 'payments',
+      icon: CreditCard,
+      description: 'Coming soon - Square payment processing and analytics.',
+      color: 'bg-gray-500',
+      features: ['Payment processing', 'Revenue analytics', 'Transaction data', 'Customer insights'],
+      available: false
     },
     {
       name: 'Plaid',
@@ -394,10 +412,10 @@ export function Integrations() {
             <Shield className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-gray-900 mb-2">FinTech Data Stack</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">Payment Processing</h2>
             <p className="text-sm text-gray-700">
-              Essential integrations for fraud analysis, activation funnels, and revenue attribution.
-              Connect your payment processor, KYC provider, and banking platform.
+              Connect Stripe or PayPal to automatically track subscription revenue, MRR, and customer data.
+              Square and additional processors coming soon.
             </p>
           </div>
         </div>

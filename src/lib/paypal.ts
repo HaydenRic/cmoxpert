@@ -1,4 +1,5 @@
-export const STRIPE_PUBLISHABLE_KEY = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY || '';
+export const PAYPAL_CLIENT_ID = import.meta.env.VITE_PAYPAL_CLIENT_ID || '';
+export const PAYPAL_MODE = import.meta.env.VITE_PAYPAL_MODE || 'sandbox';
 
 export type PaymentProcessor = 'stripe' | 'paypal';
 
@@ -102,16 +103,16 @@ export const BETA_PRICING_TIERS: PricingTier[] = [
   }
 ];
 
-export interface StripeCheckoutData {
+export interface PayPalCheckoutData {
   email: string;
   name: string;
-  priceId: string;
+  planId: string;
   tier: string;
   successUrl: string;
   cancelUrl: string;
 }
 
-export function getStripeTier(tierName: string): PricingTier | undefined {
+export function getPricingTier(tierName: string): PricingTier | undefined {
   return BETA_PRICING_TIERS.find(t => t.id === tierName || t.name === tierName);
 }
 
@@ -129,4 +130,25 @@ export function formatPrice(price: number, interval: 'month' | 'year' = 'month')
 export function calculateDiscount(price: number, originalPrice: number): number {
   if (!originalPrice || originalPrice === 0) return 0;
   return Math.round(((originalPrice - price) / originalPrice) * 100);
+}
+
+export function loadPayPalScript(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (window.paypal) {
+      resolve();
+      return;
+    }
+
+    const script = document.createElement('script');
+    script.src = `https://www.paypal.com/sdk/js?client-id=${PAYPAL_CLIENT_ID}&vault=true&intent=subscription`;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error('Failed to load PayPal SDK'));
+    document.body.appendChild(script);
+  });
+}
+
+declare global {
+  interface Window {
+    paypal?: any;
+  }
 }
