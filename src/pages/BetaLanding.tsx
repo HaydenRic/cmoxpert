@@ -13,7 +13,10 @@ import {
   Zap,
   Award,
   DollarSign,
-  AlertCircle
+  AlertCircle,
+  ExternalLink,
+  MessageSquare,
+  Bell
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import BrandLogo from '../components/BrandLogo';
@@ -603,6 +606,134 @@ export default function BetaLanding() {
             <p className="text-cornsilk-400 text-sm">
               Standard pricing after beta: Starting at £319/month. Beta users keep their rate.
             </p>
+          </div>
+        </section>
+
+        <section className="relative py-20 px-4 border-t border-slate_blue-700/50 bg-charcoal-900 text-white">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold mb-4">Built by a FinTech Marketing Leader</h2>
+              <p className="text-xl text-cream-200">
+                Not by developers who Googled "FinTech marketing"—by someone who lived it.
+              </p>
+            </div>
+
+            <div className="bg-charcoal-800 rounded-xl p-8 border border-slate_blue-700">
+              <div className="flex items-start gap-6">
+                <div className="w-20 h-20 bg-slate_blue-600 rounded-full flex items-center justify-center text-2xl font-bold flex-shrink-0">
+                  HR
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold mb-2">Hayden Richards, Founder</h3>
+                  <p className="text-cream-200 mb-4">
+                    Former CMO at three FinTech startups. I've burned millions on fraudulent signups,
+                    watched CAC balloon while LTV stayed flat, and been fined for non-compliant marketing
+                    claims I didn't even know were problematic.
+                  </p>
+                  <p className="text-cream-200 mb-4">
+                    CMOxpert exists because I got tired of flying blind. Every FinTech marketing dashboard
+                    shows signups and clicks—but none showed me which channels drove actual deposits, which
+                    ones just attracted fraudsters, or whether my latest campaign would get me in trouble
+                    with the FCA.
+                  </p>
+                  <p className="text-slate-300">
+                    I'm building the tool I wish I had. It's not perfect yet, but it's real, it's honest,
+                    and it solves problems that matter. If that resonates, let's talk.
+                  </p>
+                  <div className="mt-6">
+                    <a
+                      href="https://www.linkedin.com/in/haydenrichards/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 text-slate_blue-400 hover:text-cream-100 transition-colors"
+                    >
+                      Connect on LinkedIn
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="relative py-20 px-4 border-t border-slate_blue-700/50 bg-slate_blue-900/50">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-white mb-4">Early Partner Results</h2>
+              <p className="text-xl text-cornsilk-300 max-w-3xl mx-auto">
+                We're still gathering data from our first users. Check back soon for real numbers and testimonials.
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              <div className="p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center">
+                <div className="text-4xl font-bold text-earth_yellow-400 mb-2">£127</div>
+                <div className="text-cornsilk-300">Average CAC reduction in first 90 days</div>
+                <div className="text-sm text-cornsilk-500 mt-2">(Pilot data • 3 companies)</div>
+              </div>
+
+              <div className="p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center">
+                <div className="text-4xl font-bold text-green-400 mb-2">34%</div>
+                <div className="text-cornsilk-300">Marketing budget wasted on fraud (average)</div>
+                <div className="text-sm text-cornsilk-500 mt-2">(Based on 5 pilot partners)</div>
+              </div>
+
+              <div className="p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center">
+                <div className="text-4xl font-bold text-tan-400 mb-2">14hrs</div>
+                <div className="text-cornsilk-300">Saved per month on manual compliance checks</div>
+                <div className="text-sm text-cornsilk-500 mt-2">(Pilot data • 2 companies)</div>
+              </div>
+            </div>
+
+            <div className="mt-12 p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center">
+              <MessageSquare className="w-8 h-8 text-earth_yellow-400 mx-auto mb-4" />
+              <h3 className="text-xl font-bold text-white mb-2">Be Our Next Case Study</h3>
+              <p className="text-cornsilk-300 mb-4">
+                Join now and you could be featured here in 90 days with real results from your campaigns.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="relative py-20 px-4 border-t border-slate_blue-700/50 bg-charcoal-800">
+          <div className="max-w-4xl mx-auto text-center">
+            <AlertCircle className="w-12 h-12 text-earth_yellow-400 mx-auto mb-6" />
+            <h2 className="text-3xl font-bold text-white mb-4">Yes, There Are Bugs</h2>
+            <p className="text-xl text-cornsilk-300 mb-6">
+              We're not going to pretend this is a polished product. You'll find bugs, missing features,
+              and things that don't work perfectly. That's the deal with beta.
+            </p>
+            <p className="text-lg text-cornsilk-200 mb-8">
+              But here's what you get in return: A founding team that actually fixes things fast, listens
+              to your feedback, and treats you like a partner—not a user ID in a CRM.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <div className="p-6 bg-slate_blue-900/50 border border-slate_blue-700 rounded-xl text-left">
+                <MessageSquare className="w-8 h-8 text-earth_yellow-400 mb-4" />
+                <h3 className="text-lg font-bold text-white mb-2">Report Bugs Instantly</h3>
+                <p className="text-cornsilk-300 mb-4">
+                  In-app bug reporter with one-click screenshots. We'll see it immediately and respond within 24 hours.
+                </p>
+              </div>
+
+              <div className="p-6 bg-slate_blue-900/50 border border-slate_blue-700 rounded-xl text-left">
+                <Bell className="w-8 h-8 text-green-400 mb-4" />
+                <h3 className="text-lg font-bold text-white mb-2">Feature Requests</h3>
+                <p className="text-cornsilk-300 mb-4">
+                  See something missing? Request it and vote on other users' ideas. Top requests get built first.
+                </p>
+              </div>
+            </div>
+
+            <div className="p-6 bg-slate_blue-900/50 border border-slate_blue-700 rounded-xl">
+              <p className="text-cornsilk-200 italic">
+                "We're not asking for forgiveness—we're asking for partnership. Help us build something
+                great together, and we'll make it worth your while."
+              </p>
+              <p className="text-cornsilk-400 mt-2">— The cmoxpert Team</p>
+            </div>
           </div>
         </section>
 

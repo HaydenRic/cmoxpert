@@ -10,7 +10,6 @@ import { initializeErrorHandling } from './lib/errorHandling';
 import { Layout } from './components/Layout';
 import { AuthForm } from './components/AuthForm';
 import { LandingPageEnhanced as LandingPage } from './components/LandingPageEnhanced';
-import { EarlyAccessLanding } from './components/EarlyAccessLanding';
 import { Contact } from './pages/Contact';
 
 // Lazy load all non-critical route components
@@ -125,12 +124,10 @@ function AppContent() {
           }
         />
 
-        {/* Early Access landing page */}
+        {/* Redirect early-access to beta */}
         <Route
           path="/early-access"
-          element={
-            user ? <Navigate to="/dashboard" replace /> : <EarlyAccessLanding />
-          }
+          element={<Navigate to="/beta" replace />}
         />
 
         {/* Beta landing page */}

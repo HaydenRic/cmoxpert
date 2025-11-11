@@ -217,11 +217,11 @@ export function LandingPageEnhanced() {
 
             <nav className="flex items-center space-x-6" role="navigation" aria-label="Header navigation">
               <Link
-                to="/early-access"
+                to="/beta"
                 className="text-gray-700 hover:text-gray-900 font-medium flex items-center space-x-2 transition-colors"
               >
                 <Rocket className="w-4 h-4" />
-                <span>Early Access</span>
+                <span>Join Beta</span>
               </Link>
               <Link
                 to="/auth"
