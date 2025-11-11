@@ -61,6 +61,36 @@ function validateSupabaseConfig() {
     console.error('   - Trigger a new deploy after adding variables');
     console.error('='.repeat(80));
 
+    // Show user-friendly error in the UI instead of crashing
+    const errorDiv = document.createElement('div');
+    errorDiv.style.cssText = 'position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #1a1a1a; color: #fff; display: flex; align-items: center; justify-content: center; font-family: system-ui, -apple-system, sans-serif; z-index: 9999;';
+    errorDiv.innerHTML = `
+      <div style="max-width: 600px; padding: 40px; background: #2a2a2a; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);">
+        <h1 style="color: #ff6b6b; font-size: 24px; margin-bottom: 20px;">⚠️ Configuration Error</h1>
+        <p style="margin-bottom: 20px; line-height: 1.6;">The site cannot load because Supabase environment variables are not configured.</p>
+        <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+          <h3 style="color: #ffd93d; font-size: 16px; margin-bottom: 10px;">Missing Variables:</h3>
+          <ul style="list-style: none; padding: 0; color: #ff6b6b;">
+            ${errors.map(err => `<li style="margin: 5px 0;">• ${err}</li>`).join('')}
+          </ul>
+        </div>
+        <div style="background: #1a1a1a; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+          <h3 style="color: #6bcf7f; font-size: 16px; margin-bottom: 10px;">To Fix (Netlify):</h3>
+          <ol style="line-height: 1.8; padding-left: 20px;">
+            <li>Go to Netlify Dashboard → Site settings → Environment variables</li>
+            <li>Add <code style="background: #3a3a3a; padding: 2px 6px; border-radius: 4px;">VITE_SUPABASE_URL</code></li>
+            <li>Add <code style="background: #3a3a3a; padding: 2px 6px; border-radius: 4px;">VITE_SUPABASE_ANON_KEY</code></li>
+            <li>Trigger a new deploy</li>
+          </ol>
+        </div>
+        <button onclick="window.location.reload()" style="background: #6bcf7f; color: #1a1a1a; border: none; padding: 12px 24px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px;">
+          Reload After Fix
+        </button>
+        <p style="margin-top: 20px; font-size: 12px; color: #888;">Check browser console (F12) for detailed logs</p>
+      </div>
+    `;
+    document.body.appendChild(errorDiv);
+
     throw new Error('Supabase configuration is invalid. Check console for details.');
   }
 
