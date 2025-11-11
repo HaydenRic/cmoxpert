@@ -132,13 +132,13 @@ export function ServicePackages() {
     }
   };
 
-  const formatPrice = (cents: number) => {
-    return new Intl.NumberFormat('en-US', {
+  const formatPrice = (pence: number) => {
+    return new Intl.NumberFormat('en-GB', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'GBP',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(cents / 100);
+    }).format(pence / 100);
   };
 
   const getPackageIcon = (index: number) => {
@@ -369,7 +369,7 @@ export function ServicePackages() {
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">Traditional Agency</h3>
               <ul className="text-sm text-slate-600 space-y-2">
-                <li>$5,000-$15,000/month</li>
+                <li>£4,000-£12,000/month</li>
                 <li>Slow turnaround times</li>
                 <li>Inconsistent quality</li>
                 <li>Requires constant management</li>
@@ -382,7 +382,7 @@ export function ServicePackages() {
               </div>
               <h3 className="text-xl font-bold text-green-900 mb-2">Our Platform</h3>
               <ul className="text-sm text-green-800 space-y-2 font-medium">
-                <li>✓ $2,500-$10,000/month</li>
+                <li>✓ £2,000-£8,000/month</li>
                 <li>✓ Instant automated insights</li>
                 <li>✓ Consistent AI-powered quality</li>
                 <li>✓ Self-service + expert support</li>
@@ -395,7 +395,7 @@ export function ServicePackages() {
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-2">DIY Analytics Tools</h3>
               <ul className="text-sm text-slate-600 space-y-2">
-                <li>$200-$1,000/month</li>
+                <li>£160-£800/month</li>
                 <li>Requires technical expertise</li>
                 <li>Time-consuming setup</li>
                 <li>Data only, no strategy</li>

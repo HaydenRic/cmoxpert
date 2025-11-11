@@ -131,13 +131,13 @@ export function Deliverables() {
     return names[type] || type;
   };
 
-  const formatCurrency = (cents: number) => {
-    return new Intl.NumberFormat('en-US', {
+  const formatCurrency = (pence: number) => {
+    return new Intl.NumberFormat('en-GB', {
       style: 'currency',
-      currency: 'USD',
+      currency: 'GBP',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-    }).format(cents / 100);
+    }).format(pence / 100);
   };
 
   if (loading) {

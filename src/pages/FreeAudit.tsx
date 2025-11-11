@@ -106,7 +106,7 @@ export default function FreeAudit() {
         severity: 'critical' as const,
         category: 'Budget Allocation',
         issue: 'High ad spend without proper optimization',
-        impact: `Potentially wasting $${((spend * 0.3) / 100).toLocaleString()}/month`,
+        impact: `Potentially wasting £${((spend * 0.3) / 100).toLocaleString()}/month`,
         recommendation: 'Implement systematic A/B testing and channel attribution analysis'
       });
     }
@@ -287,14 +287,14 @@ export default function FreeAudit() {
               <div className="text-center border-r border-slate-700">
                 <p className="text-slate-400 text-sm mb-2">Estimated Monthly Waste</p>
                 <p className="text-4xl font-bold text-red-400">
-                  ${(auditResults.estimated_waste / 100).toLocaleString()}
+                  £{(auditResults.estimated_waste / 100).toLocaleString()}
                 </p>
                 <p className="text-slate-300 text-sm mt-2">Being spent inefficiently</p>
               </div>
               <div className="text-center">
                 <p className="text-slate-400 text-sm mb-2">Potential Savings</p>
                 <p className="text-4xl font-bold text-green-400">
-                  ${(auditResults.potential_savings / 100).toLocaleString()}
+                  £{(auditResults.potential_savings / 100).toLocaleString()}
                 </p>
                 <p className="text-slate-300 text-sm mt-2">Per month with optimization</p>
               </div>
@@ -347,7 +347,7 @@ export default function FreeAudit() {
                   <div className="flex items-center justify-between text-sm mb-3">
                     <span className="text-green-700">
                       <DollarSign className="w-4 h-4 inline mr-1" />
-                      Save ${(opp.savings / 100).toLocaleString()}/mo
+                      Save £{(opp.savings / 100).toLocaleString()}/mo
                     </span>
                     <span className="px-2 py-1 bg-green-200 text-green-900 rounded-full text-xs font-bold">
                       {opp.effort} effort
@@ -369,7 +369,7 @@ export default function FreeAudit() {
             </h2>
             <p className="text-slate_blue-100 text-lg mb-6 max-w-2xl mx-auto">
               Our productized marketing services deliver automated insights and strategic recommendations
-              for 60-80% less than traditional agencies.
+              for 50-60% less than traditional agencies.
             </p>
             <div className="flex items-center justify-center space-x-4">
               <Link
@@ -417,7 +417,7 @@ export default function FreeAudit() {
         <div className="bg-white rounded-xl border-2 border-slate-200 p-6 mb-8">
           <div className="grid md:grid-cols-3 gap-6 text-center">
             <div>
-              <p className="text-3xl font-bold text-slate_blue-600 mb-1">$2.4M+</p>
+              <p className="text-3xl font-bold text-slate_blue-600 mb-1">£2M+</p>
               <p className="text-sm text-slate-600">Waste Identified</p>
             </div>
             <div>
@@ -493,11 +493,11 @@ export default function FreeAudit() {
                 className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-slate_blue-500 focus:outline-none"
               >
                 <option value="">Select range...</option>
-                <option value="5000">Under $5,000/month</option>
-                <option value="15000">$5,000 - $25,000/month</option>
-                <option value="50000">$25,000 - $75,000/month</option>
-                <option value="100000">$75,000 - $150,000/month</option>
-                <option value="250000">$150,000+/month</option>
+                <option value="400000">Under £4,000/month</option>
+                <option value="1500000">£4,000 - £20,000/month</option>
+                <option value="5000000">£20,000 - £60,000/month</option>
+                <option value="10000000">£60,000 - £120,000/month</option>
+                <option value="20000000">£120,000+/month</option>
               </select>
             </div>
 

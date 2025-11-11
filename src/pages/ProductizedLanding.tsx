@@ -35,7 +35,7 @@ export default function ProductizedLanding() {
             </h1>
             <p className="text-2xl text-slate-600 mb-8 leading-relaxed">
               Get automated insights, strategic recommendations, and expert support
-              for <strong>60-80% less</strong> than traditional marketing agencies
+              for <strong>50-60% less</strong> than traditional marketing agencies
             </p>
             <div className="flex items-center justify-center space-x-4">
               <Link
@@ -82,7 +82,7 @@ export default function ProductizedLanding() {
               </div>
               <ul className="space-y-4">
                 {[
-                  '$5,000-$15,000/month retainers',
+                  '£4,000-£12,000/month retainers',
                   '2-4 weeks for simple campaign changes',
                   'Inconsistent quality across team members',
                   'Requires constant management and check-ins',
@@ -108,7 +108,7 @@ export default function ProductizedLanding() {
               </div>
               <ul className="space-y-4">
                 {[
-                  '$2,500-$10,000/month transparent pricing',
+                  '£2,000-£8,000/month transparent pricing',
                   'Instant automated insights every week',
                   'Consistent AI-powered analysis quality',
                   'Self-service dashboard + expert support',
@@ -254,26 +254,26 @@ export default function ProductizedLanding() {
                   <th className="py-4 px-6">
                     <div className="text-center">
                       <p className="font-bold text-red-900 mb-1">Traditional Agency</p>
-                      <p className="text-sm text-slate-600">$5-15K/month</p>
+                      <p className="text-sm text-slate-600">£4-12K/month</p>
                     </div>
                   </th>
                   <th className="py-4 px-6 bg-gradient-to-br from-green-50 to-green-100 rounded-t-xl">
                     <div className="text-center">
                       <p className="font-bold text-green-900 mb-1">Our Platform</p>
-                      <p className="text-sm text-green-700">$2.5-10K/month</p>
+                      <p className="text-sm text-green-700">£2-8K/month</p>
                     </div>
                   </th>
                   <th className="py-4 px-6">
                     <div className="text-center">
                       <p className="font-bold text-slate-900 mb-1">DIY Tools</p>
-                      <p className="text-sm text-slate-600">$200-1K/month</p>
+                      <p className="text-sm text-slate-600">£160-800/month</p>
                     </div>
                   </th>
                 </tr>
               </thead>
               <tbody className="text-sm">
                 {[
-                  { feature: 'Monthly Cost', agency: '$5,000 - $15,000', us: '$2,500 - $10,000', diy: '$200 - $1,000' },
+                  { feature: 'Monthly Cost', agency: '£4,000 - £12,000', us: '£2,000 - £8,000', diy: '£160 - £800' },
                   { feature: 'Setup Time', agency: '4-6 weeks', us: '24 hours', diy: '2-4 weeks' },
                   { feature: 'Report Delivery', agency: '2-4 weeks', us: 'Automated weekly', diy: 'You build it' },
                   { feature: 'Strategic Guidance', agency: 'Yes', us: 'Yes', diy: 'No' },
@@ -312,7 +312,7 @@ export default function ProductizedLanding() {
 
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
-              <div className="text-5xl font-bold text-green-400 mb-2">$2.4M+</div>
+              <div className="text-5xl font-bold text-green-400 mb-2">£2M+</div>
               <p className="text-slate-300">Wasted ad spend identified and recovered</p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
