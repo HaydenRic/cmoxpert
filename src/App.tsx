@@ -49,6 +49,7 @@ const Terms = lazy(() => import('./pages/Terms').then(module => ({ default: modu
 const Support = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Support })));
 const Security = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Security })));
 const DebugAuth = lazy(() => import('./pages/DebugAuth').then(module => ({ default: module.DebugAuth })));
+const BetaLanding = lazy(() => import('./pages/BetaLanding').then(module => ({ default: module.default })));
 
 // Initialize error handling
 initializeErrorHandling();
@@ -129,6 +130,16 @@ function AppContent() {
           path="/early-access"
           element={
             user ? <Navigate to="/dashboard" replace /> : <EarlyAccessLanding />
+          }
+        />
+
+        {/* Beta landing page */}
+        <Route
+          path="/beta"
+          element={
+            <Suspense fallback={<PageLoadingFallback />}>
+              <BetaLanding />
+            </Suspense>
           }
         />
 

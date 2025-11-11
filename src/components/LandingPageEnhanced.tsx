@@ -70,9 +70,9 @@ export function LandingPageEnhanced() {
   const handleGetStarted = () => {
     trackEvent('cta_click', {
       cta_location: 'hero',
-      cta_text: 'Request Demo'
+      cta_text: 'Join Beta'
     });
-    navigate('/auth');
+    navigate('/beta');
   };
 
   const handleLiveDemo = () => {
@@ -234,7 +234,7 @@ export function LandingPageEnhanced() {
                 onClick={handleGetStarted}
                 className="btn-primary"
               >
-                <span>Request Demo</span>
+                <span>Join Beta</span>
                 <ArrowRight className="w-4 h-4 ml-2" />
               </button>
             </nav>
