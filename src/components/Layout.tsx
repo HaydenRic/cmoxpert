@@ -27,7 +27,7 @@ import {
   FileCheck,
   Sliders
 } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 
 interface LayoutProps {
@@ -37,6 +37,7 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
   const { user, profile, isAdmin, signOut } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
@@ -63,6 +64,7 @@ export function Layout({ children }: LayoutProps) {
 
   const handleSignOut = async () => {
     await signOut();
+    navigate('/');
   };
 
   return (
