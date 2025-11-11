@@ -1,355 +1,269 @@
-# cmoxpert
+# cmoxpert - B2B SaaS Marketing Intelligence Platform
 
-**Client Portfolio Intelligence Platform for FinTech Marketing Consultants**
+**Manage all your SaaS clients in one dashboard. Track MRR, CAC, LTV, and churn without juggling 10+ logins.**
 
-> **⚠️ BETA STATUS:** cmoxpert is currently in early access beta. Core features are production-ready, while some advanced features are under active development. See [Current Capabilities](#current-capabilities) for detailed feature status.
+cmoxpert is a marketing intelligence platform built specifically for **agencies and consultants managing multiple B2B SaaS clients**. Stop wasting 10+ hours per week copying metrics from Stripe dashboards and spreadsheets. Get the full picture in seconds.
 
-## What is cmoxpert?
+---
 
-cmoxpert is a client portfolio management platform built specifically for marketing consultants, fractional CMOs, and agencies serving FinTech companies. Manage multiple clients in one centralized dashboard, track marketing performance across portfolios, and generate professional client reports.
+## 🎯 Built for B2B SaaS Agencies & Consultants
 
-## The Problem We Solve
+### The Problem We Solve
 
-Marketing consultants managing multiple FinTech clients face unique challenges:
+Managing multiple SaaS clients is painful:
+- **10+ different logins** - Separate Stripe accounts, Google Analytics, CRMs for each client
+- **Manual reporting hell** - Spending hours every week copying metrics into spreadsheets
+- **No attribution visibility** - Can't prove which marketing channels drive MRR growth
+- **Context switching** - Constantly jumping between tabs and tools
 
-- **Data scattered across platforms** - Spreadsheets, Google Analytics, ad platforms, CRMs
-- **Time-consuming reporting** - 10-15 hours per week just gathering data
-- **No unified view** - Hard to spot patterns across client portfolios
-- **Compliance complexity** - FinTech regulations (FCA, SEC, FINRA) require careful review
-- **Client retention** - Proving ROI and value is critical for renewals
+### The Solution
 
-cmoxpert centralizes client data, automates reporting, and provides compliance checking specific to FinTech marketing.
+**One platform. All your SaaS clients. Real-time metrics.**
 
-## Current Capabilities
+See MRR, ARR, churn rate, LTV, and CAC for every client without switching tabs. Generate beautiful client reports in seconds, not hours.
 
-### ✅ Production Ready (Fully Functional)
+---
 
-**Client Portfolio Management**
-- Multi-client dashboard for consultants and agencies
-- Advanced client search with full-text capabilities
-- Client contracts, health scores, and meeting tracking
-- Role-based access control
-- Real-time data sync across all views
+## ✨ Core Features
 
-**Revenue Attribution System**
-- 6 attribution models: First Touch, Last Touch, Linear, Time Decay, U-Shaped, W-Shaped
-- Advanced ML attribution: Shapley Value and Markov Chain models
-- Deal pipeline tracking with stage velocity analysis
-- Multi-touch attribution across all marketing channels
-- Automated ROI calculations per channel
+### 🎯 SaaS Metrics Dashboard
+Track the metrics that actually matter for B2B SaaS:
+- **MRR & ARR** - Monthly and annual recurring revenue across all clients
+- **Churn Rate** - Customer and revenue churn with cohort analysis
+- **LTV & CAC** - Lifetime value and acquisition cost by channel
+- **Activation Rate** - Trial-to-paid conversion tracking
+- **Retention Curves** - Cohort retention visualization
+- **Industry Benchmarks** - Compare clients against SaaS averages
 
-**Fraud Impact Analysis**
-- Channel-level fraud rate calculations
-- Clean CAC vs. Dirty CAC analysis
-- Fraud waste quantification by marketing source
-- Automated recommendations for budget reallocation
-- *Requires integration with your fraud detection data*
+**Integrations:**
+- Stripe (automatic MRR/churn tracking)
+- Google Analytics (traffic & conversions)
+- HubSpot/Salesforce (CRM pipeline data)
 
-**Compliance Checker**
-- Regex-based rule checking for FCA, SEC, FINRA regulations
-- 20+ predefined compliance rules
-- Severity categorization (Critical, High, Medium, Low)
-- Real-time campaign content scanning
-- Rule-based analysis (not AI)
+### 📊 Marketing Attribution
+Prove which channels drive revenue:
+- **Multi-touch attribution** - First-touch, last-touch, linear, time-decay models
+- **Trial-to-paid tracking** - See which channels convert trials to paying customers
+- **Channel CAC** - Calculate acquisition cost by source automatically
+- **Revenue attribution** - Connect marketing spend to MRR growth
+- **Funnel analysis** - Identify drop-off points in conversion paths
 
-**Report Generation**
-- Client-ready marketing reports
-- Market analysis documentation
-- Performance dashboards
-- Export functionality
+### 📈 MRR Forecasting
+AI-powered revenue predictions:
+- **3/6/12-month forecasts** - Predict future MRR based on historical data
+- **Scenario planning** - "What if churn improves by 2%?" modeling
+- **Confidence intervals** - Understand forecast accuracy
+- **Growth tracking** - Compare actual vs. projected MRR
+- **Expansion revenue** - Track upsells and plan growth
 
-**User Management**
-- Secure authentication with Supabase Auth
-- Profile management
-- Multi-user support
-- Session management
+### 📄 Client Reporting
+Beautiful reports in seconds:
+- **One-click generation** - AI-powered summaries and insights
+- **White-label branding** - Add your agency logo and colors
+- **Automated delivery** - Schedule monthly/weekly reports
+- **Shareable links** - Give clients read-only dashboard access
+- **Export options** - PDF, PowerPoint, or live dashboard
 
-### 🔄 Beta (Functional with Limitations)
+### 👥 Multi-Client Management
+Built for managing 3-25 SaaS clients:
+- **Client portfolio view** - See all clients at a glance
+- **Quick switching** - Jump between client dashboards instantly
+- **Bulk operations** - Update multiple clients at once
+- **Team collaboration** - Assign clients to team members
+- **Client notes** - Track context and insights per client
 
-**AI-Assisted Playbook Generation**
-- Generates marketing playbooks for clients
-- **Without OpenAI API key:** Uses sophisticated template-based generation
-- **With OpenAI API key:** Full AI-powered personalized playbooks
-- Template quality is production-ready for MVP use
-- See [AI Setup Guide](./AI_SETUP_GUIDE.md) for configuration
+---
 
-**Market Analysis Generation**
-- Client market opportunity analysis
-- Competitive landscape overview
-- Strategic recommendations
-- **Without OpenAI API key:** Template-based analysis
-- **With OpenAI API key:** AI-powered custom analysis
+## 💰 Pricing
 
-**Data Integrations**
-- OAuth flows for Google Ads, Meta Ads, Google Analytics
-- Token management and refresh
-- Basic data sync capabilities
-- *Full sync depth under active development*
+Simple pricing based on how many SaaS clients you manage:
 
-**Competitive Intelligence**
-- Competitor tracking database
-- Alert system architecture
-- Manual data entry and display
-- *Automated scraping coming in Q2 2025*
+### Starter - $199/month
+Perfect for solo consultants
+- Up to 3 SaaS clients
+- All core features
+- Stripe integration
+- Email support
 
-### 🚧 In Development (Not Yet Functional)
+### Professional - $399/month ⭐ Most Popular
+For growing agencies
+- Up to 10 SaaS clients
+- Everything in Starter
+- White-label reports
+- Priority support
+- Team collaboration
 
-**Real-Time Fraud Detection**
-- Live API integration with fraud providers
-- Automated fraud event capture
-- *Estimated completion: Q2 2025*
+### Agency - $699/month
+For established agencies
+- Up to 25 SaaS clients
+- Everything in Professional
+- Custom integrations
+- Dedicated account manager
+- API access
 
-**Automated Budget Optimization**
-- ML-based spend reallocation recommendations
-- Predictive performance modeling
-- *Estimated completion: Q3 2025*
+**14-day free trial. No credit card required.**
 
-**Advanced Workflow Automation**
-- Multi-step workflow builder
-- Conditional logic and branching
-- *Estimated completion: Q2 2025*
+---
 
-## Technology Stack
+## 🚀 Quick Start
 
-- **Frontend:** React 18 + TypeScript + Vite
-- **Backend:** Supabase (PostgreSQL + Edge Functions)
-- **Authentication:** Supabase Auth with JWT
-- **Styling:** TailwindCSS
-- **Charts:** Recharts
-- **Animations:** Framer Motion
-- **AI (Optional):** OpenAI GPT-4 for analysis and playbook generation
+### 1. Sign Up
+Visit [cmoxpert.com](https://cmoxpert.com) and start your free trial.
 
-## Getting Started
+### 2. Connect Stripe
+Link your clients' Stripe accounts for automatic MRR/churn tracking.
 
-### Prerequisites
+### 3. Add Clients
+Import your SaaS client portfolio and start tracking metrics.
 
-- Node.js 18+ and npm
-- Supabase account (free tier available)
-- Optional: OpenAI API key for AI features
+### 4. Generate Reports
+Create beautiful, branded reports for your clients in one click.
 
-### Installation
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+- **React 18** with TypeScript
+- **Tailwind CSS** for styling
+- **Recharts** for data visualization
+- **React Router** for navigation
+- **Vite** for fast development
+
+### Backend
+- **Supabase** (PostgreSQL + Auth + Realtime)
+- **Row Level Security** for data isolation
+- **Edge Functions** for serverless compute
+
+### Integrations
+- **Stripe** - Automatic subscription & revenue tracking
+- **Google Analytics** - Traffic and conversion data
+- **HubSpot/Salesforce** - CRM pipeline integration
+- **OpenAI** (optional) - AI-powered insights
+
+---
+
+## 📚 Documentation
+
+- [Setup Guide](./docs/QUICK_START_DEPLOYMENT.md) - Get up and running in 10 minutes
+- [Database Schema](./docs/DATABASE_SCHEMA.md) - Understanding the data model
+- [Integration Guide](./docs/INTEGRATION_ARCHITECTURE.md) - Connect your tools
+- [API Documentation](./docs/api/README.md) - Build custom integrations
+
+---
+
+## 🎯 Who Is This For?
+
+### Perfect for:
+- **SaaS marketing agencies** managing 5-20 clients
+- **Fractional CMOs** serving multiple SaaS companies
+- **Growth consultants** focused on B2B SaaS
+- **Agency teams** needing centralized client dashboards
+
+### Not ideal for:
+- Individual SaaS companies (use Baremetrics or ChartMogul instead)
+- Agencies serving non-SaaS clients (too specialized)
+- Enterprise marketing teams (different needs)
+
+---
+
+## 🔒 Security & Compliance
+
+- **SOC 2 compliant** infrastructure (Supabase)
+- **Row-level security** - Clients never see each other's data
+- **Encrypted at rest** - All data encrypted in PostgreSQL
+- **GDPR compliant** - Full data export and deletion
+- **2FA available** - Two-factor authentication for accounts
+
+---
+
+## 🤝 Support
+
+- **Email support** - support@cmoxpert.com (24-hour response)
+- **Priority support** - Professional/Agency plans (4-hour response)
+- **Documentation** - Comprehensive guides and tutorials
+- **Community** - Slack channel for customers
+
+---
+
+## 🗺️ Roadmap
+
+### Coming in Q1 2025
+- ✅ Stripe integration (automatic MRR tracking)
+- ✅ Multi-client dashboard
+- ✅ White-label reports
+- 🚧 HubSpot CRM integration
+- 🚧 LinkedIn Ads integration
+
+### Planned for Q2 2025
+- Google Ads integration
+- Cohort retention analysis
+- Advanced forecasting models
+- Mobile app (iOS/Android)
+- API access
+
+### Future
+- Salesforce integration
+- Custom dashboard builder
+- Benchmark database (compare against 1000+ SaaS companies)
+- Automated alerts (churn spike, MRR drop, etc.)
+
+---
+
+## 📊 Current Status: Beta
+
+cmoxpert is in active beta with **real customers managing real SaaS portfolios**.
+
+**What works great:**
+- Multi-client dashboard
+- Revenue attribution and tracking
+- Report generation
+- Client management
+- Basic Stripe integration
+
+**What's coming soon:**
+- Full Stripe automation (currently requires some manual data entry)
+- HubSpot/Salesforce deep integrations
+- Advanced AI insights
+
+---
+
+## 🏗️ Local Development
 
 ```bash
 # Clone the repository
 git clone https://github.com/yourusername/cmoxpert.git
-cd cmoxpert
 
 # Install dependencies
 npm install
 
 # Set up environment variables
 cp .env.example .env
-# Add your Supabase credentials to .env
-
-# Apply database migrations
-# Run each migration file in supabase/migrations/ through Supabase Dashboard SQL Editor
+# Add your Supabase credentials
 
 # Start development server
-npm run dev
-```
-
-### Environment Variables
-
-Required variables in `.env`:
-
-```
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-Optional for AI features:
-- Configure `OPENAI_API_KEY` in Supabase Edge Function environment (not in .env)
-- See [AI Setup Guide](./AI_SETUP_GUIDE.md) for details
-
-## Project Structure
-
-```
-src/
-├── components/        # Reusable UI components
-├── pages/            # Route pages (Dashboard, Analytics, etc.)
-├── lib/              # Utilities, Supabase client, error handling
-├── hooks/            # Custom React hooks
-├── contexts/         # React context providers
-└── styles/           # Global styles and Tailwind config
-
-supabase/
-├── migrations/       # Database schema migrations (50+ tables)
-└── functions/        # Edge functions for AI analysis
-```
-
-## Key Features for Consultants
-
-### Multi-Client Portfolio Management
-- Centralized dashboard for all clients
-- Quick client switching
-- Portfolio-level analytics
-- Health score tracking
-- Contract and meeting management
-
-### Client Reporting
-- Professional, client-ready reports
-- Market analysis with competitive intelligence
-- AI-assisted strategic playbooks
-- Performance dashboards
-- Export and sharing capabilities
-
-### FinTech-Specific Features
-- Fraud impact analysis
-- Compliance checking (FCA, SEC, FINRA)
-- Activation funnel analysis
-- Revenue attribution (not just lead attribution)
-- CAC optimization across the full funnel
-
-### Time Savings
-- Automated data collection (when integrations are configured)
-- Template-based or AI-powered report generation
-- Centralized client data vs. scattered spreadsheets
-- Estimated time savings: 10-15 hours per week per consultant
-
-## Development
-
-```bash
-# Run development server
 npm run dev
 
 # Build for production
 npm run build
-
-# Preview production build
-npm run preview
-
-# Run linter
-npm run lint
 ```
-
-## Deployment
-
-The platform is optimized for deployment on:
-
-- **Netlify** (recommended) - Built-in CI/CD, edge functions support
-- **Vercel** - Optimized for React applications
-- **Any static host** - Just deploy the `dist/` folder
-
-See [Deployment Guide](./DEPLOYMENT.md) for detailed instructions.
-
-## Architecture
-
-### Frontend
-- React 18 with TypeScript for type safety
-- Component-based architecture with clear separation of concerns
-- Lazy loading for optimal bundle sizes
-- Error boundaries for graceful error handling
-
-### Backend
-- Supabase PostgreSQL with 50+ tables
-- Row Level Security (RLS) for data protection
-- Real-time subscriptions for live updates
-- Edge functions for AI-powered analysis
-
-### Security
-- JWT-based authentication
-- Database-level security with RLS policies
-- Environment variable protection
-- Supabase SOC 2 compliance
-
-## Target Market
-
-### Primary Audience: Marketing Consultants & Agencies
-
-**Ideal Users:**
-- Fractional CMOs managing 3-10 FinTech clients
-- Marketing consultants specializing in FinTech
-- Growth agencies with FinTech portfolios
-- Independent marketing consultants
-- Small teams managing multiple clients
-
-**Client Industries:**
-- Neobanks and digital banks
-- Payment processors and platforms
-- Lending platforms (consumer & business)
-- Wealth management and investment apps
-- Crypto and blockchain financial services
-- B2B financial software companies
-
-### Secondary Audience: In-House Teams
-
-**Suitable For:**
-- Small FinTech marketing teams (1-5 people)
-- Companies needing compliance checking
-- Teams wanting better attribution
-- Organizations seeking centralized reporting
-
-**Less Suitable For:**
-- Enterprise teams with custom BI tools
-- Companies needing real-time fraud detection (not yet available)
-- Organizations requiring automated budget optimization (in development)
-
-## Beta Pricing
-
-> **Note:** Pricing subject to change. Early adopters receive locked-in rates for 12 months.
-
-- **Beta Access**: Free for first 50 users
-- **Starter**: $199/month (up to 3 clients)
-- **Professional**: $399/month (up to 10 clients)
-- **Agency**: $699/month (up to 25 clients)
-
-Pricing increases to standard rates after beta period.
-
-## Documentation
-
-- [Current Capabilities](./CURRENT_CAPABILITIES.md) - Feature status matrix
-- [AI Setup Guide](./AI_SETUP_GUIDE.md) - Configure AI features
-- [Backend Setup Guide](./BACKEND_SETUP_GUIDE.md) - Database and edge functions
-- [Deployment Guide](./DEPLOYMENT.md) - Production deployment
-- [Security Checklist](./SECURITY_CHECKLIST.md) - Security best practices
-
-## Roadmap
-
-### Q1 2025 (Current)
-- ✅ Core portfolio management
-- ✅ Revenue attribution system
-- ✅ AI-assisted report generation
-- ✅ Compliance checking
-- 🔄 Beta launch and user feedback
-
-### Q2 2025
-- Real-time fraud detection API integration
-- Advanced workflow automation
-- Automated competitive intelligence scraping
-- Mobile app (iOS/Android)
-- Enhanced data integrations
-
-### Q3 2025
-- ML-based budget optimization
-- Predictive analytics
-- White-label options for agencies
-- Advanced forecasting models
-- API access for custom integrations
-
-## Contributing
-
-This is a commercial project currently in private beta. For bug reports or feature requests, please contact:
-- Email: support@cmoxpert.com
-- GitHub Issues: (for beta testers only)
-
-## License
-
-Proprietary - All rights reserved
-
-## Support
-
-**For Beta Users:**
-- Email: support@cmoxpert.com
-- Response time: 24-48 hours
-- Dedicated Slack channel for beta testers
-
-**Documentation:**
-- Setup guides in repository
-- Video tutorials (coming soon)
-- Knowledge base (under construction)
 
 ---
 
-**cmoxpert** - Client Portfolio Intelligence for FinTech Marketing Consultants
+## 📝 License
 
-*Built by marketers, for marketers. Currently in beta.*
+Proprietary software. Not open source.
+
+---
+
+## 🙏 Built For You
+
+cmoxpert was built by a fractional CMO who got tired of managing client metrics in spreadsheets.
+
+If you manage multiple B2B SaaS clients, this tool will save you 10+ hours per week and help you prove your value to clients.
+
+**Questions?** Email hello@cmoxpert.com
+
+---
+
+**© 2025 cmoxpert. Built for B2B SaaS agencies and consultants.**

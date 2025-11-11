@@ -9,7 +9,7 @@ import { OfflineIndicator } from './components/ui/OfflineIndicator';
 import { initializeErrorHandling } from './lib/errorHandling';
 import { Layout } from './components/Layout';
 import { AuthForm } from './components/AuthForm';
-import { LandingPageEnhanced as LandingPage } from './components/LandingPageEnhanced';
+import SaaSLanding from './pages/SaaSLanding';
 import { Contact } from './pages/Contact';
 
 // Lazy load all non-critical route components
@@ -119,7 +119,7 @@ function AppContent() {
         {/* Public landing page - always accessible */}
         <Route
           path="/"
-          element={<LandingPage />}
+          element={<SaaSLanding />}
         />
 
         {/* Redirect early-access to beta */}
