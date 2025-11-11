@@ -40,6 +40,8 @@ const SpendOptimizer = lazy(() => import('./pages/SpendOptimizer').then(module =
 const PitchDemo = lazy(() => import('./pages/PitchDemo').then(module => ({ default: module.default })));
 const Pricing = lazy(() => import('./pages/Pricing').then(module => ({ default: module.default })));
 const PitchAnalytics = lazy(() => import('./pages/PitchAnalytics').then(module => ({ default: module.default })));
+const ServicePackages = lazy(() => import('./pages/ServicePackages').then(module => ({ default: module.ServicePackages })));
+const Deliverables = lazy(() => import('./pages/Deliverables').then(module => ({ default: module.Deliverables })));
 
 // Lazy load placeholder pages
 const Settings = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Settings })));
@@ -156,6 +158,15 @@ function AppContent() {
           element={
             <Suspense fallback={<PageLoadingFallback />}>
               <Pricing />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/packages"
+          element={
+            <Suspense fallback={<PageLoadingFallback />}>
+              <ServicePackages />
             </Suspense>
           }
         />
@@ -497,6 +508,21 @@ function AppContent() {
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
                   <RevenueAttribution />
+                </Suspense>
+              </Layout>
+            ) : (
+              <Navigate to="/auth" replace />
+            )
+          }
+        />
+
+        <Route
+          path="/deliverables"
+          element={
+            user ? (
+              <Layout>
+                <Suspense fallback={<PageLoadingFallback />}>
+                  <Deliverables />
                 </Suspense>
               </Layout>
             ) : (
