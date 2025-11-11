@@ -42,6 +42,8 @@ const Pricing = lazy(() => import('./pages/Pricing').then(module => ({ default: 
 const PitchAnalytics = lazy(() => import('./pages/PitchAnalytics').then(module => ({ default: module.default })));
 const ServicePackages = lazy(() => import('./pages/ServicePackages').then(module => ({ default: module.ServicePackages })));
 const Deliverables = lazy(() => import('./pages/Deliverables').then(module => ({ default: module.Deliverables })));
+const FreeAudit = lazy(() => import('./pages/FreeAudit').then(module => ({ default: module.default })));
+const ProductizedLanding = lazy(() => import('./pages/ProductizedLanding').then(module => ({ default: module.default })));
 
 // Lazy load placeholder pages
 const Settings = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Settings })));
@@ -121,6 +123,16 @@ function AppContent() {
         {/* Public landing page - always accessible */}
         <Route
           path="/"
+          element={
+            <Suspense fallback={<PageLoadingFallback />}>
+              <ProductizedLanding />
+            </Suspense>
+          }
+        />
+
+        {/* Alternative landing pages */}
+        <Route
+          path="/saas"
           element={<SaaSLanding />}
         />
 
@@ -167,6 +179,15 @@ function AppContent() {
           element={
             <Suspense fallback={<PageLoadingFallback />}>
               <ServicePackages />
+            </Suspense>
+          }
+        />
+
+        <Route
+          path="/audit"
+          element={
+            <Suspense fallback={<PageLoadingFallback />}>
+              <FreeAudit />
             </Suspense>
           }
         />
