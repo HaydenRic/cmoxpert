@@ -167,6 +167,18 @@ function AppContent() {
             user ? <Navigate to="/dashboard" replace /> : <AuthForm />
           }
         />
+
+        {/* Login route - redirects to auth */}
+        <Route
+          path="/login"
+          element={<Navigate to="/auth" replace />}
+        />
+
+        {/* Demo route - redirects to pitch demo */}
+        <Route
+          path="/demo"
+          element={<Navigate to="/pitch" replace />}
+        />
         
         {/* Protected app routes with lazy loading */}
         <Route 
