@@ -116,12 +116,10 @@ function AppContent() {
       <NetworkStatus />
       <OfflineIndicator onRetry={() => window.location.reload()} />
       <Routes>
-        {/* Public landing page */}
+        {/* Public landing page - always accessible */}
         <Route
           path="/"
-          element={
-            user ? <Navigate to="/dashboard" replace /> : <LandingPage />
-          }
+          element={<LandingPage />}
         />
 
         {/* Redirect early-access to beta */}

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { trackVideoPlay, trackEvent } from './Analytics';
 import { BrandLogo } from './BrandLogo';
+import { useAuth } from '../contexts/AuthContext';
 import {
   Compass, TrendingUp, Zap, Target, Eye, Search, ArrowRight, Play, CheckCircle, Star,
   Clock, BarChart3, Users, Globe, LogIn, UserCheck, Shield, Lightbulb, Timer, Rocket,
@@ -23,6 +24,7 @@ export function LandingPageEnhanced() {
   const [email, setEmail] = useState('');
   const [featuredVideo, setFeaturedVideo] = useState<Video | null>(null);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   useEffect(() => {
     loadFeaturedVideo();
@@ -216,27 +218,48 @@ export function LandingPageEnhanced() {
             <BrandLogo theme="light" size="md" variant="text-only" />
 
             <nav className="flex items-center space-x-6" role="navigation" aria-label="Header navigation">
-              <Link
-                to="/beta"
-                className="text-gray-700 hover:text-gray-900 font-medium flex items-center space-x-2 transition-colors"
-              >
-                <Rocket className="w-4 h-4" />
-                <span>Join Beta</span>
-              </Link>
-              <Link
-                to="/auth"
-                className="text-gray-700 hover:text-gray-900 font-medium flex items-center space-x-2 transition-colors"
-              >
-                <LogIn className="w-4 h-4" />
-                <span>Sign In</span>
-              </Link>
-              <button
-                onClick={handleGetStarted}
-                className="btn-primary"
-              >
-                <span>Join Beta</span>
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </button>
+              {user ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="text-gray-700 hover:text-gray-900 font-medium flex items-center space-x-2 transition-colors"
+                  >
+                    <BarChart3 className="w-4 h-4" />
+                    <span>Dashboard</span>
+                  </Link>
+                  <Link
+                    to="/beta"
+                    className="text-gray-700 hover:text-gray-900 font-medium flex items-center space-x-2 transition-colors"
+                  >
+                    <Rocket className="w-4 h-4" />
+                    <span>Join Beta</span>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link
+                    to="/beta"
+                    className="text-gray-700 hover:text-gray-900 font-medium flex items-center space-x-2 transition-colors"
+                  >
+                    <Rocket className="w-4 h-4" />
+                    <span>Join Beta</span>
+                  </Link>
+                  <Link
+                    to="/auth"
+                    className="text-gray-700 hover:text-gray-900 font-medium flex items-center space-x-2 transition-colors"
+                  >
+                    <LogIn className="w-4 h-4" />
+                    <span>Sign In</span>
+                  </Link>
+                  <button
+                    onClick={handleGetStarted}
+                    className="btn-primary"
+                  >
+                    <span>Join Beta</span>
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </button>
+                </>
+              )}
             </nav>
           </div>
         </div>
