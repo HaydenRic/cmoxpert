@@ -9,7 +9,7 @@ import {
   Sparkles,
   Zap,
   Award,
-  DollarSign,
+  PoundSterling,
   BarChart3,
   LineChart,
   Activity
@@ -226,7 +226,7 @@ export default function SaaSLanding() {
         <div className="grid md:grid-cols-2 gap-8">
           <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-2xl p-8 border border-blue-400/20">
             <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
-              <DollarSign className="w-6 h-6 text-blue-400" />
+              <PoundSterling className="w-6 h-6 text-blue-400" />
             </div>
             <h3 className="text-2xl font-bold text-white mb-3">SaaS Metrics Dashboard</h3>
             <p className="text-cream-100 mb-4">
@@ -337,7 +337,7 @@ export default function SaaSLanding() {
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
             <h3 className="text-2xl font-bold text-white mb-2">Starter</h3>
             <div className="mb-6">
-              <span className="text-5xl font-bold text-white">$199</span>
+              <span className="text-5xl font-bold text-white">£199</span>
               <span className="text-cream-100">/month</span>
             </div>
             <p className="text-cream-100 mb-6">Perfect for solo consultants</p>
@@ -375,7 +375,7 @@ export default function SaaSLanding() {
             </div>
             <h3 className="text-2xl font-bold text-white mb-2">Professional</h3>
             <div className="mb-6">
-              <span className="text-5xl font-bold text-white">$399</span>
+              <span className="text-5xl font-bold text-white">£399</span>
               <span className="text-cream-100">/month</span>
             </div>
             <p className="text-cream-100 mb-6">For growing agencies</p>
@@ -412,7 +412,7 @@ export default function SaaSLanding() {
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-white/10">
             <h3 className="text-2xl font-bold text-white mb-2">Agency</h3>
             <div className="mb-6">
-              <span className="text-5xl font-bold text-white">$699</span>
+              <span className="text-5xl font-bold text-white">£699</span>
               <span className="text-cream-100">/month</span>
             </div>
             <p className="text-cream-100 mb-6">For established agencies</p>
