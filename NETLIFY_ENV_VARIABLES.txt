@@ -1,0 +1,42 @@
+================================================
+NETLIFY ENVIRONMENT VARIABLES
+Copy these exact values into Netlify Dashboard
+================================================
+
+Add these in: Netlify Dashboard > Site settings > Environment variables
+
+Variable 1:
+-----------
+Key:   VITE_SUPABASE_URL
+Value: https://kgtiverynmxizyguklfr.supabase.co
+
+
+Variable 2:
+-----------
+Key:   VITE_SUPABASE_ANON_KEY
+Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtndGl2ZXJ5bm14aXp5Z3VrbGZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA0NDE3ODQsImV4cCI6MjA3NjAxNzc4NH0.Vku24xKdTCYwhvrGGwrQjz9fLseM-tIKcS8nuZkA2Q4
+
+
+IMPORTANT NOTES:
+================
+1. DO NOT include quotes around the values
+2. Variable names are case-sensitive (must be exactly as shown)
+3. After adding both variables, click "Trigger deploy" to redeploy
+4. The site will work after the new deploy completes (2-3 minutes)
+
+STEP-BY-STEP INSTRUCTIONS:
+===========================
+1. Log in to https://app.netlify.com
+2. Click on your site (cmoxpert)
+3. Click "Site settings" in the top menu
+4. Click "Environment variables" in the left sidebar
+5. Click "Add a variable" button
+6. Paste the Key and Value from above
+7. Click "Create variable"
+8. Repeat for the second variable
+9. Go to "Deploys" tab
+10. Click "Trigger deploy" > "Deploy site"
+11. Wait for deploy to complete
+12. Visit your site - it should now work!
+
+================================================

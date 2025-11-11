@@ -1,0 +1,149 @@
+================================================
+NETLIFY DASHBOARD NAVIGATION GUIDE
+Step-by-step with what you'll see
+================================================
+
+STEP 1: Login and Find Your Site
+================================
+URL: https://app.netlify.com
+
+What you'll see:
+- Your list of sites/projects
+- Find the one with your project name or the auto-generated name
+- Click on it
+
+
+STEP 2: Navigate to Site Settings
+==================================
+At the top of your site dashboard, you'll see tabs:
+[ Site overview ] [ Deploys ] [ Site settings ] [ Domain settings ] ...
+
+Click: [ Site settings ]
+
+
+STEP 3: Find Environment Variables
+===================================
+On the left sidebar, you'll see:
+- General
+- Build & deploy
+- Domain management
+- Environment variables  ← CLICK THIS
+- Identity
+- Forms
+- Analytics
+...
+
+
+STEP 4: Add Variables Page
+===========================
+You should now see a section titled "Environment variables"
+
+If you have no variables yet:
+   "No environment variables yet"
+   [Add a variable] button
+
+If you have variables:
+   List of existing variables
+   [Add a variable] button at top right
+
+Click: [Add a variable]
+
+
+STEP 5: Add Variable Form
+==========================
+A form will appear with fields:
+
+┌─────────────────────────────────────┐
+│ Key                                  │
+│ [________________________]           │
+│                                      │
+│ Value                                │
+│ [________________________]           │
+│                                      │
+│ Scopes                               │
+│ ☑ All scopes                        │
+│ ☐ Specific scopes...                │
+│                                      │
+│ [Cancel] [Create variable]           │
+└─────────────────────────────────────┘
+
+FILL IN:
+Key:   VITE_SUPABASE_URL
+Value: https://kgtiverynmxizyguklfr.supabase.co
+Leave "All scopes" checked
+
+Click: [Create variable]
+
+
+STEP 6: Add Second Variable
+============================
+Repeat Step 5 with:
+
+Key:   VITE_SUPABASE_ANON_KEY
+Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtndGl2ZXJ5bm14aXp5Z3VrbGZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA0NDE3ODQsImV4cCI6MjA3NjAxNzc4NH0.Vku24xKdTCYwhvrGGwrQjz9fLseM-tIKcS8nuZkA2Q4
+
+Click: [Create variable]
+
+
+STEP 7: Verify Variables Are Added
+===================================
+You should now see:
+
+Environment variables (2)
+┌─────────────────────────────────────────────────┐
+│ VITE_SUPABASE_URL                               │
+│ https://kgtiverynmxizyguklfr.supabase.co       │
+│ All scopes                                      │
+│ [Edit] [Delete]                                 │
+├─────────────────────────────────────────────────┤
+│ VITE_SUPABASE_ANON_KEY                          │
+│ eyJhbGci... (value is partially hidden)         │
+│ All scopes                                      │
+│ [Edit] [Delete]                                 │
+└─────────────────────────────────────────────────┘
+
+
+STEP 8: Trigger New Deploy
+===========================
+Click the "Deploys" tab at the top
+
+You'll see:
+[ Site overview ] [ Deploys ] [ Site settings ] ...
+                      ^
+                   CLICK HERE
+
+Then click the "Trigger deploy" button (top right)
+Select: "Deploy site"
+
+You'll see:
+- "Deploy in progress..."
+- Build log scrolling
+- After 2-3 minutes: "Published" with green checkmark
+
+
+STEP 9: Visit Your Site
+========================
+Once deploy shows "Published":
+- Click on your site URL at the top
+- Or click "Open production deploy"
+
+Your site should now load correctly!
+
+================================================
+
+TROUBLESHOOTING:
+================
+
+Q: I don't see "Environment variables" in the left sidebar
+A: Make sure you're in "Site settings" tab, not "Site overview"
+
+Q: The values have quotes around them
+A: Remove the quotes - paste the values directly without quotes
+
+Q: Deploy succeeded but site still blank
+A: Clear browser cache or try incognito mode
+
+Q: Still not working
+A: Open browser console (F12) and share the error message
+
+================================================

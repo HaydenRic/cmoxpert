@@ -1,0 +1,103 @@
+╔════════════════════════════════════════════════════════════════╗
+║              NETLIFY DEPLOYMENT CHECKLIST                      ║
+║          Fix Blank Page in 5 Minutes                          ║
+╔════════════════════════════════════════════════════════════════╗
+
+CURRENT STATUS:
+===============
+✅ Code built successfully
+✅ All files ready in dist/ folder
+✅ Netlify configuration (netlify.toml) ✓
+✅ Error handling improved
+✅ Documentation created
+
+⚠️  MISSING: Environment variables in Netlify dashboard
+
+
+YOUR TODO (Complete these steps):
+==================================
+
+□ Step 1: Login to Netlify
+   Go to: https://app.netlify.com
+   Login with your account
+
+□ Step 2: Select Your Site
+   Find your site in the list (cmoxpert or auto-generated name)
+   Click on it
+
+□ Step 3: Go to Environment Variables
+   Click: Site settings (top menu)
+   Click: Environment variables (left sidebar)
+
+□ Step 4: Add VITE_SUPABASE_URL
+   Click: "Add a variable"
+   Key: VITE_SUPABASE_URL
+   Value: https://kgtiverynmxizyguklfr.supabase.co
+   Click: "Create variable"
+
+□ Step 5: Add VITE_SUPABASE_ANON_KEY
+   Click: "Add a variable"
+   Key: VITE_SUPABASE_ANON_KEY
+   Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtndGl2ZXJ5bm14aXp5Z3VrbGZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA0NDE3ODQsImV4cCI6MjA3NjAxNzc4NH0.Vku24xKdTCYwhvrGGwrQjz9fLseM-tIKcS8nuZkA2Q4
+   Click: "Create variable"
+
+□ Step 6: Verify Both Variables
+   You should see 2 environment variables listed:
+   - VITE_SUPABASE_URL
+   - VITE_SUPABASE_ANON_KEY
+
+□ Step 7: Trigger Redeploy
+   Click: "Deploys" tab (top menu)
+   Click: "Trigger deploy" button
+   Select: "Deploy site"
+
+□ Step 8: Wait for Deploy
+   Watch the build log
+   Wait for "Published" status (2-3 minutes)
+
+□ Step 9: Test Your Site
+   Click on your site URL
+   Landing page should load (no blank page!)
+
+□ Step 10: Verify Everything Works
+   Test navigation
+   Try clicking "Sign In"
+   Check browser console for errors (F12)
+
+
+QUICK COPY-PASTE VALUES:
+=========================
+
+Variable 1:
+Key:   VITE_SUPABASE_URL
+Value: https://kgtiverynmxizyguklfr.supabase.co
+
+Variable 2:
+Key:   VITE_SUPABASE_ANON_KEY
+Value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtndGl2ZXJ5bm14aXp5Z3VrbGZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA0NDE3ODQsImV4cCI6MjA3NjAxNzc4NH0.Vku24xKdTCYwhvrGGwrQjz9fLseM-tIKcS8nuZkA2Q4
+
+
+TROUBLESHOOTING:
+=================
+
+Problem: Still see blank page after deploy
+Solution: Clear browser cache (Ctrl+Shift+R) or try incognito
+
+Problem: Can't find Environment variables section
+Solution: Make sure you're in "Site settings" not "Site overview"
+
+Problem: Deploy fails
+Solution: Check deploy logs for errors, contact Netlify support
+
+Problem: Error message shows but different issue
+Solution: Open browser console (F12) and note the error
+
+
+HELP DOCS:
+==========
+- QUICK_FIX_BLANK_PAGE.md - Simple 5-minute guide
+- NETLIFY_SCREENSHOT_GUIDE.txt - Detailed visual walkthrough
+- NETLIFY_ENV_VARIABLES.txt - Just the values to copy
+- BLANK_PAGE_FIX_SUMMARY.md - Complete overview
+
+╚════════════════════════════════════════════════════════════════╝
