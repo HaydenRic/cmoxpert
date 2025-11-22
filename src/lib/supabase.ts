@@ -42,24 +42,8 @@ function validateSupabaseConfig() {
     }
   }
 
-  // Log errors and warnings
   if (errors.length > 0) {
-    console.error('='.repeat(80));
-    console.error('CRITICAL: Supabase Configuration Errors');
-    console.error('='.repeat(80));
-    errors.forEach((error, i) => {
-      console.error(`${i + 1}. ${error}`);
-    });
-    console.error('');
-    console.error('To fix this:');
-    console.error('1. Check your .env file in the project root');
-    console.error('2. For local development: Ensure .env has valid VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY');
-    console.error('3. For production (Netlify): Set environment variables in Netlify dashboard:');
-    console.error('   - Go to Site settings > Environment variables');
-    console.error('   - Add VITE_SUPABASE_URL with your Supabase project URL');
-    console.error('   - Add VITE_SUPABASE_ANON_KEY with your anon/public key');
-    console.error('   - Trigger a new deploy after adding variables');
-    console.error('='.repeat(80));
+    console.error('Supabase Configuration Error:', errors.join(', '));
 
     // Show user-friendly error in the UI instead of crashing
     const errorDiv = document.createElement('div');
@@ -94,19 +78,9 @@ function validateSupabaseConfig() {
     throw new Error('Supabase configuration is invalid. Check console for details.');
   }
 
-  if (warnings.length > 0) {
-    console.warn('='.repeat(80));
-    console.warn('Supabase Configuration Warnings');
-    console.warn('='.repeat(80));
-    warnings.forEach((warning, i) => {
-      console.warn(`${i + 1}. ${warning}`);
-    });
-    console.warn('='.repeat(80));
+  if (warnings.length > 0 && import.meta.env.DEV) {
+    console.warn('Supabase Config Warnings:', warnings.join(', '));
   }
-
-  console.log('[SUPABASE] Configuration validated successfully');
-  console.log('[SUPABASE] URL:', supabaseUrl?.substring(0, 30) + '...');
-  console.log('[SUPABASE] Anon Key:', supabaseAnonKey?.substring(0, 20) + '...');
 }
 
 // Run validation
@@ -164,7 +138,6 @@ export async function checkSupabaseConnection(): Promise<{
     const latency = Date.now() - startTime;
 
     if (error) {
-      console.error('[SUPABASE] Health check failed:', error);
       return {
         success: false,
         error: error.message,
@@ -172,14 +145,12 @@ export async function checkSupabaseConnection(): Promise<{
       };
     }
 
-    console.log(`[SUPABASE] Health check passed (${latency}ms)`);
     return {
       success: true,
       latency
     };
   } catch (error: any) {
     const latency = Date.now() - startTime;
-    console.error('[SUPABASE] Health check exception:', error);
 
     let errorMessage = 'Unable to connect to Supabase';
 

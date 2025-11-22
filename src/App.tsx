@@ -11,6 +11,10 @@ import { Layout } from './components/Layout';
 import { AuthForm } from './components/AuthForm';
 import SaaSLanding from './pages/SaaSLanding';
 import { Contact } from './pages/Contact';
+import ProductizedLanding from './pages/ProductizedLanding';
+import FreeAudit from './pages/FreeAudit';
+import Pricing from './pages/Pricing';
+import BetaLanding from './pages/BetaLanding';
 
 // Lazy load all non-critical route components
 const Dashboard = lazy(() => import('./pages/Dashboard').then(module => ({ default: module.Dashboard })));
@@ -38,12 +42,9 @@ const SpendOptimizer = lazy(() => import('./pages/SpendOptimizer').then(module =
 
 // Lazy load pitch system pages
 const PitchDemo = lazy(() => import('./pages/PitchDemo').then(module => ({ default: module.default })));
-const Pricing = lazy(() => import('./pages/Pricing').then(module => ({ default: module.default })));
 const PitchAnalytics = lazy(() => import('./pages/PitchAnalytics').then(module => ({ default: module.default })));
 const ServicePackages = lazy(() => import('./pages/ServicePackages').then(module => ({ default: module.ServicePackages })));
 const Deliverables = lazy(() => import('./pages/Deliverables').then(module => ({ default: module.Deliverables })));
-const FreeAudit = lazy(() => import('./pages/FreeAudit').then(module => ({ default: module.default })));
-const ProductizedLanding = lazy(() => import('./pages/ProductizedLanding').then(module => ({ default: module.default })));
 
 // Lazy load placeholder pages
 const Settings = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Settings })));
@@ -52,7 +53,6 @@ const Terms = lazy(() => import('./pages/Terms').then(module => ({ default: modu
 const Support = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Support })));
 const Security = lazy(() => import('./components/StaticPages').then(module => ({ default: module.Security })));
 const DebugAuth = lazy(() => import('./pages/DebugAuth').then(module => ({ default: module.DebugAuth })));
-const BetaLanding = lazy(() => import('./pages/BetaLanding').then(module => ({ default: module.default })));
 
 // Initialize error handling
 initializeErrorHandling();

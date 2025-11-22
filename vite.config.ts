@@ -18,15 +18,21 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ['react', 'react-dom'],
+          vendor: ['react', 'react-dom', 'react-router-dom'],
           supabase: ['@supabase/supabase-js'],
           ui: ['lucide-react', 'framer-motion'],
-          charts: ['recharts'],
-          spline: ['@splinetool/react-spline', '@splinetool/runtime']
+          charts: ['recharts', 'date-fns']
         }
       }
     },
-    chunkSizeWarningLimit: 1000
+    chunkSizeWarningLimit: 1000,
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
   },
   server: {
     hmr: {

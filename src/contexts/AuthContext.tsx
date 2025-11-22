@@ -42,11 +42,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const skipLoading = () => setLoading(false);
   const clearLoginSuccess = () => setLoginSuccess(false);
 
-  const loadProfile = async (userId: string, userEmail: string, retryCount = 0, maxRetries = 3) => {
+  const loadProfile = async (userId: string, userEmail: string, retryCount = 0, maxRetries = 2) => {
     try {
-      console.log('[AUTH] Loading profile for user:', userId, 'Email:', userEmail, 'Retry:', retryCount);
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      const timeoutId = setTimeout(() => controller.abort(), 3000);
 
       try {
         const { data, error } = await supabase
@@ -59,17 +58,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         clearTimeout(timeoutId);
 
         if (error) {
-          console.error('[AUTH] Profile query error:', error);
-
-          // Retry with exponential backoff
           if (retryCount < maxRetries) {
-            const delay = Math.min(1000 * Math.pow(2, retryCount), 5000);
-            console.log(`[AUTH] Retrying profile load in ${delay}ms...`);
-            setTimeout(() => loadProfile(userId, userEmail, retryCount + 1, maxRetries), delay);
+            setTimeout(() => loadProfile(userId, userEmail, retryCount + 1, maxRetries), 1000);
             return;
           }
-
-          setError('Unable to load your profile. Please refresh the page or contact support.');
+          setError('Unable to load profile');
           return;
         }
 
@@ -179,42 +172,33 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         console.log('[AUTH] Initializing authentication...');
 
-        // Increased timeout for slower connections
+        // Fast timeout for better UX
         initTimeout = setTimeout(() => {
           if (mounted) {
-            console.warn('[AUTH] Timeout reached, proceeding without authentication');
             setLoading(false);
-            setError('Connection timeout. You can continue without authentication or refresh the page.');
+            setError('Connection timeout');
           }
-        }, 15000);
+        }, 5000);
 
-        console.log('[AUTH] Fetching session from Supabase...');
         const { data: { session }, error } = await supabase.auth.getSession();
 
         clearTimeout(initTimeout);
 
-        if (!mounted) {
-          console.log('[AUTH] Component unmounted, aborting');
-          return;
-        }
+        if (!mounted) return;
 
         if (error) {
-          console.error('[AUTH] Session fetch error:', error);
-          setError('Authentication error. You can continue without authentication.');
+          setError('Authentication error');
           setLoading(false);
           return;
         }
 
-        console.log('[AUTH] Session retrieved:', session ? 'User logged in' : 'No active session');
         setSession(session);
         setUser(session?.user ?? null);
 
         if (session?.user) {
-          console.log('[AUTH] Loading user profile...');
           await loadProfile(session.user.id, session.user.email || '');
         }
 
-        console.log('[AUTH] Authentication initialization complete');
         setLoading(false);
       } catch (error: any) {
         console.error('[AUTH] Initialization error:', error);
