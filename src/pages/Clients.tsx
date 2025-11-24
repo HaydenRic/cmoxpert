@@ -87,7 +87,9 @@ export function Clients() {
         query = query.eq('status', statusFilter);
       }
 
-      const { data, error } = await query.order('created_at', { ascending: false });
+      const { data, error } = await query
+        .order('created_at', { ascending: false })
+        .limit(100);
 
       if (error) throw error;
 

@@ -14,6 +14,7 @@ export function PerformanceMonitor() {
     if (!import.meta.env.PROD) return;
 
     const metrics: PerformanceMetrics = {};
+    const observers: PerformanceObserver[] = [];
 
     // Measure Core Web Vitals
     const measureWebVitals = () => {
@@ -38,6 +39,7 @@ export function PerformanceMonitor() {
             metrics.lcp = lastEntry.startTime;
           });
           lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
+          observers.push(lcpObserver);
 
           // First Input Delay
           const fidObserver = new PerformanceObserver((list) => {
@@ -47,6 +49,7 @@ export function PerformanceMonitor() {
             });
           });
           fidObserver.observe({ entryTypes: ['first-input'] });
+          observers.push(fidObserver);
 
           // Cumulative Layout Shift
           const clsObserver = new PerformanceObserver((list) => {
@@ -60,13 +63,14 @@ export function PerformanceMonitor() {
             metrics.cls = clsValue;
           });
           clsObserver.observe({ entryTypes: ['layout-shift'] });
+          observers.push(clsObserver);
 
           // Send metrics after page load
           setTimeout(() => {
             sendMetrics(metrics);
           }, 5000);
         } catch (error) {
-          console.warn('Performance monitoring not supported:', error);
+          // Silently fail in production
         }
       }
     };
@@ -104,6 +108,10 @@ export function PerformanceMonitor() {
 
     return () => {
       document.removeEventListener('DOMContentLoaded', measureWebVitals);
+      // Disconnect all performance observers
+      observers.forEach(observer => {
+        observer.disconnect();
+      });
     };
   }, []);
 

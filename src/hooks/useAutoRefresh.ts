@@ -46,12 +46,29 @@ export function useAutoRefresh(
       return;
     }
 
-    intervalRef.current = window.setInterval(refresh, interval);
+    // Only refresh when page is visible
+    const handleVisibilityChange = () => {
+      if (document.hidden && intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      } else if (!document.hidden && !intervalRef.current) {
+        intervalRef.current = window.setInterval(refresh, interval);
+      }
+    };
+
+    // Start interval if page is visible
+    if (!document.hidden) {
+      intervalRef.current = window.setInterval(refresh, interval);
+    }
+
+    // Listen for visibility changes
+    document.addEventListener('visibilitychange', handleVisibilityChange);
 
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [enabled, interval]);
 

@@ -161,12 +161,16 @@ export function Dashboard() {
           supabase
             .from('fintech_transactions')
             .select('id, is_fraudulent, amount')
-            .eq('client_id', clientId),
+            .eq('client_id', clientId)
+            .order('created_at', { ascending: false })
+            .limit(1000),
 
           supabase
             .from('fintech_user_events')
             .select('user_id, event_type')
             .eq('client_id', clientId)
+            .order('created_at', { ascending: false })
+            .limit(1000)
         ]);
 
         const { data: fraudData, error: fraudError } = fraudResult;

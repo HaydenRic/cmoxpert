@@ -116,10 +116,11 @@ function AppContent() {
   console.log('[APP] Loading complete, rendering routes');
 
   return (
-    <Suspense fallback={<PageLoadingFallback />}>
-      <NetworkStatus />
-      <OfflineIndicator onRetry={() => window.location.reload()} />
-      <Routes>
+    <ErrorBoundary>
+      <Suspense fallback={<PageLoadingFallback />}>
+        <NetworkStatus />
+        <OfflineIndicator onRetry={() => window.location.reload()} />
+        <Routes>
         {/* Public landing page - always accessible */}
         <Route
           path="/"
@@ -628,7 +629,8 @@ function AppContent() {
         {/* Fallback routes */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </Suspense>
+      </Suspense>
+    </ErrorBoundary>
   );
 }
 

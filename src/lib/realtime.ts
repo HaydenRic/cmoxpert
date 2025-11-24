@@ -143,6 +143,7 @@ export class RealtimeManager {
   }
 }
 
+// DEPRECATED: Use hooks below with proper cleanup
 export function useRealtimeMetrics(userId: string, callback: RealtimeCallback) {
   const manager = new RealtimeManager(userId);
   return manager.subscribeToMetrics(callback);
@@ -151,4 +152,58 @@ export function useRealtimeMetrics(userId: string, callback: RealtimeCallback) {
 export function useRealtimeAlerts(userId: string, callback: RealtimeCallback) {
   const manager = new RealtimeManager(userId);
   return manager.subscribeToCompetitorAlerts(callback);
+}
+
+// Proper React hooks with cleanup
+import { useEffect, useRef } from 'react';
+
+export function useRealtimeMetricsWithCleanup(userId: string, callback: RealtimeCallback) {
+  const managerRef = useRef<RealtimeManager | null>(null);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    managerRef.current = new RealtimeManager(userId);
+    const unsubscribe = managerRef.current.subscribeToMetrics(callback);
+
+    return () => {
+      unsubscribe();
+      managerRef.current?.unsubscribeAll();
+      managerRef.current = null;
+    };
+  }, [userId, callback]);
+}
+
+export function useRealtimeAlertsWithCleanup(userId: string, callback: RealtimeCallback) {
+  const managerRef = useRef<RealtimeManager | null>(null);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    managerRef.current = new RealtimeManager(userId);
+    const unsubscribe = managerRef.current.subscribeToCompetitorAlerts(callback);
+
+    return () => {
+      unsubscribe();
+      managerRef.current?.unsubscribeAll();
+      managerRef.current = null;
+    };
+  }, [userId, callback]);
+}
+
+export function useRealtimeCampaignsWithCleanup(userId: string, callback: RealtimeCallback) {
+  const managerRef = useRef<RealtimeManager | null>(null);
+
+  useEffect(() => {
+    if (!userId) return;
+
+    managerRef.current = new RealtimeManager(userId);
+    const unsubscribe = managerRef.current.subscribeToCampaignUpdates(callback);
+
+    return () => {
+      unsubscribe();
+      managerRef.current?.unsubscribeAll();
+      managerRef.current = null;
+    };
+  }, [userId, callback]);
 }
