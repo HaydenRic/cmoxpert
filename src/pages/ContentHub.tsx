@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { supabase, AIServicesManager } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { trackFeatureUsage, monitorApiCall } from '../lib/monitoring';
+import { ContentTemplateModal } from '../components/ContentTemplateModal';
+import { ContentPreview } from '../components/ContentPreview';
+import { ContentTemplate } from '../lib/contentTemplates';
 import { 
   FileText, 
   MessageSquare, 
@@ -75,6 +78,8 @@ export function ContentHub() {
     length: 'medium',
     keywords: ''
   });
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [previewContent, setPreviewContent] = useState<{ title: string; content: string } | null>(null);
 
   const contentTypes = [
     { value: 'blog_post', label: 'Blog Post', icon: FileText, description: 'SEO-optimized blog articles' },
@@ -137,10 +142,27 @@ export function ContentHub() {
     }
   };
 
+  const handleTemplateSelect = (template: ContentTemplate) => {
+    setGenerateForm(prev => ({
+      ...prev,
+      content_type: template.category === 'blog' ? 'blog_post' :
+                    template.category === 'social' ? 'social_media_post' :
+                    template.category === 'email' ? 'email_copy' :
+                    template.category === 'ad' ? 'ad_copy' :
+                    template.category === 'landing' ? 'landing_page' : 'press_release',
+      title: template.titleSuggestions[0].replace(/{[^}]+}/g, '___'),
+      prompt: template.promptTemplate.replace(/{topic}/g, ''),
+      tone: template.tone,
+      length: template.length,
+      keywords: template.keywords.join(', ')
+    }));
+    setShowGenerateForm(true);
+  };
+
   const generateContent = async (e: React.FormEvent) => {
     e.preventDefault();
     setGenerating(true);
-    
+
     // Track feature usage
     trackFeatureUsage('ai_content', 'generation_started', {
       content_type: generateForm.content_type,
@@ -189,39 +211,17 @@ Please create compelling, professional content that drives engagement and conver
         generatedContent = await simulateContentGeneration(generateForm, fullPrompt);
       }
 
-      // Save to database
-      const { error } = await supabase
-        .from('generated_content')
-        .insert([{
-          user_id: user!.id,
-          client_id: generateForm.client_id || null,
-          content_type: generateForm.content_type,
-          title: generateForm.title,
-          content: generatedContent,
-          ai_prompt: fullPrompt,
-          status: 'draft'
-        }]);
+      // Show preview instead of saving immediately
+      setPreviewContent({
+        title: generateForm.title,
+        content: generatedContent
+      });
 
-      if (error) throw error;
-      
-      // Track successful completion
+      // Track successful generation
       trackFeatureUsage('ai_content', 'generation_completed', {
         content_type: generateForm.content_type,
         client_id: generateForm.client_id
       });
-
-      // Reset form and reload data
-      setGenerateForm({
-        content_type: 'blog_post',
-        client_id: '',
-        title: '',
-        prompt: '',
-        tone: 'professional',
-        length: 'medium',
-        keywords: ''
-      });
-      setShowGenerateForm(false);
-      loadData();
     } catch (error) {
       console.error('Error generating content:', error);
       alert('Failed to generate content. Please try again.');
@@ -451,6 +451,44 @@ For more information, visit [website] or contact:
     }
   };
 
+  const savePreviewedContent = async () => {
+    if (!previewContent) return;
+
+    try {
+      const { error } = await supabase
+        .from('generated_content')
+        .insert([{
+          user_id: user!.id,
+          client_id: generateForm.client_id || null,
+          content_type: generateForm.content_type,
+          title: previewContent.title,
+          content: previewContent.content,
+          ai_prompt: generateForm.prompt,
+          status: 'draft'
+        }]);
+
+      if (error) throw error;
+
+      // Reset form and reload data
+      setGenerateForm({
+        content_type: 'blog_post',
+        client_id: '',
+        title: '',
+        prompt: '',
+        tone: 'professional',
+        length: 'medium',
+        keywords: ''
+      });
+      setShowGenerateForm(false);
+      setPreviewContent(null);
+      setGenerating(false);
+      loadData();
+    } catch (error) {
+      console.error('Error saving content:', error);
+      alert('Failed to save content. Please try again.');
+    }
+  };
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
     // You could add a toast notification here
@@ -498,6 +536,27 @@ For more information, visit [website] or contact:
 
   return (
     <div className="p-8">
+      {/* Modals */}
+      <ContentTemplateModal
+        isOpen={showTemplateModal}
+        onClose={() => setShowTemplateModal(false)}
+        onSelectTemplate={handleTemplateSelect}
+      />
+
+      {previewContent && (
+        <ContentPreview
+          isOpen={true}
+          onClose={() => {
+            setPreviewContent(null);
+            setGenerating(false);
+          }}
+          title={previewContent.title}
+          content={previewContent.content}
+          contentType={generateForm.content_type}
+          onSave={savePreviewedContent}
+        />
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -505,23 +564,33 @@ For more information, visit [website] or contact:
           <p className="text-slate-600">Generate, manage, and optimize your marketing content</p>
         </div>
 
-        <button
-          onClick={() => setShowGenerateForm(true)}
-          disabled={generating}
-          className="bg-gradient-to-r from-slate_blue-600 to-charcoal-700 hover:from-slate_blue-700 hover:to-charcoal-800 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
-        >
-          {generating ? (
-            <>
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              <span>Generating...</span>
-            </>
-          ) : (
-            <>
-              <Sparkles className="w-5 h-5" />
-              <span>Create Content</span>
-            </>
-          )}
-        </button>
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setShowTemplateModal(true)}
+            className="bg-white hover:bg-slate-50 border-2 border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-medium flex items-center space-x-2 transition-all"
+          >
+            <BookOpen className="w-5 h-5" />
+            <span>Browse Templates</span>
+          </button>
+
+          <button
+            onClick={() => setShowGenerateForm(true)}
+            disabled={generating}
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
+          >
+            {generating ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span>Generating...</span>
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-5 h-5" />
+                <span>Create Content</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* AI Status Notice */}
