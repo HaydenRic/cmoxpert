@@ -128,7 +128,7 @@ export function AuthForm() {
         setSuccessEmail(demoEmail);
         setShowSuccessModal(true);
         setTimeout(() => {
-          navigate('/fraud-analysis');
+          navigate('/dashboard');
         }, 2500);
       } else {
         setError('Demo account created but sign in failed. Please try signing in manually.');

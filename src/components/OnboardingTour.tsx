@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, ChevronRight, ChevronLeft, Sparkles, Users, Target, TrendingUp, Shield, Clock } from 'lucide-react';
+import { X, ChevronRight, ChevronLeft, Sparkles, Users, BarChart3, FileText, Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface TourStep {
@@ -15,52 +15,43 @@ interface TourStep {
 const TOUR_STEPS: TourStep[] = [
   {
     title: 'Welcome to cmoxpert!',
-    description: "We're thrilled to have you here. Let's take a quick tour to show you how to get the most out of your client portfolio dashboard.",
+    description: "Let's take a quick tour to show you how our platform helps you deliver exceptional fractional CMO services to your clients.",
     icon: <Sparkles className="w-12 h-12 text-earth_yellow-400" />
   },
   {
-    title: 'Manage All Your Clients',
-    description: 'Add your FinTech clients in one place. Track performance, health scores, contracts, and meeting notes. No more juggling spreadsheets.',
+    title: 'Manage Your Clients',
+    description: 'Add and manage all your B2B SaaS clients in one place. Track performance, store notes, and maintain all client information centrally.',
     icon: <Users className="w-12 h-12 text-blue-400" />,
     action: {
-      label: 'Add Your First Client',
+      label: 'View Clients',
       path: '/clients'
     }
   },
   {
-    title: 'Revenue Attribution',
-    description: 'See which marketing channels actually drive revenue with 6+ attribution models including ML-based Shapley and Markov Chain.',
-    icon: <TrendingUp className="w-12 h-12 text-green-400" />,
+    title: 'Performance Dashboard',
+    description: 'Monitor all your client KPIs, marketing campaigns, and growth metrics in real-time. Make data-driven decisions faster.',
+    icon: <BarChart3 className="w-12 h-12 text-green-400" />,
     action: {
-      label: 'Explore Attribution',
-      path: '/revenue-attribution'
+      label: 'View Performance',
+      path: '/performance'
     }
   },
   {
-    title: 'Fraud Impact Analysis',
-    description: 'Identify which channels are wasting budget on fraud. Calculate clean vs. dirty CAC to optimize spend.',
-    icon: <Target className="w-12 h-12 text-red-400" />,
+    title: 'Generate Reports',
+    description: 'Create comprehensive marketing reports for your clients. Share insights, recommendations, and performance data professionally.',
+    icon: <FileText className="w-12 h-12 text-purple-400" />,
     action: {
-      label: 'View Fraud Analysis',
-      path: '/fraud-analysis'
+      label: 'View Reports',
+      path: '/reports'
     }
   },
   {
-    title: 'Compliance Checking',
-    description: 'Scan campaigns for FCA, SEC, and FINRA compliance issues before they become problems. Get fix suggestions instantly.',
-    icon: <Shield className="w-12 h-12 text-purple-400" />,
+    title: 'Research & Intelligence',
+    description: 'Track competitor activity and market trends. Stay ahead with real-time competitive intelligence for your clients.',
+    icon: <Eye className="w-12 h-12 text-orange-400" />,
     action: {
-      label: 'Check Compliance',
-      path: '/compliance-checker'
-    }
-  },
-  {
-    title: 'Save 10-15 Hours Per Week',
-    description: "You're all set! Add your first client to get started. Our beta community is here to help if you need anything.",
-    icon: <Clock className="w-12 h-12 text-earth_yellow-400" />,
-    action: {
-      label: 'Start Adding Clients',
-      path: '/clients'
+      label: 'Explore Research',
+      path: '/competitive-intelligence'
     }
   }
 ];

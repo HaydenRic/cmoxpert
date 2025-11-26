@@ -93,8 +93,8 @@ export default function Pricing() {
             Simple, Transparent Pricing
           </h1>
           <p className="text-xl text-slate_blue-600 mb-8 max-w-3xl mx-auto">
-            Choose the plan that fits your marketing spend. All plans include fraud detection,
-            channel analytics, and compliance tools.
+            Choose the plan that fits your needs. All plans include strategic guidance,
+            performance tracking, and content creation support.
           </p>
 
           <div className="inline-flex items-center bg-cream-50 rounded-2xl p-2 shadow-lg border border-tan-300">

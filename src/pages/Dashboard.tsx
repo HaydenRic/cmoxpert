@@ -10,8 +10,6 @@ import {
   Activity,
   ArrowUpRight,
   CheckCircle,
-  Shield,
-  Target,
   AlertCircle
 } from 'lucide-react';
 import { format } from 'date-fns';
@@ -25,18 +23,6 @@ interface DashboardStats {
   completedReports: number;
   pendingReports: number;
   recentActivity: any[];
-  fraudMetrics?: {
-    totalTransactions: number;
-    fraudulentCount: number;
-    fraudRate: number;
-    estimatedLoss: number;
-  };
-  activationMetrics?: {
-    totalRegistrations: number;
-    completedActivations: number;
-    completionRate: number;
-    avgDropOffStage: string;
-  };
 }
 
 export function Dashboard() {
@@ -149,71 +135,13 @@ export function Dashboard() {
       const completedReports = reports?.filter(r => r.status === 'completed').length || 0;
       const pendingReports = reports?.filter(r => r.status === 'pending').length || 0;
 
-      let fraudMetrics = undefined;
-      let activationMetrics = undefined;
-
-      // Load fraud/activation metrics only if we have clients and no critical errors
-      if (clients && clients.length > 0 && !clientError) {
-        const clientId = clients[0].id;
-
-        // Execute fraud and activation queries in parallel
-        const [fraudResult, eventsResult] = await Promise.all([
-          supabase
-            .from('fintech_transactions')
-            .select('id, is_fraudulent, amount')
-            .eq('client_id', clientId)
-            .order('created_at', { ascending: false })
-            .limit(1000),
-
-          supabase
-            .from('fintech_user_events')
-            .select('user_id, event_type')
-            .eq('client_id', clientId)
-            .order('created_at', { ascending: false })
-            .limit(1000)
-        ]);
-
-        const { data: fraudData, error: fraudError } = fraudResult;
-        const { data: eventData, error: eventError } = eventsResult;
-
-        // Process fraud metrics
-        if (!fraudError && fraudData && fraudData.length > 0) {
-          const fraudulentCount = fraudData.filter(t => t.is_fraudulent).length;
-          const estimatedLoss = fraudData
-            .filter(t => t.is_fraudulent)
-            .reduce((sum, t) => sum + (t.amount || 0), 0);
-
-          fraudMetrics = {
-            totalTransactions: fraudData.length,
-            fraudulentCount,
-            fraudRate: (fraudulentCount / fraudData.length) * 100,
-            estimatedLoss
-          };
-        }
-
-        // Process activation metrics
-        if (!eventError && eventData && eventData.length > 0) {
-          const registrations = eventData.filter(e => e.event_type === 'registration').length;
-          const completions = eventData.filter(e => e.event_type === 'first_transaction').length;
-
-          activationMetrics = {
-            totalRegistrations: registrations,
-            completedActivations: completions,
-            completionRate: registrations > 0 ? (completions / registrations) * 100 : 0,
-            avgDropOffStage: 'KYC Verification'
-          };
-        }
-      }
-
       setStats({
         clientsNeedingOnboarding: 0,
         totalClients: clientCount || 0,
         totalReports: reportCount || 0,
         completedReports,
         pendingReports,
-        recentActivity: recentActivity || [],
-        fraudMetrics,
-        activationMetrics
+        recentActivity: recentActivity || []
       });
     } catch (error: any) {
       console.error('Error loading dashboard data:', error);
@@ -416,80 +344,7 @@ export function Dashboard() {
         ))}
       </div>
 
-      {/* FinTech Insights Cards */}
-      {(stats.fraudMetrics || stats.activationMetrics) && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {stats.fraudMetrics && (
-            <Link to="/fraud-analysis" className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl shadow-sm border-2 border-red-200 p-6 hover:shadow-lg transition-all group">
-              <div className="flex items-start justify-between mb-4">
-                <div className="w-14 h-14 bg-red-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Shield className="w-7 h-7 text-white" />
-                </div>
-                <div className="flex items-center text-red-700 text-sm font-semibold bg-red-100 px-3 py-1 rounded-full">
-                  NEW
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Fraud Analysis</h3>
-              <div className="space-y-3 mb-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Total Transactions</span>
-                  <span className="text-lg font-bold text-gray-900">{stats.fraudMetrics.totalTransactions.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Fraudulent</span>
-                  <span className="text-lg font-bold text-red-600">{stats.fraudMetrics.fraudulentCount.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Fraud Rate</span>
-                  <span className="text-lg font-bold text-red-600">{stats.fraudMetrics.fraudRate.toFixed(1)}%</span>
-                </div>
-                <div className="flex justify-between items-center pt-2 border-t border-red-200">
-                  <span className="text-sm font-medium text-gray-700">Estimated Loss</span>
-                  <span className="text-xl font-bold text-red-700">${stats.fraudMetrics.estimatedLoss.toLocaleString()}</span>
-                </div>
-              </div>
-              <div className="flex items-center text-red-600 font-medium group-hover:translate-x-1 transition-transform">
-                View Detailed Analysis <ArrowUpRight className="w-4 h-4 ml-1" />
-              </div>
-            </Link>
-          )}
-
-          {stats.activationMetrics && (
-            <Link to="/activation-funnel" className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl shadow-sm border-2 border-blue-200 p-6 hover:shadow-lg transition-all group">
-              <div className="flex items-start justify-between mb-4">
-                <div className="w-14 h-14 bg-blue-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Target className="w-7 h-7 text-white" />
-                </div>
-                <div className="flex items-center text-blue-700 text-sm font-semibold bg-blue-100 px-3 py-1 rounded-full">
-                  NEW
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Activation Funnel</h3>
-              <div className="space-y-3 mb-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Total Registrations</span>
-                  <span className="text-lg font-bold text-gray-900">{stats.activationMetrics.totalRegistrations.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Completed Activation</span>
-                  <span className="text-lg font-bold text-green-600">{stats.activationMetrics.completedActivations.toLocaleString()}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-600">Completion Rate</span>
-                  <span className="text-lg font-bold text-blue-600">{stats.activationMetrics.completionRate.toFixed(1)}%</span>
-                </div>
-                <div className="flex justify-between items-center pt-2 border-t border-blue-200">
-                  <span className="text-sm font-medium text-gray-700">Biggest Drop-off</span>
-                  <span className="text-sm font-bold text-orange-600">{stats.activationMetrics.avgDropOffStage}</span>
-                </div>
-              </div>
-              <div className="flex items-center text-blue-600 font-medium group-hover:translate-x-1 transition-transform">
-                View Full Funnel <ArrowUpRight className="w-4 h-4 ml-1" />
-              </div>
-            </Link>
-          )}
-        </div>
-      )}
+      {/* Removed: Fraud Analysis and Activation Funnel cards - features deprecated */}
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
