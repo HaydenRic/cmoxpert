@@ -1,107 +1,97 @@
-# cmoxpert - B2B SaaS Marketing Intelligence Platform
+# cmoxpert - Tech-Enabled Fractional CMO Services
 
-**Manage all your SaaS clients in one dashboard. Track MRR, CAC, LTV, and churn without juggling 10+ logins.**
+**Strategic marketing leadership with real-time data insights.**
 
-cmoxpert is a marketing intelligence platform built specifically for **agencies and consultants managing multiple B2B SaaS clients**. Stop wasting 10+ hours per week copying metrics from Stripe dashboards and spreadsheets. Get the full picture in seconds.
+cmoxpert delivers fractional CMO services to B2B SaaS companies, combining strategic expertise with proprietary technology. Get the marketing leadership you need without the full-time CMO price tag.
 
 ---
 
-## 🎯 Built for B2B SaaS Agencies & Consultants
+## 🎯 For B2B SaaS Companies Ready to Scale
 
 ### The Problem We Solve
 
-Managing multiple SaaS clients is painful:
-- **10+ different logins** - Separate Stripe accounts, Google Analytics, CRMs for each client
-- **Manual reporting hell** - Spending hours every week copying metrics into spreadsheets
-- **No attribution visibility** - Can't prove which marketing channels drive MRR growth
-- **Context switching** - Constantly jumping between tabs and tools
+Growing B2B SaaS companies face a common dilemma:
+- **Can't afford a full-time CMO** - $200K+ salary plus equity
+- **Agencies are hit-or-miss** - Expensive retainers with inconsistent results
+- **Marketing complexity** - Multiple channels, attribution challenges, data overload
+- **Need strategic leadership** - Not just execution, but someone who can own the vision
 
 ### The Solution
 
-**One platform. All your SaaS clients. Real-time metrics.**
+**Fractional CMO expertise backed by technology.**
 
-See MRR, ARR, churn rate, LTV, and CAC for every client without switching tabs. Generate beautiful client reports in seconds, not hours.
-
----
-
-## ✨ Core Features
-
-### 🎯 SaaS Metrics Dashboard
-Track the metrics that actually matter for B2B SaaS:
-- **MRR & ARR** - Monthly and annual recurring revenue across all clients
-- **Churn Rate** - Customer and revenue churn with cohort analysis
-- **LTV & CAC** - Lifetime value and acquisition cost by channel
-- **Activation Rate** - Trial-to-paid conversion tracking
-- **Retention Curves** - Cohort retention visualization
-- **Industry Benchmarks** - Compare clients against SaaS averages
-
-**Integrations:**
-- Stripe (automatic MRR/churn tracking)
-- Google Analytics (traffic & conversions)
-- HubSpot/Salesforce (CRM pipeline data)
-
-### 📊 Marketing Attribution
-Prove which channels drive revenue:
-- **Multi-touch attribution** - First-touch, last-touch, linear, time-decay models
-- **Trial-to-paid tracking** - See which channels convert trials to paying customers
-- **Channel CAC** - Calculate acquisition cost by source automatically
-- **Revenue attribution** - Connect marketing spend to MRR growth
-- **Funnel analysis** - Identify drop-off points in conversion paths
-
-### 📈 MRR Forecasting
-AI-powered revenue predictions:
-- **3/6/12-month forecasts** - Predict future MRR based on historical data
-- **Scenario planning** - "What if churn improves by 2%?" modeling
-- **Confidence intervals** - Understand forecast accuracy
-- **Growth tracking** - Compare actual vs. projected MRR
-- **Expansion revenue** - Track upsells and plan growth
-
-### 📄 Client Reporting
-Beautiful reports in seconds:
-- **One-click generation** - AI-powered summaries and insights
-- **White-label branding** - Add your agency logo and colors
-- **Automated delivery** - Schedule monthly/weekly reports
-- **Shareable links** - Give clients read-only dashboard access
-- **Export options** - PDF, PowerPoint, or live dashboard
-
-### 👥 Multi-Client Management
-Built for managing 3-25 SaaS clients:
-- **Client portfolio view** - See all clients at a glance
-- **Quick switching** - Jump between client dashboards instantly
-- **Bulk operations** - Update multiple clients at once
-- **Team collaboration** - Assign clients to team members
-- **Client notes** - Track context and insights per client
+Get strategic marketing leadership, execution support, and real-time performance insights without the full-time CMO price tag. Perfect for Series A/B SaaS companies ready to scale their marketing.
 
 ---
 
-## 💰 Pricing
+## ✨ What You Get
 
-Simple pricing based on how many SaaS clients you manage:
+### 🎯 Strategic Leadership
+Fractional CMO expertise for your business:
+- **Marketing strategy development** - Quarterly planning and goal setting
+- **Channel optimization** - Identify and scale your best-performing channels
+- **Team leadership** - Guide your marketing team or contractors
+- **Budget management** - Smart allocation of marketing spend
+- **Growth roadmap** - 6-12 month strategic planning
 
-### Starter - $199/month
-Perfect for solo consultants
-- Up to 3 SaaS clients
-- All core features
-- Stripe integration
+### 📊 Real-Time Insights
+Technology-powered visibility:
+- **Performance dashboards** - See all your marketing metrics in one place
+- **Multi-channel tracking** - Google Ads, LinkedIn, content, email, and more
+- **Revenue attribution** - Know exactly which channels drive growth
+- **Competitive intelligence** - Track your competitors' moves
+- **Custom reporting** - Automated monthly reports for stakeholders
+
+### 📈 Execution Support
+Strategy plus doing:
+- **Content creation** - Blog posts, LinkedIn content, email campaigns
+- **Campaign management** - Setup and optimization across channels
+- **Marketing automation** - Integrate and optimize your marketing stack
+- **Performance analysis** - Weekly reviews and optimization recommendations
+- **Playbook development** - Document what works for your team
+
+### 🔧 Technology Platform
+Proprietary tools for your business:
+- **Client portal** - Share performance data with stakeholders
+- **Integration hub** - Connect Stripe, Google Analytics, CRMs, and more
+- **Content hub** - Manage all your marketing content in one place
+- **Research tools** - Competitive analysis and market insights
+- **Collaboration tools** - Work seamlessly with your team
+
+---
+
+## 💰 Service Packages
+
+Transparent pricing based on your needs:
+
+### Marketing Intelligence - €599/month
+Self-service platform access
+- Full dashboard access
+- All integrations included
+- Automated monthly reports
 - Email support
+- Perfect for: Companies with in-house marketing teams
 
-### Professional - $399/month ⭐ Most Popular
-For growing agencies
-- Up to 10 SaaS clients
-- Everything in Starter
-- White-label reports
-- Priority support
-- Team collaboration
+### Fractional CMO Lite - €1,999/month ⭐ Most Popular
+Strategy + technology
+- Everything in Marketing Intelligence
+- 10 hours/month strategic consulting
+- Monthly strategy sessions
+- Campaign setup and monitoring
+- Content calendar planning
+- Perfect for: Series A companies, 5-20 employees
 
-### Agency - $699/month
-For established agencies
-- Up to 25 SaaS clients
-- Everything in Professional
-- Custom integrations
-- Dedicated account manager
-- API access
+### Full-Service CMO - €3,999/month
+Complete marketing leadership
+- Everything in Fractional CMO Lite
+- 20 hours/month hands-on execution
+- Weekly strategy calls
+- Content creation (4-8 pieces/month)
+- Campaign management
+- Team coordination
+- Perfect for: Series B+ companies, 20-100 employees
 
-**14-day free trial. No credit card required.**
+**Book a free discovery call to discuss your needs.**
 
 ---
 
@@ -156,15 +146,15 @@ Create beautiful, branded reports for your clients in one click.
 ## 🎯 Who Is This For?
 
 ### Perfect for:
-- **SaaS marketing agencies** managing 5-20 clients
-- **Fractional CMOs** serving multiple SaaS companies
-- **Growth consultants** focused on B2B SaaS
-- **Agency teams** needing centralized client dashboards
+- **Series A/B B2B SaaS companies** (€500K-€5M ARR)
+- **Technical founders** who need marketing leadership
+- **Companies outgrowing agencies** looking for better value
+- **SaaS scale-ups** with 10-50 employees
 
 ### Not ideal for:
-- Individual SaaS companies (use Baremetrics or ChartMogul instead)
-- Agencies serving non-SaaS clients (too specialized)
-- Enterprise marketing teams (different needs)
+- Pre-product companies (too early)
+- Enterprise companies (need full-time CMO)
+- B2C or e-commerce businesses (different expertise)
 
 ---
 
@@ -259,14 +249,14 @@ Proprietary software. Not open source.
 
 ---
 
-## 🙏 Built For You
+## 🙏 Built By Fractional CMOs, For SaaS Companies
 
-cmoxpert was built by a fractional CMO who got tired of managing client metrics in spreadsheets.
+cmoxpert was built by fractional CMOs who understand the challenges of scaling B2B SaaS marketing.
 
-If you manage multiple B2B SaaS clients, this tool will save you 10+ hours per week and help you prove your value to clients.
+We combine strategic expertise with proprietary technology to deliver results you can't get from traditional agencies.
 
-**Questions?** Email hello@cmoxpert.com
+**Ready to grow?** Email hello@cmoxpert.com or book a discovery call at cmoxpert.com/contact
 
 ---
 
-**© 2025 cmoxpert. Built for B2B SaaS agencies and consultants.**
+**© 2025 cmoxpert. Tech-enabled fractional CMO services for B2B SaaS.**

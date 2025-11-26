@@ -32,17 +32,15 @@ const Integrations = lazy(() => import('./pages/Integrations').then(module => ({
 const OAuthCallback = lazy(() => import('./pages/OAuthCallback').then(module => ({ default: module.OAuthCallback })));
 const ClientPortal = lazy(() => import('./pages/ClientPortal').then(module => ({ default: module.ClientPortal })));
 const Workflows = lazy(() => import('./pages/Workflows').then(module => ({ default: module.Workflows })));
-const AlertRules = lazy(() => import('./pages/AlertRules').then(module => ({ default: module.AlertRules })));
+// Removed: AlertRules - over-engineered for small teams
 const Forecasting = lazy(() => import('./pages/Forecasting').then(module => ({ default: module.Forecasting })));
 const RevenueAttribution = lazy(() => import('./pages/RevenueAttribution').then(module => ({ default: module.RevenueAttribution })));
-const FraudAnalysis = lazy(() => import('./pages/FraudAnalysis').then(module => ({ default: module.default })));
-const ActivationFunnel = lazy(() => import('./pages/ActivationFunnel').then(module => ({ default: module.default })));
-const ComplianceChecker = lazy(() => import('./pages/ComplianceChecker').then(module => ({ default: module.default })));
-const SpendOptimizer = lazy(() => import('./pages/SpendOptimizer').then(module => ({ default: module.default })));
+// Removed: FraudAnalysis, ActivationFunnel, ComplianceChecker, SpendOptimizer
+// These features were not core to the fractional CMO service offering
 
 // Lazy load pitch system pages
 const PitchDemo = lazy(() => import('./pages/PitchDemo').then(module => ({ default: module.default })));
-const PitchAnalytics = lazy(() => import('./pages/PitchAnalytics').then(module => ({ default: module.default })));
+// Removed: PitchAnalytics - consolidated into ClientDetail
 const ServicePackages = lazy(() => import('./pages/ServicePackages').then(module => ({ default: module.ServicePackages })));
 const Deliverables = lazy(() => import('./pages/Deliverables').then(module => ({ default: module.Deliverables })));
 
@@ -364,65 +362,7 @@ function AppContent() {
           }
         />
 
-        <Route
-          path="/fraud-analysis"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <FraudAnalysis />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
-
-        <Route
-          path="/activation-funnel"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <ActivationFunnel />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
-
-        <Route
-          path="/compliance-checker"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <ComplianceChecker />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
-
-        <Route
-          path="/spend-optimizer"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <SpendOptimizer />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
+        {/* Removed: fraud-analysis, activation-funnel, compliance-checker, spend-optimizer routes */}
 
         <Route
           path="/admin" 
@@ -493,20 +433,7 @@ function AppContent() {
           }
         />
 
-        <Route
-          path="/alert-rules"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <AlertRules />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
+        {/* Removed: alert-rules route */}
 
         <Route
           path="/forecasting"
@@ -553,20 +480,7 @@ function AppContent() {
           }
         />
 
-        <Route
-          path="/pitch-analytics"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <PitchAnalytics />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
+        {/* Removed: pitch-analytics route - functionality moved to ClientDetail */}
 
         <Route
           path="/settings"

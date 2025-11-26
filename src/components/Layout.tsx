@@ -42,16 +42,13 @@ export function Layout({ children }: LayoutProps) {
 
   const navigation = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'SaaS Clients', href: '/clients', icon: Users },
-    { name: 'SaaS Metrics', href: '/revenue-attribution', icon: Target, badge: 'CORE', badgeColor: 'bg-blue-600' },
-    { name: 'MRR Forecasting', href: '/forecasting', icon: TrendingUp },
+    { name: 'Clients', href: '/clients', icon: Users },
     { name: 'Reports', href: '/reports', icon: FileText },
-    { name: 'Playbooks', href: '/playbooks', icon: BookOpen },
-    { name: 'Performance', href: '/performance', icon: BarChart3 },
-    { name: 'Integrations', href: '/integrations', icon: Plug, badge: 'NEW', badgeColor: 'bg-green-500' },
     { name: 'Content Hub', href: '/content', icon: Sparkles },
-    { name: 'Competitive Intel', href: '/competitive-intelligence', icon: Eye },
-    { name: 'Client Portal', href: '/client-portal', icon: UserPlus },
+    { name: 'Performance', href: '/performance', icon: BarChart3 },
+    { name: 'Research', href: '/competitive-intelligence', icon: Eye },
+    { name: 'Playbooks', href: '/playbooks', icon: BookOpen },
+    { name: 'Integrations', href: '/integrations', icon: Plug },
     ...(isAdmin ? [{ name: 'Admin', href: '/admin', icon: Shield }] : []),
     { name: 'Settings', href: '/settings', icon: Settings },
   ];
@@ -62,7 +59,7 @@ export function Layout({ children }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-cream-100" role="application" aria-label="cmoxpert AI Marketing Co-Pilot">
+    <div className="min-h-screen bg-cream-100" role="application" aria-label="cmoxpert Client Management Platform">
       <OnboardingTour />
 
       {/* Skip to main content link for keyboard users */}

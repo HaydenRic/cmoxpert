@@ -26,16 +26,16 @@ export default function ProductizedLanding() {
           <div className="text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center justify-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-bold mb-6">
               <TrendingUp className="w-4 h-4 mr-2" />
-              Replace Your Marketing Agency
+              Tech-Enabled Fractional CMO Services
             </div>
             <h1 className="text-6xl font-bold text-slate-900 mb-6 leading-tight">
-              Agency-Quality Marketing
+              Strategic Marketing Leadership
               <br />
-              <span className="text-slate_blue-600">Without the Agency Price</span>
+              <span className="text-slate_blue-600">Powered by Technology</span>
             </h1>
             <p className="text-2xl text-slate-600 mb-8 leading-relaxed">
-              Get automated insights, strategic recommendations, and expert support
-              for <strong>50-60% less</strong> than traditional marketing agencies
+              Get fractional CMO expertise with data-driven insights and real-time reporting
+              for <strong>50-60% less</strong> than traditional agencies
             </p>
             <div className="flex items-center justify-center space-x-4">
               <Link
@@ -104,7 +104,7 @@ export default function ProductizedLanding() {
                 <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center mr-4">
                   <CheckCircle className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-green-900">Our Platform</h3>
+                <h3 className="text-2xl font-bold text-green-900">cmoxpert Services</h3>
               </div>
               <ul className="space-y-4">
                 {[
@@ -146,7 +146,7 @@ export default function ProductizedLanding() {
               How It Works
             </h2>
             <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Automated analysis meets expert strategy. The best of both worlds.
+              Fractional CMO expertise meets real-time data insights. The best of both worlds.
             </p>
           </div>
 
