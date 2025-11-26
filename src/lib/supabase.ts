@@ -451,11 +451,50 @@ export class AIServicesManager {
         .select('status, ai_analysis, semrush_data, trends_data')
         .eq('id', reportId)
         .single();
-      
+
       if (error) throw error;
       return data;
     } catch (error) {
       console.error('Get analysis status error:', error);
+      throw error;
+    }
+  }
+
+  static async generateContent(payload: {
+    userId: string;
+    clientId?: string;
+    contentType: string;
+    title: string;
+    prompt: string;
+    tone: string;
+    length: string;
+    keywords?: string;
+  }) {
+    try {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+
+      if (sessionError || !session) {
+        throw new Error('User is not authenticated. Please log in.');
+      }
+
+      const response = await fetch(`${this.EDGE_FUNCTION_URL}/generate-content`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${session.access_token}`,
+          'apikey': supabaseAnonKey,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: response.statusText }));
+        throw new Error(`AI Content generation failed: ${errorData.error || response.statusText}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      console.error('AI Content generation error:', error);
       throw error;
     }
   }

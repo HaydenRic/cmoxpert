@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { initiateOAuthFlow } from '../lib/integrations/oauth';
 import { refreshGoogleAdsData } from '../lib/integrations/googleAds';
 import { refreshMetaAdsData } from '../lib/integrations/metaAds';
+import { IntegrationHealth } from '../components/IntegrationHealth';
 import {
   Plug,
   Plus,
@@ -342,13 +343,18 @@ export function Integrations() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="p-8 space-y-6">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-charcoal-900">Data Integrations</h1>
           <p className="text-charcoal-600 mt-1">Connect your marketing tools to automate data collection</p>
         </div>
       </div>
+
+      {/* Integration Health Dashboard */}
+      {integrations.length > 0 && (
+        <IntegrationHealth />
+      )}
 
       {integrations.length > 0 && (
         <div className="bg-white rounded-lg shadow-sm border border-charcoal-200">

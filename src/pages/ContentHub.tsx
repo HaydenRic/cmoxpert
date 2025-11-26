@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, AIServicesManager } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { trackFeatureUsage, monitorApiCall } from '../lib/monitoring';
 import { 
@@ -167,10 +167,27 @@ Additional requirements: ${generateForm.prompt}
 
 Please create compelling, professional content that drives engagement and conversions.`;
 
-      // Generate content using templates (will use OpenAI if API key is configured in Admin)
-      const generatedContent = await monitorApiCall('generate_content', () =>
-        simulateContentGeneration(generateForm, fullPrompt)
-      );
+      // Try to use real AI generation first, fall back to templates if unavailable
+      let generatedContent: string;
+      try {
+        const result = await monitorApiCall('generate_content', () =>
+          AIServicesManager.generateContent({
+            userId: user!.id,
+            clientId: generateForm.client_id || undefined,
+            contentType: generateForm.content_type,
+            title: generateForm.title,
+            prompt: fullPrompt,
+            tone: generateForm.tone,
+            length: generateForm.length,
+            keywords: generateForm.keywords
+          })
+        );
+        generatedContent = result.content;
+      } catch (error) {
+        console.log('AI generation unavailable, using templates:', error);
+        // Fall back to template generation
+        generatedContent = await simulateContentGeneration(generateForm, fullPrompt);
+      }
 
       // Save to database
       const { error } = await supabase
@@ -507,14 +524,14 @@ For more information, visit [website] or contact:
         </button>
       </div>
 
-      {/* Template Mode Notice */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 flex items-start space-x-3">
-        <Lightbulb className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-        <div>
-          <h3 className="text-sm font-semibold text-blue-900 mb-1">Template-Based Generation</h3>
+      {/* AI Status Notice */}
+      <div className="bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 rounded-xl p-4 mb-6 flex items-start space-x-3">
+        <Brain className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+        <div className="flex-1">
+          <h3 className="text-sm font-semibold text-blue-900 mb-1">Content Generation Mode</h3>
           <p className="text-sm text-blue-700">
-            Content is generated using professional templates. For AI-powered generation with OpenAI, add your API key in{' '}
-            <a href="/admin" className="underline font-medium hover:text-blue-900">Admin Settings</a>.
+            Platform automatically uses AI (OpenAI GPT-4) when API key is configured, otherwise uses professional templates.
+            Configure in <a href="/admin" className="underline font-medium hover:text-blue-900">Admin Settings</a>.
           </p>
         </div>
       </div>

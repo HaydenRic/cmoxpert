@@ -19,6 +19,7 @@ import {
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { ClientSelector } from '../components/ClientSelector';
+import { AIFeatureTour } from '../components/AIFeatureTour';
 
 interface DashboardStats {
   totalClients: number;
@@ -42,12 +43,42 @@ export function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
+  const [showTour, setShowTour] = useState(false);
 
   useEffect(() => {
     if (user) {
       loadDashboardData();
+      checkIfNewUser();
     }
   }, [user, selectedClientId]);
+
+  const checkIfNewUser = async () => {
+    try {
+      const tourCompleted = localStorage.getItem(`tour_completed_${user!.id}`);
+      if (!tourCompleted) {
+        const { count } = await supabase
+          .from('clients')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user!.id);
+
+        if (count === 0) {
+          setTimeout(() => setShowTour(true), 1000);
+        }
+      }
+    } catch (error) {
+      console.error('Error checking tour status:', error);
+    }
+  };
+
+  const handleTourComplete = () => {
+    localStorage.setItem(`tour_completed_${user!.id}`, 'true');
+    setShowTour(false);
+  };
+
+  const handleTourSkip = () => {
+    localStorage.setItem(`tour_completed_${user!.id}`, 'true');
+    setShowTour(false);
+  };
 
   const loadDashboardData = async () => {
     try {
@@ -253,6 +284,11 @@ export function Dashboard() {
 
   return (
     <div className="p-8">
+      {/* AI Feature Tour */}
+      {showTour && (
+        <AIFeatureTour onComplete={handleTourComplete} onSkip={handleTourSkip} />
+      )}
+
       {/* Error Banner */}
       {error && stats.totalClients > 0 && (
         <div className="mb-6 bg-yellow-50 border border-yellow-200 rounded-xl p-4">
