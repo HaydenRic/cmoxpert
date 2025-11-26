@@ -3,12 +3,12 @@ import { useParams, Link } from 'react-router-dom';
 import { supabase, AIServicesManager } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { trackFeatureUsage, monitorApiCall } from '../lib/monitoring';
-import { 
-  ArrowLeft, 
+import { Breadcrumbs } from '../components/Breadcrumbs';
+import {
   Rocket,
-  Globe, 
-  TrendingUp, 
-  FileText, 
+  Globe,
+  TrendingUp,
+  FileText,
   Calendar,
   AlertCircle,
   CheckCircle,
@@ -17,7 +17,9 @@ import {
   Brain,
   Activity,
   BookOpen,
-  Lightbulb
+  Lightbulb,
+  Users,
+  Sparkles
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -255,16 +257,18 @@ export function ClientDetail() {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-4 md:p-8">
+      {/* Breadcrumbs */}
+      <Breadcrumbs
+        items={[
+          { label: 'Clients', href: '/clients', icon: Users },
+          { label: client.name }
+        ]}
+        className="mb-6"
+      />
+
       {/* Header */}
       <div className="mb-8">
-        <Link 
-          to="/clients" 
-          className="inline-flex items-center text-slate-600 hover:text-slate-900 mb-4"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Clients
-        </Link>
         
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
@@ -282,49 +286,61 @@ export function ClientDetail() {
             </div>
           </div>
           
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-wrap items-center gap-3">
             <button
               onClick={generateMarketAnalysis}
               disabled={generating || reports.length === 0}
-              className="bg-gradient-to-r from-slate_blue-600 to-charcoal-700 hover:from-slate_blue-700 hover:to-charcoal-800 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
+              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-all"
+              title={reports.length === 0 ? 'Create a report first to generate analysis' : 'Generate AI market analysis'}
             >
               {generating ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Generating Analysis...</span>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span className="hidden sm:inline">Analyzing...</span>
                 </>
               ) : (
                 <>
-                  <Brain className="w-5 h-5" />
-                  <span>Generate AI Analysis</span>
+                  <Brain className="w-4 h-4" />
+                  <span className="hidden sm:inline">AI Analysis</span>
                 </>
               )}
             </button>
-            
+
             <button
               onClick={generateAIPlaybook}
               disabled={generatingPlaybook}
-              className="bg-gradient-to-r from-tan-600 to-olive-600 hover:from-tan-700 hover:to-olive-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
+              className="bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-all"
+              title="Generate marketing playbook for this client"
             >
               {generatingPlaybook ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                  <span>Generating Playbook...</span>
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <span className="hidden sm:inline">Generating...</span>
                 </>
               ) : (
                 <>
-                  <Lightbulb className="w-5 h-5" />
-                  <span>Generate AI Playbook</span>
+                  <BookOpen className="w-4 h-4" />
+                  <span className="hidden sm:inline">Playbook</span>
                 </>
               )}
             </button>
-            
+
+            <Link
+              to={`/content?client=${client.id}`}
+              className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-all"
+              title="Create content for this client"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span className="hidden sm:inline">Content</span>
+            </Link>
+
             <Link
               to={`/clients/${client.id}/onboarding`}
-              className="bg-cream-100 hover:bg-cream-200 text-slate_blue-700 px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
+              className="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-all"
+              title="Run guided setup wizard"
             >
-              <Rocket className="w-5 h-5" />
-              <span>Guided Setup</span>
+              <Rocket className="w-4 h-4" />
+              <span className="hidden sm:inline">Setup</span>
             </Link>
           </div>
         </div>

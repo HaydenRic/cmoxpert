@@ -1,13 +1,13 @@
 // src/components/Layout.tsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrandLogo } from './BrandLogo';
 import { useAuth } from '../contexts/AuthContext';
 import OnboardingTour from './OnboardingTour';
+import { CommandPalette } from './CommandPalette';
 import {
   LayoutDashboard,
   Rocket,
   BarChart3,
-  PoundSterling,
   Eye,
   FileText,
   Users,
@@ -15,18 +15,15 @@ import {
   BookOpen,
   Settings,
   LogOut,
-  Compass,
   Shield,
   Plug,
-  UserPlus,
   Zap,
-  Bell,
   TrendingUp,
-  Target,
-  AlertTriangle,
-  TrendingDown,
-  FileCheck,
-  Sliders
+  Menu,
+  X,
+  Globe,
+  GitBranch,
+  PoundSterling
 } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
@@ -35,22 +32,110 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
+interface NavItem {
+  name: string;
+  href: string;
+  icon: React.ElementType;
+  badge?: string | number;
+  badgeColor?: string;
+}
+
+interface NavSection {
+  title: string;
+  items: NavItem[];
+}
+
 export function Layout({ children }: LayoutProps) {
   const { user, profile, isAdmin, signOut } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
 
-  const navigation = [
-    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Clients', href: '/clients', icon: Users },
-    { name: 'Reports', href: '/reports', icon: FileText },
-    { name: 'Content Hub', href: '/content', icon: Sparkles },
-    { name: 'Performance', href: '/performance', icon: BarChart3 },
-    { name: 'Research', href: '/competitive-intelligence', icon: Eye },
-    { name: 'Playbooks', href: '/playbooks', icon: BookOpen },
-    { name: 'Integrations', href: '/integrations', icon: Plug },
-    ...(isAdmin ? [{ name: 'Admin', href: '/admin', icon: Shield }] : []),
-    { name: 'Settings', href: '/settings', icon: Settings },
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 1024);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  }, [mobileMenuOpen]);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setCommandPaletteOpen(prev => !prev);
+      }
+      if (e.key === 'Escape') {
+        setCommandPaletteOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const navigationSections: NavSection[] = [
+    {
+      title: 'Overview',
+      items: [
+        { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard }
+      ]
+    },
+    {
+      title: 'Clients',
+      items: [
+        { name: 'Clients', href: '/clients', icon: Users },
+        { name: 'Client Portal', href: '/client-portal', icon: Globe }
+      ]
+    },
+    {
+      title: 'AI Features',
+      items: [
+        { name: 'Content Hub', href: '/content', icon: Sparkles },
+        { name: 'Playbooks', href: '/playbooks', icon: BookOpen },
+        { name: 'Research', href: '/competitive-intelligence', icon: Eye }
+      ]
+    },
+    {
+      title: 'Analytics',
+      items: [
+        { name: 'Reports', href: '/reports', icon: FileText },
+        { name: 'Performance', href: '/performance', icon: BarChart3 },
+        { name: 'Attribution', href: '/revenue-attribution', icon: PoundSterling },
+        { name: 'Forecasting', href: '/forecasting', icon: TrendingUp }
+      ]
+    },
+    {
+      title: 'Tools',
+      items: [
+        { name: 'Integrations', href: '/integrations', icon: Plug },
+        { name: 'Workflows', href: '/workflows', icon: GitBranch },
+        { name: 'Deliverables', href: '/deliverables', icon: Zap }
+      ]
+    },
+    {
+      title: 'Settings',
+      items: [
+        ...(isAdmin ? [{ name: 'Admin', href: '/admin', icon: Shield }] : []),
+        { name: 'Settings', href: '/settings', icon: Settings }
+      ]
+    }
   ];
 
   const handleSignOut = async () => {
@@ -58,11 +143,54 @@ export function Layout({ children }: LayoutProps) {
     navigate('/');
   };
 
+  const renderNavSection = (section: NavSection, index: number) => (
+    <div key={section.title} className="mb-6">
+      <h3 className="px-4 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+        {section.title}
+      </h3>
+      <div className="space-y-1">
+        {section.items.map((item) => {
+          const isActive = location.pathname === item.href || location.pathname.startsWith(item.href + '/');
+          return (
+            <Link
+              key={item.name}
+              to={item.href}
+              className={clsx(
+                'flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 group',
+                isActive
+                  ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-600 pl-3'
+                  : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900'
+              )}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              <div className="flex items-center">
+                <item.icon className={clsx(
+                  'w-5 h-5 mr-3 transition-colors',
+                  isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'
+                )} />
+                <span>{item.name}</span>
+              </div>
+              {item.badge && (
+                <span className={clsx(
+                  'px-2 py-0.5 text-xs font-bold rounded-full',
+                  item.badgeColor || 'bg-blue-600 text-white'
+                )}>
+                  {item.badge}
+                </span>
+              )}
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+
   return (
     <div className="min-h-screen bg-cream-100" role="application" aria-label="cmoxpert Client Management Platform">
       <OnboardingTour />
+      <CommandPalette isOpen={commandPaletteOpen} onClose={() => setCommandPaletteOpen(false)} />
 
-      {/* Skip to main content link for keyboard users */}
+      {/* Skip to main content link */}
       <a
         href="#main-content"
         className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 z-50 bg-slate-900 text-white px-4 py-2 rounded-lg font-medium focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2"
@@ -70,9 +198,36 @@ export function Layout({ children }: LayoutProps) {
         Skip to main content
       </a>
 
+      {/* Mobile menu button */}
+      {isMobile && (
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="fixed top-4 left-4 z-50 lg:hidden bg-white p-2 rounded-lg shadow-lg"
+          aria-label="Toggle navigation menu"
+        >
+          {mobileMenuOpen ? (
+            <X className="w-6 h-6 text-slate-700" />
+          ) : (
+            <Menu className="w-6 h-6 text-slate-700" />
+          )}
+        </button>
+      )}
+
+      {/* Mobile overlay */}
+      {mobileMenuOpen && isMobile && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={() => setMobileMenuOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Sidebar */}
-      <aside 
-        className="fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg" 
+      <aside
+        className={clsx(
+          'fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transition-transform duration-300 ease-in-out',
+          isMobile && !mobileMenuOpen && '-translate-x-full'
+        )}
         role="complementary"
         aria-label="Application sidebar"
       >
@@ -83,37 +238,9 @@ export function Layout({ children }: LayoutProps) {
           </header>
 
           {/* Navigation */}
-          <nav className="flex-1 px-4 space-y-2" role="navigation" aria-label="Main navigation">
+          <nav className="flex-1 px-3 py-4 overflow-y-auto" role="navigation" aria-label="Main navigation">
             <h2 className="sr-only">Main Navigation</h2>
-            {navigation.map((item) => {
-              const isActive = location.pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  to={item.href}
-                  className={clsx(
-                    'flex items-center justify-between px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200',
-                    isActive
-                      ? 'bg-cream-200 text-slate_blue-900 border-r-2 border-slate_blue-600'
-                      : 'text-slate-600 hover:bg-cornsilk-100 hover:text-slate-900'
-                  )}
-                  aria-current={isActive ? 'page' : undefined}
-                >
-                  <div className="flex items-center">
-                    <item.icon className="w-5 h-5 mr-3" />
-                    {item.name}
-                  </div>
-                  {(item as any).badge && (
-                    <span className={clsx(
-                      'px-2 py-0.5 text-xs font-bold text-white rounded-full',
-                      (item as any).badgeColor || 'bg-slate_blue-500'
-                    )}>
-                      {(item as any).badge}
-                    </span>
-                  )}
-                </Link>
-              );
-            })}
+            {navigationSections.map((section, index) => renderNavSection(section, index))}
           </nav>
 
           {/* User menu */}
@@ -149,7 +276,7 @@ export function Layout({ children }: LayoutProps) {
       </aside>
 
       {/* Main content */}
-      <div className="pl-64">
+      <div className="lg:pl-64">
         <main 
           id="main-content"
           className="min-h-screen" 
