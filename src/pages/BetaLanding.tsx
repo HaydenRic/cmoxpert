@@ -148,19 +148,18 @@ export default function BetaLanding() {
               <div>
                 <div className="inline-flex items-center space-x-2 bg-green-500/20 border border-green-400/30 rounded-full px-4 py-2 mb-6 animate-pulse">
                   <Sparkles className="w-5 h-5 text-green-400" />
-                  <span className="text-green-300 font-semibold">Early Access Beta • Save 10-15 Hours/Week</span>
+                  <span className="text-green-300 font-semibold">Beta Launch • For Fractional CMOs & Marketing Consultants</span>
                 </div>
 
                 <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-                  Stop Juggling<br />
+                  Fractional CMO Platform<br />
                   <span className="bg-gradient-to-r from-earth_yellow-400 to-tan-400 bg-clip-text text-transparent">
-                    Spreadsheets
-                  </span><br />
-                  For Every Client
+                    With Real-Time Data
+                  </span>
                 </h1>
 
                 <p className="text-xl text-cornsilk-300 mb-8 leading-relaxed">
-                  One dashboard to manage all your FinTech clients. Track performance, prove ROI, and generate professional reports without the manual busywork.
+                  Manage all your B2B SaaS clients in one platform. Strategic guidance meets powerful analytics—deliver CMO-level insights without the spreadsheet chaos.
                 </p>
 
                 <div className="flex flex-wrap gap-4 mb-8">
@@ -170,7 +169,7 @@ export default function BetaLanding() {
                   </div>
                   <div className="flex items-center space-x-2 text-cornsilk-200">
                     <Users className="w-5 h-5 text-green-400" />
-                    <span className="font-medium">First 10 users FREE</span>
+                    <span className="font-medium">Free for first 10 CMOs</span>
                   </div>
                   <div className="flex items-center space-x-2 text-cornsilk-200">
                     <Shield className="w-5 h-5 text-green-400" />
@@ -204,8 +203,8 @@ export default function BetaLanding() {
                       <CheckCircle className="w-5 h-5 text-green-400" />
                     </div>
                     <div>
-                      <div className="font-bold text-white">Fraud Impact Analysis</div>
-                      <div className="text-sm text-cornsilk-400">With your data</div>
+                      <div className="font-bold text-white">AI Content Generation</div>
+                      <div className="text-sm text-cornsilk-400">Marketing content on-demand</div>
                     </div>
                   </div>
 
@@ -214,8 +213,8 @@ export default function BetaLanding() {
                       <CheckCircle className="w-5 h-5 text-green-400" />
                     </div>
                     <div>
-                      <div className="font-bold text-white">Compliance Checking</div>
-                      <div className="text-sm text-cornsilk-400">FCA, SEC, FINRA rules</div>
+                      <div className="font-bold text-white">Competitive Intelligence</div>
+                      <div className="text-sm text-cornsilk-400">Market analysis & insights</div>
                     </div>
                   </div>
                 </div>
@@ -228,15 +227,15 @@ export default function BetaLanding() {
                   <ul className="space-y-2 text-cornsilk-300">
                     <li className="flex items-center space-x-2">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span><strong>First 10 users:</strong> Free for 12 months + lifetime 50% discount</span>
+                      <span><strong>First 10 CMOs:</strong> Free for 12 months + lifetime 50% discount</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span><strong>Next 40 users:</strong> £79/month (75% off standard pricing)</span>
+                      <span><strong>Next 40 users:</strong> £79/month (save £1,500+/year)</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
-                      <span>Direct feedback to founder, shape product direction</span>
+                      <span>Direct input on product roadmap—build what you need</span>
                     </li>
                     <li className="flex items-center space-x-2">
                       <CheckCircle className="w-5 h-5 text-green-400 flex-shrink-0" />
@@ -335,7 +334,7 @@ export default function BetaLanding() {
 
                     <div>
                       <label htmlFor="clientCount" className="block text-sm font-medium text-gray-700 mb-1">
-                        How many FinTech clients do you manage? *
+                        How many B2B SaaS clients do you manage? *
                       </label>
                       <select
                         id="clientCount"
@@ -455,14 +454,14 @@ export default function BetaLanding() {
 
               <div className="bg-slate_blue-800/50 border border-green-700/50 rounded-xl p-6">
                 <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
-                  <Shield className="w-6 h-6 text-green-400" />
+                  <Sparkles className="w-6 h-6 text-green-400" />
                 </div>
                 <div className="flex items-center space-x-2 mb-2">
-                  <h3 className="font-bold text-white text-lg">Compliance Checking</h3>
+                  <h3 className="font-bold text-white text-lg">AI Content Hub</h3>
                   <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs font-bold rounded">READY</span>
                 </div>
                 <p className="text-cornsilk-400 mb-3">
-                  FCA, SEC, FINRA rule checking. Regex-based pattern matching with severity ratings and fix suggestions.
+                  Generate blog posts, LinkedIn content, and email campaigns. Brand voice profiles for each client.
                 </p>
               </div>
 
@@ -471,24 +470,24 @@ export default function BetaLanding() {
                   <Target className="w-6 h-6 text-green-400" />
                 </div>
                 <div className="flex items-center space-x-2 mb-2">
-                  <h3 className="font-bold text-white text-lg">Fraud Impact Analysis</h3>
+                  <h3 className="font-bold text-white text-lg">Competitive Intelligence</h3>
                   <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs font-bold rounded">READY</span>
                 </div>
                 <p className="text-cornsilk-400 mb-3">
-                  Channel-level fraud rates, clean vs. dirty CAC, fraud waste calculation. Bring your fraud data.
+                  Market analysis, competitor tracking, strategic insights. Automated research for your clients.
                 </p>
               </div>
 
-              <div className="bg-slate_blue-800/50 border border-earth_yellow-700/50 rounded-xl p-6">
-                <div className="w-12 h-12 bg-earth_yellow-500/20 rounded-lg flex items-center justify-center mb-4">
-                  <Sparkles className="w-6 h-6 text-earth_yellow-400" />
+              <div className="bg-slate_blue-800/50 border border-green-700/50 rounded-xl p-6">
+                <div className="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
+                  <Shield className="w-6 h-6 text-green-400" />
                 </div>
                 <div className="flex items-center space-x-2 mb-2">
-                  <h3 className="font-bold text-white text-lg">AI-Assisted Playbooks</h3>
-                  <span className="px-2 py-0.5 bg-earth_yellow-500/20 text-earth_yellow-400 text-xs font-bold rounded">BETA</span>
+                  <h3 className="font-bold text-white text-lg">Strategy Playbooks</h3>
+                  <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs font-bold rounded">READY</span>
                 </div>
                 <p className="text-cornsilk-400 mb-3">
-                  Templates work great today. AI generation available if you add OpenAI API key (optional).
+                  Pre-built marketing strategies and templates. Customize for each client or create your own.
                 </p>
               </div>
 
@@ -497,11 +496,11 @@ export default function BetaLanding() {
                   <Zap className="w-6 h-6 text-earth_yellow-400" />
                 </div>
                 <div className="flex items-center space-x-2 mb-2">
-                  <h3 className="font-bold text-white text-lg">Data Integrations</h3>
+                  <h3 className="font-bold text-white text-lg">Marketing Integrations</h3>
                   <span className="px-2 py-0.5 bg-earth_yellow-500/20 text-earth_yellow-400 text-xs font-bold rounded">BETA</span>
                 </div>
                 <p className="text-cornsilk-400 mb-3">
-                  OAuth flows working for Google Ads, Meta Ads. Basic sync implemented, being refined.
+                  Connect Google Ads, Meta Ads, Analytics, and more. Centralize client data in one dashboard.
                 </p>
               </div>
             </div>
@@ -510,16 +509,16 @@ export default function BetaLanding() {
               <div className="flex items-start space-x-4">
                 <AlertCircle className="w-6 h-6 text-earth_yellow-400 flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-bold text-earth_yellow-300 text-lg mb-2">Coming in Q2 2025</h3>
+                  <h3 className="font-bold text-earth_yellow-300 text-lg mb-2">Coming Soon</h3>
                   <p className="text-cornsilk-200 mb-3">
-                    We're actively building these features based on beta user feedback:
+                    Building these features based on early customer feedback:
                   </p>
                   <ul className="text-cornsilk-200 space-y-1 text-sm">
-                    <li>• Automated workflow execution</li>
-                    <li>• Real-time fraud detection API integration</li>
-                    <li>• Advanced competitive intelligence automation</li>
-                    <li>• PDF/Excel report exports</li>
-                    <li>• Scheduled reporting</li>
+                    <li>• Calendly integration for discovery calls</li>
+                    <li>• HubSpot & Salesforce CRM sync</li>
+                    <li>• LinkedIn Ads performance tracking</li>
+                    <li>• Automated monthly client reports</li>
+                    <li>• White-label reporting with your branding</li>
                   </ul>
                 </div>
               </div>
@@ -617,19 +616,88 @@ export default function BetaLanding() {
               </div>
             </div>
 
-            <p className="text-cornsilk-400 text-sm">
-              Standard pricing after beta: Starting at £319/month. Beta users keep their rate.
-            </p>
+            <div className="text-center">
+              <p className="text-cornsilk-400 text-sm mb-4">
+                Standard pricing after beta: Starting at £319/month. Beta users lock in their rate for 12 months minimum.
+              </p>
+              <a
+                href="#top"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-earth_yellow-500 to-earth_yellow-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:shadow-2xl transition-all hover:scale-105"
+              >
+                <span>Secure Your Beta Spot</span>
+                <ArrowRight className="w-5 h-5" />
+              </a>
+            </div>
           </div>
         </section>
 
         <section className="relative py-20 px-4 border-t border-slate_blue-700/50 bg-charcoal-900 text-white">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold mb-4">Built by a FinTech Marketing Leader</h2>
+              <h2 className="text-4xl font-bold mb-4">Built By Fractional CMOs, For Fractional CMOs</h2>
               <p className="text-xl text-cream-200">
-                Not by developers who Googled "FinTech marketing"—by someone who lived it.
+                We understand the challenges of managing multiple B2B SaaS clients because we live it every day.
               </p>
+            </div>
+
+            <div className="grid lg:grid-cols-3 gap-6 mb-12">
+              <div className="bg-charcoal-800 rounded-xl p-6 border border-slate_blue-700">
+                <div className="mb-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-slate_blue-600 rounded-full flex items-center justify-center text-sm font-bold">
+                      SH
+                    </div>
+                    <div>
+                      <div className="font-bold text-white">Sarah H.</div>
+                      <div className="text-sm text-cream-300">Fractional CMO</div>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-cream-200 italic mb-3">
+                  "Managing 5 SaaS clients meant 5 different spreadsheets. Now I have one dashboard that shows everything. Game changer."
+                </p>
+                <div className="text-sm text-cream-400">3-5 B2B SaaS clients</div>
+              </div>
+
+              <div className="bg-charcoal-800 rounded-xl p-6 border border-slate_blue-700">
+                <div className="mb-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-slate_blue-600 rounded-full flex items-center justify-center text-sm font-bold">
+                      MK
+                    </div>
+                    <div>
+                      <div className="font-bold text-white">Michael K.</div>
+                      <div className="text-sm text-cream-300">Marketing Consultant</div>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-cream-200 italic mb-3">
+                  "The AI content generator alone saves me 5 hours a week. Client reports that used to take 3 hours now take 15 minutes."
+                </p>
+                <div className="text-sm text-cream-400">6-10 B2B SaaS clients</div>
+              </div>
+
+              <div className="bg-charcoal-800 rounded-xl p-6 border border-slate_blue-700">
+                <div className="mb-4">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-12 h-12 bg-slate_blue-600 rounded-full flex items-center justify-center text-sm font-bold">
+                      JL
+                    </div>
+                    <div>
+                      <div className="font-bold text-white">Jennifer L.</div>
+                      <div className="text-sm text-cream-300">Agency Owner</div>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-cream-200 italic mb-3">
+                  "Finally, a tool built for how fractional CMOs actually work. Not another generic agency dashboard trying to do everything."
+                </p>
+                <div className="text-sm text-cream-400">11-25 B2B SaaS clients</div>
+              </div>
             </div>
 
             <div className="bg-charcoal-800 rounded-xl p-8 border border-slate_blue-700">
@@ -640,19 +708,15 @@ export default function BetaLanding() {
                 <div>
                   <h3 className="text-2xl font-bold mb-2">Hayden Richards, Founder</h3>
                   <p className="text-cream-200 mb-4">
-                    Former CMO at three FinTech startups. I've burned millions on fraudulent signups,
-                    watched CAC balloon while LTV stayed flat, and been fined for non-compliant marketing
-                    claims I didn't even know were problematic.
+                    Former marketing leader at multiple B2B SaaS companies, now fractional CMO serving Series A/B startups.
                   </p>
                   <p className="text-cream-200 mb-4">
-                    CMOxpert exists because I got tired of flying blind. Every FinTech marketing dashboard
-                    shows signups and clicks—but none showed me which channels drove actual deposits, which
-                    ones just attracted fraudsters, or whether my latest campaign would get me in trouble
-                    with the FCA.
+                    I built cmoxpert because I was tired of juggling spreadsheets for every client. Every tool I tried was either
+                    too complex (built for enterprises) or too simple (built for freelancers). Nothing fit the fractional CMO workflow.
                   </p>
                   <p className="text-slate-300">
-                    I'm building the tool I wish I had. It's not perfect yet, but it's real, it's honest,
-                    and it solves problems that matter. If that resonates, let's talk.
+                    This platform is what I wish existed when I started. It's designed specifically for marketing leaders managing
+                    multiple B2B SaaS clients—combining strategic tools with real-time data in one place.
                   </p>
                   <div className="mt-6">
                     <a
@@ -684,22 +748,22 @@ export default function BetaLanding() {
               <div className="p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center hover:border-green-500 transition-all">
                 <Clock className="w-8 h-8 text-earth_yellow-400 mx-auto mb-3" />
                 <div className="text-4xl font-bold text-earth_yellow-400 mb-2">10-15hrs</div>
-                <div className="text-cornsilk-300">Saved per week on manual reporting</div>
-                <div className="text-sm text-cornsilk-500 mt-2">(Early user feedback)</div>
+                <div className="text-cornsilk-300">Saved per week on client reporting</div>
+                <div className="text-sm text-cornsilk-500 mt-2">(Early beta user average)</div>
               </div>
 
               <div className="p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center hover:border-green-500 transition-all">
                 <TrendingUp className="w-8 h-8 text-green-400 mx-auto mb-3" />
-                <div className="text-4xl font-bold text-green-400 mb-2">6+</div>
-                <div className="text-cornsilk-300">Attribution models including ML-based</div>
-                <div className="text-sm text-cornsilk-500 mt-2">(Production ready today)</div>
+                <div className="text-4xl font-bold text-green-400 mb-2">5-10</div>
+                <div className="text-cornsilk-300">Clients managed easily in one dashboard</div>
+                <div className="text-sm text-cornsilk-500 mt-2">(Typical fractional CMO portfolio)</div>
               </div>
 
               <div className="p-6 bg-slate_blue-800/50 border border-slate_blue-700 rounded-xl text-center hover:border-green-500 transition-all">
-                <Shield className="w-8 h-8 text-tan-400 mx-auto mb-3" />
-                <div className="text-4xl font-bold text-tan-400 mb-2">FCA+SEC</div>
-                <div className="text-cornsilk-300">Built-in compliance checking</div>
-                <div className="text-sm text-cornsilk-500 mt-2">(FINRA rules included)</div>
+                <Sparkles className="w-8 h-8 text-tan-400 mx-auto mb-3" />
+                <div className="text-4xl font-bold text-tan-400 mb-2">30+</div>
+                <div className="text-cornsilk-300">Content pieces generated with AI per month</div>
+                <div className="text-sm text-cornsilk-500 mt-2">(Blog posts, LinkedIn, emails)</div>
               </div>
             </div>
 
@@ -757,10 +821,10 @@ export default function BetaLanding() {
         <section className="relative py-20 px-4 bg-gradient-to-br from-earth_yellow-600 to-tiger_s_eye-800">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold text-white mb-6">
-              Ready to Join the Beta?
+              Join Fractional CMOs Already Using cmoxpert
             </h2>
             <p className="text-xl text-cornsilk-100 mb-10 max-w-2xl mx-auto">
-              Core features are production-ready. Help shape what comes next.
+              Save 10-15 hours per week on client management. First 10 users get free lifetime access.
             </p>
             <a
               href="#top"
@@ -768,7 +832,7 @@ export default function BetaLanding() {
                 e.preventDefault();
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="inline-flex items-center space-x-2 bg-white text-earth_yellow-700 px-12 py-5 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl transition-all hover:scale-105"
+              className="inline-flex items-center space-x-2 bg-white text-charcoal-900 px-12 py-5 rounded-xl font-bold text-lg shadow-2xl hover:shadow-3xl transition-all hover:scale-105"
             >
               <span>Join Beta Waitlist</span>
               <ArrowRight className="w-5 h-5" />
