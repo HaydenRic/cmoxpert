@@ -312,18 +312,42 @@ export function Dashboard() {
 
       {/* Header */}
       <div className="mb-8">
-        <div className="flex items-start justify-between">
-          <div>
+        <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+          <div className="flex-1">
             <h1 className="text-3xl font-bold text-slate-900 mb-2">
               Welcome back, {user?.email?.split('@')[0] || 'User'}
             </h1>
-            <p className="text-slate-600">
+            <p className="text-slate-600 mb-4">
               {selectedClientId
                 ? 'Viewing data for selected client'
                 : "Here's what's happening with your client portfolio today."}
             </p>
+            {/* Quick Actions */}
+            <div className="flex flex-wrap items-center gap-2">
+              <Link
+                to="/clients?action=new"
+                className="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                <UserPlus className="w-4 h-4" />
+                <span>Add Client</span>
+              </Link>
+              <Link
+                to="/content"
+                className="inline-flex items-center space-x-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Generate Content</span>
+              </Link>
+              <Link
+                to="/playbooks"
+                className="inline-flex items-center space-x-2 bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                <BookOpen className="w-4 h-4" />
+                <span>Create Playbook</span>
+              </Link>
+            </div>
           </div>
-          <div className="w-80">
+          <div className="w-full lg:w-80">
             <label className="block text-sm font-medium text-slate-700 mb-2">
               Filter by Client
             </label>
@@ -412,9 +436,13 @@ export function Dashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {statCards.map((stat, index) => (
-          <div key={index} className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-shadow">
+          <Link
+            key={index}
+            to={stat.link}
+            className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 hover:shadow-md transition-all hover:border-blue-300 group"
+          >
             <div className="flex items-center justify-between mb-4">
-              <div className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center`}>
+              <div className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center transition-transform group-hover:scale-110`}>
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
               <div className="text-right">
@@ -427,8 +455,12 @@ export function Dashboard() {
                 </div>
               </div>
             </div>
-            <h3 className="text-sm font-medium text-slate-600">{stat.title}</h3>
-          </div>
+            <h3 className="text-sm font-medium text-slate-600 group-hover:text-blue-600 transition-colors">{stat.title}</h3>
+            <div className="mt-2 text-xs text-slate-500 flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <span>View details</span>
+              <ArrowUpRight className="w-3 h-3" />
+            </div>
+          </Link>
         ))}
       </div>
 

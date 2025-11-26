@@ -4,6 +4,8 @@ import { BrandLogo } from './BrandLogo';
 import { useAuth } from '../contexts/AuthContext';
 import OnboardingTour from './OnboardingTour';
 import { CommandPalette } from './CommandPalette';
+import { KeyboardShortcutsModal } from './KeyboardShortcutsModal';
+import { BackToTop } from './BackToTop';
 import {
   LayoutDashboard,
   Rocket,
@@ -27,6 +29,9 @@ import {
 } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
+import { supabase } from '../lib/supabase';
+import { useRecentPages, getRecentPages } from '../hooks/useRecentPages';
+import { Clock } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -52,6 +57,11 @@ export function Layout({ children }: LayoutProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [shortcutsModalOpen, setShortcutsModalOpen] = useState(false);
+  const [badges, setBadges] = useState<Record<string, number>>({});
+  const [recentPages, setRecentPages] = useState<Array<{path: string; title: string}>>([]);
+
+  useRecentPages();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -81,14 +91,78 @@ export function Layout({ children }: LayoutProps) {
         e.preventDefault();
         setCommandPaletteOpen(prev => !prev);
       }
+      if ((e.metaKey || e.ctrlKey) && e.key === '/') {
+        e.preventDefault();
+        setShortcutsModalOpen(prev => !prev);
+      }
       if (e.key === 'Escape') {
         setCommandPaletteOpen(false);
+        setShortcutsModalOpen(false);
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  useEffect(() => {
+    if (user) {
+      loadBadgeCounts();
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const updateRecentPages = () => {
+      setRecentPages(getRecentPages());
+    };
+    updateRecentPages();
+    window.addEventListener('storage', updateRecentPages);
+    const interval = setInterval(updateRecentPages, 1000);
+    return () => {
+      window.removeEventListener('storage', updateRecentPages);
+      clearInterval(interval);
+    };
+  }, [location.pathname]);
+
+  const loadBadgeCounts = async () => {
+    try {
+      const newBadges: Record<string, number> = {};
+
+      const { count: needsOnboarding } = await supabase
+        .from('clients')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user!.id)
+        .eq('status', 'needs_onboarding');
+
+      if (needsOnboarding && needsOnboarding > 0) {
+        newBadges['clients'] = needsOnboarding;
+      }
+
+      const { count: pendingReports } = await supabase
+        .from('reports')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user!.id)
+        .eq('status', 'pending');
+
+      if (pendingReports && pendingReports > 0) {
+        newBadges['reports'] = pendingReports;
+      }
+
+      const { count: failedIntegrations } = await supabase
+        .from('integrations')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user!.id)
+        .eq('status', 'error');
+
+      if (failedIntegrations && failedIntegrations > 0) {
+        newBadges['integrations'] = failedIntegrations;
+      }
+
+      setBadges(newBadges);
+    } catch (error) {
+      console.error('Error loading badge counts:', error);
+    }
+  };
 
   const navigationSections: NavSection[] = [
     {
@@ -100,7 +174,7 @@ export function Layout({ children }: LayoutProps) {
     {
       title: 'Clients',
       items: [
-        { name: 'Clients', href: '/clients', icon: Users },
+        { name: 'Clients', href: '/clients', icon: Users, badge: badges['clients'], badgeColor: 'bg-orange-500' },
         { name: 'Client Portal', href: '/client-portal', icon: Globe }
       ]
     },
@@ -115,7 +189,7 @@ export function Layout({ children }: LayoutProps) {
     {
       title: 'Analytics',
       items: [
-        { name: 'Reports', href: '/reports', icon: FileText },
+        { name: 'Reports', href: '/reports', icon: FileText, badge: badges['reports'], badgeColor: 'bg-blue-500' },
         { name: 'Performance', href: '/performance', icon: BarChart3 },
         { name: 'Attribution', href: '/revenue-attribution', icon: PoundSterling },
         { name: 'Forecasting', href: '/forecasting', icon: TrendingUp }
@@ -124,7 +198,7 @@ export function Layout({ children }: LayoutProps) {
     {
       title: 'Tools',
       items: [
-        { name: 'Integrations', href: '/integrations', icon: Plug },
+        { name: 'Integrations', href: '/integrations', icon: Plug, badge: badges['integrations'], badgeColor: 'bg-red-500' },
         { name: 'Workflows', href: '/workflows', icon: GitBranch },
         { name: 'Deliverables', href: '/deliverables', icon: Zap }
       ]
@@ -189,6 +263,7 @@ export function Layout({ children }: LayoutProps) {
     <div className="min-h-screen bg-cream-100" role="application" aria-label="cmoxpert Client Management Platform">
       <OnboardingTour />
       <CommandPalette isOpen={commandPaletteOpen} onClose={() => setCommandPaletteOpen(false)} />
+      <KeyboardShortcutsModal isOpen={shortcutsModalOpen} onClose={() => setShortcutsModalOpen(false)} />
 
       {/* Skip to main content link */}
       <a
@@ -241,6 +316,35 @@ export function Layout({ children }: LayoutProps) {
           <nav className="flex-1 px-3 py-4 overflow-y-auto" role="navigation" aria-label="Main navigation">
             <h2 className="sr-only">Main Navigation</h2>
             {navigationSections.map((section, index) => renderNavSection(section, index))}
+
+            {/* Recent Pages */}
+            {recentPages.length > 0 && (
+              <div className="mt-6 pt-6 border-t border-slate-200">
+                <h3 className="px-4 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider flex items-center space-x-2">
+                  <Clock className="w-3 h-3" />
+                  <span>Recent</span>
+                </h3>
+                <div className="space-y-1">
+                  {recentPages.slice(0, 3).map((page) => {
+                    const isActive = location.pathname === page.path;
+                    return (
+                      <Link
+                        key={page.path}
+                        to={page.path}
+                        className={clsx(
+                          'flex items-center px-4 py-2 text-sm rounded-lg transition-colors',
+                          isActive
+                            ? 'bg-blue-50 text-blue-700'
+                            : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                        )}
+                      >
+                        <span className="truncate">{page.title}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
           </nav>
 
           {/* User menu */}
@@ -277,15 +381,16 @@ export function Layout({ children }: LayoutProps) {
 
       {/* Main content */}
       <div className="lg:pl-64">
-        <main 
+        <main
           id="main-content"
-          className="min-h-screen" 
+          className="min-h-screen"
           role="main"
           aria-label="Main content area"
           tabIndex={-1}
         >
           {children}
         </main>
+        <BackToTop />
       </div>
     </div>
   );
