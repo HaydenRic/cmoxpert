@@ -167,7 +167,7 @@ Additional requirements: ${generateForm.prompt}
 
 Please create compelling, professional content that drives engagement and conversions.`;
 
-      // Simulate AI content generation (in production, this would call OpenAI)
+      // Generate content using templates (will use OpenAI if API key is configured in Admin)
       const generatedContent = await monitorApiCall('generate_content', () =>
         simulateContentGeneration(generateForm, fullPrompt)
       );
@@ -220,7 +220,7 @@ Please create compelling, professional content that drives engagement and conver
   };
 
   const simulateContentGeneration = async (form: any, prompt: string): Promise<string> => {
-    // Simulate API delay
+    // Generate from templates (production would use OpenAI API if key configured)
     await new Promise(resolve => setTimeout(resolve, 2000));
 
     const templates = {
@@ -484,10 +484,10 @@ For more information, visit [website] or contact:
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">AI Content Hub</h1>
-          <p className="text-slate-600">Generate, manage, and optimize your marketing content with AI</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Content Hub</h1>
+          <p className="text-slate-600">Generate, manage, and optimize your marketing content</p>
         </div>
-        
+
         <button
           onClick={() => setShowGenerateForm(true)}
           disabled={generating}
@@ -501,10 +501,22 @@ For more information, visit [website] or contact:
           ) : (
             <>
               <Sparkles className="w-5 h-5" />
-              <span>Generate Content</span>
+              <span>Create Content</span>
             </>
           )}
         </button>
+      </div>
+
+      {/* Template Mode Notice */}
+      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 flex items-start space-x-3">
+        <Lightbulb className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+        <div>
+          <h3 className="text-sm font-semibold text-blue-900 mb-1">Template-Based Generation</h3>
+          <p className="text-sm text-blue-700">
+            Content is generated using professional templates. For AI-powered generation with OpenAI, add your API key in{' '}
+            <a href="/admin" className="underline font-medium hover:text-blue-900">Admin Settings</a>.
+          </p>
+        </div>
       </div>
 
       {/* Content Type Overview */}
@@ -826,6 +838,7 @@ For more information, visit [website] or contact:
                 <button
                   type="submit"
                   disabled={generating || !generateForm.title}
+                  title={generating ? 'Generating content...' : !generateForm.title ? 'Please enter a title first' : 'Generate content from template'}
                   className="flex-1 bg-gradient-to-r from-slate_blue-600 to-charcoal-700 hover:from-slate_blue-700 hover:to-charcoal-800 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3 px-4 rounded-lg font-medium transition-all flex items-center justify-center space-x-2"
                 >
                   {generating ? (

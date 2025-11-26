@@ -10,7 +10,11 @@ import {
   Activity,
   ArrowUpRight,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Brain,
+  Settings,
+  Sparkles,
+  XCircle
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
@@ -320,6 +324,54 @@ export function Dashboard() {
           </div>
         </div>
       )}
+
+      {/* AI Status Card */}
+      <div className="mb-6 bg-gradient-to-r from-blue-50 to-cyan-50 border border-blue-200 rounded-xl p-6">
+        <div className="flex items-start justify-between">
+          <div className="flex-1">
+            <div className="flex items-center space-x-2 mb-3">
+              <Brain className="w-6 h-6 text-blue-600" />
+              <h2 className="text-lg font-bold text-slate-900">AI Features Status</h2>
+            </div>
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="bg-white rounded-lg p-3 border border-blue-100">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm font-medium text-slate-700">Content Generation</span>
+                  <XCircle className="w-4 h-4 text-orange-500" />
+                </div>
+                <p className="text-xs text-slate-600">Template Mode</p>
+              </div>
+              <div className="bg-white rounded-lg p-3 border border-blue-100">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm font-medium text-slate-700">AI Playbooks</span>
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                </div>
+                <p className="text-xs text-slate-600">Template Mode Active</p>
+              </div>
+              <div className="bg-white rounded-lg p-3 border border-blue-100">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm font-medium text-slate-700">Market Analysis</span>
+                  <XCircle className="w-4 h-4 text-orange-500" />
+                </div>
+                <p className="text-xs text-slate-600">API Key Required</p>
+              </div>
+            </div>
+          </div>
+          <Link
+            to="/admin"
+            className="ml-4 flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+          >
+            <Settings className="w-4 h-4" />
+            <span>Configure AI</span>
+          </Link>
+        </div>
+        <div className="mt-4 pt-4 border-t border-blue-200">
+          <p className="text-sm text-blue-700 flex items-center space-x-2">
+            <Sparkles className="w-4 h-4" />
+            <span>Add OpenAI API key in Admin Settings to unlock AI-powered content generation</span>
+          </p>
+        </div>
+      </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">

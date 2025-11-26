@@ -154,28 +154,28 @@ export function Integrations() {
       name: 'LinkedIn Ads',
       type: 'ads',
       icon: TrendingUp,
-      description: 'Track B2B advertising campaigns and lead generation',
+      description: 'Coming soon - Track B2B advertising campaigns',
       color: 'bg-blue-700',
       features: ['Campaign metrics', 'Lead gen forms', 'Audience insights', 'ROI tracking'],
-      available: true
+      available: false
     },
     {
       name: 'Mailchimp',
       type: 'email',
       icon: Mail,
-      description: 'Import email campaign performance and subscriber data',
+      description: 'Coming soon - Email campaign performance tracking',
       color: 'bg-yellow-500',
       features: ['Email metrics', 'Subscriber lists', 'Campaign performance', 'Automation data'],
-      available: true
+      available: false
     },
     {
       name: 'Slack',
       type: 'communication',
       icon: MessageSquare,
-      description: 'Receive alerts and notifications in your Slack workspace',
+      description: 'Coming soon - Receive alerts in Slack',
       color: 'bg-tan-600',
       features: ['Real-time alerts', 'Report sharing', 'Team notifications', 'Custom webhooks'],
-      available: true
+      available: false
     },
     {
       name: 'Salesforce',
@@ -220,13 +220,18 @@ export function Integrations() {
     try {
       const serviceName = template.name.toLowerCase().replace(/\s+/g, '_');
 
-      if (serviceName === 'google_ads' || serviceName === 'meta_ads' || serviceName === 'linkedin_ads') {
-        const oauthUrl = await initiateOAuthFlow(
-          serviceName as 'google_ads' | 'meta_ads' | 'linkedin_ads',
-          user!.id
-        );
-        window.location.href = oauthUrl;
-        return;
+      if (serviceName === 'google_ads' || serviceName === 'meta_ads') {
+        try {
+          const oauthUrl = await initiateOAuthFlow(
+            serviceName as 'google_ads' | 'meta_ads',
+            user!.id
+          );
+          window.location.href = oauthUrl;
+          return;
+        } catch (error: any) {
+          alert(`OAuth setup required. Please configure ${template.name} credentials in Admin Settings first.`);
+          return;
+        }
       }
 
       const { data, error } = await supabase
@@ -243,7 +248,7 @@ export function Integrations() {
 
       if (error) throw error;
 
-      alert(`${template.name} integration setup initiated. Please configure in the settings.`);
+      alert(`${template.name} connection initiated. Note: Full integration requires additional setup in Admin Settings.`);
       loadIntegrations();
     } catch (error: any) {
       console.error('Error connecting integration:', error);
@@ -491,9 +496,20 @@ export function Integrations() {
                       Coming Soon
                     </span>
                   )}
+                  {isConnected && (
+                    <CheckCircle className="w-5 h-5 text-green-600" />
+                  )}
                 </div>
                 <h3 className="font-bold text-charcoal-900 mb-2">{template.name}</h3>
                 <p className="text-sm text-charcoal-600 mb-4">{template.description}</p>
+                {(template.name === 'Google Ads' || template.name === 'Meta Ads') && !isConnected && (
+                  <div className="mb-3 bg-amber-50 border border-amber-200 rounded-lg p-2">
+                    <p className="text-xs text-amber-800 flex items-center space-x-1">
+                      <Settings className="w-3 h-3" />
+                      <span>Requires OAuth setup</span>
+                    </p>
+                  </div>
+                )}
                 <ul className="space-y-2 mb-4">
                   {template.features.slice(0, 3).map((feature, idx) => (
                     <li key={idx} className="text-xs text-charcoal-600 flex items-start">

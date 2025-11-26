@@ -168,16 +168,32 @@ export function Playbooks() {
         loadData();
         setGenerating(false);
       }, 2000);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error generating playbook:', error);
-      alert('Failed to generate playbook. Please try again.');
-      
+
+      // Provide specific error messages
+      let errorMessage = 'Failed to generate playbook. ';
+
+      if (error.message?.includes('not authenticated')) {
+        errorMessage += 'Please log in again.';
+      } else if (error.message?.includes('network') || error.message?.includes('fetch')) {
+        errorMessage += 'Network error. Please check your connection and try again.';
+      } else if (error.message?.includes('rate limit')) {
+        errorMessage += 'API rate limit reached. Please try again in a few minutes.';
+      } else if (error.message?.includes('API key')) {
+        errorMessage += 'Using template-based generation. Add OpenAI key in Admin Settings for AI-powered playbooks.';
+      } else {
+        errorMessage += 'Please try again or contact support if the issue persists.';
+      }
+
+      alert(errorMessage);
+
       // Track failure
       trackFeatureUsage('ai_playbook', 'generation_failed', {
         client_id: generateForm.clientId,
         error: error.message
       });
-      
+
       setGenerating(false);
     }
   };
@@ -212,11 +228,12 @@ export function Playbooks() {
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">AI Marketing Playbooks</h1>
-          <p className="text-slate-600">Generate and manage custom marketing strategies powered by AI</p>
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">Marketing Playbooks</h1>
+          <p className="text-slate-600">Generate and manage custom marketing strategies for your clients</p>
         </div>
         <button
           onClick={() => setShowGenerateForm(true)}
+          title={clients.length === 0 ? 'Create a client first to generate playbooks' : 'Generate a new marketing playbook'}
           disabled={generating}
           className="bg-gradient-to-r from-tiger_s_eye-600 to-earth_yellow-600 hover:from-tiger_s_eye-700 hover:to-earth_yellow-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
         >
