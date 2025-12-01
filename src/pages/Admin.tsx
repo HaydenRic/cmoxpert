@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { ClientPortfolioOverview } from '../components/ClientPortfolioOverview';
+import { AIConfigPanel } from '../components/AIConfigPanel';
 import {
   Upload,
   Play,
@@ -843,112 +844,22 @@ export function Admin() {
           {/* AI Settings Tab */}
           {activeTab === 'ai-settings' && (
             <div>
-              <div className="flex items-center justify-between mb-6">
-                <div>
-                  <h2 className="text-lg font-semibold text-slate-900 flex items-center">
-                    <Brain className="w-5 h-5 mr-2" />
-                    AI Service Configuration
-                  </h2>
-                  <p className="text-sm text-slate-600 mt-1">Configure API keys and settings for AI-powered features</p>
-                </div>
-                <button
-                  onClick={() => setShowAIForm(true)}
-                  className="bg-gradient-to-r from-tiger_s_eye-600 to-earth_yellow-600 hover:from-tiger_s_eye-700 hover:to-earth_yellow-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2"
-                >
-                  <Key className="w-4 h-4" />
-                  <span>Configure APIs</span>
-                </button>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-gradient-to-br from-tiger_s_eye-50 to-earth_yellow-50 rounded-lg p-6 border border-tiger_s_eye-100">
-                  <h3 className="font-medium text-slate-900 mb-4 flex items-center">
-                    <Brain className="w-5 h-5 mr-2 text-tiger_s_eye-600" />
-                    OpenAI GPT
-                  </h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-600">API Key</span>
-                      <span className="text-xs font-mono bg-white px-2 py-1 rounded border text-slate-700">
-                        Not configured
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-600">Status</span>
-                      <span className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">
-                        Not configured
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-tiger_s_eye-50 to-earth_yellow-50 rounded-lg p-6 border border-tiger_s_eye-100">
-                  <h3 className="font-medium text-slate-900 mb-4 flex items-center">
-                    <Zap className="w-5 h-5 mr-2 text-tiger_s_eye-600" />
-                    Google Gemini
-                  </h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-600">API Key</span>
-                      <span className="text-xs font-mono bg-white px-2 py-1 rounded border text-slate-700">
-                        Not configured
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-600">Status</span>
-                      <span className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">
-                        Not configured
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-tiger_s_eye-50 to-earth_yellow-50 rounded-lg p-6 border border-tiger_s_eye-100">
-                  <h3 className="font-medium text-slate-900 mb-4 flex items-center">
-                    <BarChart3 className="w-5 h-5 mr-2 text-tiger_s_eye-600" />
-                    SEMrush API
-                  </h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-600">API Key</span>
-                      <span className="text-xs font-mono bg-white px-2 py-1 rounded border text-slate-700">
-                        Not configured
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-600">Status</span>
-                      <span className="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">
-                        Not configured
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-gradient-to-br from-tiger_s_eye-50 to-earth_yellow-50 rounded-lg p-6 border border-tiger_s_eye-100">
-                  <h3 className="font-medium text-slate-900 mb-4 flex items-center">
-                    <Settings className="w-5 h-5 mr-2 text-tiger_s_eye-600" />
-                    AI Features
-                  </h3>
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-600">AI Analysis</span>
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        aiSettings.enableAIFeatures 
-                          ? 'bg-pakistan_green-100 text-pakistan_green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
-                        {aiSettings.enableAIFeatures ? 'Enabled' : 'Disabled'}
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-slate-600">Auto Reports</span>
-                      <span className="text-xs px-2 py-1 rounded-full bg-pakistan_green-100 text-pakistan_green-800">
-                        Active
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <AIConfigPanel
+                currentApiKey={aiSettings.openaiApiKey}
+                onSave={async (apiKey) => {
+                  setSavingAI(true);
+                  try {
+                    setAISettings({ ...aiSettings, openaiApiKey: apiKey });
+                    // In production, save to secure server-side storage
+                    setToast({ message: 'API key saved successfully!', type: 'success' });
+                  } catch (error) {
+                    setToast({ message: 'Failed to save API key', type: 'error' });
+                    throw error;
+                  } finally {
+                    setSavingAI(false);
+                  }
+                }}
+              />
             </div>
           )}
 

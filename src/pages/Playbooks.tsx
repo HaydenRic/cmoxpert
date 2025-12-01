@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { supabase, AIServicesManager } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { trackFeatureUsage, monitorApiCall } from '../lib/monitoring';
+import { PlaybookTemplateModal } from '../components/PlaybookTemplateModal';
+import { PlaybookBuilder } from '../components/PlaybookBuilder';
+import { PlaybookTemplate, PlaybookTactic } from '../lib/playbookTemplates';
 import { 
   BookOpen, 
   Plus, 
@@ -65,6 +68,9 @@ export function Playbooks() {
     playbookType: 'growth-strategy',
     customPrompt: ''
   });
+  const [showTemplateModal, setShowTemplateModal] = useState(false);
+  const [showBuilder, setShowBuilder] = useState(false);
+  const [builderData, setBuilderData] = useState<{ tactics: PlaybookTactic[], name: string } | null>(null);
 
   const categories = [
     { value: 'all', label: 'All Categories' },
@@ -122,16 +128,50 @@ export function Playbooks() {
     }
   };
 
+  const handleTemplateSelect = (template: PlaybookTemplate) => {
+    setBuilderData({
+      tactics: template.tactics.map(t => ({ ...t, completed: false })),
+      name: template.name
+    });
+    setShowBuilder(true);
+  };
+
+  const handleSavePlaybook = async (tactics: PlaybookTactic[], metadata: any) => {
+    if (!user) return;
+
+    try {
+      const { error } = await supabase
+        .from('playbooks')
+        .insert([{
+          user_id: user.id,
+          source_client_id: generateForm.clientId || null,
+          name: metadata.name,
+          description: `Custom playbook with ${tactics.length} tactics`,
+          category: metadata.category || 'growth-strategy',
+          tactics: tactics
+        }]);
+
+      if (error) throw error;
+
+      setShowBuilder(false);
+      setBuilderData(null);
+      loadData();
+    } catch (error) {
+      console.error('Error saving playbook:', error);
+      alert('Failed to save playbook. Please try again.');
+    }
+  };
+
   const generateAIPlaybook = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!generateForm.clientId) {
       alert('Please select a client');
       return;
     }
 
     setGenerating(true);
-    
+
     // Track feature usage
     trackFeatureUsage('ai_playbook', 'generation_started', {
       client_id: generateForm.clientId,
@@ -225,30 +265,61 @@ export function Playbooks() {
 
   return (
     <div className="p-8">
+      {/* Modals */}
+      <PlaybookTemplateModal
+        isOpen={showTemplateModal}
+        onClose={() => setShowTemplateModal(false)}
+        onSelectTemplate={handleTemplateSelect}
+      />
+
+      {builderData && (
+        <PlaybookBuilder
+          isOpen={showBuilder}
+          onClose={() => {
+            setShowBuilder(false);
+            setBuilderData(null);
+          }}
+          initialTactics={builderData.tactics}
+          playbookName={builderData.name}
+          onSave={handleSavePlaybook}
+        />
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between mb-8">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 mb-2">Marketing Playbooks</h1>
           <p className="text-slate-600">Generate and manage custom marketing strategies for your clients</p>
         </div>
-        <button
-          onClick={() => setShowGenerateForm(true)}
-          title={clients.length === 0 ? 'Create a client first to generate playbooks' : 'Generate a new marketing playbook'}
-          disabled={generating}
-          className="bg-gradient-to-r from-tiger_s_eye-600 to-earth_yellow-600 hover:from-tiger_s_eye-700 hover:to-earth_yellow-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
-        >
-          {generating ? (
-            <>
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              <span>Generating...</span>
-            </>
-          ) : (
-            <>
-              <Sparkles className="w-5 h-5" />
-              <span>Generate AI Playbook</span>
-            </>
-          )}
-        </button>
+
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setShowTemplateModal(true)}
+            className="bg-white hover:bg-slate-50 border-2 border-slate-300 text-slate-700 px-6 py-3 rounded-lg font-medium flex items-center space-x-2 transition-all"
+          >
+            <BookOpen className="w-5 h-5" />
+            <span>Browse Templates</span>
+          </button>
+
+          <button
+            onClick={() => setShowGenerateForm(true)}
+            title={clients.length === 0 ? 'Create a client first to generate playbooks' : 'Generate a new marketing playbook'}
+            disabled={generating}
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-3 rounded-lg font-medium flex items-center space-x-2 shadow-lg hover:shadow-xl transition-all"
+          >
+            {generating ? (
+              <>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <span>Generating...</span>
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-5 h-5" />
+                <span>Generate AI Playbook</span>
+              </>
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Generation Status Banner */}
