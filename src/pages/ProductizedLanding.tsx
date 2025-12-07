@@ -13,358 +13,529 @@ import {
   Shield,
   Award,
   CheckCircle,
-  AlertTriangle
+  AlertTriangle,
+  Sparkles,
+  Rocket,
+  Brain,
+  LineChart,
+  Star
 } from 'lucide-react';
 
 export default function ProductizedLanding() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate_blue-600 to-slate_blue-800 opacity-5"></div>
-        <div className="relative max-w-7xl mx-auto px-4 py-20">
-          <div className="text-center max-w-4xl mx-auto">
-            <div className="inline-flex items-center justify-center px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm font-bold mb-6">
-              <TrendingUp className="w-4 h-4 mr-2" />
+    <div className="min-h-screen bg-white">
+      {/* Animated Gradient Hero Section */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-teal-700 min-h-[90vh] flex items-center">
+        {/* Animated gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/30 via-transparent to-teal-500/30 animate-pulse"></div>
+
+        {/* Decorative elements */}
+        <div className="absolute top-20 left-10 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl"></div>
+
+        <div className="relative max-w-7xl mx-auto px-6 py-24 lg:py-32">
+          <div className="text-center max-w-5xl mx-auto space-y-8">
+            {/* Badge */}
+            <div className="inline-flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-green-400 to-emerald-500 text-white rounded-full text-sm font-bold shadow-xl animate-fade-in-up">
+              <Sparkles className="w-4 h-4 mr-2" />
               Tech-Enabled Fractional CMO Services
             </div>
-            <h1 className="text-6xl font-bold text-slate-900 mb-6 leading-tight">
-              Strategic Marketing Leadership
+
+            {/* Main Headline with better typography */}
+            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] tracking-tight animate-fade-in-up animation-delay-200">
+              Strategic Marketing
               <br />
-              <span className="text-slate_blue-600">Powered by Technology</span>
+              <span className="bg-gradient-to-r from-teal-300 via-cyan-300 to-blue-300 bg-clip-text text-transparent">
+                Leadership, Automated
+              </span>
             </h1>
-            <p className="text-2xl text-slate-600 mb-8 leading-relaxed">
-              Get fractional CMO expertise with data-driven insights and real-time reporting
-              for <strong>50-60% less</strong> than traditional agencies
+
+            {/* Subheadline */}
+            <p className="text-xl md:text-2xl lg:text-3xl text-blue-100 leading-relaxed max-w-4xl mx-auto font-light animate-fade-in-up animation-delay-400">
+              Get fractional CMO expertise with AI-powered insights and real-time reporting for{' '}
+              <span className="font-bold text-teal-300">50-60% less</span>{' '}
+              than traditional agencies
             </p>
-            <div className="flex items-center justify-center space-x-4">
+
+            {/* CTA Buttons with animations */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 animate-fade-in-up animation-delay-600">
               <Link
                 to="/audit"
-                className="bg-gradient-to-r from-slate_blue-600 to-slate_blue-700 hover:from-slate_blue-700 hover:to-slate_blue-800 text-white px-10 py-5 rounded-xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all inline-flex items-center"
+                className="group relative px-10 py-5 bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white rounded-2xl font-bold text-lg shadow-2xl hover:shadow-cyan-500/50 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 inline-flex items-center"
               >
-                Get Free Marketing Audit
-                <ArrowRight className="w-5 h-5 ml-2" />
+                <span className="relative z-10 flex items-center">
+                  Get Free Marketing Audit
+                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
+                </span>
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity blur-xl"></div>
               </Link>
+
               <Link
                 to="/packages"
-                className="bg-white hover:bg-slate-50 text-slate_blue-700 border-2 border-slate_blue-200 px-10 py-5 rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+                className="px-10 py-5 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-2 border-white/30 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
               >
                 View Pricing
               </Link>
             </div>
-            <p className="text-sm text-slate-500 mt-4">
+
+            {/* Trust line */}
+            <p className="text-sm text-blue-200 animate-fade-in-up animation-delay-800">
+              <Shield className="w-4 h-4 inline mr-2" />
               No credit card required • See results in 60 seconds
             </p>
           </div>
         </div>
+
+        {/* Trust Badges Bar */}
+        <div className="absolute bottom-0 left-0 right-0 bg-white/10 backdrop-blur-md border-t border-white/20 py-6">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
+              <div className="space-y-1">
+                <div className="text-3xl font-bold text-teal-300">50+</div>
+                <div className="text-sm text-blue-200">Active Clients</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-3xl font-bold text-teal-300">£2M+</div>
+                <div className="text-sm text-blue-200">Ad Spend Optimized</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-3xl font-bold text-teal-300">156%</div>
+                <div className="text-sm text-blue-200">Avg ROI Increase</div>
+              </div>
+              <div className="space-y-1">
+                <div className="text-3xl font-bold text-teal-300">24hrs</div>
+                <div className="text-sm text-blue-200">To First Insights</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* Problem Section */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
-              Marketing Agencies Are Broken
+      {/* Spacer */}
+      <div className="h-24"></div>
+
+      {/* Problem Section with Side-by-Side Cards */}
+      <section className="py-24 bg-gradient-to-b from-slate-50 to-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-6xl font-black text-slate-900 mb-6 leading-tight">
+              Marketing Agencies
+              <br />
+              <span className="bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+                Are Broken
+              </span>
             </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              You know you need marketing help, but traditional agencies are expensive,
-              slow, and inconsistent. Sound familiar?
+            <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
+              You know you need marketing help, but traditional agencies are expensive, slow, and inconsistent
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 mb-12">
-            <div className="bg-gradient-to-br from-red-50 to-red-100 border-2 border-red-200 rounded-xl p-8">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center mr-4">
-                  <AlertTriangle className="w-6 h-6 text-white" />
+          {/* Side-by-Side Comparison Cards */}
+          <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* Traditional Agency Card */}
+            <div className="group bg-gradient-to-br from-red-50 via-orange-50 to-red-50 rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-2 border-red-200">
+              <div className="flex items-center mb-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-red-600 to-orange-600 rounded-2xl flex items-center justify-center mr-5 shadow-lg">
+                  <AlertTriangle className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-red-900">Traditional Agency</h3>
+                <h3 className="text-3xl font-bold text-red-900">Traditional Agency</h3>
               </div>
+
               <ul className="space-y-4">
                 {[
-                  '£4,000-£12,000/month retainers',
-                  '2-4 weeks for simple campaign changes',
-                  'Inconsistent quality across team members',
-                  'Requires constant management and check-ins',
-                  'Hidden costs and scope creep',
-                  'Junior staff doing the actual work',
-                  'Generic strategies copied from other clients',
-                  'No transparency into what theyre actually doing'
+                  { text: '£4,000-£12,000/month retainers', icon: DollarSign },
+                  { text: '2-4 weeks for simple campaign changes', icon: Clock },
+                  { text: 'Inconsistent quality across team', icon: AlertTriangle },
+                  { text: 'Requires constant management', icon: Users },
+                  { text: 'Hidden costs and scope creep', icon: TrendingUp },
+                  { text: 'Junior staff doing actual work', icon: Users },
+                  { text: 'Generic strategies from templates', icon: BarChart3 },
+                  { text: 'Zero transparency into activities', icon: X }
                 ].map((item, idx) => (
-                  <li key={idx} className="flex items-start text-red-900">
-                    <X className="w-5 h-5 mr-3 flex-shrink-0 text-red-600 mt-0.5" />
-                    <span>{item}</span>
+                  <li key={idx} className="flex items-start text-red-900 font-medium">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-red-200 flex items-center justify-center mr-4 mt-0.5">
+                      <X className="w-4 h-4 text-red-600" />
+                    </div>
+                    <span className="text-lg">{item.text}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            <div className="bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-200 rounded-xl p-8">
-              <div className="flex items-center mb-6">
-                <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center mr-4">
-                  <CheckCircle className="w-6 h-6 text-white" />
+            {/* cmoxpert Card */}
+            <div className="group bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 rounded-3xl p-10 shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 border-2 border-emerald-300 relative overflow-hidden">
+              {/* Shine effect */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+
+              {/* Best Value Badge */}
+              <div className="absolute -top-3 -right-3">
+                <div className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg flex items-center">
+                  <Star className="w-4 h-4 mr-2 fill-current" />
+                  Best Value
                 </div>
-                <h3 className="text-2xl font-bold text-green-900">cmoxpert Services</h3>
               </div>
-              <ul className="space-y-4">
-                {[
-                  '£2,000-£8,000/month transparent pricing',
-                  'Instant automated insights every week',
-                  'Consistent AI-powered analysis quality',
-                  'Self-service dashboard + expert support',
-                  'All-inclusive - no surprise fees',
-                  'Strategic recommendations from real data',
-                  'Customized strategies for your business',
-                  'Complete transparency with real-time reporting'
-                ].map((item, idx) => (
-                  <li key={idx} className="flex items-start text-green-900 font-medium">
-                    <Check className="w-5 h-5 mr-3 flex-shrink-0 text-green-600 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
+
+              <div className="relative z-10">
+                <div className="flex items-center mb-8">
+                  <div className="w-16 h-16 bg-gradient-to-br from-emerald-600 to-teal-600 rounded-2xl flex items-center justify-center mr-5 shadow-lg">
+                    <CheckCircle className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-3xl font-bold text-emerald-900">cmoxpert Services</h3>
+                </div>
+
+                <ul className="space-y-4">
+                  {[
+                    { text: '£2,000-£8,000/month transparent pricing', icon: DollarSign },
+                    { text: 'Instant automated insights every week', icon: Zap },
+                    { text: 'Consistent AI-powered analysis', icon: Brain },
+                    { text: 'Self-service dashboard + expert support', icon: Users },
+                    { text: 'All-inclusive - no surprise fees', icon: Shield },
+                    { text: 'Strategic recommendations from data', icon: LineChart },
+                    { text: 'Customized strategies for YOUR business', icon: Target },
+                    { text: 'Complete transparency & real-time reports', icon: BarChart3 }
+                  ].map((item, idx) => (
+                    <li key={idx} className="flex items-start text-emerald-900 font-bold">
+                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-300 flex items-center justify-center mr-4 mt-0.5">
+                        <Check className="w-4 h-4 text-emerald-700" />
+                      </div>
+                      <span className="text-lg">{item.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
 
-          <div className="text-center">
+          <div className="text-center mt-12">
             <Link
               to="/audit"
-              className="inline-flex items-center text-slate_blue-600 hover:text-slate_blue-700 font-bold text-lg"
+              className="group inline-flex items-center text-blue-600 hover:text-blue-700 font-bold text-xl transition-colors"
             >
               See how much you could save
-              <ArrowRight className="w-5 h-5 ml-2" />
+              <ArrowRight className="w-6 h-6 ml-2 group-hover:translate-x-2 transition-transform" />
             </Link>
           </div>
         </div>
       </section>
 
-      {/* Value Props */}
-      <section className="py-20 bg-gradient-to-br from-slate-50 to-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
+      {/* Spacer */}
+      <div className="h-24"></div>
+
+      {/* How It Works - Timeline Design */}
+      <section className="py-24 bg-gradient-to-b from-white to-slate-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-6xl font-black text-slate-900 mb-6">
               How It Works
             </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
-              Fractional CMO expertise meets real-time data insights. The best of both worlds.
+            <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto">
+              Fractional CMO expertise meets{' '}
+              <span className="font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
+                real-time AI insights
+              </span>
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-slate-200 hover:border-slate_blue-300 transition-all">
-              <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
-                <Zap className="w-8 h-8 text-blue-600" />
+          {/* Timeline Steps */}
+          <div className="max-w-5xl mx-auto space-y-16">
+            {/* Step 1 */}
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="flex-shrink-0 w-full md:w-1/2 order-2 md:order-1">
+                <div className="bg-white rounded-3xl shadow-2xl p-10 border-2 border-slate-200 hover:border-blue-300 transition-all duration-500 transform hover:-translate-y-1">
+                  <div className="flex items-start mb-6">
+                    <div className="flex-shrink-0 w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-xl">
+                      <Zap className="w-10 h-10 text-white" />
+                    </div>
+                    <div className="ml-6">
+                      <h3 className="text-3xl font-bold text-slate-900 mb-2">Automated Insights</h3>
+                      <p className="text-slate-600 text-lg leading-relaxed">
+                        Connect your marketing platforms once. Every Monday, receive comprehensive performance reports.
+                      </p>
+                    </div>
+                  </div>
+                  <ul className="space-y-3">
+                    {['Weekly performance reports', 'ROI tracking across all channels', 'Anomaly detection & alerts'].map((item, idx) => (
+                      <li key={idx} className="flex items-center text-slate-700 font-medium">
+                        <Check className="w-5 h-5 mr-3 text-green-600 flex-shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Automated Insights</h3>
-              <p className="text-slate-600 mb-6">
-                Connect your marketing platforms once. Every Monday, receive a comprehensive
-                performance report showing whats working and whats not.
-              </p>
-              <ul className="space-y-2 text-sm text-slate-600">
-                <li className="flex items-center">
-                  <Check className="w-4 h-4 mr-2 text-green-600" />
-                  Weekly performance reports
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-4 h-4 mr-2 text-green-600" />
-                  ROI tracking across all channels
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-4 h-4 mr-2 text-green-600" />
-                  Anomaly detection & alerts
-                </li>
-              </ul>
+
+              <div className="flex-shrink-0 w-24 h-24 bg-gradient-to-br from-blue-600 to-cyan-600 rounded-full flex items-center justify-center text-white text-4xl font-black shadow-2xl order-1 md:order-2">
+                1
+              </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-slate_blue-300 hover:border-slate_blue-400 transition-all relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <span className="bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-1 rounded-full text-sm font-bold shadow-lg">
-                  Most Popular
-                </span>
+            {/* Connecting Line */}
+            <div className="hidden md:block w-1 h-16 bg-gradient-to-b from-blue-600 to-green-600 mx-auto rounded-full"></div>
+
+            {/* Step 2 */}
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="flex-shrink-0 w-24 h-24 bg-gradient-to-br from-green-600 to-emerald-600 rounded-full flex items-center justify-center text-white text-4xl font-black shadow-2xl order-1">
+                2
               </div>
-              <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mb-6">
-                <Target className="w-8 h-8 text-green-600" />
+
+              <div className="flex-shrink-0 w-full md:w-1/2 order-2">
+                <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-3xl shadow-2xl p-10 border-2 border-green-300 hover:border-green-400 transition-all duration-500 transform hover:-translate-y-1 relative">
+                  <div className="absolute -top-4 right-8">
+                    <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+                      Most Popular
+                    </span>
+                  </div>
+                  <div className="flex items-start mb-6">
+                    <div className="flex-shrink-0 w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl flex items-center justify-center shadow-xl">
+                      <Target className="w-10 h-10 text-white" />
+                    </div>
+                    <div className="ml-6">
+                      <h3 className="text-3xl font-bold text-slate-900 mb-2">Strategic Recommendations</h3>
+                      <p className="text-slate-600 text-lg leading-relaxed">
+                        AI analyzes your data and delivers actionable next steps to improve results.
+                      </p>
+                    </div>
+                  </div>
+                  <ul className="space-y-3">
+                    {['Budget reallocation advice', 'Campaign optimization tips', 'Competitive intelligence'].map((item, idx) => (
+                      <li key={idx} className="flex items-center text-slate-700 font-medium">
+                        <Check className="w-5 h-5 mr-3 text-green-600 flex-shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Strategic Recommendations</h3>
-              <p className="text-slate-600 mb-6">
-                AI analyzes your data and market trends to deliver actionable recommendations.
-                Know exactly what to do next to improve results.
-              </p>
-              <ul className="space-y-2 text-sm text-slate-600">
-                <li className="flex items-center">
-                  <Check className="w-4 h-4 mr-2 text-green-600" />
-                  Budget reallocation advice
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-4 h-4 mr-2 text-green-600" />
-                  Campaign optimization tips
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-4 h-4 mr-2 text-green-600" />
-                  Competitive intelligence
-                </li>
-              </ul>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-slate-200 hover:border-slate_blue-300 transition-all">
-              <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
-                <Users className="w-8 h-8 text-purple-600" />
+            {/* Connecting Line */}
+            <div className="hidden md:block w-1 h-16 bg-gradient-to-b from-green-600 to-purple-600 mx-auto rounded-full"></div>
+
+            {/* Step 3 */}
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="flex-shrink-0 w-full md:w-1/2 order-2 md:order-1">
+                <div className="bg-white rounded-3xl shadow-2xl p-10 border-2 border-slate-200 hover:border-purple-300 transition-all duration-500 transform hover:-translate-y-1">
+                  <div className="flex items-start mb-6">
+                    <div className="flex-shrink-0 w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-xl">
+                      <Users className="w-10 h-10 text-white" />
+                    </div>
+                    <div className="ml-6">
+                      <h3 className="text-3xl font-bold text-slate-900 mb-2">Expert Support</h3>
+                      <p className="text-slate-600 text-lg leading-relaxed">
+                        Get monthly strategy calls with real marketing experts who guide your decisions.
+                      </p>
+                    </div>
+                  </div>
+                  <ul className="space-y-3">
+                    {['Monthly strategy sessions', 'Quarterly business reviews', 'Email & chat support'].map((item, idx) => (
+                      <li key={idx} className="flex items-center text-slate-700 font-medium">
+                        <Check className="w-5 h-5 mr-3 text-green-600 flex-shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-4">Expert Support</h3>
-              <p className="text-slate-600 mb-6">
-                Not just software. Get monthly strategy calls with real marketing experts
-                who review your results and guide your decisions.
-              </p>
-              <ul className="space-y-2 text-sm text-slate-600">
-                <li className="flex items-center">
-                  <Check className="w-4 h-4 mr-2 text-green-600" />
-                  Monthly strategy sessions
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-4 h-4 mr-2 text-green-600" />
-                  Quarterly business reviews
-                </li>
-                <li className="flex items-center">
-                  <Check className="w-4 h-4 mr-2 text-green-600" />
-                  Email & chat support
-                </li>
-              </ul>
+
+              <div className="flex-shrink-0 w-24 h-24 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center text-white text-4xl font-black shadow-2xl order-1 md:order-2">
+                3
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Comparison Table */}
-      <section className="py-20 bg-white">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-900 mb-4">
-              Compare Your Options
-            </h2>
-            <p className="text-xl text-slate-600">
-              See why productized services are the future of marketing support
-            </p>
-          </div>
+      {/* Spacer */}
+      <div className="h-24"></div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b-2 border-slate-200">
-                  <th className="text-left py-4 px-6 font-bold text-slate-900"></th>
-                  <th className="py-4 px-6">
-                    <div className="text-center">
-                      <p className="font-bold text-red-900 mb-1">Traditional Agency</p>
-                      <p className="text-sm text-slate-600">£4-12K/month</p>
-                    </div>
-                  </th>
-                  <th className="py-4 px-6 bg-gradient-to-br from-green-50 to-green-100 rounded-t-xl">
-                    <div className="text-center">
-                      <p className="font-bold text-green-900 mb-1">Our Platform</p>
-                      <p className="text-sm text-green-700">£2-8K/month</p>
-                    </div>
-                  </th>
-                  <th className="py-4 px-6">
-                    <div className="text-center">
-                      <p className="font-bold text-slate-900 mb-1">DIY Tools</p>
-                      <p className="text-sm text-slate-600">£160-800/month</p>
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="text-sm">
-                {[
-                  { feature: 'Monthly Cost', agency: '£4,000 - £12,000', us: '£2,000 - £8,000', diy: '£160 - £800' },
-                  { feature: 'Setup Time', agency: '4-6 weeks', us: '24 hours', diy: '2-4 weeks' },
-                  { feature: 'Report Delivery', agency: '2-4 weeks', us: 'Automated weekly', diy: 'You build it' },
-                  { feature: 'Strategic Guidance', agency: 'Yes', us: 'Yes', diy: 'No' },
-                  { feature: 'Data Analysis', agency: 'Manual', us: 'Automated + AI', diy: 'Manual' },
-                  { feature: 'Turnaround Time', agency: 'Slow', us: 'Instant', diy: 'Depends on you' },
-                  { feature: 'Quality Consistency', agency: 'Varies', us: 'Consistent', diy: 'Varies' },
-                  { feature: 'Scalability', agency: 'Limited', us: 'High', diy: 'Very limited' },
-                  { feature: 'Contract Length', agency: '6-12 months', us: 'Month-to-month', diy: 'Monthly' },
-                ].map((row, idx) => (
-                  <tr key={idx} className="border-b border-slate-100">
-                    <td className="py-4 px-6 font-medium text-slate-900">{row.feature}</td>
-                    <td className="py-4 px-6 text-center text-slate-600">{row.agency}</td>
-                    <td className="py-4 px-6 text-center font-bold text-green-900 bg-gradient-to-br from-green-50 to-green-100">
-                      {row.us}
-                    </td>
-                    <td className="py-4 px-6 text-center text-slate-600">{row.diy}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+      {/* Social Proof Section */}
+      <section className="py-24 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
 
-      {/* Social Proof */}
-      <section className="py-20 bg-gradient-to-br from-slate-800 to-slate-900 text-white">
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="relative max-w-7xl mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">
+            <h2 className="text-5xl md:text-6xl font-black mb-6">
               Trusted by Growing Companies
             </h2>
-            <p className="text-xl text-slate-300">
+            <p className="text-xl md:text-2xl text-blue-200">
               Marketing leaders choose us over agencies
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
-              <div className="text-5xl font-bold text-green-400 mb-2">£2M+</div>
-              <p className="text-slate-300">Wasted ad spend identified and recovered</p>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              { value: '£2M+', label: 'Wasted ad spend identified', gradient: 'from-green-400 to-emerald-500' },
+              { value: '156%', label: 'Average ROI improvement in 90 days', gradient: 'from-blue-400 to-cyan-500' },
+              { value: '24hrs', label: 'From signup to actionable insights', gradient: 'from-purple-400 to-pink-500' }
+            ].map((stat, idx) => (
+              <div key={idx} className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-500 transform hover:-translate-y-2 shadow-2xl">
+                <div className={`text-6xl font-black bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent mb-4`}>
+                  {stat.value}
+                </div>
+                <p className="text-lg text-blue-100">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Spacer */}
+      <div className="h-24"></div>
+
+      {/* Final CTA Section */}
+      <section className="py-32 bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50">
+        <div className="max-w-5xl mx-auto px-6 text-center">
+          <h2 className="text-5xl md:text-7xl font-black text-slate-900 mb-8 leading-tight">
+            Ready to{' '}
+            <span className="bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+              Ditch Your Agency?
+            </span>
+          </h2>
+
+          <p className="text-2xl md:text-3xl text-slate-600 mb-12 leading-relaxed">
+            Start with a free marketing audit. See exactly where you're wasting money and how much you could save.
+          </p>
+
+          <div className="mb-10">
+            <Link
+              to="/audit"
+              className="group relative inline-flex items-center px-14 py-7 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 bg-size-200 hover:bg-pos-100 text-white rounded-2xl font-black text-2xl shadow-2xl hover:shadow-cyan-500/50 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2"
+            >
+              <Rocket className="w-8 h-8 mr-3 group-hover:rotate-12 transition-transform" />
+              Get Free Audit (60 Seconds)
+              <ArrowRight className="w-8 h-8 ml-3 group-hover:translate-x-2 transition-transform" />
+              <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl opacity-0 group-hover:opacity-50 transition-opacity blur-2xl"></div>
+            </Link>
+          </div>
+
+          <p className="text-slate-500 mb-10 text-lg">
+            <Shield className="w-5 h-5 inline mr-2" />
+            No credit card • No obligation • Instant results
+          </p>
+
+          <div className="flex flex-wrap items-center justify-center gap-8 text-slate-600">
+            <div className="flex items-center bg-white rounded-full px-6 py-3 shadow-lg">
+              <Shield className="w-5 h-5 mr-2 text-blue-600" />
+              <span className="font-semibold">No long-term contracts</span>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
-              <div className="text-5xl font-bold text-green-400 mb-2">156%</div>
-              <p className="text-slate-300">Average ROI improvement in 90 days</p>
+            <div className="flex items-center bg-white rounded-full px-6 py-3 shadow-lg">
+              <Award className="w-5 h-5 mr-2 text-blue-600" />
+              <span className="font-semibold">Cancel anytime</span>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl p-8 border border-white/20">
-              <div className="text-5xl font-bold text-green-400 mb-2">24hrs</div>
-              <p className="text-slate-300">From signup to first actionable insights</p>
+            <div className="flex items-center bg-white rounded-full px-6 py-3 shadow-lg">
+              <Clock className="w-5 h-5 mr-2 text-blue-600" />
+              <span className="font-semibold">Results in 24 hours</span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-slate_blue-50 to-white">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-5xl font-bold text-slate-900 mb-6">
-            Ready to Ditch Your Agency?
-          </h2>
-          <p className="text-2xl text-slate-600 mb-10">
-            Start with a free marketing audit. See exactly where youre wasting money
-            and how much you could save with our productized services.
-          </p>
-          <div className="flex items-center justify-center space-x-4 mb-8">
-            <Link
-              to="/audit"
-              className="bg-gradient-to-r from-slate_blue-600 to-slate_blue-700 hover:from-slate_blue-700 hover:to-slate_blue-800 text-white px-12 py-6 rounded-xl font-bold text-xl shadow-2xl hover:shadow-3xl transition-all inline-flex items-center"
-            >
-              Get Free Audit (60 Seconds)
-              <ArrowRight className="w-6 h-6 ml-3" />
-            </Link>
+      {/* Modern Footer */}
+      <footer className="bg-slate-900 text-white py-16">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-4 gap-12 mb-12">
+            {/* Brand */}
+            <div>
+              <h3 className="text-2xl font-black mb-4 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                cmoxpert
+              </h3>
+              <p className="text-slate-400 leading-relaxed">
+                Tech-enabled fractional CMO services for growing companies
+              </p>
+            </div>
+
+            {/* Product */}
+            <div>
+              <h4 className="font-bold mb-4 text-lg">Product</h4>
+              <ul className="space-y-2 text-slate-400">
+                <li><Link to="/packages" className="hover:text-white transition-colors">Pricing</Link></li>
+                <li><Link to="/audit" className="hover:text-white transition-colors">Free Audit</Link></li>
+                <li><Link to="/beta" className="hover:text-white transition-colors">Platform Demo</Link></li>
+              </ul>
+            </div>
+
+            {/* Company */}
+            <div>
+              <h4 className="font-bold mb-4 text-lg">Company</h4>
+              <ul className="space-y-2 text-slate-400">
+                <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
+                <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link></li>
+                <li><Link to="/terms" className="hover:text-white transition-colors">Terms</Link></li>
+              </ul>
+            </div>
+
+            {/* Contact */}
+            <div>
+              <h4 className="font-bold mb-4 text-lg">Get Started</h4>
+              <Link
+                to="/audit"
+                className="inline-block bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white px-6 py-3 rounded-xl font-bold transition-all transform hover:scale-105"
+              >
+                Free Audit
+              </Link>
+            </div>
           </div>
-          <p className="text-slate-500 mb-8">
-            No credit card • No obligation • Instant results
-          </p>
-          <div className="flex items-center justify-center space-x-8 text-sm text-slate-600">
-            <div className="flex items-center">
-              <Shield className="w-5 h-5 mr-2 text-slate_blue-600" />
-              <span>No long-term contracts</span>
-            </div>
-            <div className="flex items-center">
-              <Award className="w-5 h-5 mr-2 text-slate_blue-600" />
-              <span>Cancel anytime</span>
-            </div>
-            <div className="flex items-center">
-              <Clock className="w-5 h-5 mr-2 text-slate_blue-600" />
-              <span>Results in 24 hours</span>
-            </div>
+
+          <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
+            <p>© 2024 cmoxpert. All rights reserved.</p>
           </div>
         </div>
-      </section>
+      </footer>
+
+      {/* Custom CSS for animations */}
+      <style>{`
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fade-in-up {
+          animation: fade-in-up 0.8s ease-out forwards;
+        }
+
+        .animation-delay-200 {
+          animation-delay: 0.2s;
+          opacity: 0;
+        }
+
+        .animation-delay-400 {
+          animation-delay: 0.4s;
+          opacity: 0;
+        }
+
+        .animation-delay-600 {
+          animation-delay: 0.6s;
+          opacity: 0;
+        }
+
+        .animation-delay-800 {
+          animation-delay: 0.8s;
+          opacity: 0;
+        }
+
+        .bg-size-200 {
+          background-size: 200%;
+        }
+
+        .bg-pos-100 {
+          background-position: 100%;
+        }
+
+        @keyframes pulse {
+          0%, 100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.8;
+          }
+        }
+      `}</style>
     </div>
   );
 }
