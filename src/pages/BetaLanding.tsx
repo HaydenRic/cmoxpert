@@ -154,12 +154,12 @@ export default function BetaLanding() {
                 <h1 className="text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
                   Fractional CMO Platform<br />
                   <span className="bg-gradient-to-r from-earth_yellow-400 to-tan-400 bg-clip-text text-transparent">
-                    With Real-Time Data
+                    With Centralized Data
                   </span>
                 </h1>
 
                 <p className="text-xl text-cornsilk-300 mb-8 leading-relaxed">
-                  Manage all your B2B SaaS clients in one platform. Strategic guidance meets powerful analytics—deliver CMO-level insights without the spreadsheet chaos.
+                  Manage all your B2B SaaS clients in one platform. Strategic guidance meets data-driven analytics—deliver CMO-level insights without the spreadsheet chaos.
                 </p>
 
                 <div className="flex flex-wrap gap-4 mb-8">
@@ -203,8 +203,8 @@ export default function BetaLanding() {
                       <CheckCircle className="w-5 h-5 text-green-400" />
                     </div>
                     <div>
-                      <div className="font-bold text-white">AI Content Generation</div>
-                      <div className="text-sm text-cornsilk-400">Marketing content on-demand</div>
+                      <div className="font-bold text-white">Content Generation</div>
+                      <div className="text-sm text-cornsilk-400">Automated marketing content</div>
                     </div>
                   </div>
 
@@ -457,11 +457,11 @@ export default function BetaLanding() {
                   <Sparkles className="w-6 h-6 text-green-400" />
                 </div>
                 <div className="flex items-center space-x-2 mb-2">
-                  <h3 className="font-bold text-white text-lg">AI Content Hub</h3>
+                  <h3 className="font-bold text-white text-lg">Content Hub</h3>
                   <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs font-bold rounded">READY</span>
                 </div>
                 <p className="text-cornsilk-400 mb-3">
-                  Generate blog posts, LinkedIn content, and email campaigns. Brand voice profiles for each client.
+                  Generate blog posts, LinkedIn content, and email campaigns using templates. Brand voice profiles for each client.
                 </p>
               </div>
 

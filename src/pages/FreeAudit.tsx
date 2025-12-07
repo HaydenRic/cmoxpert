@@ -198,20 +198,55 @@ export default function FreeAudit() {
 
       // Save to database
       const monthlySpendCents = Math.round((parseInt(formData.monthly_ad_spend) || 0) * 100);
+      const emailLower = formData.email.toLowerCase().trim();
 
-      await supabase.from('marketing_audits').insert({
-        email: formData.email,
-        company_name: formData.company_name,
-        website: formData.website,
-        monthly_ad_spend: monthlySpendCents,
-        primary_channels: formData.primary_channels,
-        biggest_challenge: formData.biggest_challenge,
-        audit_results: results,
-        score: results.score,
-        referral_source: 'organic',
-        ip_address: 'unknown', // Would get from request in production
-        user_agent: navigator.userAgent
-      });
+      // Check if audit already exists for this email
+      const { data: existing } = await supabase
+        .from('marketing_audits')
+        .select('id, submission_count')
+        .eq('email', emailLower)
+        .maybeSingle();
+
+      if (existing) {
+        // Update existing record
+        const { error } = await supabase
+          .from('marketing_audits')
+          .update({
+            company_name: formData.company_name,
+            website: formData.website,
+            monthly_ad_spend: monthlySpendCents,
+            primary_channels: formData.primary_channels,
+            biggest_challenge: formData.biggest_challenge,
+            audit_results: results,
+            score: results.score,
+            submission_count: (existing.submission_count || 1) + 1,
+            last_submission_date: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            user_agent: navigator.userAgent
+          })
+          .eq('id', existing.id);
+
+        if (error) throw error;
+      } else {
+        // Insert new record
+        const { error } = await supabase.from('marketing_audits').insert({
+          email: emailLower,
+          company_name: formData.company_name,
+          website: formData.website,
+          monthly_ad_spend: monthlySpendCents,
+          primary_channels: formData.primary_channels,
+          biggest_challenge: formData.biggest_challenge,
+          audit_results: results,
+          score: results.score,
+          referral_source: 'organic',
+          ip_address: 'unknown',
+          user_agent: navigator.userAgent,
+          submission_count: 1,
+          last_submission_date: new Date().toISOString()
+        });
+
+        if (error) throw error;
+      }
 
       setStep('results');
     } catch (error) {
@@ -269,8 +304,11 @@ export default function FreeAudit() {
             <h1 className="text-4xl font-bold text-slate-900 mb-3">
               Your Marketing Health Report
             </h1>
-            <p className="text-lg text-slate-600">
-              Based on your inputs, heres what we found
+            <p className="text-lg text-slate-600 mb-2">
+              Based on your inputs, here's what we found
+            </p>
+            <p className="text-sm text-slate-500">
+              Estimates based on industry benchmarks and the data you provided
             </p>
           </div>
 
@@ -332,6 +370,37 @@ export default function FreeAudit() {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Methodology Explanation */}
+          <div className="bg-blue-50 rounded-xl border-2 border-blue-200 p-6 mb-8">
+            <details className="cursor-pointer">
+              <summary className="font-bold text-blue-900 text-lg mb-2 flex items-center">
+                <Search className="w-5 h-5 mr-2" />
+                How we calculated this
+              </summary>
+              <div className="mt-4 space-y-3 text-sm text-blue-800">
+                <p>
+                  <strong>Marketing Health Score:</strong> Calculated based on channel diversification, spend levels, and reported challenges.
+                  Scores range from 30-85, with lower scores indicating more opportunities for optimization.
+                </p>
+                <p>
+                  <strong>Estimated Waste:</strong> Based on industry benchmarks, we estimate 15-35% of marketing spend is typically
+                  wasted on underperforming campaigns, poor targeting, and inefficient channels.
+                </p>
+                <p className="bg-blue-100 p-3 rounded">
+                  <strong>Formula:</strong> Monthly Spend × Waste Factor (15-35%) = Estimated Waste<br />
+                  <em>Waste factor varies based on number of channels, spend level, and reported challenges</em>
+                </p>
+                <p>
+                  <strong>Potential Savings:</strong> With systematic optimization (A/B testing, channel consolidation, conversion rate
+                  improvements), businesses typically recover 40-50% of wasted spend within 90 days.
+                </p>
+                <p className="text-xs text-blue-700 italic">
+                  These are estimates based on industry averages. Actual results will vary based on your specific situation.
+                </p>
+              </div>
+            </details>
           </div>
 
           {/* Opportunities */}
@@ -415,19 +484,11 @@ export default function FreeAudit() {
 
         {/* Social Proof */}
         <div className="bg-white rounded-xl border-2 border-slate-200 p-6 mb-8">
-          <div className="grid md:grid-cols-3 gap-6 text-center">
-            <div>
-              <p className="text-3xl font-bold text-slate_blue-600 mb-1">£2M+</p>
-              <p className="text-sm text-slate-600">Waste Identified</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-slate_blue-600 mb-1">500+</p>
-              <p className="text-sm text-slate-600">Audits Completed</p>
-            </div>
-            <div>
-              <p className="text-3xl font-bold text-slate_blue-600 mb-1">35%</p>
-              <p className="text-sm text-slate-600">Avg Savings Found</p>
-            </div>
+          <div className="text-center">
+            <p className="text-lg font-semibold text-slate_blue-600 mb-2">Join Our Beta Program</p>
+            <p className="text-sm text-slate-600">
+              Help us improve our audit tool and get exclusive early access to our platform
+            </p>
           </div>
         </div>
 

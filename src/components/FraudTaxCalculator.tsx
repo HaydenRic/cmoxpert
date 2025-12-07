@@ -59,9 +59,17 @@ export default function FraudTaxCalculator() {
         </div>
       </div>
 
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+        <p className="text-xs text-blue-800">
+          <strong>Note:</strong> Fraud rates are industry estimates based on 2023-2024 research.
+          Actual fraud rates vary by industry, targeting, and protection measures in place.
+          These calculations provide directional guidance, not exact figures.
+        </p>
+      </div>
+
       <div className="space-y-4 mb-8">
         <p className="text-sm text-gray-600 mb-4">
-          Enter your monthly spend by channel to see fraud exposure
+          Enter your monthly spend by channel to see estimated fraud exposure
         </p>
 
         {channels.map((channel, index) => (
@@ -144,8 +152,8 @@ export default function FraudTaxCalculator() {
             <div className="flex items-start gap-3 mb-4">
               <TrendingDown className="w-6 h-6 text-green-600 mt-1" />
               <div className="flex-1">
-                <h4 className="font-bold text-green-900 text-lg mb-1">Potential Savings with cmoxpert</h4>
-                <p className="text-sm text-green-700">Eliminate 85% of fraud waste with AI-powered detection</p>
+                <h4 className="font-bold text-green-900 text-lg mb-1">Potential Savings with Better Protection</h4>
+                <p className="text-sm text-green-700">Industry leaders reduce fraud waste by up to 85% with proper detection and filtering</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
