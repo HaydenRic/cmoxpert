@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
+import toast from 'react-hot-toast';
 import { supabase } from '../lib/supabase';
 import { setUserContext, clearUserContext } from '../lib/monitoring';
 
@@ -249,18 +250,41 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (result.error) {
-        setError(result.error.message);
+        const errorMessage = result.error.message;
+        setError(errorMessage);
+
+        if (errorMessage.includes('Invalid login credentials') || errorMessage.includes('Invalid')) {
+          toast.error('Invalid email or password. Please try again.', {
+            icon: '✕',
+          });
+        } else if (errorMessage.includes('Email not confirmed')) {
+          toast.error('Please verify your email before signing in.', {
+            icon: 'ℹ',
+          });
+        } else {
+          toast.error(errorMessage, {
+            icon: '✕',
+          });
+        }
+
         return result;
       }
 
       if (result.data.session) {
         setLoginSuccess(true);
+        toast.success('Welcome back! Redirecting to dashboard...', {
+          icon: '✓',
+          duration: 3000,
+        });
       }
 
       return { ...result, success: true };
     } catch (error: any) {
       const errorMessage = error.message || 'An error occurred during sign in';
       setError(errorMessage);
+      toast.error('Login failed. Please try again.', {
+        icon: '✕',
+      });
       return { error: { message: errorMessage }, success: false };
     } finally {
       setLoading(false);
@@ -281,11 +305,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
 
       if (result.error) {
-        setError(result.error.message);
+        const errorMessage = result.error.message;
+        setError(errorMessage);
+
+        if (errorMessage.includes('already registered') || errorMessage.includes('already exists')) {
+          toast.error('Email already registered. Try logging in instead.', {
+            icon: 'ℹ',
+            style: {
+              background: '#f59e0b',
+              color: '#fff',
+            },
+          });
+        } else {
+          toast.error(errorMessage, {
+            icon: '✕',
+          });
+        }
+
         return result;
       }
 
       if (result.data.user) {
+        toast.success('Account created successfully! Welcome to CMOxPert', {
+          icon: '🎉',
+          duration: 3000,
+        });
+
         setTimeout(async () => {
           try {
             const { data: existingProfile } = await supabase
@@ -313,6 +358,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error: any) {
       const errorMessage = error.message || 'An error occurred during sign up';
       setError(errorMessage);
+      toast.error('Sign up failed. Please try again.', {
+        icon: '✕',
+      });
       return { error: { message: errorMessage } };
     } finally {
       setLoading(false);

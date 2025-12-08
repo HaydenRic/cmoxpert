@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { Compass, Mail, Lock, AlertCircle, ArrowLeft, Play, CheckCircle } from 'lucide-react';
+import { Compass, Mail, Lock, AlertCircle, ArrowLeft, Play, CheckCircle, Loader2 } from 'lucide-react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import clsx from 'clsx';
 import { LoginSuccessModal } from './LoginSuccessModal';
@@ -197,8 +197,16 @@ export function AuthForm() {
       } else if (isSignIn && result.success) {
         setSuccessEmail(trimmedEmail);
         setShowSuccessModal(true);
-      } else if (!isSignIn && result.data?.user && !result.data.session) {
-        setError('Account created successfully! You can now sign in.');
+        setTimeout(() => {
+          const isAdmin = result.data?.user?.email === 'hdnric@gmail.com';
+          navigate(isAdmin ? '/admin' : '/dashboard');
+        }, 1500);
+      } else if (!isSignIn && result.data?.user) {
+        if (result.data.session) {
+          setTimeout(() => {
+            navigate('/dashboard');
+          }, 1500);
+        }
       }
     } catch (err: any) {
       console.error('Authentication error:', err);
@@ -381,14 +389,18 @@ export function AuthForm() {
                 type="submit"
                 disabled={loading}
                 className={clsx(
-                  'w-full py-3 px-4 rounded-lg font-medium transition-all',
+                  'w-full py-3 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2',
                   'bg-gradient-to-r from-slate_blue-600 to-charcoal-700 hover:from-slate_blue-700 hover:to-charcoal-800',
                   'text-white shadow-lg hover:shadow-xl',
                   'disabled:opacity-50 disabled:cursor-not-allowed'
                 )}
                 aria-describedby="submit-help"
               >
-                {loading ? 'Please wait...' : isSignIn ? 'Sign in' : 'Create account'}
+                {loading && <Loader2 className="w-5 h-5 animate-spin" />}
+                {loading
+                  ? (isSignIn ? 'Logging in...' : 'Creating account...')
+                  : (isSignIn ? 'Log In' : 'Sign Up')
+                }
               </button>
               <div id="submit-help" className="sr-only">
                 {isSignIn ? 'Sign in to access your dashboard' : 'Create your account to get started'}
