@@ -14,7 +14,9 @@ import {
   Brain,
   Settings,
   Sparkles,
-  XCircle
+  XCircle,
+  UserPlus,
+  BookOpen
 } from 'lucide-react';
 import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
@@ -206,7 +208,8 @@ export function Dashboard() {
       icon: Users,
       color: 'bg-dark_moss_green-500',
       change: '+12%',
-      changeType: 'positive'
+      changeType: 'positive',
+      link: '/clients'
     },
     {
       title: 'Total Reports',
@@ -214,7 +217,8 @@ export function Dashboard() {
       icon: FileText,
       color: 'bg-pakistan_green-500',
       change: '+8%',
-      changeType: 'positive'
+      changeType: 'positive',
+      link: '/reports'
     },
     {
       title: 'Completed',
@@ -222,7 +226,8 @@ export function Dashboard() {
       icon: CheckCircle,
       color: 'bg-pakistan_green-500',
       change: `${stats.completedReports}/${stats.totalReports}`,
-      changeType: 'neutral'
+      changeType: 'neutral',
+      link: '/reports'
     },
     {
       title: 'In Progress',
@@ -230,7 +235,8 @@ export function Dashboard() {
       icon: Clock,
       color: 'bg-earth_yellow-500',
       change: 'Active',
-      changeType: 'neutral'
+      changeType: 'neutral',
+      link: '/reports'
     }
   ];
 
