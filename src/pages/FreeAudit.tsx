@@ -13,9 +13,16 @@ import {
   Mail,
   Building,
   Globe,
-  CreditCard
+  CreditCard,
+  Download,
+  Briefcase,
+  TrendingUp
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { generateAuditPDF } from '../lib/pdfReportGenerator';
+import { analyzePlatforms } from '../lib/platformAnalysisEngine';
+import { generateActionPlan, type ActionPlanItem } from '../lib/actionPlanGenerator';
+import { WasteBreakdownChart, ROIImprovementChart, PlatformScoreChart } from '../components/AuditCharts';
 
 interface AuditFormData {
   email: string;
@@ -24,6 +31,10 @@ interface AuditFormData {
   monthly_ad_spend: string;
   primary_channels: string[];
   biggest_challenge: string;
+  industry: string;
+  primary_goal: string[];
+  current_roas: string;
+  tracking_setup: string;
 }
 
 interface AuditResults {
@@ -43,6 +54,20 @@ interface AuditResults {
   }>;
   estimated_waste: number;
   potential_savings: number;
+  platformAnalysis?: {
+    overall_score: number;
+    campaign_structure: number;
+    tracking_analytics: number;
+    budget_allocation: number;
+    best_practices: number;
+    platform_details: Array<{
+      platform: string;
+      score: number;
+      issues: string[];
+      recommendations: string[];
+    }>;
+  };
+  actionPlan?: ActionPlanItem[];
 }
 
 export default function FreeAudit() {
@@ -54,7 +79,11 @@ export default function FreeAudit() {
     website: '',
     monthly_ad_spend: '',
     primary_channels: [],
-    biggest_challenge: ''
+    biggest_challenge: '',
+    industry: '',
+    primary_goal: [],
+    current_roas: '',
+    tracking_setup: ''
   });
   const [auditResults, setAuditResults] = useState<AuditResults | null>(null);
 
@@ -76,6 +105,35 @@ export default function FreeAudit() {
     'Need strategic guidance'
   ];
 
+  const industries = [
+    'SaaS / Software',
+    'Ecommerce / Retail',
+    'B2B Services',
+    'Financial Services',
+    'Healthcare',
+    'Education',
+    'Real Estate',
+    'Manufacturing',
+    'Other'
+  ];
+
+  const goals = [
+    { id: 'leads', label: 'Generate Leads' },
+    { id: 'sales', label: 'Drive Sales' },
+    { id: 'brand', label: 'Build Brand Awareness' },
+    { id: 'app', label: 'App Installs' },
+    { id: 'engagement', label: 'Increase Engagement' }
+  ];
+
+  const handleGoalToggle = (goalId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      primary_goal: prev.primary_goal.includes(goalId)
+        ? prev.primary_goal.filter(g => g !== goalId)
+        : [...prev.primary_goal, goalId]
+    }));
+  };
+
   const handleChannelToggle = (channelId: string) => {
     setFormData(prev => ({
       ...prev,
@@ -89,13 +147,21 @@ export default function FreeAudit() {
     const spend = parseInt(data.monthly_ad_spend) || 50000;
     const channelCount = data.primary_channels.length;
 
-    // Calculate score based on inputs
-    let score = 60; // Base score
-    if (spend > 100000) score -= 10; // Higher spend = more waste potential
-    if (channelCount < 2) score -= 15; // Poor diversification
-    if (channelCount > 5) score -= 10; // Too scattered
+    const platformAnalysis = analyzePlatforms({
+      monthly_ad_spend: spend,
+      primary_channels: data.primary_channels,
+      biggest_challenge: data.biggest_challenge,
+      industry: data.industry,
+      tracking_setup: data.tracking_setup === 'yes',
+      current_roas: parseFloat(data.current_roas) || undefined
+    });
+
+    let score = platformAnalysis.overall_score;
+    if (spend > 100000) score -= 5;
+    if (channelCount < 2) score -= 10;
+    if (channelCount > 5) score -= 5;
     if (data.biggest_challenge.includes('expensive') || data.biggest_challenge.includes('ROI')) {
-      score -= 15;
+      score -= 10;
     }
 
     // Generate findings
@@ -175,16 +241,57 @@ export default function FreeAudit() {
       }
     ];
 
+    platformAnalysis.platform_details.forEach(platform => {
+      if (platform.issues.length > 0) {
+        findings.push({
+          severity: 'warning' as const,
+          category: platform.platform,
+          issue: platform.issues[0],
+          impact: `Platform score: ${platform.score}/100`,
+          recommendation: platform.recommendations[0]
+        });
+      }
+    });
+
     const estimated_waste = Math.round(spend * 0.35);
     const potential_savings = Math.round(spend * 0.45);
+
+    const actionPlan = generateActionPlan({
+      monthly_ad_spend: spend,
+      primary_channels: data.primary_channels,
+      biggest_challenge: data.biggest_challenge,
+      score,
+      tracking_setup: data.tracking_setup === 'yes',
+      current_roas: parseFloat(data.current_roas) || undefined
+    });
 
     return {
       score: Math.max(30, Math.min(score, 85)),
       findings,
       opportunities,
       estimated_waste,
-      potential_savings
+      potential_savings,
+      platformAnalysis,
+      actionPlan
     };
+  };
+
+  const handleDownloadPDF = async () => {
+    if (!auditResults) return;
+
+    await generateAuditPDF({
+      company_name: formData.company_name || 'Your Company',
+      website: formData.website,
+      monthly_ad_spend: parseInt(formData.monthly_ad_spend),
+      primary_channels: formData.primary_channels,
+      score: auditResults.score,
+      estimated_waste: auditResults.estimated_waste,
+      potential_savings: auditResults.potential_savings,
+      findings: auditResults.findings,
+      opportunities: auditResults.opportunities,
+      platformAnalysis: auditResults.platformAnalysis,
+      actionPlan: auditResults.actionPlan
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -310,6 +417,13 @@ export default function FreeAudit() {
             <p className="text-sm text-slate-500">
               Estimates based on industry benchmarks and the data you provided
             </p>
+            <button
+              onClick={handleDownloadPDF}
+              className="mt-4 inline-flex items-center px-6 py-3 bg-slate_blue-600 hover:bg-slate_blue-700 text-white font-semibold rounded-lg shadow-lg transition-colors"
+            >
+              <Download className="w-5 h-5 mr-2" />
+              Download Full Report (PDF)
+            </button>
           </div>
 
           {/* Score Card */}
@@ -338,6 +452,32 @@ export default function FreeAudit() {
               </div>
             </div>
           </div>
+
+          {/* Data Visualizations */}
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <WasteBreakdownChart
+              estimated_waste={auditResults.estimated_waste}
+              potential_savings={auditResults.potential_savings}
+              monthly_spend={parseInt(formData.monthly_ad_spend)}
+            />
+            <ROIImprovementChart
+              potential_savings={auditResults.potential_savings}
+              monthly_spend={parseInt(formData.monthly_ad_spend)}
+            />
+          </div>
+
+          {auditResults.platformAnalysis && (
+            <div className="mb-8">
+              <PlatformScoreChart
+                platformScores={{
+                  campaign_structure: auditResults.platformAnalysis.campaign_structure,
+                  tracking_analytics: auditResults.platformAnalysis.tracking_analytics,
+                  budget_allocation: auditResults.platformAnalysis.budget_allocation,
+                  best_practices: auditResults.platformAnalysis.best_practices
+                }}
+              />
+            </div>
+          )}
 
           {/* Findings */}
           <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
@@ -402,6 +542,52 @@ export default function FreeAudit() {
               </div>
             </details>
           </div>
+
+          {/* Action Plan */}
+          {auditResults.actionPlan && auditResults.actionPlan.length > 0 && (
+            <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
+              <h2 className="text-2xl font-bold text-slate-900 mb-6 flex items-center">
+                <Target className="w-6 h-6 mr-3 text-blue-600" />
+                Prioritized Action Plan
+              </h2>
+              <p className="text-slate-600 mb-6">
+                Follow these step-by-step actions to optimize your marketing performance. Actions are prioritized by impact and effort.
+              </p>
+              <div className="space-y-6">
+                {auditResults.actionPlan.slice(0, 6).map((action, idx) => {
+                  const priorityColors: Record<string, string> = {
+                    HIGH: 'bg-red-100 border-red-300 text-red-900',
+                    MEDIUM: 'bg-yellow-100 border-yellow-300 text-yellow-900',
+                    LOW: 'bg-blue-100 border-blue-300 text-blue-900'
+                  };
+                  return (
+                    <div key={idx} className={`border-2 rounded-lg p-5 ${priorityColors[action.priority]}`}>
+                      <div className="flex items-start justify-between mb-3">
+                        <h3 className="font-bold text-lg">{idx + 1}. {action.title}</h3>
+                        <span className="text-xs uppercase font-bold px-2 py-1 rounded">{action.priority}</span>
+                      </div>
+                      <div className="flex items-center space-x-4 text-sm mb-3 opacity-90">
+                        <span><strong>Impact:</strong> {action.impact}</span>
+                        <span><strong>Effort:</strong> {action.effort}/5</span>
+                        <span><strong>Timeline:</strong> {action.timeline}</span>
+                      </div>
+                      <div className="bg-white bg-opacity-60 rounded-lg p-4 mb-3">
+                        <p className="font-semibold text-sm mb-2">Steps:</p>
+                        <ol className="list-decimal list-inside space-y-1 text-sm">
+                          {action.steps.map((step, stepIdx) => (
+                            <li key={stepIdx}>{step}</li>
+                          ))}
+                        </ol>
+                      </div>
+                      <p className="text-sm italic">
+                        <strong>Expected Result:</strong> {action.expected_result}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {/* Opportunities */}
           <div className="bg-white rounded-xl shadow-lg p-8 mb-8">
@@ -606,6 +792,90 @@ export default function FreeAudit() {
                   <option key={challenge} value={challenge}>{challenge}</option>
                 ))}
               </select>
+            </div>
+
+            {/* Industry */}
+            <div>
+              <label className="block text-sm font-bold text-slate-900 mb-2">
+                <Briefcase className="w-4 h-4 inline mr-2" />
+                Industry
+              </label>
+              <select
+                value={formData.industry}
+                onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-slate_blue-500 focus:outline-none"
+              >
+                <option value="">Select industry...</option>
+                {industries.map(industry => (
+                  <option key={industry} value={industry}>{industry}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Primary Goal */}
+            <div>
+              <label className="block text-sm font-bold text-slate-900 mb-3">
+                <TrendingUp className="w-4 h-4 inline mr-2" />
+                Primary Marketing Goals (select all that apply)
+              </label>
+              <div className="grid md:grid-cols-2 gap-3">
+                {goals.map(goal => (
+                  <button
+                    key={goal.id}
+                    type="button"
+                    onClick={() => handleGoalToggle(goal.id)}
+                    className={`px-4 py-3 rounded-lg border-2 text-left font-medium transition-all ${
+                      formData.primary_goal.includes(goal.id)
+                        ? 'border-slate_blue-500 bg-slate_blue-50 text-slate_blue-900'
+                        : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300'
+                    }`}
+                  >
+                    <CheckCircle
+                      className={`w-4 h-4 inline mr-2 ${
+                        formData.primary_goal.includes(goal.id) ? 'text-slate_blue-600' : 'text-slate-300'
+                      }`}
+                    />
+                    {goal.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Tracking Setup */}
+            <div>
+              <label className="block text-sm font-bold text-slate-900 mb-2">
+                Do you have conversion tracking properly set up?
+              </label>
+              <select
+                value={formData.tracking_setup}
+                onChange={(e) => setFormData({ ...formData, tracking_setup: e.target.value })}
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-slate_blue-500 focus:outline-none"
+              >
+                <option value="">Select...</option>
+                <option value="yes">Yes - tracking all conversions</option>
+                <option value="no">No - not set up yet</option>
+                <option value="unsure">Not sure</option>
+              </select>
+            </div>
+
+            {/* Current ROAS */}
+            <div>
+              <label className="block text-sm font-bold text-slate-900 mb-2">
+                <DollarSign className="w-4 h-4 inline mr-2" />
+                Current ROAS (Return on Ad Spend) - Optional
+              </label>
+              <input
+                type="number"
+                step="0.1"
+                min="0"
+                value={formData.current_roas}
+                onChange={(e) => setFormData({ ...formData, current_roas: e.target.value })}
+                className="w-full px-4 py-3 border-2 border-slate-200 rounded-lg focus:border-slate_blue-500 focus:outline-none"
+                placeholder="e.g., 2.5 (means £2.50 revenue per £1 spent)"
+              />
+              <p className="text-xs text-slate-500 mt-1">
+                If you know your current ROAS, enter it here. Otherwise, leave blank.
+              </p>
             </div>
 
             {/* Submit Button */}
