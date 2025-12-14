@@ -1,6 +1,4 @@
-```typescript
 import { useState, useCallback } from 'react';
-import { AppError } from '../lib/errorTypes';
 import { ErrorHandler } from '../lib/errorHandler';
 import { 
   validateEmail, 
@@ -20,7 +18,7 @@ interface FormErrorState {
 export function useFormErrorHandler() {
   const [formErrors, setFormErrors] = useState<Record<string, AppError[]>>({});
 
-  const addFieldError = useCallback(async (field: string, error: any) => {
+  const addFieldError = useCallback(async (field: string, error: unknown) => {
     const appError = await ErrorHandler.handleError(error, {
       field,
       component: 'form',
@@ -56,8 +54,8 @@ export function useFormErrorHandler() {
 
   const validateField = useCallback(async (
     field: string,
-    value: any,
-    validators: Array<(value: any) => void>
+    value: unknown,
+    validators: Array<(value: unknown) => void>
   ): Promise<boolean> => {
     // Clear existing errors for this field
     clearFieldErrors(field);
@@ -75,8 +73,8 @@ export function useFormErrorHandler() {
   }, [addFieldError, clearFieldErrors]);
 
   const validateForm = useCallback(async (
-    formData: Record<string, any>,
-    validationRules: Record<string, Array<(value: any) => void>>
+    formData: Record<string, unknown>,
+    validationRules: Record<string, Array<(value: unknown) => void>>
   ): Promise<boolean> => {
     clearAllErrors();
 
@@ -92,14 +90,14 @@ export function useFormErrorHandler() {
   const validators = {
     email: (value: string) => validateEmail(value),
     password: (value: string) => validatePassword(value),
-    required: (fieldName: string) => (value: any) => validateRequired(value, fieldName),
+    required: (fieldName: string) => (value: unknown) => validateRequired(value, fieldName),
     url: (fieldName: string) => (value: string) => validateUrl(value, fieldName),
     file: (options?: { maxSize?: number; allowedTypes?: string[] }) => 
       (value: File) => validateFile(value, options),
     minLength: (min: number, fieldName: string) => (value: string) => {
       if (value && value.length < min) {
         throw new ValidationError(
-          \`${fieldName} must be at least ${min} characters`,
+          `${fieldName} must be at least ${min} characters`,
           fieldName.toLowerCase().replace(' ', '_'),
           'TOO_SHORT'
         );
@@ -108,18 +106,18 @@ export function useFormErrorHandler() {
     maxLength: (max: number, fieldName: string) => (value: string) => {
       if (value && value.length > max) {
         throw new ValidationError(
-          \`${fieldName} must be no more than ${max} characters`,
+          `${fieldName} must be no more than ${max} characters`,
           fieldName.toLowerCase().replace(' ', '_'),
           'TOO_LONG'
         );
       }
     },
-    numeric: (fieldName: string) => (value: any) => {
+    numeric: (fieldName: string) => (value: unknown) => {
       if (value !== null && value !== undefined && value !== '') {
         const num = Number(value);
         if (isNaN(num)) {
           throw new ValidationError(
-            \`${fieldName} must be a valid number`,
+            `${fieldName} must be a valid number`,
             fieldName.toLowerCase().replace(' ', '_'),
             'INVALID_NUMBER'
           );
@@ -129,16 +127,16 @@ export function useFormErrorHandler() {
     positive: (fieldName: string) => (value: number) => {
       if (value !== null && value !== undefined && value < 0) {
         throw new ValidationError(
-          \`${fieldName} must be positive`,
+          `${fieldName} must be positive`,
           fieldName.toLowerCase().replace(' ', '_'),
           'NEGATIVE_VALUE'
         );
       }
     },
-    oneOf: (options: any[], fieldName: string) => (value: any) => {
+    oneOf: (options: unknown[], fieldName: string) => (value: unknown) => {
       if (value && !options.includes(value)) {
         throw new ValidationError(
-          \`${fieldName} must be one of: ${options.join(', ')}`,
+          `${fieldName} must be one of: ${options.join(', ')}`,
           fieldName.toLowerCase().replace(' ', '_'),
           'INVALID_OPTION'
         );
@@ -167,17 +165,15 @@ export function useFormErrorHandler() {
     getFormState
   };
 }
-
 // Real-time validation hook
 export function useRealTimeValidation(
-  initialData: Record<string, any> = {},
-  validationRules: Record<string, Array<(value: any) => void>> = {}
+  initialData: Record<string, unknown> = {},
+  validationRules: Record<string, Array<(value: unknown) => void>> = {}
 ) {
-  const [formData, setFormData] = useState(initialData);
+  const [formData, setFormData] = useState<Record<string, unknown>>(initialData);
   const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set());
   const { validateField, formErrors, clearFieldErrors, getFormState } = useFormErrorHandler();
-
-  const updateField = useCallback(async (field: string, value: any) => {
+  const updateField = useCallback(async (field: string, value: unknown) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     
     // Only validate if field has been touched
@@ -219,4 +215,4 @@ export function useRealTimeValidation(
     formState: getFormState()
   };
 }
-```
+ 

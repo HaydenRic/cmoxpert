@@ -77,7 +77,7 @@ export function MetricsUpload({ clientId, onSuccess }: MetricsUploadProps) {
     try {
       const fileContent = await file.text();
 
-      const { data, error } = await supabase.functions.invoke('csv-import-commit', {
+      const { error } = await supabase.functions.invoke('csv-import-commit', {
         body: {
           clientId,
           csvContent: fileContent,
@@ -88,7 +88,6 @@ export function MetricsUpload({ clientId, onSuccess }: MetricsUploadProps) {
         throw new Error(error.message || 'Import failed');
       }
 
-      const result = data as any;
       setSuccess(true);
       setFile(null);
       setPreview([]);

@@ -8,6 +8,11 @@
 import { corsHeaders } from '../_shared/cors.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.3';
 
+declare const Deno: {
+  env: { get(name: string): string | undefined };
+  serve(handler: (req: Request) => Promise<Response> | Response): void;
+};
+
 const googleClientId = Deno.env.get('GOOGLE_CLIENT_ID');
 const googleClientSecret = Deno.env.get('GOOGLE_CLIENT_SECRET');
 

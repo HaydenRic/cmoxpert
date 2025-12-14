@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -14,13 +14,7 @@ import {
   Trash2,
   RefreshCw,
   PieChart,
-  LineChart as LineChartIcon,
-  ArrowUpRight,
-  ArrowDownRight,
   Minus,
-  CheckCircle,
-  Clock,
-  AlertCircle,
   Search,
   Download,
   Upload,
@@ -32,12 +26,8 @@ import {
   MessageSquare,
   FileText
 } from 'lucide-react';
-import { format, parseISO, isAfter, isBefore, subDays, subMonths } from 'date-fns';
+import { format, parseISO, subDays } from 'date-fns';
 import { 
-  LineChart, 
-  Line, 
-  AreaChart, 
-  Area, 
   BarChart, 
   Bar, 
   PieChart as RechartsPieChart, 
@@ -50,8 +40,7 @@ import {
   Legend, 
   ResponsiveContainer 
 } from 'recharts';
-import { Link } from 'react-router-dom';
-import clsx from 'clsx';
+// clsx removed (unused)
 import { ChannelMetricsImporter } from '../components/ChannelMetricsImporter';
 import toast from 'react-hot-toast';
 
@@ -189,13 +178,7 @@ export function MarketingAnalytics() {
     { value: 'cancelled', label: 'Cancelled' }
   ];
 
-  useEffect(() => {
-    if (user) {
-      loadData();
-    }
-  }, [user, selectedClient, selectedDateRange, selectedStatus]);
-
-  const loadData = async () => {
+  const loadData = useCallback(async () => {
     try {
       setLoading(true);
 
@@ -290,7 +273,11 @@ export function MarketingAnalytics() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user, selectedClient, selectedDateRange, selectedStatus]);
+
+  useEffect(() => {
+    if (user) loadData();
+  }, [user, loadData]);
 
   const calculateStats = (campaignsData: Campaign[], goalsData: MarketingGoal[]) => {
     const totalCampaigns = campaignsData.length;
@@ -435,21 +422,7 @@ export function MarketingAnalytics() {
     }
   };
 
-  const deleteGoal = async (goalId: string) => {
-    if (!confirm('Are you sure you want to delete this goal?')) return;
-
-    try {
-      const { error } = await supabase
-        .from('marketing_goals')
-        .delete()
-        .eq('id', goalId);
-
-      if (error) throw error;
-      loadData();
-    } catch (error) {
-      console.error('Error deleting goal:', error);
-    }
-  };
+  // deleteGoal removed (unused)
 
   const updateGoalValue = async (goalId: string, newValue: number) => {
     try {
@@ -548,7 +521,7 @@ export function MarketingAnalytics() {
     { name: 'Active', value: stats.activeGoals, color: '#3b82f6' }
   ];
 
-  const COLORS = ['#22333B', '#5E503F', '#C6AC8F', '#EAE0D5', '#0A0908'];
+  // COLORS removed (unused)
 
   const statCards = [
     {
@@ -750,12 +723,12 @@ export function MarketingAnalytics() {
                   }}
                   formatter={(value, name) => {
                     if (name === 'cost' || name === 'revenue') {
-                      return [formatCurrency(Number(value)), name.charAt(0).toUpperCase() + name.slice(1)];
+                      return [formatCurrency(Number(value)), String(name).charAt(0).toUpperCase() + String(name).slice(1)];
                     }
                     if (name === 'ctr' || name === 'cvr' || name === 'roi') {
                       return [`${Number(value).toFixed(2)}%`, name.toUpperCase()];
                     }
-                    return [value, name.charAt(0).toUpperCase() + name.slice(1)];
+                    return [value, String(name).charAt(0).toUpperCase() + String(name).slice(1)];
                   }}
                 />
                 <Legend />
@@ -808,7 +781,7 @@ export function MarketingAnalytics() {
                   }}
                   formatter={(value, name) => {
                     if (name === 'spend' || name === 'budget' || name === 'revenue') {
-                      return [formatCurrency(Number(value)), name.charAt(0).toUpperCase() + name.slice(1)];
+                      return [formatCurrency(Number(value)), String(name).charAt(0).toUpperCase() + String(name).slice(1)];
                     }
                     if (name === 'roi') {
                       return [`${Number(value).toFixed(2)}%`, 'ROI'];

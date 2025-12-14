@@ -21,7 +21,8 @@ interface AuthContextType {
   error: string | null;
   loginSuccess: boolean;
   signIn: (email: string, password: string) => Promise<{ error: any; success?: boolean }>;
-  signUp: (email: string, password: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string) => Promise<{ error: unknown }>;
+  signIn: (email: string, password: string) => Promise<{ error: unknown; success?: boolean }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
   clearError: () => void;

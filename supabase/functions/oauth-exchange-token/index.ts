@@ -1,4 +1,7 @@
-import { createClient } from 'npm:@supabase/supabase-js@2';
+declare const Deno: {
+  env: { get(name: string): string | undefined };
+  serve(handler: (req: Request) => Promise<Response> | Response): void;
+};
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -13,8 +16,7 @@ interface TokenExchangeRequest {
 }
 
 Deno.serve(async (req: Request) => {
-  // Extract user's JWT from Authorization header for RLS
-  const authHeader = req.headers.get('Authorization')!;
+  // (no Supabase client used here) — no auth header required
   if (req.method === 'OPTIONS') {
     return new Response(null, {
       status: 200,

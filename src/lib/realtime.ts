@@ -1,7 +1,7 @@
 import { supabase } from './supabase';
 import { RealtimeChannel } from '@supabase/supabase-js';
 
-export type RealtimeCallback<T = any> = (payload: T) => void;
+export type RealtimeCallback<T = unknown> = (payload: T) => void;
 
 export class RealtimeManager {
   private channels: Map<string, RealtimeChannel> = new Map();

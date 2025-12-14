@@ -1,5 +1,10 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 
+declare const Deno: {
+  env: { get(name: string): string | undefined };
+  serve(handler: (req: Request) => Promise<Response> | Response): void;
+};
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -39,6 +44,19 @@ interface ComplianceCheckResult {
   rules_checked: number;
 }
 
+interface Rule {
+  applies_to_products?: string[];
+  keywords_prohibited?: string[];
+  keywords_required?: string[];
+  pattern_regex?: string;
+  rule_code?: string;
+  rule_name?: string;
+  regulatory_body?: string;
+  severity?: string;
+  rule_description?: string;
+  potential_fine_amount?: number;
+}
+
 Deno.serve(async (req: Request) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, {
@@ -52,9 +70,9 @@ Deno.serve(async (req: Request) => {
     const authHeader = req.headers.get('Authorization')!;
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey,
-      { global: { headers: { Authorization: authHeader } } }grep -L "req.headers.get('Authorization')" supabase/functions/*/index.ts
-      );
+    const supabase = createClient(supabaseUrl, supabaseKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
 
     const {
       campaign_id,
@@ -81,7 +99,7 @@ Deno.serve(async (req: Request) => {
       ${campaign_content.call_to_action}
     `.toLowerCase();
 
-    rules?.forEach((rule: any) => {
+    rules?.forEach((rule: Rule) => {
       const applies_to = rule.applies_to_products || [];
       if (applies_to.length > 0 && !applies_to.includes(product_type)) {
         return;
@@ -140,8 +158,8 @@ Deno.serve(async (req: Request) => {
               potential_fine: rule.potential_fine_amount || 0,
             });
           }
-        } catch (e) {
-          console.error('Invalid regex pattern:', rule.pattern_regex);
+        } catch (err) {
+          console.error('Invalid regex pattern:', rule.pattern_regex, err);
         }
       }
     });
@@ -204,7 +222,7 @@ Deno.serve(async (req: Request) => {
       );
     }
 
-    const { data: checkData, error: checkError } = await supabase
+    const { error: checkError } = await supabase
       .from('campaign_compliance_checks')
       .insert({
         campaign_id,
