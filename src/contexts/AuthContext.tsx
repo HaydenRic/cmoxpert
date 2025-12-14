@@ -348,7 +348,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                   role: 'user'
                 }]);
             }
-          } catch (error) {
+          } catch {
             // Silent fail, profile will be created on next sign in
           }
         }, 1000);
@@ -372,7 +372,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setError(null);
       await supabase.auth.signOut();
       setProfile(null);
-    } catch (error: unknown) {
+    } catch (err: unknown) {
+      console.error('[AUTH] signOut error:', err);
       setError('Error signing out. Please try again.');
     }
   };
