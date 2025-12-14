@@ -141,10 +141,10 @@ export function Contact() {
       name: "Sarah Chen",
       role: "VP Marketing",
       company: "TechFlow SaaS",
-      content: "cmoxpert transformed our market research process. We now identify opportunities 80% faster and our strategic decisions are backed by real-time data.",
+      content: "cmoxpert transformed our market research process. We now identify opportunities more efficiently and our strategic decisions are backed by comprehensive data.",
       rating: 5,
       avatar: "SC",
-      metric: "80% faster insights"
+      metric: "More strategic focus"
     },
     {
       name: "Marcus Rodriguez",
@@ -233,7 +233,7 @@ export function Contact() {
                 <span className="block text-slate_blue-600">That Drives Results</span>
               </h1>
               <p className="text-xl text-charcoal-600 max-w-4xl mx-auto mb-8 leading-relaxed">
-                Partner with AI-powered marketing intelligence designed for B2B SaaS companies. Get the strategic insights you need to outmaneuver competitors and accelerate growth.
+                Partner with expert-guided marketing intelligence designed for B2B SaaS companies. Get the strategic insights you need to compete effectively and accelerate growth.
               </p>
               <div className="flex flex-wrap justify-center gap-6 text-sm text-charcoal-500">
                 <div className="flex items-center space-x-2">
@@ -284,7 +284,7 @@ export function Contact() {
                     How We Accelerate Your Growth
                   </h2>
                   <p className="text-lg text-charcoal-600 leading-relaxed">
-                    Our AI-powered platform combines advanced market intelligence with strategic expertise to deliver actionable insights that drive measurable results.
+                    Our platform combines comprehensive market intelligence with strategic expertise to deliver actionable insights that drive measurable results.
                   </p>
                 </div>
                 
@@ -341,7 +341,7 @@ export function Contact() {
                 <div className="mb-8">
                   <h2 className="text-2xl font-bold text-charcoal-900 mb-3">Request Your Strategy Demo</h2>
                   <p className="text-charcoal-600">
-                    Get a personalized demo showing how cmoxpert can accelerate your marketing results with AI-powered insights.
+                    Get a personalized demo showing how cmoxpert can accelerate your marketing results with expert insights.
                   </p>
                 </div>
                 
@@ -620,7 +620,7 @@ export function Contact() {
                 <BrandLogo variant="text-only" theme="dark" />
               </div>
               <p className="text-charcoal-400 text-sm leading-relaxed">
-                AI-powered marketing intelligence platform designed for B2B SaaS companies ready to outmaneuver competitors and accelerate growth.
+                Expert marketing intelligence platform designed for B2B SaaS companies ready to compete effectively and accelerate growth.
               </p>
             </div>
             

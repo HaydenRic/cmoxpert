@@ -46,15 +46,13 @@ export default function ProductizedLanding() {
               Strategic Marketing
               <br />
               <span className="bg-gradient-to-r from-teal-300 via-cyan-300 to-blue-300 bg-clip-text text-transparent">
-                Leadership, Automated
+                Leadership, Simplified
               </span>
             </h1>
 
             {/* Subheadline */}
             <p className="text-xl md:text-2xl lg:text-3xl text-blue-100 leading-relaxed max-w-4xl mx-auto font-light animate-fade-in-up animation-delay-400">
-              Get fractional CMO expertise with AI-powered insights and real-time reporting for{' '}
-              <span className="font-bold text-teal-300">50-60% less</span>{' '}
-              than traditional agencies
+              Get expert strategic guidance combined with comprehensive reporting at a fraction of the cost of traditional agencies
             </p>
 
             {/* CTA Buttons with animations */}
@@ -81,7 +79,7 @@ export default function ProductizedLanding() {
             {/* Trust line */}
             <p className="text-sm text-blue-200 animate-fade-in-up animation-delay-800">
               <Shield className="w-4 h-4 inline mr-2" />
-              No credit card required • See results in 60 seconds
+              No credit card required • Get started in minutes
             </p>
           </div>
         </div>
@@ -91,20 +89,20 @@ export default function ProductizedLanding() {
           <div className="max-w-7xl mx-auto px-6">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center text-white">
               <div className="space-y-1">
-                <div className="text-3xl font-bold text-teal-300">50+</div>
-                <div className="text-sm text-blue-200">Active Clients</div>
+                <div className="text-3xl font-bold text-teal-300">Expert</div>
+                <div className="text-sm text-blue-200">CMO Guidance</div>
               </div>
               <div className="space-y-1">
-                <div className="text-3xl font-bold text-teal-300">£2M+</div>
-                <div className="text-sm text-blue-200">Ad Spend Optimized</div>
+                <div className="text-3xl font-bold text-teal-300">Weekly</div>
+                <div className="text-sm text-blue-200">Performance Reports</div>
               </div>
               <div className="space-y-1">
-                <div className="text-3xl font-bold text-teal-300">156%</div>
-                <div className="text-sm text-blue-200">Avg ROI Increase</div>
+                <div className="text-3xl font-bold text-teal-300">Custom</div>
+                <div className="text-sm text-blue-200">Strategies</div>
               </div>
               <div className="space-y-1">
-                <div className="text-3xl font-bold text-teal-300">24hrs</div>
-                <div className="text-sm text-blue-200">To First Insights</div>
+                <div className="text-3xl font-bold text-teal-300">Transparent</div>
+                <div className="text-sm text-blue-200">Pricing</div>
               </div>
             </div>
           </div>
@@ -186,13 +184,13 @@ export default function ProductizedLanding() {
                 <ul className="space-y-4">
                   {[
                     { text: '£2,000-£8,000/month transparent pricing', icon: DollarSign },
-                    { text: 'Instant automated insights every week', icon: Zap },
-                    { text: 'Consistent AI-powered analysis', icon: Brain },
+                    { text: 'Weekly performance insights and tracking', icon: Zap },
+                    { text: 'Consistent data-driven analysis', icon: Brain },
                     { text: 'Self-service dashboard + expert support', icon: Users },
                     { text: 'All-inclusive - no surprise fees', icon: Shield },
                     { text: 'Strategic recommendations from data', icon: LineChart },
                     { text: 'Customized strategies for YOUR business', icon: Target },
-                    { text: 'Complete transparency & real-time reports', icon: BarChart3 }
+                    { text: 'Complete transparency & regular reports', icon: BarChart3 }
                   ].map((item, idx) => (
                     <li key={idx} className="flex items-start text-emerald-900 font-bold">
                       <div className="flex-shrink-0 w-6 h-6 rounded-full bg-emerald-300 flex items-center justify-center mr-4 mt-0.5">
@@ -231,7 +229,7 @@ export default function ProductizedLanding() {
             <p className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto">
               Fractional CMO expertise meets{' '}
               <span className="font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                real-time AI insights
+                data-driven insights
               </span>
             </p>
           </div>
@@ -292,7 +290,7 @@ export default function ProductizedLanding() {
                     <div className="ml-6">
                       <h3 className="text-3xl font-bold text-slate-900 mb-2">Strategic Recommendations</h3>
                       <p className="text-slate-600 text-lg leading-relaxed">
-                        AI analyzes your data and delivers actionable next steps to improve results.
+                        Our experts analyze your data and deliver actionable next steps to improve results.
                       </p>
                     </div>
                   </div>
@@ -364,12 +362,12 @@ export default function ProductizedLanding() {
 
           <div className="grid md:grid-cols-3 gap-8">
             {[
-              { value: '£2M+', label: 'Wasted ad spend identified', gradient: 'from-green-400 to-emerald-500' },
-              { value: '156%', label: 'Average ROI improvement in 90 days', gradient: 'from-blue-400 to-cyan-500' },
-              { value: '24hrs', label: 'From signup to actionable insights', gradient: 'from-purple-400 to-pink-500' }
+              { value: 'Expert', label: 'Fractional CMO Guidance', gradient: 'from-green-400 to-emerald-500' },
+              { value: 'Data-Driven', label: 'Strategic Recommendations', gradient: 'from-blue-400 to-cyan-500' },
+              { value: 'Transparent', label: 'Clear Reporting & Insights', gradient: 'from-purple-400 to-pink-500' }
             ].map((stat, idx) => (
               <div key={idx} className="bg-white/10 backdrop-blur-lg rounded-3xl p-8 border border-white/20 hover:bg-white/20 transition-all duration-500 transform hover:-translate-y-2 shadow-2xl">
-                <div className={`text-6xl font-black bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent mb-4`}>
+                <div className={`text-4xl font-black bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent mb-4`}>
                   {stat.value}
                 </div>
                 <p className="text-lg text-blue-100">{stat.label}</p>
@@ -402,7 +400,7 @@ export default function ProductizedLanding() {
               className="group relative inline-flex items-center px-14 py-7 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 bg-size-200 hover:bg-pos-100 text-white rounded-2xl font-black text-2xl shadow-2xl hover:shadow-cyan-500/50 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2"
             >
               <Rocket className="w-8 h-8 mr-3 group-hover:rotate-12 transition-transform" />
-              Get Free Audit (60 Seconds)
+              Get Free Audit
               <ArrowRight className="w-8 h-8 ml-3 group-hover:translate-x-2 transition-transform" />
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl opacity-0 group-hover:opacity-50 transition-opacity blur-2xl"></div>
             </Link>
@@ -410,7 +408,7 @@ export default function ProductizedLanding() {
 
           <p className="text-slate-500 mb-10 text-lg">
             <Shield className="w-5 h-5 inline mr-2" />
-            No credit card • No obligation • Instant results
+            No credit card • No obligation • Get started today
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-8 text-slate-600">
@@ -424,7 +422,7 @@ export default function ProductizedLanding() {
             </div>
             <div className="flex items-center bg-white rounded-full px-6 py-3 shadow-lg">
               <Clock className="w-5 h-5 mr-2 text-blue-600" />
-              <span className="font-semibold">Results in 24 hours</span>
+              <span className="font-semibold">Fast onboarding</span>
             </div>
           </div>
         </div>

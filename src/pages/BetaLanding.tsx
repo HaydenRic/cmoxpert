@@ -204,7 +204,7 @@ export default function BetaLanding() {
                     </div>
                     <div>
                       <div className="font-bold text-white">Content Generation</div>
-                      <div className="text-sm text-cornsilk-400">Automated marketing content</div>
+                      <div className="text-sm text-cornsilk-400">Marketing content creation tools</div>
                     </div>
                   </div>
 
@@ -474,7 +474,7 @@ export default function BetaLanding() {
                   <span className="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs font-bold rounded">READY</span>
                 </div>
                 <p className="text-cornsilk-400 mb-3">
-                  Market analysis, competitor tracking, strategic insights. Automated research for your clients.
+                  Market analysis, competitor tracking, strategic insights. Research tools for your clients.
                 </p>
               </div>
 
@@ -517,7 +517,7 @@ export default function BetaLanding() {
                     <li>• Calendly integration for discovery calls</li>
                     <li>• HubSpot & Salesforce CRM sync</li>
                     <li>• LinkedIn Ads performance tracking</li>
-                    <li>• Automated monthly client reports</li>
+                    <li>• Monthly client report generation</li>
                     <li>• White-label reporting with your branding</li>
                   </ul>
                 </div>

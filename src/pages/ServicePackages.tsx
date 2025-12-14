@@ -383,8 +383,8 @@ export function ServicePackages() {
               <h3 className="text-xl font-bold text-green-900 mb-2">Our Platform</h3>
               <ul className="text-sm text-green-800 space-y-2 font-medium">
                 <li>✓ £2,000-£8,000/month</li>
-                <li>✓ Instant automated insights</li>
-                <li>✓ Consistent AI-powered quality</li>
+                <li>✓ Weekly performance metrics</li>
+                <li>✓ Consistent expert-driven quality</li>
                 <li>✓ Self-service + expert support</li>
                 <li>✓ Transparent, all-inclusive pricing</li>
               </ul>
