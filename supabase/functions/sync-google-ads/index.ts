@@ -15,8 +15,6 @@ interface GoogleAdsRequest {
 }
 
 Deno.serve(async (req: Request) => {
-  // Extract user's JWT from Authorization header for RLS
-  const authHeader = req.headers.get('Authorization')!;
   if (req.method === 'OPTIONS') {
     return new Response(null, {
       status: 200,
@@ -25,8 +23,7 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    // Extract user's JWT from Authorization header for RLS
-    const authHeader = req.headers.get('Authorization')!;
+    
     const { action, access_token, customer_id, date_range }: GoogleAdsRequest = await req.json();
 
     if (action === 'fetch_campaigns') {
