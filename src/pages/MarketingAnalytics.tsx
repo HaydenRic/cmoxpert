@@ -23,6 +23,7 @@ import {
   AlertCircle,
   Search,
   Download,
+  Upload,
   Megaphone,
   Users,
   Zap,
@@ -51,6 +52,8 @@ import {
 } from 'recharts';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
+import { ChannelMetricsImporter } from '../components/ChannelMetricsImporter';
+import toast from 'react-hot-toast';
 
 interface Campaign {
   id: string;
@@ -135,6 +138,8 @@ export function MarketingAnalytics() {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [showAddCampaign, setShowAddCampaign] = useState(false);
   const [showAddGoal, setShowAddGoal] = useState(false);
+  const [showImporter, setShowImporter] = useState(false);
+  const [generatingReport, setGeneratingReport] = useState(false);
   const [newCampaign, setNewCampaign] = useState({
     client_id: '',
     name: '',
@@ -312,6 +317,49 @@ export function MarketingAnalytics() {
       completedGoals,
       activeGoals
     });
+  };
+
+  const generateWeeklyReport = async () => {
+    if (!selectedClient || selectedClient === 'all') {
+      toast.error('Please select a client to generate a report');
+      return;
+    }
+
+    setGeneratingReport(true);
+    try {
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-weekly-report`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          clientId: selectedClient,
+          days: 7,
+          format: 'html',
+        }),
+      });
+
+      const html = await response.text();
+
+      if (!response.ok) {
+        toast.error('Failed to generate report');
+        return;
+      }
+
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `weekly-report-${new Date().toISOString().split('T')[0]}.html`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      toast.success('Report generated and downloaded');
+    } catch (error) {
+      toast.error(`Report generation failed: ${String(error)}`);
+    } finally {
+      setGeneratingReport(false);
+    }
   };
 
   const handleAddCampaign = async (e: React.FormEvent) => {
@@ -636,6 +684,23 @@ export function MarketingAnalytics() {
             >
               <Target className="w-4 h-4" />
               <span>Add Goal</span>
+            </button>
+
+            <button
+              onClick={() => setShowImporter(true)}
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2"
+            >
+              <Upload className="w-4 h-4" />
+              <span>Import CSV</span>
+            </button>
+
+            <button
+              onClick={generateWeeklyReport}
+              disabled={generatingReport || !selectedClient || selectedClient === 'all'}
+              className="bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2"
+            >
+              {generatingReport ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+              <span>{generatingReport ? 'Generating...' : 'Weekly Report'}</span>
             </button>
           </div>
         </div>
@@ -1325,6 +1390,39 @@ export function MarketingAnalytics() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {showImporter && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div className="sticky top-0 bg-white border-b border-gray-200 p-6 flex items-center justify-between">
+              <h2 className="text-2xl font-bold text-gray-900">Import Channel Metrics</h2>
+              <button
+                onClick={() => setShowImporter(false)}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                <span className="text-2xl">×</span>
+              </button>
+            </div>
+            <div className="p-6">
+              {selectedClient && selectedClient !== 'all' ? (
+                <ChannelMetricsImporter
+                  clientId={selectedClient}
+                  onImportSuccess={() => {
+                    setShowImporter(false);
+                    loadData();
+                  }}
+                />
+              ) : (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <p className="text-sm text-yellow-800">
+                    Please select a client from the dropdown above to import metrics.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
