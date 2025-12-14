@@ -1,0 +1,9 @@
+{
+  "name": "cmoxpert",
+  "image": "mcr.microsoft.com/devcontainers/typescript-node:18",
+  "postCreateCommand": "npm ci && npm i -g supabase",
+  "forwardPorts": [5173],
+  "portsAttributes": {
+    "5173": { "label": "Vite dev server", "onAutoForward": "openPreview" }
+  }
+}
