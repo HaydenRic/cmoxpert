@@ -76,26 +76,19 @@ export function MetricsUpload({ clientId, onSuccess }: MetricsUploadProps) {
     setError(null);
     try {
       const fileContent = await file.text();
-      const session = await supabase.auth.getSession();
 
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/csv-import-commit`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${session.data.session?.access_token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('csv-import-commit', {
+        body: {
           clientId,
           csvContent: fileContent,
-        }),
+        }
       });
 
-      if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.error || 'Import failed');
+      if (error) {
+        throw new Error(error.message || 'Import failed');
       }
 
-      const result = await response.json();
+      const result = data as any;
       setSuccess(true);
       setFile(null);
       setPreview([]);

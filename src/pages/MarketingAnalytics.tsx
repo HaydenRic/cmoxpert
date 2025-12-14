@@ -327,25 +327,20 @@ export function MarketingAnalytics() {
 
     setGeneratingReport(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-weekly-report`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('generate-weekly-report', {
+        body: {
           clientId: selectedClient,
           days: 7,
           format: 'html',
-        }),
+        }
       });
 
-      const html = await response.text();
-
-      if (!response.ok) {
+      if (error) {
         toast.error('Failed to generate report');
         return;
       }
+
+      const html = typeof data === 'string' ? data : JSON.stringify(data);
 
       const blob = new Blob([html], { type: 'text/html' });
       const url = window.URL.createObjectURL(blob);

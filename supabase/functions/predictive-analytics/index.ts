@@ -165,6 +165,8 @@ function generateOptimizationRecommendations(
 }
 
 Deno.serve(async (req: Request) => {
+  // Extract user's JWT from Authorization header for RLS
+  const authHeader = req.headers.get('Authorization')!;
   if (req.method === 'OPTIONS') {
     return new Response(null, {
       status: 200,
@@ -176,8 +178,8 @@ Deno.serve(async (req: Request) => {
     const { user_id, client_id, analysis_type = 'forecast' } = await req.json();
 
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabaseServiceKey = Deno.env.get('SUPABASE_ANON_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, { global: { headers: { Authorization: authHeader } } });
 
     const { data: metrics, error } = await supabase
       .from('marketing_channel_metrics')

@@ -218,10 +218,14 @@ Deno.serve(async (req: Request) => {
       );
     }
 
+        // Extract user's JWT from Authorization header for RLS
+    const authHeader = req.headers.get('Authorization')!;
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL") || "",
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || ""
-    );
+      Deno.env.get("SUPABASE_ANON_KEY") || ""
+    ,
+    { global: { headers: { Authorization: authHeader } } });
 
     const reportData = await fetchWeeklyMetrics(supabase, clientId, days);
 

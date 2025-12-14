@@ -49,6 +49,8 @@ const VALID_CHANNELS = [
 ];
 
 Deno.serve(async (req: Request) => {
+  // Extract user's JWT from Authorization header for RLS
+  const authHeader = req.headers.get('Authorization')!;
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 200, headers: corsHeaders });
   }

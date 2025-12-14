@@ -1,262 +1,177 @@
-# cmoxpert - Tech-Enabled Fractional CMO Services
+# Supabase CLI
 
-**Strategic marketing leadership with real-time data insights.**
+[![Coverage Status](https://coveralls.io/repos/github/supabase/cli/badge.svg?branch=main)](https://coveralls.io/github/supabase/cli?branch=main) [![Bitbucket Pipelines](https://img.shields.io/bitbucket/pipelines/supabase-cli/setup-cli/master?style=flat-square&label=Bitbucket%20Canary)](https://bitbucket.org/supabase-cli/setup-cli/pipelines) [![Gitlab Pipeline Status](https://img.shields.io/gitlab/pipeline-status/sweatybridge%2Fsetup-cli?label=Gitlab%20Canary)
+](https://gitlab.com/sweatybridge/setup-cli/-/pipelines)
 
-cmoxpert delivers fractional CMO services to B2B SaaS companies, combining strategic expertise with proprietary technology. Get the marketing leadership you need without the full-time CMO price tag.
+[Supabase](https://supabase.io) is an open source Firebase alternative. We're building the features of Firebase using enterprise-grade open source tools.
 
----
+This repository contains all the functionality for Supabase CLI.
 
-## 🎯 For B2B SaaS Companies Ready to Scale
+- [x] Running Supabase locally
+- [x] Managing database migrations
+- [x] Creating and deploying Supabase Functions
+- [x] Generating types directly from your database schema
+- [x] Making authenticated HTTP requests to [Management API](https://supabase.com/docs/reference/api/introduction)
 
-### The Problem We Solve
+## Getting started
 
-Growing B2B SaaS companies face a common dilemma:
-- **Can't afford a full-time CMO** - $200K+ salary plus equity
-- **Agencies are hit-or-miss** - Expensive retainers with inconsistent results
-- **Marketing complexity** - Multiple channels, attribution challenges, data overload
-- **Need strategic leadership** - Not just execution, but someone who can own the vision
+### Install the CLI
 
-### The Solution
-
-**Fractional CMO expertise backed by technology.**
-
-Get strategic marketing leadership, execution support, and real-time performance insights without the full-time CMO price tag. Perfect for Series A/B SaaS companies ready to scale their marketing.
-
----
-
-## ✨ What You Get
-
-### 🎯 Strategic Leadership
-Fractional CMO expertise for your business:
-- **Marketing strategy development** - Quarterly planning and goal setting
-- **Channel optimization** - Identify and scale your best-performing channels
-- **Team leadership** - Guide your marketing team or contractors
-- **Budget management** - Smart allocation of marketing spend
-- **Growth roadmap** - 6-12 month strategic planning
-
-### 📊 Real-Time Insights
-Technology-powered visibility:
-- **Performance dashboards** - See all your marketing metrics in one place
-- **Multi-channel tracking** - Google Ads, LinkedIn, content, email, and more
-- **Revenue attribution** - Know exactly which channels drive growth
-- **Competitive intelligence** - Track your competitors' moves
-- **Custom reporting** - Automated monthly reports for stakeholders
-
-### 📈 Execution Support
-Strategy plus doing:
-- **Content creation** - Blog posts, LinkedIn content, email campaigns
-- **Campaign management** - Setup and optimization across channels
-- **Marketing automation** - Integrate and optimize your marketing stack
-- **Performance analysis** - Weekly reviews and optimization recommendations
-- **Playbook development** - Document what works for your team
-
-### 🔧 Technology Platform
-Proprietary tools for your business:
-- **Client portal** - Share performance data with stakeholders
-- **Integration hub** - Connect Stripe, Google Analytics, CRMs, and more
-- **Content hub** - Manage all your marketing content in one place
-- **Research tools** - Competitive analysis and market insights
-- **Collaboration tools** - Work seamlessly with your team
-
----
-
-## 💰 Service Packages
-
-Transparent pricing based on your needs:
-
-### Marketing Intelligence - €599/month
-Self-service platform access
-- Full dashboard access
-- All integrations included
-- Automated monthly reports
-- Email support
-- Perfect for: Companies with in-house marketing teams
-
-### Fractional CMO Lite - €1,999/month ⭐ Most Popular
-Strategy + technology
-- Everything in Marketing Intelligence
-- 10 hours/month strategic consulting
-- Monthly strategy sessions
-- Campaign setup and monitoring
-- Content calendar planning
-- Perfect for: Series A companies, 5-20 employees
-
-### Full-Service CMO - €3,999/month
-Complete marketing leadership
-- Everything in Fractional CMO Lite
-- 20 hours/month hands-on execution
-- Weekly strategy calls
-- Content creation (4-8 pieces/month)
-- Campaign management
-- Team coordination
-- Perfect for: Series B+ companies, 20-100 employees
-
-**Book a free discovery call to discuss your needs.**
-
----
-
-## 🚀 Quick Start
-
-### 1. Sign Up
-Visit [cmoxpert.com](https://cmoxpert.com) and start your free trial.
-
-### 2. Connect Payment Processor
-Link your clients' Stripe or PayPal accounts for automatic MRR/churn tracking.
-
-### 3. Add Clients
-Import your SaaS client portfolio and start tracking metrics.
-
-### 4. Generate Reports
-Create beautiful, branded reports for your clients in one click.
-
----
-
-## 🛠️ Technology Stack
-
-### Frontend
-- **React 18** with TypeScript
-- **Tailwind CSS** for styling
-- **Recharts** for data visualization
-- **React Router** for navigation
-- **Vite** for fast development
-
-### Backend
-- **Supabase** (PostgreSQL + Auth + Realtime)
-- **Row Level Security** for data isolation
-- **Edge Functions** for serverless compute
-
-### Integrations
-- **Stripe or PayPal** - Automatic subscription & revenue tracking (choose your preferred processor)
-- **Square** - Coming soon
-- **Google Analytics** - Traffic and conversion data
-- **HubSpot/Salesforce** - CRM pipeline integration
-- **OpenAI** (optional) - AI-powered insights
-
----
-
-## 📚 Documentation
-
-- [Setup Guide](./docs/QUICK_START_DEPLOYMENT.md) - Get up and running in 10 minutes
-- [Database Schema](./docs/DATABASE_SCHEMA.md) - Understanding the data model
-- [Integration Guide](./docs/INTEGRATION_ARCHITECTURE.md) - Connect your tools
-- [API Documentation](./docs/api/README.md) - Build custom integrations
-
----
-
-## 🎯 Who Is This For?
-
-### Perfect for:
-- **Series A/B B2B SaaS companies** (€500K-€5M ARR)
-- **Technical founders** who need marketing leadership
-- **Companies outgrowing agencies** looking for better value
-- **SaaS scale-ups** with 10-50 employees
-
-### Not ideal for:
-- Pre-product companies (too early)
-- Enterprise companies (need full-time CMO)
-- B2C or e-commerce businesses (different expertise)
-
----
-
-## 🔒 Security & Compliance
-
-- **SOC 2 compliant** infrastructure (Supabase)
-- **Row-level security** - Clients never see each other's data
-- **Encrypted at rest** - All data encrypted in PostgreSQL
-- **GDPR compliant** - Full data export and deletion
-- **2FA available** - Two-factor authentication for accounts
-
----
-
-## 🤝 Support
-
-- **Email support** - support@cmoxpert.com (24-hour response)
-- **Priority support** - Professional/Agency plans (4-hour response)
-- **Documentation** - Comprehensive guides and tutorials
-- **Community** - Slack channel for customers
-
----
-
-## 🗺️ Roadmap
-
-### Coming in Q1 2025
-- ✅ Stripe integration (automatic MRR tracking)
-- ✅ PayPal integration (subscription management)
-- ✅ Multi-client dashboard
-- ✅ White-label reports
-- 🚧 Square payment processor
-- 🚧 HubSpot CRM integration
-- 🚧 LinkedIn Ads integration
-
-### Planned for Q2 2025
-- Google Ads integration
-- Cohort retention analysis
-- Advanced forecasting models
-- Mobile app (iOS/Android)
-- API access
-
-### Future
-- Salesforce integration
-- Custom dashboard builder
-- Benchmark database (compare against 1000+ SaaS companies)
-- Automated alerts (churn spike, MRR drop, etc.)
-
----
-
-## 📊 Current Status: Beta
-
-cmoxpert is in active beta with **real customers managing real SaaS portfolios**.
-
-**What works great:**
-- Multi-client dashboard
-- Revenue attribution and tracking
-- Report generation
-- Client management
-- Stripe and PayPal payment processing
-
-**What's coming soon:**
-- Square payment processor integration
-- HubSpot/Salesforce deep integrations
-- Advanced AI insights
-
----
-
-## 🏗️ Local Development
+Available via [NPM](https://www.npmjs.com) as dev dependency. To install:
 
 ```bash
-# Clone the repository
-git clone https://github.com/yourusername/cmoxpert.git
-
-# Install dependencies
-npm install
-
-# Set up environment variables
-cp .env.example .env
-# Add your Supabase credentials
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
+npm i supabase --save-dev
 ```
 
----
+When installing with yarn 4, you need to disable experimental fetch with the following nodejs config.
 
-## 📝 License
+```
+NODE_OPTIONS=--no-experimental-fetch yarn add supabase
+```
 
-Proprietary software. Not open source.
+> **Note**
+For Bun versions below v1.0.17, you must add `supabase` as a [trusted dependency](https://bun.sh/guides/install/trusted) before running `bun add -D supabase`.
 
----
+<details>
+  <summary><b>macOS</b></summary>
 
-## 🙏 Built By Fractional CMOs, For SaaS Companies
+  Available via [Homebrew](https://brew.sh). To install:
 
-cmoxpert was built by fractional CMOs who understand the challenges of scaling B2B SaaS marketing.
+  ```sh
+  brew install supabase/tap/supabase
+  ```
 
-We combine strategic expertise with proprietary technology to deliver results you can't get from traditional agencies.
+  To install the beta release channel:
+  
+  ```sh
+  brew install supabase/tap/supabase-beta
+  brew link --overwrite supabase-beta
+  ```
+  
+  To upgrade:
 
-**Ready to grow?** Email hello@cmoxpert.com or book a discovery call at cmoxpert.com/contact
+  ```sh
+  brew upgrade supabase
+  ```
+</details>
 
----
+<details>
+  <summary><b>Windows</b></summary>
 
-**© 2025 cmoxpert. Tech-enabled fractional CMO services for B2B SaaS.**
+  Available via [Scoop](https://scoop.sh). To install:
+
+  ```powershell
+  scoop bucket add supabase https://github.com/supabase/scoop-bucket.git
+  scoop install supabase
+  ```
+
+  To upgrade:
+
+  ```powershell
+  scoop update supabase
+  ```
+</details>
+
+<details>
+  <summary><b>Linux</b></summary>
+
+  Available via [Homebrew](https://brew.sh) and Linux packages.
+
+  #### via Homebrew
+
+  To install:
+
+  ```sh
+  brew install supabase/tap/supabase
+  ```
+
+  To upgrade:
+
+  ```sh
+  brew upgrade supabase
+  ```
+
+  #### via Linux packages
+
+  Linux packages are provided in [Releases](https://github.com/supabase/cli/releases). To install, download the `.apk`/`.deb`/`.rpm`/`.pkg.tar.zst` file depending on your package manager and run the respective commands.
+
+  ```sh
+  sudo apk add --allow-untrusted <...>.apk
+  ```
+
+  ```sh
+  sudo dpkg -i <...>.deb
+  ```
+
+  ```sh
+  sudo rpm -i <...>.rpm
+  ```
+
+  ```sh
+  sudo pacman -U <...>.pkg.tar.zst
+  ```
+</details>
+
+<details>
+  <summary><b>Other Platforms</b></summary>
+
+  You can also install the CLI via [go modules](https://go.dev/ref/mod#go-install) without the help of package managers.
+
+  ```sh
+  go install github.com/supabase/cli@latest
+  ```
+
+  Add a symlink to the binary in `$PATH` for easier access:
+
+  ```sh
+  ln -s "$(go env GOPATH)/bin/cli" /usr/bin/supabase
+  ```
+
+  This works on other non-standard Linux distros.
+</details>
+
+<details>
+  <summary><b>Community Maintained Packages</b></summary>
+
+  Available via [pkgx](https://pkgx.sh/). Package script [here](https://github.com/pkgxdev/pantry/blob/main/projects/supabase.com/cli/package.yml).
+  To install in your working directory:
+
+  ```bash
+  pkgx install supabase
+  ```
+
+  Available via [Nixpkgs](https://nixos.org/). Package script [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/tools/supabase-cli/default.nix).
+</details>
+
+### Run the CLI
+
+```bash
+supabase bootstrap
+```
+
+Or using npx:
+
+```bash
+npx supabase bootstrap
+```
+
+The bootstrap command will guide you through the process of setting up a Supabase project using one of the [starter](https://github.com/supabase-community/supabase-samples/blob/main/samples.json) templates.
+
+## Docs
+
+Command & config reference can be found [here](https://supabase.com/docs/reference/cli/about).
+
+## Breaking changes
+
+We follow semantic versioning for changes that directly impact CLI commands, flags, and configurations.
+
+However, due to dependencies on other service images, we cannot guarantee that schema migrations, seed.sql, and generated types will always work for the same CLI major version. If you need such guarantees, we encourage you to pin a specific version of CLI in package.json.
+
+## Developing
+
+To run from source:
+
+```sh
+# Go >= 1.22
+go run . help
+```
