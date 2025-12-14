@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../lib/supabase';
 import { Upload, AlertCircle, CheckCircle, Loader, Download } from 'lucide-react';
 import toast from 'react-hot-toast';
 
@@ -61,21 +62,16 @@ export function ChannelMetricsImporter({ clientId, onImportSuccess }: ChannelMet
 
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/channel-csv-validate`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ csvContent }),
-      });
+        const { data, error } = await supabase.functions.invoke('channel-csv-validate', {
+          body: { csvContent }
+        });
 
-      const result = await response.json();
+        if (error) {
+          toast.error(error.message || 'Validation failed');
+          return;
+        }
 
-      if (!response.ok) {
-        toast.error(result.error || 'Validation failed');
-        return;
-      }
+        const result = data as ValidationResult;
 
       setValidationResult(result);
       if (result.valid || result.validRows > 0) {
@@ -93,25 +89,20 @@ export function ChannelMetricsImporter({ clientId, onImportSuccess }: ChannelMet
   const commitCsv = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/channel-csv-commit`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const { data, error } = await supabase.functions.invoke('channel-csv-commit', {
+        body: {
           clientId,
           filename,
           csvContent,
-        }),
+        }
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        toast.error(result.error || 'Import failed');
+      if (error) {
+        toast.error(error.message || 'Import failed');
         return;
       }
+
+      const result = data as CommitResult;
 
       setCommitResult(result);
       setStep('complete');

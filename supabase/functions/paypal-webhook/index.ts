@@ -79,6 +79,8 @@ async function verifyPayPalWebhook(
 }
 
 Deno.serve(async (req: Request) => {
+  // Extract user's JWT from Authorization header for RLS
+  const authHeader = req.headers.get('Authorization')!;
   if (req.method === "OPTIONS") {
     return new Response(null, {
       status: 200,
@@ -88,8 +90,8 @@ Deno.serve(async (req: Request) => {
 
   try {
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
-    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const supabaseServiceKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, { global: { headers: { Authorization: authHeader } } });
 
     const body = await req.text();
     const event = JSON.parse(body);

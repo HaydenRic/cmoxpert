@@ -13,11 +13,15 @@ interface AutoresponderPayload {
 }
 
 Deno.serve(async (req: Request) => {
+  // Extract user's JWT from Authorization header for RLS
+  const authHeader = req.headers.get('Authorization')!;
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 200, headers: corsHeaders });
   }
 
   try {
+    // Extract user's JWT from Authorization header for RLS
+    const authHeader = req.headers.get('Authorization')!;
     const payload: AutoresponderPayload = await req.json();
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");
