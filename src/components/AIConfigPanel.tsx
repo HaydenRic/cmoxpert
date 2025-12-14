@@ -21,55 +21,12 @@ export function AIConfigPanel({ currentApiKey, onSave }: AIConfigPanelProps) {
   };
 
   const testConnection = async () => {
-    if (!apiKey || !apiKey.startsWith('sk-')) {
-      setTestResult({
-        success: false,
-        message: 'Please enter a valid OpenAI API key (starts with sk-)'
-      });
-      return;
-    }
-
     setTesting(true);
-    setTestResult(null);
-
-    try {
-      // Simple test generation
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${apiKey}`
-        },
-        body: JSON.stringify({
-          model: 'gpt-4',
-          messages: [
-            { role: 'system', content: 'You are a helpful assistant.' },
-            { role: 'user', content: 'Say "API key working!" if you can read this.' }
-          ],
-          max_tokens: 20
-        })
-      });
-
-      if (response.ok) {
-        setTestResult({
-          success: true,
-          message: 'API key is valid! AI features will work perfectly.'
-        });
-      } else {
-        const error = await response.json();
-        setTestResult({
-          success: false,
-          message: error.error?.message || 'Invalid API key or insufficient permissions'
-        });
-      }
-    } catch (error: any) {
-      setTestResult({
-        success: false,
-        message: error.message || 'Network error. Please check your connection.'
-      });
-    } finally {
-      setTesting(false);
-    }
+    setTestResult({
+      success: true,
+      message: 'AI is configured server-side by admin. API keys are not tested client-side for security.'
+    });
+    setTesting(false);
   };
 
   const handleSave = async () => {

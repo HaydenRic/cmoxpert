@@ -11,6 +11,7 @@ import { initializeErrorHandling } from './lib/errorHandling';
 import { DemoBadge } from './components/DemoBadge';
 import { Layout } from './components/Layout';
 import { AuthForm } from './components/AuthForm';
+import { featureFlags } from './lib/featureFlags';
 import SaaSLanding from './pages/SaaSLanding';
 import { Contact } from './pages/Contact';
 import ProductizedLanding from './pages/ProductizedLanding';
@@ -453,20 +454,22 @@ function AppContent() {
           }
         />
 
-        <Route
-          path="/revenue-attribution"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <RevenueAttribution />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
+        {featureFlags.ENABLE_REVENUE_ATTRIBUTION && (
+          <Route
+            path="/revenue-attribution"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <RevenueAttribution />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
+        )}
 
         <Route
           path="/deliverables"

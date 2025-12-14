@@ -32,6 +32,7 @@ import clsx from 'clsx';
 import { supabase } from '../lib/supabase';
 import { useRecentPages, getRecentPages } from '../hooks/useRecentPages';
 import { Clock } from 'lucide-react';
+import { featureFlags } from '../lib/featureFlags';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -191,7 +192,7 @@ export function Layout({ children }: LayoutProps) {
       items: [
         { name: 'Reports', href: '/reports', icon: FileText, badge: badges['reports'], badgeColor: 'bg-blue-500' },
         { name: 'Performance', href: '/performance', icon: BarChart3 },
-        { name: 'Attribution', href: '/revenue-attribution', icon: PoundSterling },
+        ...(featureFlags.ENABLE_REVENUE_ATTRIBUTION ? [{ name: 'Attribution', href: '/revenue-attribution', icon: PoundSterling }] : []),
         { name: 'Forecasting', href: '/forecasting', icon: TrendingUp }
       ]
     },

@@ -63,10 +63,10 @@ export function Integrations() {
       name: 'Stripe',
       type: 'stripe',
       icon: CreditCard,
-      description: 'Track payments, revenue, and subscription data via Stripe.',
+      description: 'Coming soon - Track payments, revenue, and subscription data via Stripe.',
       color: 'bg-blue-600',
       features: ['Payment tracking', 'Revenue analytics', 'Subscription metrics', 'Customer data'],
-      available: isIntegrationEnabled('stripe')
+      available: false
     },
     {
       name: 'PayPal',
@@ -117,13 +117,22 @@ export function Integrations() {
 
   const marketingIntegrations: IntegrationTemplate[] = [
     {
+      name: 'Google Search Console',
+      type: 'google_search_console',
+      icon: Search,
+      description: 'Track search performance, keywords, and SEO insights.',
+      color: 'bg-green-500',
+      features: ['Search performance', 'Keyword rankings', 'Click tracking', 'Impression data'],
+      available: true
+    },
+    {
       name: 'Google Analytics 4',
       type: 'ga4',
       icon: BarChart3,
-      description: 'Track website traffic, user sessions, and conversions',
+      description: 'Coming soon - Track website traffic, user sessions, and conversions',
       color: 'bg-orange-500',
       features: ['Traffic data', 'User sessions', 'Goal tracking', 'Event analytics'],
-      available: isIntegrationEnabled('ga4')
+      available: false
     },
     {
       name: 'Google Ads',
@@ -132,6 +141,15 @@ export function Integrations() {
       description: 'Coming soon - Import campaign performance and advertising metrics',
       color: 'bg-blue-500',
       features: ['Campaign metrics', 'Ad performance', 'Keyword data', 'Budget tracking'],
+      available: false
+    },
+    {
+      name: 'Meta Ads',
+      type: 'meta_ads',
+      icon: Megaphone,
+      description: 'Coming soon - Track Facebook and Instagram ad campaigns',
+      color: 'bg-slate-700',
+      features: ['Ad performance', 'Campaign insights', 'Audience data', 'Spend tracking'],
       available: false
     },
     {
