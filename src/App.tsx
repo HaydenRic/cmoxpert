@@ -8,6 +8,7 @@ import { PerformanceMonitor } from './components/PerformanceMonitor';
 import { ErrorToastProvider, useErrorToast, NetworkStatus } from './components/ui/ErrorToast';
 import { OfflineIndicator } from './components/ui/OfflineIndicator';
 import { initializeErrorHandling } from './lib/errorHandling';
+import { DemoBadge } from './components/DemoBadge';
 import { Layout } from './components/Layout';
 import { AuthForm } from './components/AuthForm';
 import SaaSLanding from './pages/SaaSLanding';
@@ -117,6 +118,7 @@ function AppContent() {
   return (
     <ErrorBoundary>
       <Suspense fallback={<PageLoadingFallback />}>
+        <DemoBadge />
         <NetworkStatus />
         <OfflineIndicator onRetry={() => window.location.reload()} />
         <Routes>

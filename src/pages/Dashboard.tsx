@@ -22,6 +22,8 @@ import { format } from 'date-fns';
 import { Link } from 'react-router-dom';
 import { ClientSelector } from '../components/ClientSelector';
 import { AIFeatureTour } from '../components/AIFeatureTour';
+import { ManualMetricEntry } from '../components/ManualMetricEntry';
+import { MetricsUpload } from '../components/MetricsUpload';
 
 interface DashboardStats {
   totalClients: number;
@@ -471,6 +473,29 @@ export function Dashboard() {
       </div>
 
       {/* Removed: Fraud Analysis and Activation Funnel cards - features deprecated */}
+
+      {/* Metrics Management Section */}
+      {selectedClientId && (
+        <div className="mb-8 space-y-6">
+          <h2 className="text-xl font-bold text-slate-900">Metrics Management</h2>
+          <ManualMetricEntry clientId={selectedClientId} onSuccess={loadDashboardData} />
+          <MetricsUpload clientId={selectedClientId} onSuccess={loadDashboardData} />
+        </div>
+      )}
+
+      {!selectedClientId && (
+        <div className="mb-8 bg-blue-50 border border-blue-200 rounded-lg p-6">
+          <div className="flex items-center gap-3">
+            <Activity className="w-6 h-6 text-blue-600" />
+            <div>
+              <h3 className="font-semibold text-blue-900 mb-1">Track Metrics</h3>
+              <p className="text-sm text-blue-700">
+                Select a client above to add metrics manually or import from CSV
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

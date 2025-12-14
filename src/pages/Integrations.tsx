@@ -5,6 +5,7 @@ import { initiateOAuthFlow } from '../lib/integrations/oauth';
 import { refreshGoogleAdsData } from '../lib/integrations/googleAds';
 import { refreshMetaAdsData } from '../lib/integrations/metaAds';
 import { IntegrationHealth } from '../components/IntegrationHealth';
+import { isIntegrationEnabled } from '../lib/featureFlags';
 import {
   Plug,
   Plus,
@@ -60,25 +61,25 @@ export function Integrations() {
   const fintechIntegrations: IntegrationTemplate[] = [
     {
       name: 'Stripe',
-      type: 'payments',
+      type: 'stripe',
       icon: CreditCard,
-      description: 'Track payments, revenue, and subscription data. Automatic MRR tracking.',
+      description: 'Track payments, revenue, and subscription data via Stripe.',
       color: 'bg-blue-600',
       features: ['Payment tracking', 'Revenue analytics', 'Subscription metrics', 'Customer data'],
-      available: true
+      available: isIntegrationEnabled('stripe')
     },
     {
       name: 'PayPal',
-      type: 'payments',
+      type: 'paypal',
       icon: CreditCard,
-      description: 'Accept PayPal payments and track subscription revenue.',
+      description: 'Coming soon - Accept PayPal payments and track subscription revenue.',
       color: 'bg-indigo-600',
       features: ['PayPal payments', 'Subscription billing', 'Revenue tracking', 'Customer management'],
-      available: true
+      available: false
     },
     {
       name: 'Square',
-      type: 'payments',
+      type: 'square',
       icon: CreditCard,
       description: 'Coming soon - Square payment processing and analytics.',
       color: 'bg-gray-500',
@@ -87,73 +88,73 @@ export function Integrations() {
     },
     {
       name: 'Plaid',
-      type: 'banking',
+      type: 'plaid',
       icon: LinkIcon,
-      description: 'Monitor bank account connections and funding conversion rates.',
+      description: 'Coming soon - Monitor bank account connections and funding conversion rates.',
       color: 'bg-teal-600',
       features: ['Bank linking', 'Account verification', 'Balance checks', 'Transaction history'],
-      available: true
+      available: false
     },
     {
       name: 'Jumio',
-      type: 'kyc',
+      type: 'jumio',
       icon: Shield,
-      description: 'Track KYC verification rates and identity fraud prevention.',
+      description: 'Coming soon - Track KYC verification rates and identity fraud prevention.',
       color: 'bg-red-600',
       features: ['Identity verification', 'Document scanning', 'Fraud screening', 'Compliance reporting'],
-      available: true
+      available: false
     },
     {
       name: 'Segment',
-      type: 'analytics',
+      type: 'segment',
       icon: Zap,
-      description: 'Collect and route user event data across your fintech stack.',
+      description: 'Coming soon - Collect and route user event data across your fintech stack.',
       color: 'bg-green-600',
       features: ['Event tracking', 'User journeys', 'Data routing', 'Integration hub'],
-      available: true
+      available: false
     }
   ];
 
   const marketingIntegrations: IntegrationTemplate[] = [
     {
-      name: 'Google Analytics',
-      type: 'analytics',
+      name: 'Google Analytics 4',
+      type: 'ga4',
       icon: BarChart3,
-      description: 'Track website traffic, user behavior, and conversion data',
+      description: 'Track website traffic, user sessions, and conversions',
       color: 'bg-orange-500',
-      features: ['Traffic data', 'User behavior', 'Goal tracking', 'Real-time analytics'],
-      available: true
+      features: ['Traffic data', 'User sessions', 'Goal tracking', 'Event analytics'],
+      available: isIntegrationEnabled('ga4')
     },
     {
       name: 'Google Ads',
-      type: 'ads',
+      type: 'google_ads',
       icon: Megaphone,
-      description: 'Import campaign performance and advertising metrics',
+      description: 'Coming soon - Import campaign performance and advertising metrics',
       color: 'bg-blue-500',
       features: ['Campaign metrics', 'Ad performance', 'Keyword data', 'Budget tracking'],
-      available: true
+      available: false
     },
     {
       name: 'HubSpot',
-      type: 'crm',
+      type: 'hubspot',
       icon: Target,
-      description: 'Sync contacts, deals, and marketing automation data',
+      description: 'Coming soon - Sync contacts, deals, and marketing automation data',
       color: 'bg-orange-600',
       features: ['Contact sync', 'Deal pipeline', 'Email campaigns', 'Lead scoring'],
-      available: true
+      available: false
     },
     {
       name: 'SEMrush',
-      type: 'seo',
+      type: 'semrush',
       icon: Search,
-      description: 'Access keyword rankings, backlinks, and competitor data',
+      description: 'Coming soon - Access keyword rankings, backlinks, and competitor data',
       color: 'bg-slate_blue-500',
       features: ['Keyword rankings', 'Backlink analysis', 'Competitor research', 'SEO audit'],
-      available: true
+      available: false
     },
     {
       name: 'LinkedIn Ads',
-      type: 'ads',
+      type: 'linkedin',
       icon: TrendingUp,
       description: 'Coming soon - Track B2B advertising campaigns',
       color: 'bg-blue-700',
@@ -162,7 +163,7 @@ export function Integrations() {
     },
     {
       name: 'Mailchimp',
-      type: 'email',
+      type: 'mailchimp',
       icon: Mail,
       description: 'Coming soon - Email campaign performance tracking',
       color: 'bg-yellow-500',
@@ -171,7 +172,7 @@ export function Integrations() {
     },
     {
       name: 'Slack',
-      type: 'communication',
+      type: 'slack',
       icon: MessageSquare,
       description: 'Coming soon - Receive alerts in Slack',
       color: 'bg-tan-600',
@@ -180,9 +181,9 @@ export function Integrations() {
     },
     {
       name: 'Salesforce',
-      type: 'crm',
+      type: 'salesforce',
       icon: Activity,
-      description: 'Sync customer data, opportunities, and sales pipeline',
+      description: 'Coming soon - Sync customer data, opportunities, and sales pipeline',
       color: 'bg-cyan-500',
       features: ['Account sync', 'Opportunity tracking', 'Sales data', 'Custom objects'],
       available: false
