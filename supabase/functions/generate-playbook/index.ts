@@ -157,9 +157,7 @@ Deno.serve(async (req: Request) => {
       throw new Error('Missing Supabase configuration');
     }
 
-    const supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-    // Get user from JWT token
+    // Extract user's JWT from Authorization header for RLS
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
       return new Response(
@@ -170,6 +168,8 @@ Deno.serve(async (req: Request) => {
         }
       );
     }
+
+    const supabase = createClient(supabaseUrl, supabaseServiceKey, { global: { headers: { Authorization: authHeader } } });
 
     const token = authHeader.replace('Bearer ', '');
     const { data: { user }, error: authError } = await supabase.auth.getUser(token);
