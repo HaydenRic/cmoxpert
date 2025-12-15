@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint .",
+    "lint": "eslint \"src/**/*.{ts,tsx}\"",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run lint && npm run typecheck && npm run build",
     "preview": "vite preview",
     "docs:generate": "node docs/api/tools/documentation-generator.js generate",
     "docs:validate": "node docs/api/tools/documentation-generator.js validate",

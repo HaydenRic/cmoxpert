@@ -27,4 +27,6 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"]
+  ,
+  "exclude": ["supabase/functions/**", "dist", "node_modules"]
 }
