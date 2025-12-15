@@ -20,8 +20,8 @@ interface AuthContextType {
   isAdmin: boolean;
   error: string | null;
   loginSuccess: boolean;
-  signIn: (email: string, password: string) => Promise<{ error: any; success?: boolean }>;
-  signUp: (email: string, password: string) => Promise<{ error: any }>;
+  signIn: (email: string, password: string) => Promise<{ error: unknown; success?: boolean }>;
+  signUp: (email: string, password: string) => Promise<{ error: unknown }>;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
   clearError: () => void;
@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           console.log('[AUTH] Profile not found, attempting to create...');
 
           // Try to use the database function to ensure profile exists
-          const { data: functionResult, error: functionError } = await supabase
+          const { error: functionError } = await supabase
             .rpc('ensure_profile_exists', {
               user_id: userId,
               user_email: userEmail
@@ -140,17 +140,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         console.log('[AUTH] Profile loaded successfully');
         setProfile(data);
         setError(null);
-      } catch (err: any) {
+      } catch (err: unknown) {
         clearTimeout(timeoutId);
         console.error('[AUTH] Profile load exception:', err);
 
-        if (err.name === 'AbortError' && retryCount < maxRetries) {
+        const errAny = err as { name?: string };
+        if (errAny.name === 'AbortError' && retryCount < maxRetries) {
           const delay = Math.min(1000 * Math.pow(2, retryCount), 5000);
           console.log(`[AUTH] Timeout, retrying in ${delay}ms...`);
           setTimeout(() => loadProfile(userId, userEmail, retryCount + 1, maxRetries), delay);
           return;
         }
-
         if (retryCount < maxRetries) {
           const delay = Math.min(1000 * Math.pow(2, retryCount), 5000);
           setTimeout(() => loadProfile(userId, userEmail, retryCount + 1, maxRetries), delay);
@@ -159,7 +159,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         setError('Connection timeout. Please check your internet connection and try again.');
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('[AUTH] Unexpected profile load error:', error);
       setError('An unexpected error occurred. Please try again or contact support.');
     }
@@ -201,7 +201,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         setLoading(false);
-      } catch (error: any) {
+      } catch (error: unknown) {
         console.error('[AUTH] Initialization error:', error);
         if (mounted) {
           setError('Failed to initialize authentication. You can continue without authentication.');
@@ -279,8 +279,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       return { ...result, success: true };
-    } catch (error: any) {
-      const errorMessage = error.message || 'An error occurred during sign in';
+    } catch (error: unknown) {
+      const errorMessage = (error as Error)?.message || 'An error occurred during sign in';
       setError(errorMessage);
       toast.error('Login failed. Please try again.', {
         icon: '✕',
@@ -348,15 +348,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                   role: 'user'
                 }]);
             }
-          } catch (error) {
+          } catch {
             // Silent fail, profile will be created on next sign in
           }
         }, 1000);
       }
 
       return result;
-    } catch (error: any) {
-      const errorMessage = error.message || 'An error occurred during sign up';
+    } catch (error: unknown) {
+      const errorMessage = (error as Error)?.message || 'An error occurred during sign up';
       setError(errorMessage);
       toast.error('Sign up failed. Please try again.', {
         icon: '✕',
@@ -372,7 +372,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setError(null);
       await supabase.auth.signOut();
       setProfile(null);
-    } catch (error: any) {
+    } catch (err: unknown) {
+      console.error('[AUTH] signOut error:', err);
       setError('Error signing out. Please try again.');
     }
   };

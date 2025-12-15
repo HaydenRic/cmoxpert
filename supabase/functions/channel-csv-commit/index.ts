@@ -1,6 +1,11 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.78.0";
 
+declare const Deno: {
+  env: { get(name: string): string | undefined };
+  serve(handler: (req: Request) => Promise<Response> | Response): void;
+};
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -21,12 +26,7 @@ interface CommitRow {
   notes?: string;
 }
 
-interface CommitResult {
-  success: boolean;
-  rowsInserted: number;
-  rowsFailed: number;
-  errors: string[];
-}
+// CommitResult removed (unused)
 
 Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") {

@@ -92,11 +92,19 @@ Deno.serve(async (req: Request) => {
       throw new Error('Missing Supabase configuration');
     }
 
-    supabase = createClient(supabaseUrl, supabaseServiceKey);
-
-    // Get user from JWT token
+    // Extract user's JWT from Authorization header for RLS
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Missing authorization header' }),
+        {
+          status: 401,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    }
+
+    supabase = createClient(supabaseUrl, supabaseServiceKey, { global: { headers: { Authorization: authHeader } } });
       return new Response(
         JSON.stringify({ error: 'Missing authorization header' }),
         {

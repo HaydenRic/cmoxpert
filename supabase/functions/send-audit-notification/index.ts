@@ -1,5 +1,10 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
+declare const Deno: {
+  env: { get(name: string): string | undefined };
+  serve(handler: (req: Request) => Promise<Response> | Response): void;
+};
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -16,15 +21,11 @@ interface AuditNotificationPayload {
 }
 
 Deno.serve(async (req: Request) => {
-  // Extract user's JWT from Authorization header for RLS
-  const authHeader = req.headers.get('Authorization')!;
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 200, headers: corsHeaders });
   }
 
   try {
-    // Extract user's JWT from Authorization header for RLS
-    const authHeader = req.headers.get('Authorization')!;
     const payload: AuditNotificationPayload = await req.json();
 
     const RESEND_API_KEY = Deno.env.get("RESEND_API_KEY");

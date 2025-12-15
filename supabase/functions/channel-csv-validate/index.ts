@@ -49,8 +49,7 @@ const VALID_CHANNELS = [
 ];
 
 Deno.serve(async (req: Request) => {
-  // Extract user's JWT from Authorization header for RLS
-  const authHeader = req.headers.get('Authorization')!;
+  // (no Supabase client used here) — no auth header required
   if (req.method === "OPTIONS") {
     return new Response(null, { status: 200, headers: corsHeaders });
   }

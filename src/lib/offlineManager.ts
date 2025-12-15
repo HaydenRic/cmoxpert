@@ -45,8 +45,7 @@ export class NetworkMonitor {
 export class OfflineStorage {
   private static readonly STORAGE_KEY = 'cmoxpert_offline_data';
   private static readonly MAX_STORAGE_SIZE = 5 * 1024 * 1024; // 5MB
-
-  static save(key: string, data: any): boolean {
+  static save(key: string, data: unknown): boolean {
     try {
       const storage = this.getStorage();
       storage[key] = {
@@ -72,7 +71,7 @@ export class OfflineStorage {
     }
   }
 
-  static load(key: string): any | null {
+  static load(key: string): unknown | null {
     try {
       const storage = this.getStorage();
       const item = storage[key];
@@ -112,7 +111,7 @@ export class OfflineStorage {
     }
   }
 
-  private static getStorage(): Record<string, any> {
+  private static getStorage(): Record<string, { data: unknown; timestamp: number; version?: string }> {
     try {
       const stored = localStorage.getItem(this.STORAGE_KEY);
       return stored ? JSON.parse(stored) : {};
@@ -121,7 +120,7 @@ export class OfflineStorage {
     }
   }
 
-  private static saveStorage(storage: Record<string, any>): void {
+  private static saveStorage(storage: Record<string, { data: unknown; timestamp: number; version?: string }>): void {
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(storage));
     } catch (error) {
@@ -132,13 +131,13 @@ export class OfflineStorage {
   private static cleanup(): void {
     try {
       const storage = this.getStorage();
-      const entries = Object.entries(storage);
-      
+      const entries = Object.entries(storage) as Array<[string, { data: unknown; timestamp: number; version?: string }]>
+
       // Sort by timestamp and keep only the 10 most recent items
-      entries.sort((a, b) => (b[1] as any).timestamp - (a[1] as any).timestamp);
+      entries.sort((a, b) => b[1].timestamp - a[1].timestamp);
       const cleaned = Object.fromEntries(entries.slice(0, 10));
-      
-      this.saveStorage(cleaned);
+
+      this.saveStorage(cleaned as Record<string, { data: unknown; timestamp: number; version?: string }>);
     } catch (error) {
       console.error('Failed to cleanup storage:', error);
     }
@@ -148,7 +147,7 @@ export class OfflineStorage {
 // Main OfflineManager class that combines network monitoring and storage
 export class OfflineManager {
   private static networkMonitor: NetworkMonitor;
-  private static pendingOperations: any[] = [];
+  private static pendingOperations: Array<() => Promise<unknown>> = [];
 
   static init(): void {
     this.networkMonitor = NetworkMonitor.init();
@@ -202,10 +201,9 @@ export class OfflineManager {
   }
 
   static getCachedData<T>(key: string): T | null {
-    return OfflineStorage.load(key);
+    return OfflineStorage.load(key) as T | null;
   }
-
-  static cacheData(key: string, data: any): boolean {
+  static cacheData(key: string, data: unknown): boolean {
     return OfflineStorage.save(key, data);
   }
 }

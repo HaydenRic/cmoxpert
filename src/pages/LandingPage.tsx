@@ -1,5 +1,12 @@
-@@ .. @@
-               <p className="text-xl text-white mb-8 leading-relaxed">
--                <strong className="text-white">You get me, and only me.</strong> <span className="text-cream-100">No junior account managers, no diluted communication, no bait-and-switch. Just direct access to expert-level marketing intelligence powered by AI, delivered with radical transparency.</span>
-+                <strong className="text-white">You work directly with me.</strong> <span className="text-cream-100">No junior account managers, no diluted communication, and no bait-and-switch. You'll receive direct access to expert-level marketing intelligence, powered by AI and delivered with radical transparency.</span>
-               </p>
+import React from 'react';
+
+export default function LandingPage(): JSX.Element {
+  return (
+    <main className="min-h-screen flex items-center justify-center bg-gradient-to-b from-slate-900 to-slate-800 text-white">
+      <section className="max-w-4xl p-8 text-center">
+        <h1 className="text-4xl font-bold mb-4">Cmoxpert — Marketing Intelligence</h1>
+        <p className="text-lg opacity-90">Expert marketing insights and analytics for growth-focused teams.</p>
+      </section>
+    </main>
+  );
+}
