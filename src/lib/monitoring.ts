@@ -47,11 +47,11 @@ interface ErrorReport {
   userAgent: string;
   timestamp: number;
   userId?: string;
-  additionalData?: Record<string, any>;
+  additionalData?: Record<string, unknown>;
 }
 
 // Enhanced error reporting function
-export const reportError = (error: Error, additionalData?: Record<string, any>) => {
+export const reportError = (error: Error, additionalData?: Record<string, unknown>) => {
   if (import.meta.env.DEV) {
     console.error('Development Error:', error, additionalData);
     return;
@@ -90,12 +90,12 @@ export const reportError = (error: Error, additionalData?: Record<string, any>) 
 };
 
 // Performance monitoring with enhanced error handling
-export const measurePerformance = (name: string, fn: () => Promise<any>) => {
-  return async (...args: any[]) => {
+export const measurePerformance = (name: string, fn: (...args: unknown[]) => Promise<unknown>) => {
+  return async (...args: unknown[]) => {
     const startTime = performance.now();
     
     try {
-      const result = await fn.apply(null, args);
+      const result = await fn(...(args as unknown[]));
       const endTime = performance.now();
       const duration = endTime - startTime;
       
@@ -105,11 +105,9 @@ export const measurePerformance = (name: string, fn: () => Promise<any>) => {
       }
       
       // Send to analytics in production
-      if (import.meta.env.PROD && typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', 'timing_complete', {
-          name: name,
-          value: Math.round(duration)
-        });
+      if (import.meta.env.PROD && typeof window !== 'undefined') {
+        const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+        if (gtag) gtag('event', 'timing_complete', { name: name, value: Math.round(duration) });
       }
       
       // Send to Sentry for performance monitoring
@@ -123,7 +121,7 @@ export const measurePerformance = (name: string, fn: () => Promise<any>) => {
       
       return result;
     } catch (error) {
-      reportError(error as Error, { operation: name, args });
+      reportError(error as Error, { operation: name, args: args as Record<string, unknown> | undefined });
       throw error;
     }
   };
@@ -139,10 +137,9 @@ export const trackUserSession = () => {
   const handleBeforeUnload = () => {
     const sessionDuration = Date.now() - sessionStart;
     
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'session_duration', {
-        value: Math.round(sessionDuration / 1000) // in seconds
-      });
+    if (typeof window !== 'undefined') {
+      const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+      if (gtag) gtag('event', 'session_duration', { value: Math.round(sessionDuration / 1000) });
     }
   };
 
@@ -155,14 +152,11 @@ export const trackUserSession = () => {
 };
 
 // Feature usage tracking with error handling
-export const trackFeatureUsage = (feature: string, action: string, metadata?: Record<string, any>) => {
+export const trackFeatureUsage = (feature: string, action: string, metadata?: Record<string, unknown>) => {
   try {
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'feature_usage', {
-        feature_name: feature,
-        action: action,
-        ...metadata
-      });
+    if (typeof window !== 'undefined') {
+      const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+      if (gtag) gtag('event', 'feature_usage', { feature_name: feature, action: action, ...metadata });
     }
 
     // Add breadcrumb for debugging
@@ -181,9 +175,9 @@ export const trackFeatureUsage = (feature: string, action: string, metadata?: Re
 
 // API call monitoring with enhanced error handling
 export const monitorApiCall = async (
-  apiName: string, 
-  apiCall: () => Promise<any>
-): Promise<any> => {
+  apiName: string,
+  apiCall: () => Promise<unknown>
+): Promise<unknown> => {
   const startTime = performance.now();
   
   try {
@@ -191,11 +185,9 @@ export const monitorApiCall = async (
     const duration = performance.now() - startTime;
     
     // Track successful API calls
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'api_call_success', {
-        api_name: apiName,
-        duration: Math.round(duration)
-      });
+    if (typeof window !== 'undefined') {
+      const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+      if (gtag) gtag('event', 'api_call_success', { api_name: apiName, duration: Math.round(duration) });
     }
     
     // Add success breadcrumb
@@ -208,20 +200,17 @@ export const monitorApiCall = async (
     }
     
     return result;
-  } catch (error) {
+  } catch (err: unknown) {
     const duration = performance.now() - startTime;
-    
+
     // Track failed API calls
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'api_call_error', {
-        api_name: apiName,
-        duration: Math.round(duration),
-        error_message: (error as Error).message
-      });
+    if (typeof window !== 'undefined') {
+      const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
+      if (gtag) gtag('event', 'api_call_error', { api_name: apiName, duration: Math.round(duration), error_message: (err as Error).message });
     }
-    
-    reportError(error as Error, { apiName, duration });
-    throw error;
+
+    reportError(err as Error, { apiName, duration });
+    throw err;
   }
 };
 

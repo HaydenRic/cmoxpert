@@ -35,10 +35,10 @@ export interface AppError {
   message: string;
   userMessage: string;
   code?: string;
-  details?: any;
+  details?: unknown;
   timestamp: number;
   userId?: string;
-  context?: Record<string, any>;
+  context?: Record<string, unknown>;
   retryable: boolean;
   action?: string;
   recoveryActions?: RecoveryAction[];

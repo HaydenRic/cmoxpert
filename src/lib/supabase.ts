@@ -149,16 +149,17 @@ export async function checkSupabaseConnection(): Promise<{
       success: true,
       latency
     };
-  } catch (error: any) {
+  } catch (err: unknown) {
     const latency = Date.now() - startTime;
 
     let errorMessage = 'Unable to connect to Supabase';
+    const msg = (err as Error | undefined)?.message;
 
-    if (error.message?.includes('fetch')) {
+    if (msg?.includes('fetch')) {
       errorMessage = 'Network error - please check your internet connection';
-    } else if (error.message?.includes('DNS') || error.message?.includes('NAME_NOT_RESOLVED')) {
+    } else if (msg?.includes('DNS') || msg?.includes('NAME_NOT_RESOLVED')) {
       errorMessage = 'DNS error - Supabase URL may be incorrect or unreachable';
-    } else if (error.message?.includes('timeout')) {
+    } else if (msg?.includes('timeout')) {
       errorMessage = 'Connection timeout - Supabase may be slow or unreachable';
     }
 
@@ -304,8 +305,8 @@ export type Database = {
           id: string;
           client_id: string;
           domain: string;
-          semrush_data?: any;
-          trends_data?: any;
+          semrush_data?: unknown;
+          trends_data?: unknown;
           ai_analysis?: string;
           status: string;
           created_at: string;
@@ -315,8 +316,8 @@ export type Database = {
           id?: string;
           client_id: string;
           domain: string;
-          semrush_data?: any;
-          trends_data?: any;
+          semrush_data?: unknown;
+          trends_data?: unknown;
           ai_analysis?: string;
           status?: string;
           created_at?: string;
@@ -326,8 +327,8 @@ export type Database = {
           id?: string;
           client_id?: string;
           domain?: string;
-          semrush_data?: any;
-          trends_data?: any;
+          semrush_data?: unknown;
+          trends_data?: unknown;
           ai_analysis?: string;
           status?: string;
           created_at?: string;
@@ -339,7 +340,7 @@ export type Database = {
           id: string;
           name: string;
           description?: string;
-          tactics: any;
+          tactics: unknown;
           category: string;
           user_id: string;
           created_at: string;
@@ -349,7 +350,7 @@ export type Database = {
           id?: string;
           name: string;
           description?: string;
-          tactics?: any;
+          tactics?: unknown;
           category?: string;
           user_id: string;
           created_at?: string;
@@ -359,7 +360,7 @@ export type Database = {
           id?: string;
           name?: string;
           description?: string;
-          tactics?: any;
+          tactics?: unknown;
           category?: string;
           user_id?: string;
           created_at?: string;
