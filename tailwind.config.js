@@ -53,7 +53,74 @@ export default {
         },
       },
       colors: {
-        // Professional B2B SaaS Color Palette
+        // Modern Digital Marketing Color Palette
+        // Dark backgrounds + Bright accents
+        'dark-bg': {
+          DEFAULT: '#0F172A',
+          50: '#F0F4F8',
+          100: '#DFE7F1',
+          200: '#BFC7E3',
+          300: '#7F8FBE',
+          400: '#1E3A5F',
+          500: '#0F172A',
+          600: '#0D1424',
+          700: '#0A111D',
+          800: '#080E17',
+          900: '#050B10'
+        },
+        'cyan-accent': {
+          DEFAULT: '#06B6D4',
+          50: '#ECFDFF',
+          100: '#CFFAFE',
+          200: '#A5F3FC',
+          300: '#67E8F9',
+          400: '#22D3EE',
+          500: '#06B6D4',
+          600: '#0891B2',
+          700: '#0E7490',
+          800: '#155E75',
+          900: '#164E63'
+        },
+        'teal-accent': {
+          DEFAULT: '#14B8A6',
+          50: '#F0FDFA',
+          100: '#CCFBF1',
+          200: '#99F6E4',
+          300: '#5EEAD4',
+          400: '#2DD4BF',
+          500: '#14B8A6',
+          600: '#0D9488',
+          700: '#0F766E',
+          800: '#115E59',
+          900: '#134E4A'
+        },
+        'purple-accent': {
+          DEFAULT: '#A855F7',
+          50: '#FAF5FF',
+          100: '#F3E8FF',
+          200: '#E9D5FF',
+          300: '#D8B4FE',
+          400: '#C084FC',
+          500: '#A855F7',
+          600: '#9333EA',
+          700: '#7E22CE',
+          800: '#6B21A8',
+          900: '#581C87'
+        },
+        'orange-accent': {
+          DEFAULT: '#F97316',
+          50: '#FFF7ED',
+          100: '#FFEDD5',
+          200: '#FED7AA',
+          300: '#FDBA74',
+          400: '#FB923C',
+          500: '#F97316',
+          600: '#EA580C',
+          700: '#C2410C',
+          800: '#9A3412',
+          900: '#7C2D12'
+        },
+        // Professional B2B SaaS Color Palette (legacy, keep for compatibility)
         'charcoal': {
           DEFAULT: '#0A0908',
           50: '#F8F8F8',
