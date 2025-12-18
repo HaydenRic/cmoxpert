@@ -161,15 +161,37 @@ export function ServicePackages() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-slate-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600">Loading packages...</p>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="max-w-7xl mx-auto px-4 py-16">
+          {/* Header Skeleton */}
+          <div className="text-center mb-12">
+            <div className="inline-block h-8 w-48 bg-slate-200 rounded-full animate-pulse mb-4"></div>
+            <div className="h-12 w-2/3 bg-slate-200 rounded-lg animate-pulse mx-auto mb-4"></div>
+            <div className="h-6 w-1/2 bg-slate-200 rounded-lg animate-pulse mx-auto"></div>
+          </div>
+          
+          {/* Pricing Cards Skeleton */}
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-white border-2 border-slate-200 rounded-2xl p-8 shadow-lg">
+                <div className="text-center mb-6">
+                  <div className="w-16 h-16 bg-slate-200 rounded-2xl animate-pulse mx-auto mb-4"></div>
+                  <div className="h-8 w-32 bg-slate-200 rounded-lg animate-pulse mx-auto mb-2"></div>
+                  <div className="h-4 w-48 bg-slate-200 rounded animate-pulse mx-auto mb-4"></div>
+                  <div className="h-12 w-40 bg-slate-200 rounded-lg animate-pulse mx-auto mb-2"></div>
+                </div>
+                <div className="space-y-3 mb-6">
+                  {[1, 2, 3, 4].map((j) => (
+                    <div key={j} className="h-5 bg-slate-200 rounded animate-pulse"></div>
+                  ))}
+                </div>
+                <div className="h-12 bg-slate-200 rounded-lg animate-pulse"></div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="max-w-7xl mx-auto px-4 py-16">
