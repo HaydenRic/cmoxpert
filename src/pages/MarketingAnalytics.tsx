@@ -37,9 +37,11 @@ import {
   YAxis, 
   CartesianGrid, 
   Tooltip, 
-  Legend, 
-  ResponsiveContainer 
-} from 'recharts';
+  Legend,
+  ResponsiveContainer,
+  Suspense,
+  ChartLoadingFallback
+} from '../components/LazyCharts';
 // clsx removed (unused)
 import { ChannelMetricsImporter } from '../components/ChannelMetricsImporter';
 import toast from 'react-hot-toast';

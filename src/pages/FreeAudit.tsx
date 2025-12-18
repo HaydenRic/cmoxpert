@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import {
   Search,
@@ -19,10 +19,12 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { generateAuditPDF } from '../lib/pdfReportGenerator';
 import { analyzePlatforms } from '../lib/platformAnalysisEngine';
 import { generateActionPlan, type ActionPlanItem } from '../lib/actionPlanGenerator';
-import { WasteBreakdownChart, ROIImprovementChart, PlatformScoreChart } from '../components/AuditCharts';
+// Defer heavy chart and PDF libs until needed to reduce initial bundle size
+// `AuditCharts` and `pdfReportGenerator` will be dynamic-imported when the user views results or requests a PDF.
+
+const NOOP = null as unknown as null;
 
 interface AuditFormData {
   email: string;
@@ -86,6 +88,7 @@ export default function FreeAudit() {
     tracking_setup: ''
   });
   const [auditResults, setAuditResults] = useState<AuditResults | null>(null);
+  const [AuditChartsModule, setAuditChartsModule] = useState<any>(null);
 
   const channels = [
     { id: 'paid_search', label: 'Google Ads / Paid Search' },
@@ -278,20 +281,22 @@ export default function FreeAudit() {
 
   const handleDownloadPDF = async () => {
     if (!auditResults) return;
-
-    await generateAuditPDF({
-      company_name: formData.company_name || 'Your Company',
-      website: formData.website,
-      monthly_ad_spend: parseInt(formData.monthly_ad_spend),
-      primary_channels: formData.primary_channels,
-      score: auditResults.score,
-      estimated_waste: auditResults.estimated_waste,
-      potential_savings: auditResults.potential_savings,
-      findings: auditResults.findings,
-      opportunities: auditResults.opportunities,
-      platformAnalysis: auditResults.platformAnalysis,
-      actionPlan: auditResults.actionPlan
-    });
+    const mod = await import('../lib/pdfReportGenerator');
+    if (mod && typeof mod.generateAuditPDF === 'function') {
+      await mod.generateAuditPDF({
+        company_name: formData.company_name || 'Your Company',
+        website: formData.website,
+        monthly_ad_spend: parseInt(formData.monthly_ad_spend),
+        primary_channels: formData.primary_channels,
+        score: auditResults.score,
+        estimated_waste: auditResults.estimated_waste,
+        potential_savings: auditResults.potential_savings,
+        findings: auditResults.findings,
+        opportunities: auditResults.opportunities,
+        platformAnalysis: auditResults.platformAnalysis,
+        actionPlan: auditResults.actionPlan
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -363,6 +368,17 @@ export default function FreeAudit() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Load charts module only when results are available to avoid pulling `recharts` into initial bundle
+    if (step === 'results' && !AuditChartsModule) {
+      import('../components/AuditCharts')
+        .then(mod => setAuditChartsModule(mod))
+        .catch(err => {
+          console.warn('[FreeAudit] Failed to load AuditCharts dynamically', err);
+        });
+    }
+  }, [step, AuditChartsModule]);
 
   const getSeverityColor = (severity: string) => {
     switch (severity) {
@@ -455,27 +471,39 @@ export default function FreeAudit() {
 
           {/* Data Visualizations */}
           <div className="grid md:grid-cols-2 gap-6 mb-8">
-            <WasteBreakdownChart
-              estimated_waste={auditResults.estimated_waste}
-              potential_savings={auditResults.potential_savings}
-              monthly_spend={parseInt(formData.monthly_ad_spend)}
-            />
-            <ROIImprovementChart
-              potential_savings={auditResults.potential_savings}
-              monthly_spend={parseInt(formData.monthly_ad_spend)}
-            />
+            {AuditChartsModule ? (
+              <>
+                <AuditChartsModule.WasteBreakdownChart
+                  estimated_waste={auditResults.estimated_waste}
+                  potential_savings={auditResults.potential_savings}
+                  monthly_spend={parseInt(formData.monthly_ad_spend)}
+                />
+                <AuditChartsModule.ROIImprovementChart
+                  potential_savings={auditResults.potential_savings}
+                  monthly_spend={parseInt(formData.monthly_ad_spend)}
+                />
+              </>
+            ) : (
+              <div className="col-span-2 flex items-center justify-center p-8">
+                <div className="text-center text-slate-500">Loading charts...</div>
+              </div>
+            )}
           </div>
 
           {auditResults.platformAnalysis && (
             <div className="mb-8">
-              <PlatformScoreChart
-                platformScores={{
-                  campaign_structure: auditResults.platformAnalysis.campaign_structure,
-                  tracking_analytics: auditResults.platformAnalysis.tracking_analytics,
-                  budget_allocation: auditResults.platformAnalysis.budget_allocation,
-                  best_practices: auditResults.platformAnalysis.best_practices
-                }}
-              />
+              {AuditChartsModule ? (
+                <AuditChartsModule.PlatformScoreChart
+                  platformScores={{
+                    campaign_structure: auditResults.platformAnalysis.campaign_structure,
+                    tracking_analytics: auditResults.platformAnalysis.tracking_analytics,
+                    budget_allocation: auditResults.platformAnalysis.budget_allocation,
+                    best_practices: auditResults.platformAnalysis.best_practices
+                  }}
+                />
+              ) : (
+                <div className="text-center text-slate-500">Loading charts...</div>
+              )}
             </div>
           )}
 

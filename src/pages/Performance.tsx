@@ -41,8 +41,10 @@ import {
   CartesianGrid, 
   Tooltip, 
   Legend, 
-  ResponsiveContainer 
-} from 'recharts';
+  ResponsiveContainer,
+  Suspense,
+  ChartLoadingFallback
+} from '../components/LazyCharts';
 import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 

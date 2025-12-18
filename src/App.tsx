@@ -11,6 +11,7 @@ import { initializeErrorHandling } from './lib/errorHandling';
 import { DemoBadge } from './components/DemoBadge';
 import { Layout } from './components/Layout';
 import { AuthForm } from './components/AuthForm';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import { featureFlags } from './lib/featureFlags';
 import SaaSLanding from './pages/SaaSLanding';
 import { Contact } from './pages/Contact';
@@ -77,44 +78,10 @@ function AppContent() {
 
   console.log('[APP] Rendering AppContent - Loading:', loading, 'User:', !!user, 'Error:', error);
 
-  if (loading) {
-    console.log('[APP] Showing loading screen');
-    return (
-      <div className="min-h-screen bg-cornsilk-500 flex items-center justify-center">
-        <div className="text-center max-w-md mx-auto px-4">
-          <div className="w-12 h-12 border-4 border-dark_moss_green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-pakistan_green-600 font-medium text-lg">Loading cmoxpert...</p>
-          <p className="text-xs text-slate-500 mt-2">Checking authentication status...</p>
-          {error && (
-            <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-left">
-              <p className="text-red-700 text-sm font-medium mb-2">Connection Issue</p>
-              <p className="text-red-600 text-xs">{error}</p>
-            </div>
-          )}
-          <div className="mt-6 space-x-3">
-            <button
-              onClick={() => window.location.reload()}
-              className="text-xs text-slate-500 hover:text-slate-700 underline transition-colors"
-            >
-              Reload page
-            </button>
-            <button
-              onClick={() => {
-                console.log('[APP] User clicked skip loading');
-                skipLoading();
-              }}
-              className="text-xs text-dark_moss_green-600 hover:text-dark_moss_green-700 underline font-medium transition-colors"
-            >
-              Continue anyway
-            </button>
-          </div>
-          <p className="text-xs text-slate-400 mt-4">Check browser console (F12) for details</p>
-        </div>
-      </div>
-    );
-  }
-
-  console.log('[APP] Loading complete, rendering routes');
+  // Don't block page load on auth — render routes immediately and show spinner on protected routes only.
+  // Public pages (landing, pitch, pricing) load instantly while auth resolves in background.
+  
+  console.log('[APP] Rendering routes (auth loading in background if needed)');
 
   return (
     <ErrorBoundary>
@@ -219,15 +186,13 @@ function AppContent() {
         <Route 
           path="/dashboard" 
           element={ 
-            user ? (
+            <ProtectedRoute>
               <Layout>
                 <Suspense fallback={<PageLoadingFallback />}>
                   <Dashboard />
                 </Suspense>
               </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
+            </ProtectedRoute>
           } 
         />
         

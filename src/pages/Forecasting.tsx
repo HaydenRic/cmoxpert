@@ -29,8 +29,10 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer
-} from 'recharts';
+  ResponsiveContainer,
+  Suspense,
+  ChartLoadingFallback
+} from '../components/LazyCharts';
 
 interface Forecast {
   id: string;
