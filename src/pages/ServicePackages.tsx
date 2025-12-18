@@ -55,9 +55,7 @@ export function ServicePackages() {
   const [subscribing, setSubscribing] = useState<string | null>(null);
 
   useEffect(() => {
-    if (user) {
       loadData();
-    }
   }, [user]);
 
   const loadData = async () => {
@@ -68,14 +66,14 @@ export function ServicePackages() {
           .select('*')
           .eq('is_active', true)
           .order('sort_order'),
-        supabase
+        user ? supabase
           .from('client_subscriptions')
           .select(`
             *,
             service_packages(*)
           `)
           .eq('status', 'active')
-          .maybeSingle()
+          .maybeSingle() : Promise.resolve({ data: null })
       ]);
 
       if (packagesResult.data) {
