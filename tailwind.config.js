@@ -53,87 +53,57 @@ export default {
         },
       },
       colors: {
-        // Modern Digital Marketing Color Palette
-        // Dark backgrounds + Bright accents
-        'dark-bg': {
-          DEFAULT: '#0F172A',
-          50: '#F0F4F8',
-          100: '#DFE7F1',
-          200: '#BFC7E3',
-          300: '#7F8FBE',
-          400: '#1E3A5F',
-          500: '#0F172A',
-          600: '#0D1424',
-          700: '#0A111D',
-          800: '#080E17',
-          900: '#050B10'
+        // Deep Sea brand palette
+        'space-indigo': {
+          DEFAULT: '#21295C',
+          50: '#F4F6FA',
+          100: '#E7ECF6',
+          200: '#C9D3F0',
+          300: '#9FB0E6',
+          400: '#6B83D8',
+          500: '#21295C'
         },
-        'cyan-accent': {
-          DEFAULT: '#06B6D4',
-          50: '#ECFDFF',
-          100: '#CFFAFE',
-          200: '#A5F3FC',
-          300: '#67E8F9',
-          400: '#22D3EE',
-          500: '#06B6D4',
-          600: '#0891B2',
-          700: '#0E7490',
-          800: '#155E75',
-          900: '#164E63'
+        'regal-navy': {
+          DEFAULT: '#1B3B6F',
+          50: '#F3F6FA',
+          100: '#E6EEF6',
+          200: '#C8D6EE',
+          300: '#93B2DF',
+          400: '#5A85C1',
+          500: '#1B3B6F'
         },
-        'teal-accent': {
-          DEFAULT: '#14B8A6',
-          50: '#F0FDFA',
-          100: '#CCFBF1',
-          200: '#99F6E4',
-          300: '#5EEAD4',
-          400: '#2DD4BF',
-          500: '#14B8A6',
-          600: '#0D9488',
-          700: '#0F766E',
-          800: '#115E59',
-          900: '#134E4A'
+        'baltic-blue': {
+          DEFAULT: '#065A82',
+          50: '#EBF8FB',
+          100: '#CFF3F8',
+          200: '#9FE8F0',
+          300: '#5FD0E1',
+          400: '#2CA6C9',
+          500: '#065A82'
         },
-        'purple-accent': {
-          DEFAULT: '#A855F7',
-          50: '#FAF5FF',
-          100: '#F3E8FF',
-          200: '#E9D5FF',
-          300: '#D8B4FE',
-          400: '#C084FC',
-          500: '#A855F7',
-          600: '#9333EA',
-          700: '#7E22CE',
-          800: '#6B21A8',
-          900: '#581C87'
+        'ocean-teal': {
+          DEFAULT: '#1C7293',
+          50: '#F2FAFB',
+          100: '#D9F1F5',
+          200: '#AFE1E9',
+          300: '#78C3D6',
+          400: '#3EA0B9',
+          500: '#1C7293'
         },
-        'orange-accent': {
-          DEFAULT: '#F97316',
-          50: '#FFF7ED',
-          100: '#FFEDD5',
-          200: '#FED7AA',
-          300: '#FDBA74',
-          400: '#FB923C',
-          500: '#F97316',
-          600: '#EA580C',
-          700: '#C2410C',
-          800: '#9A3412',
-          900: '#7C2D12'
+        'mist': {
+          DEFAULT: '#9EB3C2'
         },
-        // Professional B2B SaaS Color Palette (legacy, keep for compatibility)
-        'charcoal': {
-          DEFAULT: '#0A0908',
-          50: '#F8F8F8',
-          100: '#F1F1F1',
-          200: '#E4E4E4',
-          300: '#D7D7D7',
-          400: '#CACACA',
-          500: '#BDBDBD',
-          600: '#8A8A8A',
-          700: '#575757',
-          800: '#2E2E2E',
-          900: '#0A0908'
-        },
+
+        // Back-compat aliases used across app
+        'cyan-accent': '#065A82',
+        'teal-accent': '#1C7293',
+        'dark-bg': '#21295C',
+        'dark-bg-500': '#21295C',
+        'dark-bg-600': '#1B3B6F',
+        'pakistan_green': {
+          DEFAULT: '#1C7293'
+        }
+      }
         'slate_blue': {
           DEFAULT: '#22333B',
           50: '#F7F8F9',
