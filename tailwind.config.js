@@ -100,6 +100,8 @@ export default {
         'dark-bg': '#21295C',
         'dark-bg-500': '#21295C',
         'dark-bg-600': '#1B3B6F',
+        'dark-bg-700': '#17284F',
+        'dark-bg-800': '#0F1A33',
         'pakistan_green': {
           DEFAULT: '#1C7293'
         },
