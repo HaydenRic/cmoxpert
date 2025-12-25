@@ -95,7 +95,6 @@ export default {
         },
 
         // Back-compat aliases used across app
-        'baltic-blue': '#065A82',
         'teal-accent': '#1C7293',
         'dark-bg': '#21295C',
         'dark-bg-500': '#21295C',
@@ -220,6 +219,20 @@ export default {
           700: '#4C4033',
           800: '#43382D',
           900: '#3A3027'
+        }
+        ,
+        'charcoal': {
+          DEFAULT: '#0A0B0D',
+          50: '#F8F9FA',
+          100: '#F1F2F3',
+          200: '#E3E5E7',
+          300: '#C9CDD1',
+          400: '#9AA3AB',
+          500: '#6B737B',
+          600: '#3E4348',
+          700: '#26282B',
+          800: '#121416',
+          900: '#0A0B0D'
         }
       }
     },
