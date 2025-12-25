@@ -208,7 +208,7 @@ export function Dashboard() {
       title: 'Total Clients',
       value: stats.totalClients,
       icon: Users,
-      color: 'from-cyan-accent to-cyan-accent/60',
+      color: 'from-baltic-blue to-baltic-blue/60',
       change: '+12%',
       changeType: 'positive',
       link: '/clients'
@@ -217,7 +217,7 @@ export function Dashboard() {
       title: 'Total Reports',
       value: stats.totalReports,
       icon: FileText,
-      color: 'from-teal-accent to-teal-accent/60',
+      color: 'from-ocean-teal to-ocean-teal/60',
       change: '+8%',
       changeType: 'positive',
       link: '/reports'
@@ -226,7 +226,7 @@ export function Dashboard() {
       title: 'Completed',
       value: stats.completedReports,
       icon: CheckCircle,
-      color: 'from-purple-accent to-purple-accent/60',
+      color: 'from-regal-navy to-regal-navy/60',
       change: `${stats.completedReports}/${stats.totalReports}`,
       changeType: 'neutral',
       link: '/reports'
@@ -235,7 +235,7 @@ export function Dashboard() {
       title: 'In Progress',
       value: stats.pendingReports,
       icon: Clock,
-      color: 'from-orange-accent to-orange-accent/60',
+      color: 'from-baltic-blue to-baltic-blue/60',
       change: 'Active',
       changeType: 'neutral',
       link: '/reports'
@@ -260,9 +260,9 @@ export function Dashboard() {
   if (error && stats.totalClients === 0 && stats.totalReports === 0) {
     return (
       <div className="p-8 bg-dark-bg-500 min-h-screen">
-        <div className="bg-dark-bg-700 border border-orange-accent/50 rounded-xl p-6 max-w-2xl mx-auto">
+        <div className="bg-dark-bg-700 border border-baltic-blue/50 rounded-xl p-6 max-w-2xl mx-auto">
           <div className="flex items-start space-x-3">
-            <AlertCircle className="w-6 h-6 text-orange-accent flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-6 h-6 text-baltic-blue flex-shrink-0 mt-0.5" />
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-white mb-2">Unable to Load Dashboard</h3>
               <p className="text-slate-300 mb-4">{error}</p>
@@ -272,13 +272,13 @@ export function Dashboard() {
                     setLoading(true);
                     loadDashboardData();
                   }}
-                  className="px-4 py-2 bg-orange-accent hover:bg-orange-accent/90 text-dark-bg-500 rounded-lg font-medium transition-colors"
+                  className="px-4 py-2 bg-baltic-blue hover:bg-baltic-blue/90 text-dark-bg-500 rounded-lg font-medium transition-colors"
                 >
                   Retry
                 </button>
                 <button
                   onClick={() => window.location.reload()}
-                  className="px-4 py-2 bg-dark-bg-600 hover:bg-dark-bg-700 text-orange-accent border border-orange-accent/50 rounded-lg font-medium transition-colors"
+                  className="px-4 py-2 bg-dark-bg-600 hover:bg-dark-bg-700 text-baltic-blue border border-baltic-blue/50 rounded-lg font-medium transition-colors"
                 >
                   Reload Page
                 </button>
@@ -299,18 +299,18 @@ export function Dashboard() {
 
       {/* Error Banner */}
       {error && stats.totalClients > 0 && (
-        <div className="mb-6 bg-dark-bg-700 border border-orange-accent/50 rounded-xl p-4">
+        <div className="mb-6 bg-dark-bg-700 border border-baltic-blue/50 rounded-xl p-4">
           <div className="flex items-center space-x-3">
-            <AlertCircle className="w-5 h-5 text-orange-accent flex-shrink-0" />
+            <AlertCircle className="w-5 h-5 text-baltic-blue flex-shrink-0" />
             <div className="flex-1">
-              <p className="text-orange-accent/90 text-sm">{error}</p>
+              <p className="text-baltic-blue/90 text-sm">{error}</p>
             </div>
             <button
               onClick={() => {
                 setError(null);
                 loadDashboardData();
               }}
-              className="px-3 py-1 bg-orange-accent hover:bg-orange-accent/90 text-dark-bg-500 rounded text-sm font-medium transition-colors"
+              className="px-3 py-1 bg-baltic-blue hover:bg-baltic-blue/90 text-dark-bg-500 rounded text-sm font-medium transition-colors"
             >
               Retry
             </button>
@@ -334,21 +334,21 @@ export function Dashboard() {
             <div className="flex flex-wrap items-center gap-2">
               <Link
                 to="/clients?action=new"
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-cyan-accent to-cyan-accent/80 hover:from-cyan-accent/90 hover:to-cyan-accent/70 text-dark-bg-500 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg shadow-cyan-accent/30"
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-baltic-blue to-baltic-blue/80 hover:from-baltic-blue/90 hover:to-baltic-blue/70 text-dark-bg-500 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg shadow-baltic-blue/30"
               >
                 <UserPlus className="w-4 h-4" />
                 <span>Add Client</span>
               </Link>
               <Link
                 to="/content"
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-accent to-purple-accent/80 hover:from-purple-accent/90 hover:to-purple-accent/70 text-dark-bg-500 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg shadow-purple-accent/30"
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-regal-navy to-regal-navy/80 hover:from-regal-navy/90 hover:to-regal-navy/70 text-dark-bg-500 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg shadow-regal-navy/30"
               >
                 <Sparkles className="w-4 h-4" />
                 <span>Generate Content</span>
               </Link>
               <Link
                 to="/playbooks"
-                className="inline-flex items-center space-x-2 bg-gradient-to-r from-orange-accent to-orange-accent/80 hover:from-orange-accent/90 hover:to-orange-accent/70 text-dark-bg-500 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg shadow-orange-accent/30"
+                className="inline-flex items-center space-x-2 bg-gradient-to-r from-baltic-blue to-baltic-blue/80 hover:from-baltic-blue/90 hover:to-baltic-blue/70 text-dark-bg-500 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg shadow-baltic-blue/30"
               >
                 <BookOpen className="w-4 h-4" />
                 <span>Create Playbook</span>
@@ -372,9 +372,9 @@ export function Dashboard() {
 
       {/* Onboarding Banner */}
       {stats.clientsNeedingOnboarding > 0 && (
-        <div className="mb-6 bg-gradient-to-r from-dark-bg-700 to-dark-bg-600 border border-cyan-accent/30 rounded-xl p-4">
+        <div className="mb-6 bg-gradient-to-r from-dark-bg-700 to-dark-bg-600 border border-baltic-blue/30 rounded-xl p-4">
           <div className="flex items-center space-x-3">
-            <Rocket className="w-5 h-5 text-cyan-accent" />
+            <Rocket className="w-5 h-5 text-baltic-blue" />
             <div>
               <p className="font-medium text-white">
                 {stats.clientsNeedingOnboarding} {stats.clientsNeedingOnboarding === 1 ? 'Client' : 'Clients'} Need Onboarding
@@ -385,7 +385,7 @@ export function Dashboard() {
             </div>
             <Link
               to="/clients"
-              className="ml-auto bg-cyan-accent hover:bg-cyan-accent/90 text-dark-bg-500 px-4 py-2 rounded-lg text-sm font-medium"
+              className="ml-auto bg-baltic-blue hover:bg-baltic-blue/90 text-dark-bg-500 px-4 py-2 rounded-lg text-sm font-medium"
             >
               View Clients
             </Link>
@@ -394,32 +394,32 @@ export function Dashboard() {
       )}
 
       {/* AI Status Card */}
-      <div className="mb-6 bg-gradient-to-br from-dark-bg-700 to-dark-bg-600 border border-cyan-accent/30 rounded-xl p-6">
+      <div className="mb-6 bg-gradient-to-br from-dark-bg-700 to-dark-bg-600 border border-baltic-blue/30 rounded-xl p-6">
         <div className="flex items-start justify-between">
           <div className="flex-1">
             <div className="flex items-center space-x-2 mb-3">
-              <Brain className="w-6 h-6 text-cyan-accent" />
+              <Brain className="w-6 h-6 text-baltic-blue" />
               <h2 className="text-lg font-bold text-white">AI Features Status</h2>
             </div>
             <div className="grid md:grid-cols-3 gap-4">
-              <div className="bg-dark-bg-800 rounded-lg p-3 border border-cyan-accent/20">
+              <div className="bg-dark-bg-800 rounded-lg p-3 border border-baltic-blue/20">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-medium text-slate-200">Content Generation</span>
-                  <XCircle className="w-4 h-4 text-orange-accent" />
+                  <XCircle className="w-4 h-4 text-baltic-blue" />
                 </div>
                 <p className="text-xs text-slate-400">Template Mode</p>
               </div>
-              <div className="bg-dark-bg-800 rounded-lg p-3 border border-teal-accent/20">
+              <div className="bg-dark-bg-800 rounded-lg p-3 border border-ocean-teal/20">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-medium text-slate-200">AI Playbooks</span>
-                  <CheckCircle className="w-4 h-4 text-teal-accent" />
+                  <CheckCircle className="w-4 h-4 text-ocean-teal" />
                 </div>
                 <p className="text-xs text-slate-400">Template Mode Active</p>
               </div>
-              <div className="bg-dark-bg-800 rounded-lg p-3 border border-purple-accent/20">
+              <div className="bg-dark-bg-800 rounded-lg p-3 border border-regal-navy/20">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-medium text-slate-200">Market Analysis</span>
-                  <XCircle className="w-4 h-4 text-orange-accent" />
+                  <XCircle className="w-4 h-4 text-baltic-blue" />
                 </div>
                 <p className="text-xs text-slate-400">API Key Required</p>
               </div>
@@ -427,14 +427,14 @@ export function Dashboard() {
           </div>
           <Link
             to="/admin"
-            className="ml-4 flex items-center space-x-2 bg-gradient-to-r from-cyan-accent to-teal-accent text-dark-bg-500 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg shadow-cyan-accent/30"
+            className="ml-4 flex items-center space-x-2 bg-gradient-to-r from-baltic-blue to-ocean-teal text-dark-bg-500 px-4 py-2 rounded-lg text-sm font-medium transition-all shadow-lg shadow-baltic-blue/30"
           >
             <Settings className="w-4 h-4" />
             <span>Configure AI</span>
           </Link>
         </div>
-        <div className="mt-4 pt-4 border-t border-cyan-accent/20">
-          <p className="text-sm text-cyan-accent/80 flex items-center space-x-2">
+        <div className="mt-4 pt-4 border-t border-baltic-blue/20">
+          <p className="text-sm text-baltic-blue/80 flex items-center space-x-2">
             <Sparkles className="w-4 h-4" />
             <span>Add OpenAI API key in Admin Settings to unlock AI-powered content generation</span>
           </p>
@@ -447,7 +447,7 @@ export function Dashboard() {
           <Link
             key={index}
             to={stat.link}
-            className="bg-dark-bg-700 rounded-xl shadow-lg border border-slate-700/50 p-6 hover:border-cyan-accent/50 transition-all hover:shadow-lg hover:shadow-cyan-accent/20 group"
+            className="bg-dark-bg-700 rounded-xl shadow-lg border border-slate-700/50 p-6 hover:border-baltic-blue/50 transition-all hover:shadow-lg hover:shadow-baltic-blue/20 group"
           >
             <div className="flex items-center justify-between mb-4">
               <div className={`w-12 h-12 bg-gradient-to-br ${stat.color} rounded-lg flex items-center justify-center transition-transform group-hover:scale-110 shadow-lg`}>
@@ -456,14 +456,14 @@ export function Dashboard() {
               <div className="text-right">
                 <div className="text-2xl font-bold text-white">{stat.value}</div>
                 <div className={`text-sm ${
-                  stat.changeType === 'positive' ? 'text-teal-accent' :
-                  stat.changeType === 'negative' ? 'text-orange-accent' : 'text-slate-400'
+                  stat.changeType === 'positive' ? 'text-ocean-teal' :
+                  stat.changeType === 'negative' ? 'text-baltic-blue' : 'text-slate-400'
                 }`}>
                   {stat.change}
                 </div>
               </div>
             </div>
-            <h3 className="text-sm font-medium text-slate-300 group-hover:text-cyan-accent transition-colors">{stat.title}</h3>
+            <h3 className="text-sm font-medium text-slate-300 group-hover:text-baltic-blue transition-colors">{stat.title}</h3>
             <div className="mt-2 text-xs text-slate-400 flex items-center space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
               <span>View details</span>
               <ArrowUpRight className="w-3 h-3" />
@@ -484,9 +484,9 @@ export function Dashboard() {
       )}
 
       {!selectedClientId && (
-        <div className="mb-8 bg-dark-bg-700 border border-cyan-accent/30 rounded-lg p-6">
+        <div className="mb-8 bg-dark-bg-700 border border-baltic-blue/30 rounded-lg p-6">
           <div className="flex items-center gap-3">
-            <Activity className="w-6 h-6 text-cyan-accent" />
+            <Activity className="w-6 h-6 text-baltic-blue" />
             <div>
               <h3 className="font-semibold text-white mb-1">Track Metrics</h3>
               <p className="text-sm text-slate-300">
@@ -503,12 +503,12 @@ export function Dashboard() {
         <div className="bg-dark-bg-700 rounded-xl shadow-lg border border-slate-700/50 p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold text-white flex items-center">
-              <Activity className="w-5 h-5 mr-2 text-cyan-accent" />
+              <Activity className="w-5 h-5 mr-2 text-baltic-blue" />
               Recent Activity
             </h2>
             <Link 
               to="/reports" 
-              className="text-cyan-accent hover:text-teal-accent text-sm font-medium flex items-center"
+              className="text-baltic-blue hover:text-ocean-teal text-sm font-medium flex items-center"
             >
               View all <ArrowUpRight className="w-4 h-4 ml-1" />
             </Link>
@@ -517,16 +517,16 @@ export function Dashboard() {
           <div className="space-y-4">
             {stats.recentActivity.length > 0 ? (
               stats.recentActivity.map((activity) => (
-                <div key={activity.id} className="flex items-center space-x-4 p-3 bg-dark-bg-800 rounded-lg border border-slate-700/50 hover:border-cyan-accent/30 transition-all">
+                <div key={activity.id} className="flex items-center space-x-4 p-3 bg-dark-bg-800 rounded-lg border border-slate-700/50 hover:border-baltic-blue/30 transition-all">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    activity.status === 'completed' ? 'bg-teal-accent/20' : 'bg-orange-accent/20'
+                    activity.status === 'completed' ? 'bg-ocean-teal/20' : 'bg-baltic-blue/20'
                   }`}>
                     {activity.status === 'completed' ? (
                       <CheckCircle className={`w-5 h-5 ${
-                        activity.status === 'completed' ? 'text-teal-accent' : 'text-orange-accent'
+                        activity.status === 'completed' ? 'text-ocean-teal' : 'text-baltic-blue'
                       }`} />
                     ) : (
-                      <Clock className="w-5 h-5 text-orange-accent" />
+                      <Clock className="w-5 h-5 text-baltic-blue" />
                     )}
                   </div>
                   <div className="flex-1">
@@ -539,8 +539,8 @@ export function Dashboard() {
                   </div>
                   <div className={`px-2 py-1 rounded-full text-xs font-medium ${
                     activity.status === 'completed' 
-                      ? 'bg-teal-accent/20 text-teal-accent' 
-                      : 'bg-orange-accent/20 text-orange-accent'
+                      ? 'bg-ocean-teal/20 text-ocean-teal' 
+                      : 'bg-baltic-blue/20 text-baltic-blue'
                   }`}>
                     {activity.status === 'completed' ? 'Complete' : 'Processing'}
                   </div>
@@ -552,7 +552,7 @@ export function Dashboard() {
                 <p className="text-slate-400">No recent activity</p>
                 <Link 
                   to="/clients" 
-                  className="text-cyan-accent hover:text-teal-accent text-sm font-medium"
+                  className="text-baltic-blue hover:text-ocean-teal text-sm font-medium"
                 >
                   Add your first client to get started
                 </Link>
@@ -564,127 +564,127 @@ export function Dashboard() {
         {/* Quick Actions */}
         <div className="bg-dark-bg-700 rounded-xl shadow-lg border border-slate-700/50 p-6">
           <h2 className="text-lg font-semibold text-white mb-6 flex items-center">
-            <TrendingUp className="w-5 h-5 mr-2 text-cyan-accent" />
+            <TrendingUp className="w-5 h-5 mr-2 text-baltic-blue" />
             Quick Actions
           </h2>
           
           <div className="space-y-4">
             <Link 
               to="/performance"
-              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-cyan-accent/30 hover:border-cyan-accent/60 transition-all group"
+              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-baltic-blue/30 hover:border-baltic-blue/60 transition-all group"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-medium text-white group-hover:text-cyan-accent transition-colors">
+                  <h3 className="font-medium text-white group-hover:text-baltic-blue transition-colors">
                     View Performance Dashboard
                   </h3>
                   <p className="text-sm text-slate-400 mt-1">
                     Monitor KPIs, track campaigns, and competitive intelligence
                   </p>
                 </div>
-                <ArrowUpRight className="w-5 h-5 text-cyan-accent/60 group-hover:text-cyan-accent transition-colors" />
+                <ArrowUpRight className="w-5 h-5 text-baltic-blue/60 group-hover:text-baltic-blue transition-colors" />
               </div>
             </Link>
 
             <Link 
               to="/marketing-analytics"
-              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-teal-accent/30 hover:border-teal-accent/60 transition-all group"
+              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-ocean-teal/30 hover:border-ocean-teal/60 transition-all group"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-medium text-white group-hover:text-teal-accent transition-colors">
+                  <h3 className="font-medium text-white group-hover:text-ocean-teal transition-colors">
                     Marketing Analytics
                   </h3>
                   <p className="text-sm text-slate-400 mt-1">
                     Track campaigns, ROI, and marketing goals
                   </p>
                 </div>
-                <ArrowUpRight className="w-5 h-5 text-teal-accent/60 group-hover:text-teal-accent transition-colors" />
+                <ArrowUpRight className="w-5 h-5 text-ocean-teal/60 group-hover:text-ocean-teal transition-colors" />
               </div>
             </Link>
 
             <Link 
               to="/competitive-intelligence"
-              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-orange-accent/30 hover:border-orange-accent/60 transition-all group"
+              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-baltic-blue/30 hover:border-baltic-blue/60 transition-all group"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-medium text-white group-hover:text-orange-accent transition-colors">
+                  <h3 className="font-medium text-white group-hover:text-baltic-blue transition-colors">
                     Competitive Intelligence
                   </h3>
                   <p className="text-sm text-slate-400 mt-1">
                     Monitor competitors and receive real-time market alerts
                   </p>
                 </div>
-                <ArrowUpRight className="w-5 h-5 text-orange-accent/60 group-hover:text-orange-accent transition-colors" />
+                <ArrowUpRight className="w-5 h-5 text-baltic-blue/60 group-hover:text-baltic-blue transition-colors" />
               </div>
             </Link>
 
             <Link 
               to="/content"
-              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-purple-accent/30 hover:border-purple-accent/60 transition-all group"
+              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-regal-navy/30 hover:border-regal-navy/60 transition-all group"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-medium text-white group-hover:text-purple-accent transition-colors">
+                  <h3 className="font-medium text-white group-hover:text-regal-navy transition-colors">
                     AI Content Hub
                   </h3>
                   <p className="text-sm text-slate-400 mt-1">
                     Generate blog posts, social media, and marketing copy with AI
                   </p>
                 </div>
-                <ArrowUpRight className="w-5 h-5 text-purple-accent/60 group-hover:text-purple-accent transition-colors" />
+                <ArrowUpRight className="w-5 h-5 text-regal-navy/60 group-hover:text-regal-navy transition-colors" />
               </div>
             </Link>
 
             <Link 
               to="/clients?action=new"
-              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-cyan-accent/30 hover:border-cyan-accent/60 transition-all group"
+              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-baltic-blue/30 hover:border-baltic-blue/60 transition-all group"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-medium text-white group-hover:text-cyan-accent transition-colors">
+                  <h3 className="font-medium text-white group-hover:text-baltic-blue transition-colors">
                     Add New Client
                   </h3>
                   <p className="text-sm text-slate-400 mt-1">
                     Start with client onboarding and domain analysis
                   </p>
                 </div>
-                <ArrowUpRight className="w-5 h-5 text-cyan-accent/60 group-hover:text-cyan-accent transition-colors" />
+                <ArrowUpRight className="w-5 h-5 text-baltic-blue/60 group-hover:text-baltic-blue transition-colors" />
               </div>
             </Link>
 
             <Link 
               to="/playbooks"
-              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-teal-accent/30 hover:border-teal-accent/60 transition-all group"
+              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-ocean-teal/30 hover:border-ocean-teal/60 transition-all group"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-medium text-white group-hover:text-teal-accent transition-colors">
+                  <h3 className="font-medium text-white group-hover:text-ocean-teal transition-colors">
                     Browse Playbooks
                   </h3>
                   <p className="text-sm text-slate-400 mt-1">
                     Deploy proven marketing strategies
                   </p>
                 </div>
-                <ArrowUpRight className="w-5 h-5 text-teal-accent/60 group-hover:text-teal-accent transition-colors" />
+                <ArrowUpRight className="w-5 h-5 text-ocean-teal/60 group-hover:text-ocean-teal transition-colors" />
               </div>
             </Link>
 
             <Link 
               to="/reports"
-              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-purple-accent/30 hover:border-purple-accent/60 transition-all group"
+              className="block p-4 bg-gradient-to-br from-dark-bg-800 to-dark-bg-700 rounded-lg border border-regal-navy/30 hover:border-regal-navy/60 transition-all group"
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="font-medium text-white group-hover:text-purple-accent transition-colors">
+                  <h3 className="font-medium text-white group-hover:text-regal-navy transition-colors">
                     View Reports
                   </h3>
                   <p className="text-sm text-slate-400 mt-1">
                     Access completed market analyses
                   </p>
                 </div>
-                <ArrowUpRight className="w-5 h-5 text-purple-accent/60 group-hover:text-purple-accent transition-colors" />
+                <ArrowUpRight className="w-5 h-5 text-regal-navy/60 group-hover:text-regal-navy transition-colors" />
               </div>
             </Link>
           </div>

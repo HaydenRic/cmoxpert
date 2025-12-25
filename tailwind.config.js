@@ -95,7 +95,7 @@ export default {
         },
 
         // Back-compat aliases used across app
-        'cyan-accent': '#065A82',
+        'baltic-blue': '#065A82',
         'teal-accent': '#1C7293',
         'dark-bg': '#21295C',
         'dark-bg-500': '#21295C',
