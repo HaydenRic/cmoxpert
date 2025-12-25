@@ -102,8 +102,8 @@ export default {
         'dark-bg-600': '#1B3B6F',
         'pakistan_green': {
           DEFAULT: '#1C7293'
-        }
-      }
+        },
+        // additional legacy color groups
         'slate_blue': {
           DEFAULT: '#22333B',
           50: '#F7F8F9',
