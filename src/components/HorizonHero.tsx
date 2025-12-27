@@ -40,8 +40,7 @@ export const HorizonHero = () => {
           >
             Strategy Before            <br />
             <br />            <br />
-            Tactics,              Digitised.
-            </span>
+            Tactics,              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#065A82] via-[#1C7293] to-[#FF6B35]">Digitised.</span>.
           </motion.h1>
           
           <motion.p 
