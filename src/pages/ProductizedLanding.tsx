@@ -14,101 +14,17 @@ import {
   Award,
   CheckCircle,
   AlertTriangle,
-  Sparkles,
   Rocket,
   Brain,
   LineChart,
   Star
 } from 'lucide-react';
+import { HeroSection } from '../components/HeroSection';
 
 export default function ProductizedLanding() {
   return (
     <div className="min-h-screen bg-dark-bg-500">
-      {/* Modern Dark Hero Section */}
-      <section className="relative overflow-hidden bg-dark-bg-500 min-h-[90vh] flex items-center">
-        {/* Animated gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-baltic-blue/10 via-transparent to-regal-navy/10 animate-pulse"></div>
-
-        {/* Decorative glowing elements */}
-        <div className="absolute top-40 left-10 w-80 h-80 bg-baltic-blue/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-40 right-10 w-96 h-96 bg-regal-navy/15 rounded-full blur-3xl"></div>
-        <div className="absolute top-1/2 left-1/4 w-72 h-72 bg-ocean-teal/15 rounded-full blur-3xl"></div>
-
-        <div className="relative max-w-7xl mx-auto px-6 py-24 lg:py-32">
-          <div className="text-center max-w-5xl mx-auto space-y-8">
-            {/* Badge */}
-            <div className="inline-flex items-center justify-center px-5 py-2.5 bg-gradient-to-r from-baltic-blue to-ocean-teal text-dark-bg-500 rounded-full text-sm font-bold shadow-xl shadow-baltic-blue/50 animate-fade-in-up">
-              <Sparkles className="w-4 h-4 mr-2" />
-              Tech-Enabled Fractional CMO Services
-            </div>
-
-            {/* Main Headline with bold typography */}
-            <h1 className="text-6xl md:text-7xl lg:text-8xl font-black text-white leading-[1.1] tracking-tight animate-fade-in-up animation-delay-200">
-              Strategic Marketing
-              <br />
-              <span className="bg-gradient-to-r from-baltic-blue via-ocean-teal to-baltic-blue bg-clip-text text-transparent">
-                Leadership, Simplified
-              </span>
-            </h1>
-
-            {/* Subheadline */}
-            <p className="text-xl md:text-2xl lg:text-3xl text-slate-300 leading-relaxed max-w-4xl mx-auto font-light animate-fade-in-up animation-delay-400">
-              Get expert strategic guidance combined with comprehensive reporting at a fraction of the cost of traditional agencies
-            </p>
-
-            {/* CTA Buttons with animations */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 animate-fade-in-up animation-delay-600">
-              <Link
-                to="/audit"
-                className="group relative px-10 py-5 bg-gradient-to-r from-baltic-blue to-ocean-teal hover:from-baltic-blue/90 hover:to-ocean-teal/90 text-dark-bg-500 rounded-2xl font-bold text-lg shadow-2xl shadow-baltic-blue/50 hover:shadow-baltic-blue/70 transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 inline-flex items-center"
-              >
-                <span className="relative z-10 flex items-center">
-                  Get Free Marketing Audit
-                  <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </Link>
-
-              <Link
-                to="/packages"
-                className="px-10 py-5 bg-white/10 backdrop-blur-sm hover:bg-white/20 text-white border-2 border-baltic-blue/50 rounded-2xl font-bold text-lg shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-              >
-                View Pricing
-              </Link>
-            </div>
-
-            {/* Trust line */}
-            <p className="text-sm text-slate-400 animate-fade-in-up animation-delay-800">
-              <Shield className="w-4 h-4 inline mr-2" />
-              No credit card required • Get started in minutes
-            </p>
-          </div>
-        </div>
-
-        {/* Trust Badges Bar */}
-        <div className="absolute bottom-0 left-0 right-0 bg-dark-bg-600/50 backdrop-blur-md border-t border-baltic-blue/20 py-6">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              <div className="space-y-1">
-                <div className="text-3xl font-bold text-baltic-blue">Expert</div>
-                <div className="text-sm text-slate-400">CMO Guidance</div>
-              </div>
-              <div className="space-y-1">
-                <div className="text-3xl font-bold text-ocean-teal">Weekly</div>
-                <div className="text-sm text-slate-400">Performance Reports</div>
-              </div>
-              <div className="space-y-1">
-                <div className="text-3xl font-bold text-regal-navy">Custom</div>
-                <div className="text-sm text-slate-400">Strategies</div>
-              </div>
-              <div className="space-y-1">
-                <div className="text-3xl font-bold text-baltic-blue">Transparent</div>
-                <div className="text-sm text-slate-400">Pricing</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      <HeroSection />
       {/* Spacer */}
       <div className="h-24"></div>
 
