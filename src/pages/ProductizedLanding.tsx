@@ -19,12 +19,12 @@ import {
   LineChart,
   Star
 } from 'lucide-react';
-import { HeroSection } from '../components/HeroSection';
+import { HorizonHero } from '../components/HorizonHero';
 
 export default function ProductizedLanding() {
   return (
     <div className="min-h-screen bg-dark-bg-500">
-      <HeroSection />
+      <HorizonHero />
       {/* Spacer */}
       <div className="h-24"></div>
 
