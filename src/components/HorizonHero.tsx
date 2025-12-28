@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 
 export const HorizonHero = () => {
   return (
-    <div className="relative h-screen w-full bg-horizon-900 overflow-hidden">
+    <div className="relative h-screen min-h-[600px] w-full bg-horizon-900 overflow-visible">
       {/* Animated background gradient orbs */}
-      <div className="absolute inset-0 opacity-30">
+      <div className="absolute inset-0 opacity-30 overflow-hidden">
         <motion.div
           className="absolute top-20 right-1/4 w-96 h-96 bg-horizon-700/20 rounded-full blur-3xl"
           animate={{
@@ -32,17 +32,16 @@ export const HorizonHero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="text-center max-w-5xl"
+          className="text-center max-w-5xl pt-12"
         >
           <motion.h1
-            className="text-7xl md:text-9xl font-bold text-white mb-6 leading-tight tracking-tighter"
+            className="text-6xl md:text-8xl lg:text-9xl font-bold text-white mb-8 leading-[0.95] tracking-tighter py-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            Strategy Before            <br />
-            <br />            <br />
-            Tactics,              <span className="text-horizon-200">Digitised.</span>.
+            Strategy Before<br />
+            Tactics, <span className="text-horizon-200">Digitised.</span>
           </motion.h1>
 
           <motion.p
