@@ -32,7 +32,7 @@ export default function ProductizedLanding() {
       <section className="py-24 bg-dark-bg-500">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-black text-white mb-6 leading-tight">
+            <h2 className="text-5xl md:text-6xl font-black text-white mb-10 leading-relaxed-6 leading-tight">
               Marketing Agencies
               <br />
               <span className="bg-gradient-to-r from-baltic-blue to-baltic-blue/60 bg-clip-text text-transparent">
