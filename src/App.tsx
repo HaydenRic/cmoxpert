@@ -63,24 +63,24 @@ initializeErrorHandling();
 const PageLoadingFallback = () => {
   console.log('[APP] Rendering PageLoadingFallback');
   return (
-    <div className="min-h-screen bg-cornsilk-500 flex items-center justify-center">
+    <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
       <div className="text-center">
-        <div className="w-12 h-12 border-4 border-dark_moss_green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-        <p className="text-pakistan_green-600">Loading page...</p>
+        <div className="w-12 h-12 border-4 border-zinc-700 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-zinc-400">Loading page...</p>
       </div>
     </div>
   );
 };
 
 function AppContent() {
-  const { user, loading, error, skipLoading } = useAuth();
-  const { toasts, closeToast } = useErrorToast();
+  const { user, loading, error } = useAuth();
+  // const { toasts, closeToast } = useErrorToast(); // Unused
 
   console.log('[APP] Rendering AppContent - Loading:', loading, 'User:', !!user, 'Error:', error);
 
   // Don't block page load on auth — render routes immediately and show spinner on protected routes only.
   // Public pages (landing, pitch, pricing) load instantly while auth resolves in background.
-  
+
   console.log('[APP] Rendering routes (auth loading in background if needed)');
 
   return (
@@ -90,343 +90,119 @@ function AppContent() {
         <NetworkStatus />
         <OfflineIndicator onRetry={() => window.location.reload()} />
         <Routes>
-        {/* Public landing page - always accessible */}
-        <Route
-          path="/"
-          element={
-            <Suspense fallback={<PageLoadingFallback />}>
-              <ProductizedLanding />
-            </Suspense>
-          }
-        />
-
-        {/* Alternative landing pages */}
-        <Route
-          path="/saas"
-          element={<SaaSLanding />}
-        />
-
-        {/* Redirect early-access to beta */}
-        <Route
-          path="/early-access"
-          element={<Navigate to="/beta" replace />}
-        />
-
-        {/* Beta landing page */}
-        <Route
-          path="/beta"
-          element={
-            <Suspense fallback={<PageLoadingFallback />}>
-              <BetaLanding />
-            </Suspense>
-          }
-        />
-
-        {/* Contact page */}
-        <Route path="/contact" element={<Contact />} />
-
-        {/* Pitch system public pages */}
-        <Route
-          path="/pitch"
-          element={
-            <Suspense fallback={<PageLoadingFallback />}>
-              <PitchDemo />
-            </Suspense>
-          }
-        />
-
-        <Route
-          path="/pricing"
-          element={
-            <Suspense fallback={<PageLoadingFallback />}>
-              <Pricing />
-            </Suspense>
-          }
-        />
-
-        <Route
-          path="/packages"
-          element={
-            <Suspense fallback={<PageLoadingFallback />}>
-              <ServicePackages />
-            </Suspense>
-          }
-        />
-
-        <Route
-          path="/audit"
-          element={
-            <Suspense fallback={<PageLoadingFallback />}>
-              <FreeAudit />
-            </Suspense>
-          }
-        />
-
-        {/* Auth routes */}
-        <Route
-          path="/auth"
-          element={
-            user ? <Navigate to="/dashboard" replace /> : <AuthForm />
-          }
-        />
-
-        {/* Login route - redirects to auth */}
-        <Route
-          path="/login"
-          element={<Navigate to="/auth" replace />}
-        />
-
-        {/* Demo route - redirects to pitch demo */}
-        <Route
-          path="/demo"
-          element={<Navigate to="/pitch" replace />}
-        />
-        
-        {/* Protected app routes with lazy loading */}
-        <Route 
-          path="/dashboard" 
-          element={ 
-            <ProtectedRoute>
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Dashboard />
-                </Suspense>
-              </Layout>
-            </ProtectedRoute>
-          } 
-        />
-        
-        <Route 
-          path="/clients" 
-          element={ 
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Clients />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          } 
-        />
-        
-        <Route 
-          path="/clients/:id" 
-          element={ 
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <ClientDetail />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          } 
-        />
-        
-        <Route 
-          path="/performance" 
-          element={ 
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Performance />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          } 
-        />
-        
-        <Route 
-          path="/marketing-analytics" 
-          element={ 
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <MarketingAnalytics />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          } 
-        />
-        
-        <Route 
-          path="/content" 
-          element={ 
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <ContentHub />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          } 
-        />
-        
-        <Route 
-          path="/competitive-intelligence" 
-          element={ 
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <CompetitiveIntelligence />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          } 
-        />
-        
-        <Route 
-          path="/clients/:clientId/onboarding" 
-          element={ 
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <ClientOnboarding />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          } 
-        />
-        
-        <Route 
-          path="/reports" 
-          element={ 
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Reports />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          } 
-        />
-        
-        <Route
-          path="/playbooks"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Playbooks />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
-
-        {/* Removed: fraud-analysis, activation-funnel, compliance-checker, spend-optimizer routes */}
-
-        <Route
-          path="/admin" 
-          element={ 
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Admin />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          } 
-        />
-        
-        <Route
-          path="/integrations"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Integrations />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
-
-        <Route
-          path="/integrations/oauth/callback"
-          element={
-            <Suspense fallback={<PageLoadingFallback />}>
-              <OAuthCallback />
-            </Suspense>
-          }
-        />
-
-        <Route
-          path="/client-portal"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <ClientPortal />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
-
-        <Route
-          path="/workflows"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Workflows />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
-
-        {/* Removed: alert-rules route */}
-
-        <Route
-          path="/forecasting"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Forecasting />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
-
-        {featureFlags.ENABLE_REVENUE_ATTRIBUTION && (
+          {/* Public landing page - always accessible */}
           <Route
-            path="/revenue-attribution"
+            path="/"
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <ProductizedLanding />
+              </Suspense>
+            }
+          />
+
+          {/* Alternative landing pages */}
+          <Route
+            path="/saas"
+            element={<SaaSLanding />}
+          />
+
+          {/* Redirect early-access to beta */}
+          <Route
+            path="/early-access"
+            element={<Navigate to="/beta" replace />}
+          />
+
+          {/* Beta landing page */}
+          <Route
+            path="/beta"
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <BetaLanding />
+              </Suspense>
+            }
+          />
+
+          {/* Contact page */}
+          <Route path="/contact" element={<Contact />} />
+
+          {/* Pitch system public pages */}
+          <Route
+            path="/pitch"
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <PitchDemo />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="/pricing"
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <Pricing />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="/packages"
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <ServicePackages />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="/audit"
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <FreeAudit />
+              </Suspense>
+            }
+          />
+
+          {/* Auth routes */}
+          <Route
+            path="/auth"
+            element={
+              user ? <Navigate to="/dashboard" replace /> : <AuthForm />
+            }
+          />
+
+          {/* Login route - redirects to auth */}
+          <Route
+            path="/login"
+            element={<Navigate to="/auth" replace />}
+          />
+
+          {/* Demo route - redirects to pitch demo */}
+          <Route
+            path="/demo"
+            element={<Navigate to="/pitch" replace />}
+          />
+
+          {/* Protected app routes with lazy loading */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <Dashboard />
+                  </Suspense>
+                </Layout>
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/clients"
             element={
               user ? (
                 <Layout>
                   <Suspense fallback={<PageLoadingFallback />}>
-                    <RevenueAttribution />
+                    <Clients />
                   </Suspense>
                 </Layout>
               ) : (
@@ -434,86 +210,310 @@ function AppContent() {
               )
             }
           />
-        )}
 
-        <Route
-          path="/deliverables"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Deliverables />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
+          <Route
+            path="/clients/:id"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <ClientDetail />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
 
-        {/* Removed: pitch-analytics route - functionality moved to ClientDetail */}
+          <Route
+            path="/performance"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <Performance />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
 
-        <Route
-          path="/settings"
-          element={
-            user ? (
-              <Layout>
-                <Suspense fallback={<PageLoadingFallback />}>
-                  <Settings />
-                </Suspense>
-              </Layout>
-            ) : (
-              <Navigate to="/auth" replace />
-            )
-          }
-        />
+          <Route
+            path="/marketing-analytics"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <MarketingAnalytics />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
 
-        {/* Placeholder routes for Privacy, Terms, Support, and Security */}
-        <Route
-          path="/privacy"
-          element={
-            <Suspense fallback={<PageLoadingFallback />}>
-              <Privacy />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/terms"
-          element={
-            <Suspense fallback={<PageLoadingFallback />}>
-              <Terms />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/support"
-          element={
-            <Suspense fallback={<PageLoadingFallback />}>
-              <Support />
-            </Suspense>
-          }
-        />
-        <Route
-          path="/security"
-          element={
-            <Suspense fallback={<PageLoadingFallback />}>
-              <Security />
-            </Suspense>
-          }
-        />
+          <Route
+            path="/content"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <ContentHub />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
 
-        <Route
-          path="/debug"
-          element={
-            <Suspense fallback={<PageLoadingFallback />}>
-              <DebugAuth />
-            </Suspense>
-          }
-        />
+          <Route
+            path="/competitive-intelligence"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <CompetitiveIntelligence />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
 
-        {/* Fallback routes */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+          <Route
+            path="/clients/:clientId/onboarding"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <ClientOnboarding />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/reports"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <Reports />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/playbooks"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <Playbooks />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
+
+          {/* Removed: fraud-analysis, activation-funnel, compliance-checker, spend-optimizer routes */}
+
+          <Route
+            path="/admin"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <Admin />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/integrations"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <Integrations />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/integrations/oauth/callback"
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <OAuthCallback />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="/client-portal"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <ClientPortal />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
+
+          <Route
+            path="/workflows"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <Workflows />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
+
+          {/* Removed: alert-rules route */}
+
+          <Route
+            path="/forecasting"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <Forecasting />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
+
+          {featureFlags.ENABLE_REVENUE_ATTRIBUTION && (
+            <Route
+              path="/revenue-attribution"
+              element={
+                user ? (
+                  <Layout>
+                    <Suspense fallback={<PageLoadingFallback />}>
+                      <RevenueAttribution />
+                    </Suspense>
+                  </Layout>
+                ) : (
+                  <Navigate to="/auth" replace />
+                )
+              }
+            />
+          )}
+
+          <Route
+            path="/deliverables"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <Deliverables />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
+
+          {/* Removed: pitch-analytics route - functionality moved to ClientDetail */}
+
+          <Route
+            path="/settings"
+            element={
+              user ? (
+                <Layout>
+                  <Suspense fallback={<PageLoadingFallback />}>
+                    <Settings />
+                  </Suspense>
+                </Layout>
+              ) : (
+                <Navigate to="/auth" replace />
+              )
+            }
+          />
+
+          {/* Placeholder routes for Privacy, Terms, Support, and Security */}
+          <Route
+            path="/privacy"
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <Privacy />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/terms"
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <Terms />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/support"
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <Support />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/security"
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <Security />
+              </Suspense>
+            }
+          />
+
+          <Route
+            path="/debug"
+            element={
+              <Suspense fallback={<PageLoadingFallback />}>
+                <DebugAuth />
+              </Suspense>
+            }
+          />
+
+          {/* Fallback routes */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
       </Suspense>
     </ErrorBoundary>
   );
@@ -531,8 +531,9 @@ function App() {
               toastOptions={{
                 duration: 4000,
                 style: {
-                  background: '#fff',
-                  color: '#363636',
+                  background: '#18181b', // zinc-900
+                  color: '#fff',
+                  border: '1px solid #27272a', // zinc-800
                   padding: '16px',
                   borderRadius: '8px',
                   boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
@@ -544,8 +545,9 @@ function App() {
                     secondary: '#fff',
                   },
                   style: {
-                    background: '#10b981',
+                    background: '#18181b',
                     color: '#fff',
+                    border: '1px solid #10b981',
                   },
                 },
                 error: {
@@ -555,8 +557,9 @@ function App() {
                     secondary: '#fff',
                   },
                   style: {
-                    background: '#ef4444',
+                    background: '#18181b',
                     color: '#fff',
+                    border: '1px solid #ef4444',
                   },
                 },
               }}

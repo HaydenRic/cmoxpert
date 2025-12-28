@@ -11,6 +11,14 @@ export default {
         'body': ['Inter', 'sans-serif'],
         'sans': ['Inter', 'sans-serif'],
       },
+      letterSpacing: {
+        tight: '-0.03em',
+        tighter: '-0.05em',
+      },
+      boxShadow: {
+        'glow': '0 0 40px -10px rgba(59, 130, 246, 0.15)',
+        'card': '0 0 0 1px rgba(0,0,0,0.03), 0 2px 8px rgba(0,0,0,0.04)',
+      },
       animation: {
         spotlight: "spotlight 2s ease .75s 1 forwards",
         'gradient': 'gradient 8s linear infinite',
@@ -233,6 +241,29 @@ export default {
           700: '#26282B',
           800: '#121416',
           900: '#0A0B0D'
+        },
+        // Aura Build Theme Colors
+        zinc: {
+          50: '#fafafa',
+          100: '#f4f4f5',
+          200: '#e4e4e7',
+          300: '#d4d4d8',
+          400: '#a1a1aa',
+          500: '#71717a',
+          600: '#52525b',
+          700: '#3f3f46',
+          800: '#27272a',
+          850: '#1f2937',
+          900: '#18181b',
+          950: '#09090b',
+        },
+        // User provided Coolors palette: https://coolors.co/palette/21295c-1b3b6f-065a82-1c7293-9eb3c2
+        horizon: {
+          900: '#21295c', // Space Cadet
+          800: '#1b3b6f', // Lapis Lazuli
+          700: '#065a82', // Blue Sapphire
+          600: '#1c7293', // Cerulean
+          200: '#9eb3c2', // Cadet Blue
         }
       }
     },

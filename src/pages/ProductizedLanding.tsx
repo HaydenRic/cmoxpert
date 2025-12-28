@@ -23,19 +23,19 @@ import { HorizonHero } from '../components/HorizonHero';
 
 export default function ProductizedLanding() {
   return (
-    <div className="min-h-screen bg-dark-bg-500">
+    <div className="min-h-screen bg-zinc-950">
       <HorizonHero />
       {/* Spacer */}
       <div className="h-24"></div>
 
       {/* Problem Section with Side-by-Side Cards */}
-      <section className="py-24 bg-dark-bg-500">
+      <section className="py-24 bg-zinc-950">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-black text-white mb-10 leading-relaxed-6 leading-tight">
+            <h2 className="text-5xl md:text-6xl font-black text-white mb-10 leading-tight tracking-tighter">
               Marketing Agencies
               <br />
-              <span className="bg-gradient-to-r from-baltic-blue to-baltic-blue/60 bg-clip-text text-transparent">
+              <span className="text-horizon-200">
                 Are Broken
               </span>
             </h2>
@@ -47,12 +47,12 @@ export default function ProductizedLanding() {
           {/* Side-by-Side Comparison Cards */}
           <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
             {/* Traditional Agency Card */}
-            <div className="group bg-dark-bg-600/50 rounded-3xl p-10 shadow-2xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border-2 border-baltic-blue/30 hover:border-baltic-blue/60">
+            <div className="group bg-zinc-900/50 rounded-3xl p-10 shadow-card hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2 border border-zinc-800 hover:border-horizon-800">
               <div className="flex items-center mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-baltic-blue to-baltic-blue/70 rounded-2xl flex items-center justify-center mr-5 shadow-lg shadow-baltic-blue/30">
-                  <AlertTriangle className="w-8 h-8 text-dark-bg-500" />
+                <div className="w-16 h-16 bg-zinc-800 rounded-2xl flex items-center justify-center mr-5">
+                  <AlertTriangle className="w-8 h-8 text-zinc-500" />
                 </div>
-                <h3 className="text-3xl font-bold text-white">Traditional Agency</h3>
+                <h3 className="text-3xl font-bold text-white tracking-tight">Traditional Agency</h3>
               </div>
 
               <ul className="space-y-4">
@@ -67,7 +67,7 @@ export default function ProductizedLanding() {
                   { text: 'Zero transparency into activities', icon: X }
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-start text-slate-300 font-medium">
-                      <div className="flex-shrink-0 w-6 h-6 rounded-full bg-baltic-blue/20 flex items-center justify-center mr-4 mt-0.5">
+                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-baltic-blue/20 flex items-center justify-center mr-4 mt-0.5">
                       <X className="w-4 h-4 text-baltic-blue" />
                     </div>
                     <span className="text-lg">{item.text}</span>
@@ -77,13 +77,13 @@ export default function ProductizedLanding() {
             </div>
 
             {/* cmoxpert Card */}
-            <div className="group bg-gradient-to-br from-baltic-blue/10 via-ocean-teal/5 to-regal-navy/10 rounded-3xl p-10 shadow-2xl hover:shadow-3xl transition-all duration-500 transform hover:-translate-y-2 border-2 border-baltic-blue/50 relative overflow-hidden">
+            <div className="group bg-horizon-900/20 rounded-3xl p-10 shadow-glow transition-all duration-500 transform hover:-translate-y-2 border border-horizon-700/50 relative overflow-hidden">
               {/* Shine effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
 
               {/* Best Value Badge */}
-                <div className="absolute -top-3 -right-3">
-                <div className="bg-gradient-to-r from-baltic-blue to-ocean-teal text-dark-bg-500 px-6 py-2 rounded-full text-sm font-bold shadow-lg flex items-center">
+              <div className="absolute -top-3 -right-3">
+                <div className="bg-white text-horizon-900 px-6 py-2 rounded-full text-sm font-bold shadow-lg flex items-center">
                   <Star className="w-4 h-4 mr-2 fill-current" />
                   Best Value
                 </div>
@@ -91,10 +91,10 @@ export default function ProductizedLanding() {
 
               <div className="relative z-10">
                 <div className="flex items-center mb-8">
-                  <div className="w-16 h-16 bg-gradient-to-br from-baltic-blue to-ocean-teal rounded-2xl flex items-center justify-center mr-5 shadow-lg shadow-baltic-blue/30">
-                    <CheckCircle className="w-8 h-8 text-dark-bg-500" />
+                  <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mr-5 shadow-glow">
+                    <CheckCircle className="w-8 h-8 text-horizon-700" />
                   </div>
-                  <h3 className="text-3xl font-bold text-white">cmoxpert Services</h3>
+                  <h3 className="text-3xl font-bold text-white tracking-tight">cmoxpert Services</h3>
                 </div>
 
                 <ul className="space-y-4">
@@ -136,10 +136,10 @@ export default function ProductizedLanding() {
       <div className="h-24"></div>
 
       {/* How It Works - Timeline Design */}
-      <section className="py-24 bg-dark-bg-600">
+      <section className="py-24 bg-zinc-950">
         <div className="max-w-7xl mx-auto px-6">
           <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
+            <h2 className="text-5xl md:text-6xl font-black text-white mb-6 tracking-tighter">
               How It Works
             </h2>
             <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto">
@@ -155,10 +155,10 @@ export default function ProductizedLanding() {
             {/* Step 1 */}
             <div className="flex flex-col md:flex-row items-center gap-8">
               <div className="flex-shrink-0 w-full md:w-1/2 order-2 md:order-1">
-                <div className="bg-dark-bg-700 rounded-3xl shadow-2xl p-10 border-2 border-baltic-blue/30 hover:border-baltic-blue/60 transition-all duration-500 transform hover:-translate-y-1">
+                <div className="bg-zinc-900 rounded-3xl shadow-card p-10 border border-zinc-800 hover:border-zinc-700 transition-all duration-500 transform hover:-translate-y-1">
                   <div className="flex items-start mb-6">
-                    <div className="flex-shrink-0 w-20 h-20 bg-gradient-to-br from-baltic-blue to-baltic-blue/60 rounded-2xl flex items-center justify-center shadow-xl shadow-baltic-blue/30">
-                      <Zap className="w-10 h-10 text-dark-bg-500" />
+                    <div className="flex-shrink-0 w-20 h-20 bg-zinc-800 rounded-2xl flex items-center justify-center">
+                      <Zap className="w-10 h-10 text-white" />
                     </div>
                     <div className="ml-6">
                       <h3 className="text-3xl font-bold text-white mb-2">Automated Insights</h3>
@@ -297,11 +297,11 @@ export default function ProductizedLanding() {
       <div className="h-24"></div>
 
       {/* Final CTA Section */}
-      <section className="py-32 bg-gradient-to-br from-dark-bg-500 to-dark-bg-600">
+      <section className="py-32 bg-zinc-950 border-t border-zinc-900">
         <div className="max-w-5xl mx-auto px-6 text-center">
-          <h2 className="text-5xl md:text-7xl font-black text-white mb-8 leading-tight">
+          <h2 className="text-5xl md:text-7xl font-black text-white mb-8 leading-tight tracking-tighter">
             Ready to{' '}
-            <span className="bg-gradient-to-r from-baltic-blue to-ocean-teal bg-clip-text text-transparent">
+            <span className="text-horizon-200">
               Ditch Your Agency?
             </span>
           </h2>
@@ -313,7 +313,7 @@ export default function ProductizedLanding() {
           <div className="mb-10">
             <Link
               to="/audit"
-              className="group relative inline-flex items-center px-14 py-7 bg-gradient-to-r from-baltic-blue via-ocean-teal to-baltic-blue text-dark-bg-500 rounded-2xl font-black text-2xl shadow-2xl shadow-baltic-blue/50 hover:shadow-baltic-blue/70 transition-all duration-500 transform hover:scale-105 hover:-translate-y-2"
+              className="group relative inline-flex items-center px-14 py-7 bg-white text-horizon-900 rounded-full font-black text-2xl shadow-glow hover:scale-105 hover:-translate-y-2 transition-all duration-500"
             >
               <Rocket className="w-8 h-8 mr-3 group-hover:rotate-12 transition-transform" />
               Get Free Audit
@@ -344,7 +344,7 @@ export default function ProductizedLanding() {
       </section>
 
       {/* Modern Footer */}
-      <footer className="bg-dark-bg-900 text-white py-16 border-t border-baltic-blue/20">
+      <footer className="bg-zinc-950 text-white py-16 border-t border-zinc-900">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             {/* Brand */}

@@ -60,7 +60,7 @@ export function Layout({ children }: LayoutProps) {
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [shortcutsModalOpen, setShortcutsModalOpen] = useState(false);
   const [badges, setBadges] = useState<Record<string, number>>({});
-  const [recentPages, setRecentPages] = useState<Array<{path: string; title: string}>>([]);
+  const [recentPages, setRecentPages] = useState<Array<{ path: string; title: string }>>([]);
 
   useRecentPages();
 
@@ -220,7 +220,7 @@ export function Layout({ children }: LayoutProps) {
 
   const renderNavSection = (section: NavSection, index: number) => (
     <div key={section.title} className="mb-6">
-      <h3 className="px-4 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+      <h3 className="px-4 mb-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">
         {section.title}
       </h3>
       <div className="space-y-1">
@@ -233,15 +233,15 @@ export function Layout({ children }: LayoutProps) {
               className={clsx(
                 'flex items-center justify-between px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200 group',
                 isActive
-                  ? 'bg-blue-50 text-blue-700 border-l-4 border-blue-600 pl-3'
-                  : 'text-slate-700 hover:bg-slate-50 hover:text-slate-900'
+                  ? 'bg-white/10 text-white border-l-4 border-white pl-3'
+                  : 'text-zinc-400 hover:bg-white/5 hover:text-white'
               )}
               aria-current={isActive ? 'page' : undefined}
             >
               <div className="flex items-center">
                 <item.icon className={clsx(
                   'w-5 h-5 mr-3 transition-colors',
-                  isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'
+                  isActive ? 'text-white' : 'text-zinc-500 group-hover:text-zinc-300'
                 )} />
                 <span>{item.name}</span>
               </div>
@@ -261,7 +261,7 @@ export function Layout({ children }: LayoutProps) {
   );
 
   return (
-    <div className="min-h-screen bg-cream-100" role="application" aria-label="cmoxpert Client Management Platform">
+    <div className="min-h-screen bg-zinc-950 text-zinc-100" role="application" aria-label="cmoxpert Client Management Platform">
       <OnboardingTour />
       <CommandPalette isOpen={commandPaletteOpen} onClose={() => setCommandPaletteOpen(false)} />
       <KeyboardShortcutsModal isOpen={shortcutsModalOpen} onClose={() => setShortcutsModalOpen(false)} />
@@ -301,7 +301,7 @@ export function Layout({ children }: LayoutProps) {
       {/* Sidebar */}
       <aside
         className={clsx(
-          'fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transition-transform duration-300 ease-in-out',
+          'fixed inset-y-0 left-0 z-50 w-64 bg-zinc-900 border-r border-zinc-800 shadow-xl transition-transform duration-300 ease-in-out',
           isMobile && !mobileMenuOpen && '-translate-x-full'
         )}
         role="complementary"
@@ -349,27 +349,27 @@ export function Layout({ children }: LayoutProps) {
           </nav>
 
           {/* User menu */}
-          <footer className="p-4 border-t border-slate-200" role="contentinfo">
+          <footer className="p-4 border-t border-zinc-800" role="contentinfo">
             <h2 className="sr-only">User Account</h2>
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-tan-400 to-olive-600 rounded-full flex items-center justify-center">
-                  <span className="text-sm font-medium text-white">
+                <div className="w-8 h-8 bg-zinc-800 rounded-full flex items-center justify-center border border-zinc-700">
+                  <span className="text-sm font-medium text-zinc-100">
                     {user?.email?.charAt(0).toUpperCase()}
                   </span>
                 </div>
                 <div className="text-sm">
-                  <p className="font-medium text-slate-900">
+                  <p className="font-medium text-zinc-200">
                     {user?.email?.split('@')[0]}
                   </p>
-                  <p className="text-slate-500">
+                  <p className="text-zinc-500">
                     {profile?.role === 'admin' ? 'Administrator' : 'User'}
                   </p>
                 </div>
               </div>
               <button
                 onClick={handleSignOut}
-                className="p-2 text-slate-400 hover:text-slate-600 transition-colors"
+                className="p-2 text-zinc-500 hover:text-zinc-300 transition-colors"
                 title="Sign out"
                 aria-label="Sign out of your account"
               >
