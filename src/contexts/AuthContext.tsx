@@ -27,6 +27,8 @@ interface AuthContextType {
   clearError: () => void;
   skipLoading: () => void;
   clearLoginSuccess: () => void;
+  resetPassword: (email: string) => Promise<{ error: unknown; success?: boolean }>;
+  updatePassword: (newPassword: string) => Promise<{ error: unknown; success?: boolean }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -214,7 +216,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (!mounted) return;
 
       setSession(session);
@@ -385,6 +387,78 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      setError(null);
+      setLoading(true);
+
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth?mode=reset`,
+      });
+
+      if (error) {
+        const errorMessage = error.message;
+        setError(errorMessage);
+        toast.error('Failed to send password reset email. Please try again.', {
+          icon: '✕',
+        });
+        return { error, success: false };
+      }
+
+      toast.success('Password reset email sent! Check your inbox.', {
+        icon: '✉️',
+        duration: 5000,
+      });
+
+      return { error: null, success: true };
+    } catch (error: unknown) {
+      const errorMessage = (error as Error)?.message || 'An error occurred during password reset';
+      setError(errorMessage);
+      toast.error('Failed to reset password. Please try again.', {
+        icon: '✕',
+      });
+      return { error: { message: errorMessage }, success: false };
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updatePassword = async (newPassword: string) => {
+    try {
+      setError(null);
+      setLoading(true);
+
+      const { error } = await supabase.auth.updateUser({
+        password: newPassword,
+      });
+
+      if (error) {
+        const errorMessage = error.message;
+        setError(errorMessage);
+        toast.error('Failed to update password. Please try again.', {
+          icon: '✕',
+        });
+        return { error, success: false };
+      }
+
+      toast.success('Password updated successfully!', {
+        icon: '✓',
+        duration: 3000,
+      });
+
+      return { error: null, success: true };
+    } catch (error: unknown) {
+      const errorMessage = (error as Error)?.message || 'An error occurred while updating password';
+      setError(errorMessage);
+      toast.error('Failed to update password. Please try again.', {
+        icon: '✕',
+      });
+      return { error: { message: errorMessage }, success: false };
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const value = {
     user,
     profile,
@@ -400,6 +474,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     clearError,
     skipLoading,
     clearLoginSuccess,
+    resetPassword,
+    updatePassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

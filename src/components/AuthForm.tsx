@@ -14,10 +14,14 @@ export function AuthForm() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const isDemoMode = searchParams.get('demo') === 'true';
+  const resetMode = searchParams.get('mode') === 'reset';
 
   const [isSignIn, setIsSignIn] = useState(true);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [isResetPassword, setIsResetPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>([]);
@@ -26,7 +30,7 @@ export function AuthForm() {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [successEmail, setSuccessEmail] = useState('');
 
-  const { signIn, signUp, clearLoginSuccess } = useAuth();
+  const { signIn, signUp, clearLoginSuccess, resetPassword, updatePassword } = useAuth();
 
   const validateEmail = (email: string): boolean => {
     if (!email || email.trim() === '') {
@@ -88,7 +92,13 @@ export function AuthForm() {
     if (isDemoMode) {
       handleQuickDemo();
     }
-  }, [isDemoMode]);
+    // Check if we're in password reset mode
+    if (resetMode) {
+      setIsResetPassword(true);
+      setIsSignIn(false);
+      setIsForgotPassword(false);
+    }
+  }, [isDemoMode, resetMode]);
 
   const handleQuickDemo = async () => {
     setDemoInProgress(true);
@@ -204,6 +214,93 @@ export function AuthForm() {
     }
   };
 
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setValidationErrors([]);
+
+    // Validate email
+    if (!email || !validateEmail(email)) {
+      setValidationErrors([{
+        field: 'email',
+        message: 'Please enter a valid email address'
+      }]);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const trimmedEmail = email.trim().toLowerCase();
+      const result = await resetPassword(trimmedEmail);
+
+      if (result.error) {
+        setError('Failed to send reset email. Please try again.');
+      } else if (result.success) {
+        // Show success message and go back to sign in
+        setTimeout(() => {
+          setIsForgotPassword(false);
+          setIsSignIn(true);
+          setEmail('');
+        }, 2000);
+      }
+    } catch (err: any) {
+      console.error('Password reset error:', err);
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdatePassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setValidationErrors([]);
+
+    // Validate passwords
+    const errors: ValidationError[] = [];
+
+    const passwordError = validatePassword(password, true);
+    if (passwordError) {
+      errors.push({
+        field: 'password',
+        message: passwordError
+      });
+    }
+
+    if (password !== confirmPassword) {
+      errors.push({
+        field: 'password',
+        message: 'Passwords do not match'
+      });
+    }
+
+    if (errors.length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const result = await updatePassword(password);
+
+      if (result.error) {
+        setError('Failed to update password. Please try again.');
+      } else if (result.success) {
+        // Redirect to dashboard after successful password update
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 2000);
+      }
+    } catch (err: any) {
+      console.error('Password update error:', err);
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleSuccessComplete = () => {
     clearLoginSuccess();
     setShowSuccessModal(false);
@@ -274,10 +371,10 @@ export function AuthForm() {
             <section className="bg-[#18181b] border border-[#27272a] rounded-xl p-8 relative z-50">
               <div className="mb-6">
                 <h2 id="auth-form-heading" className="text-2xl font-bold text-white mb-2">
-                  {isSignIn ? 'Welcome back' : 'Get started'}
+                  {isResetPassword ? 'Reset your password' : isForgotPassword ? 'Forgot password' : isSignIn ? 'Welcome back' : 'Get started'}
                 </h2>
                 <p className="text-zinc-400">
-                  {isSignIn ? 'Sign in to your account' : 'Create your account'}
+                  {isResetPassword ? 'Enter your new password below' : isForgotPassword ? 'Enter your email to receive a password reset link' : isSignIn ? 'Sign in to your account' : 'Create your account'}
                 </p>
               </div>
 
@@ -292,98 +389,248 @@ export function AuthForm() {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label htmlFor="email" className="block text-sm font-medium text-zinc-300">
-                      Email address <span className="text-red-400" aria-label="required">*</span>
-                    </label>
-                    <input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={email}
-                      autoFocus
-                      required
-                      spellCheck={false}
-                      autoCorrect="off"
-                      autoCapitalize="none"
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-                      className={`w-full px-4 py-3 bg-[#09090b] border ${validationErrors.find(ve => ve.field === 'email') ? 'border-red-500' : 'border-[#27272a]'} rounded-lg text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-zinc-500`}
-                      style={{
-                        color: '#ffffff',
-                        backgroundColor: '#09090b',
-                        WebkitTextFillColor: '#ffffff',
-                        WebkitBoxShadow: '0 0 0 1000px #09090b inset',
-                        transition: 'background-color 5000s ease-in-out 0s'
-                      }}
-                      placeholder="you@company.com"
-                    />
-                    {validationErrors.find(e => e.field === 'email') && (
-                      <p id="email-error" className="text-red-500 text-xs mt-1">
-                        {validationErrors.find(e => e.field === 'email')?.message}
-                      </p>
-                    )}
+              {/* Reset Password Form */}
+              {isResetPassword && (
+                <form onSubmit={handleUpdatePassword} className="space-y-6" noValidate>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label htmlFor="password" className="block text-sm font-medium text-zinc-300">
+                        New Password <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={password}
+                        required
+                        spellCheck={false}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                        className={`w-full px-4 py-3 bg-[#09090b] border ${validationErrors.find(ve => ve.field === 'password') ? 'border-red-500' : 'border-[#27272a]'} rounded-lg text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-zinc-500`}
+                        style={{
+                          color: '#ffffff',
+                          backgroundColor: '#09090b',
+                          WebkitTextFillColor: '#ffffff',
+                          WebkitBoxShadow: '0 0 0 1000px #09090b inset',
+                          transition: 'background-color 5000s ease-in-out 0s'
+                        }}
+                        placeholder="••••••••"
+                      />
+                      {validationErrors.find(e => e.field === 'password') && (
+                        <p id="password-error" className="text-red-500 text-xs mt-1">
+                          {validationErrors.find(e => e.field === 'password')?.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="confirmPassword" className="block text-sm font-medium text-zinc-300">
+                        Confirm Password <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        type="password"
+                        value={confirmPassword}
+                        required
+                        spellCheck={false}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setConfirmPassword(e.target.value)}
+                        className={`w-full px-4 py-3 bg-[#09090b] border border-[#27272a] rounded-lg text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-zinc-500`}
+                        style={{
+                          color: '#ffffff',
+                          backgroundColor: '#09090b',
+                          WebkitTextFillColor: '#ffffff',
+                          WebkitBoxShadow: '0 0 0 1000px #09090b inset',
+                          transition: 'background-color 5000s ease-in-out 0s'
+                        }}
+                        placeholder="••••••••"
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <label htmlFor="password" className="block text-sm font-medium text-zinc-300">
-                      Password <span className="text-red-400">*</span>
-                    </label>
-                    <input
-                      id="password"
-                      name="password"
-                      type="password"
-                      value={password}
-                      required
-                      spellCheck={false}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
-                      className={`w-full px-4 py-3 bg-[#09090b] border ${validationErrors.find(ve => ve.field === 'password') ? 'border-red-500' : 'border-[#27272a]'} rounded-lg text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-zinc-500`}
-                      style={{
-                        color: '#ffffff',
-                        backgroundColor: '#09090b',
-                        WebkitTextFillColor: '#ffffff',
-                        WebkitBoxShadow: '0 0 0 1000px #09090b inset',
-                        transition: 'background-color 5000s ease-in-out 0s'
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className={`w-full py-3 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${loading ? 'opacity-50 cursor-not-allowed' : 'bg-horizon-600 hover:bg-horizon-500 text-white shadow-glow hover:shadow-xl'}`}
+                  >
+                    {loading && <Loader2 className="w-5 h-5 animate-spin" />}
+                    {loading ? 'Updating password...' : 'Update Password'}
+                  </button>
+                </form>
+              )}
+
+              {/* Forgot Password Form */}
+              {isForgotPassword && !isResetPassword && (
+                <form onSubmit={handleForgotPassword} className="space-y-6" noValidate>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="block text-sm font-medium text-zinc-300">
+                        Email address <span className="text-red-400" aria-label="required">*</span>
+                      </label>
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={email}
+                        autoFocus
+                        required
+                        spellCheck={false}
+                        autoCorrect="off"
+                        autoCapitalize="none"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                        className={`w-full px-4 py-3 bg-[#09090b] border ${validationErrors.find(ve => ve.field === 'email') ? 'border-red-500' : 'border-[#27272a]'} rounded-lg text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-zinc-500`}
+                        style={{
+                          color: '#ffffff',
+                          backgroundColor: '#09090b',
+                          WebkitTextFillColor: '#ffffff',
+                          WebkitBoxShadow: '0 0 0 1000px #09090b inset',
+                          transition: 'background-color 5000s ease-in-out 0s'
+                        }}
+                        placeholder="you@company.com"
+                      />
+                      {validationErrors.find(e => e.field === 'email') && (
+                        <p id="email-error" className="text-red-500 text-xs mt-1">
+                          {validationErrors.find(e => e.field === 'email')?.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className={`w-full py-3 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${loading ? 'opacity-50 cursor-not-allowed' : 'bg-horizon-600 hover:bg-horizon-500 text-white shadow-glow hover:shadow-xl'}`}
+                  >
+                    {loading && <Loader2 className="w-5 h-5 animate-spin" />}
+                    {loading ? 'Sending...' : 'Send Reset Link'}
+                  </button>
+
+                  <div className="mt-6 text-center">
+                    <button
+                      onClick={() => {
+                        setIsForgotPassword(false);
+                        setIsSignIn(true);
+                        setError('');
                       }}
-                      placeholder="••••••••"
-                    />
-                    {validationErrors.find(e => e.field === 'password') && (
-                      <p id="password-error" className="text-red-500 text-xs mt-1">
-                        {validationErrors.find(e => e.field === 'password')?.message}
-                      </p>
-                    )}
+                      className="text-horizon-400 hover:text-horizon-300 font-medium focus:outline-none focus:ring-2 focus:ring-horizon-500 focus:ring-offset-2 rounded transition-colors"
+                    >
+                      Back to sign in
+                    </button>
+                  </div>
+                </form>
+              )}
+
+              {/* Regular Sign In/Up Form */}
+              {!isForgotPassword && !isResetPassword && (
+                <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label htmlFor="email" className="block text-sm font-medium text-zinc-300">
+                        Email address <span className="text-red-400" aria-label="required">*</span>
+                      </label>
+                      <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={email}
+                        autoFocus
+                        required
+                        spellCheck={false}
+                        autoCorrect="off"
+                        autoCapitalize="none"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                        className={`w-full px-4 py-3 bg-[#09090b] border ${validationErrors.find(ve => ve.field === 'email') ? 'border-red-500' : 'border-[#27272a]'} rounded-lg text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-zinc-500`}
+                        style={{
+                          color: '#ffffff',
+                          backgroundColor: '#09090b',
+                          WebkitTextFillColor: '#ffffff',
+                          WebkitBoxShadow: '0 0 0 1000px #09090b inset',
+                          transition: 'background-color 5000s ease-in-out 0s'
+                        }}
+                        placeholder="you@company.com"
+                      />
+                      {validationErrors.find(e => e.field === 'email') && (
+                        <p id="email-error" className="text-red-500 text-xs mt-1">
+                          {validationErrors.find(e => e.field === 'email')?.message}
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <label htmlFor="password" className="block text-sm font-medium text-zinc-300">
+                        Password <span className="text-red-400">*</span>
+                      </label>
+                      <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={password}
+                        required
+                        spellCheck={false}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                        className={`w-full px-4 py-3 bg-[#09090b] border ${validationErrors.find(ve => ve.field === 'password') ? 'border-red-500' : 'border-[#27272a]'} rounded-lg text-white outline-none focus:ring-2 focus:ring-blue-500 transition-all placeholder:text-zinc-500`}
+                        style={{
+                          color: '#ffffff',
+                          backgroundColor: '#09090b',
+                          WebkitTextFillColor: '#ffffff',
+                          WebkitBoxShadow: '0 0 0 1000px #09090b inset',
+                          transition: 'background-color 5000s ease-in-out 0s'
+                        }}
+                        placeholder="••••••••"
+                      />
+                      {validationErrors.find(e => e.field === 'password') && (
+                        <p id="password-error" className="text-red-500 text-xs mt-1">
+                          {validationErrors.find(e => e.field === 'password')?.message}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {isSignIn && (
+                    <div className="flex justify-end">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setIsForgotPassword(true);
+                          setIsSignIn(false);
+                          setError('');
+                        }}
+                        className="text-sm text-horizon-400 hover:text-horizon-300 transition-colors"
+                      >
+                        Forgot password?
+                      </button>
+                    </div>
+                  )}
+
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className={`w-full py-3 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${loading ? 'opacity-50 cursor-not-allowed' : 'bg-horizon-600 hover:bg-horizon-500 text-white shadow-glow hover:shadow-xl'}`}
+                    aria-describedby="submit-help"
+                  >
+                    {loading && <Loader2 className="w-5 h-5 animate-spin" />}
+                    {loading
+                      ? (isSignIn ? 'Logging in...' : 'Creating account...')
+                      : (isSignIn ? 'Log In' : 'Sign Up')
+                    }
+                  </button>
+                  <div id="submit-help" className="sr-only">
+                    {isSignIn ? 'Sign in to access your dashboard' : 'Create your account to get started'}
+                  </div>
+                </form>
+              )}
+
+              {!isForgotPassword && !isResetPassword && (
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={() => setIsSignIn(!isSignIn)}
+                    className="text-horizon-400 hover:text-horizon-300 font-medium focus:outline-none focus:ring-2 focus:ring-horizon-500 focus:ring-offset-2 rounded transition-colors"
+                    aria-describedby="toggle-help"
+                  >
+                    {isSignIn ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+                  </button>
+                  <div id="toggle-help" className="sr-only">
+                    Switch between sign in and sign up forms
                   </div>
                 </div>
-
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className={`w-full py-3 px-4 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${loading ? 'opacity-50 cursor-not-allowed' : 'bg-horizon-600 hover:bg-horizon-500 text-white shadow-glow hover:shadow-xl'}`}
-                  aria-describedby="submit-help"
-                >
-                  {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-                  {loading
-                    ? (isSignIn ? 'Logging in...' : 'Creating account...')
-                    : (isSignIn ? 'Log In' : 'Sign Up')
-                  }
-                </button>
-                <div id="submit-help" className="sr-only">
-                  {isSignIn ? 'Sign in to access your dashboard' : 'Create your account to get started'}
-                </div>
-              </form>
-
-              <div className="mt-6 text-center">
-                <button
-                  onClick={() => setIsSignIn(!isSignIn)}
-                  className="text-horizon-400 hover:text-horizon-300 font-medium focus:outline-none focus:ring-2 focus:ring-horizon-500 focus:ring-offset-2 rounded transition-colors"
-                  aria-describedby="toggle-help"
-                >
-                  {isSignIn ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
-                </button>
-                <div id="toggle-help" className="sr-only">
-                  Switch between sign in and sign up forms
-                </div>
-              </div>
+              )}
             </section>
           </main>
         </div>
