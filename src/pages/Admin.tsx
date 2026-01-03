@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import { ClientPortfolioOverview } from '../components/ClientPortfolioOverview';
 import { AIConfigPanel } from '../components/AIConfigPanel';
+import { BrandLogo } from '../components/BrandLogo';
 import {
   Upload,
   Play,
@@ -174,35 +175,35 @@ export function Admin() {
       const { data: files, error } = await supabase.storage
         .from('branding')
         .list();
-      
+
       if (error) {
         console.error('Error listing branding files:', error);
         return;
       }
-      
+
       let logoUrl = '';
       let faviconUrl = '';
-      
+
       if (files) {
         // Find logo file
-        const logoFile = files.find(file => 
-          file.name.startsWith('logo.') && 
+        const logoFile = files.find(file =>
+          file.name.startsWith('logo.') &&
           ['png', 'jpg', 'jpeg', 'svg'].includes(file.name.split('.').pop()?.toLowerCase() || '')
         );
-        
+
         // Find favicon file
-        const faviconFile = files.find(file => 
-          file.name.startsWith('favicon.') && 
+        const faviconFile = files.find(file =>
+          file.name.startsWith('favicon.') &&
           ['ico', 'png', 'jpg', 'jpeg'].includes(file.name.split('.').pop()?.toLowerCase() || '')
         );
-        
+
         if (logoFile) {
           const { data: logoData } = supabase.storage
             .from('branding')
             .getPublicUrl(logoFile.name);
           logoUrl = logoData.publicUrl;
         }
-        
+
         if (faviconFile) {
           const { data: faviconData } = supabase.storage
             .from('branding')
@@ -305,7 +306,7 @@ export function Admin() {
         await supabase.storage
           .from('branding')
           .remove(['logo.png', 'logo.jpg', 'logo.jpeg', 'logo.svg']);
-        
+
         const fileExt = selectedLogo.name.split('.').pop();
         const logoPath = `logo.${fileExt}`;
         uploadPromises.push(
@@ -320,7 +321,7 @@ export function Admin() {
         await supabase.storage
           .from('branding')
           .remove(['favicon.ico', 'favicon.png', 'favicon.jpg']);
-        
+
         const fileExt = selectedFavicon.name.split('.').pop();
         const faviconPath = `favicon.${fileExt}`;
         uploadPromises.push(
@@ -331,7 +332,7 @@ export function Admin() {
       }
 
       const results = await Promise.all(uploadPromises);
-      
+
       // Check for upload errors
       const errors = results.filter(result => result.error);
       if (errors.length > 0) {
@@ -344,7 +345,7 @@ export function Admin() {
         const { data } = supabase.storage
           .from('branding')
           .getPublicUrl(`favicon.${fileExt}`);
-        
+
         const link = document.querySelector("link[rel~='icon']") as HTMLLinkElement;
         if (link) {
           link.href = `${data.publicUrl}?v=${Date.now()}`;
@@ -356,14 +357,14 @@ export function Admin() {
           document.head.appendChild(newLink);
         }
       }
-      
+
       // Update logo in the document if uploaded
       if (selectedLogo) {
         const fileExt = selectedLogo.name.split('.').pop();
         const { data } = supabase.storage
           .from('branding')
           .getPublicUrl(`logo.${fileExt}`);
-        
+
         // Update all logo images on the page
         const logoImages = document.querySelectorAll('[data-logo]');
         logoImages.forEach((img: HTMLImageElement) => {
@@ -526,11 +527,11 @@ export function Admin() {
 
   if (!isAdmin) {
     return (
-      <div className="p-8">
+      <div className="bg-gradient-to-br from-horizon-900 via-horizon-800 to-horizon-700 text-zinc-100 min-h-screen p-8">
         <div className="text-center py-12">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-slate-900 mb-2">Access Denied</h3>
-          <p className="text-slate-600">You don't have permission to access the admin panel.</p>
+          <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-zinc-100 mb-2">Access Denied</h3>
+          <p className="text-zinc-300">You don't have permission to access the admin panel.</p>
         </div>
       </div>
     );
@@ -538,12 +539,12 @@ export function Admin() {
 
   if (loading) {
     return (
-      <div className="p-8">
+      <div className="bg-gradient-to-br from-horizon-900 via-horizon-800 to-horizon-700 text-zinc-100 min-h-screen p-8">
         <div className="animate-pulse space-y-6">
-          <div className="h-8 bg-cornsilk-200 rounded w-1/4"></div>
+          <div className="h-8 bg-white/10 rounded w-1/4"></div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[...Array(4)].map((_, i) => (
-              <div key={i} className="h-32 bg-cornsilk-200 rounded-xl"></div>
+              <div key={i} className="h-32 bg-white/5 border border-white/10 rounded-xl"></div>
             ))}
           </div>
         </div>
@@ -556,25 +557,25 @@ export function Admin() {
       title: 'Total Users',
       value: usageStats.totalUsers,
       icon: Users,
-      color: 'bg-dark_moss_green-500'
+      color: 'bg-horizon-600'
     },
     {
       title: 'Total Clients',
       value: usageStats.totalClients,
       icon: Users,
-      color: 'bg-pakistan_green-500'
+      color: 'bg-horizon-500'
     },
     {
       title: 'Total Reports',
       value: usageStats.totalReports,
       icon: FileText,
-      color: 'bg-pakistan_green-500'
+      color: 'bg-horizon-500'
     },
     {
       title: 'Video Views',
       value: usageStats.totalVideoViews,
       icon: Eye,
-      color: 'bg-tiger_s_eye-500'
+      color: 'bg-horizon-400'
     }
   ];
 
@@ -588,26 +589,31 @@ export function Admin() {
   ];
 
   return (
-    <div className="p-8">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">CMO Dashboard</h1>
-          <p className="text-slate-600">Manage your FinTech client portfolio, track performance, and grow your business</p>
+    <div className="bg-gradient-to-br from-horizon-900 via-horizon-800 to-horizon-700 text-zinc-100 min-h-screen p-8">
+      {/* Header Hero Card */}
+      <div className="bg-white/5 border border-white/10 shadow-glow hover:border-white/20 transition-colors rounded-xl p-6 mb-8">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <BrandLogo className="h-10" />
+            <div>
+              <h1 className="text-3xl font-bold text-zinc-100 mb-2">CMO Dashboard</h1>
+              <p className="text-zinc-300">Manage your FinTech client portfolio, track performance, and grow your business</p>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {statCards.map((stat, index) => (
-          <div key={index} className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+          <div key={index} className="bg-white/5 border border-white/10 shadow-glow hover:border-white/20 transition-colors rounded-xl p-6">
             <div className="flex items-center justify-between">
               <div className={`w-12 h-12 ${stat.color} rounded-lg flex items-center justify-center`}>
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
               <div className="text-right">
-                <div className="text-2xl font-bold text-slate-900">{stat.value}</div>
-                <div className="text-sm text-slate-500">{stat.title}</div>
+                <div className="text-2xl font-bold text-zinc-100">{stat.value}</div>
+                <div className="text-sm text-zinc-400">{stat.title}</div>
               </div>
             </div>
           </div>
@@ -615,18 +621,17 @@ export function Admin() {
       </div>
 
       {/* Tabs */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="border-b border-slate-200">
+      <div className="bg-white/5 border border-white/10 shadow-glow rounded-xl overflow-hidden">
+        <div className="border-b border-white/10">
           <nav className="flex space-x-8 px-6">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center space-x-2 py-4 border-b-2 font-medium text-sm transition-colors ${
-                  activeTab === tab.id
-                    ? 'border-dark_moss_green-500 text-dark_moss_green-600'
-                    : 'border-transparent text-slate-500 hover:text-slate-700'
-                }`}
+                className={`flex items-center space-x-2 py-4 border-b-2 font-medium text-sm transition-colors ${activeTab === tab.id
+                  ? 'border-horizon-500 text-horizon-400'
+                  : 'border-transparent text-zinc-400 hover:text-zinc-200'
+                  }`}
               >
                 <tab.icon className="w-5 h-5" />
                 <span>{tab.label}</span>
@@ -647,10 +652,10 @@ export function Admin() {
           {activeTab === 'videos' && (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-slate-900">Video Management</h2>
+                <h2 className="text-lg font-semibold text-zinc-100">Video Management</h2>
                 <button
                   onClick={() => setShowUploadForm(true)}
-                  className="bg-dark_moss_green-600 hover:bg-dark_moss_green-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2"
+                  className="bg-horizon-600 hover:bg-horizon-500 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
                 >
                   <Plus className="w-4 h-4" />
                   <span>Upload Video</span>
@@ -660,32 +665,31 @@ export function Admin() {
               <div className="space-y-4">
                 {videos.length > 0 ? (
                   videos.map((video) => (
-                    <div key={video.id} className="flex items-center justify-between p-4 bg-cornsilk-100 rounded-lg">
+                    <div key={video.id} className="flex items-center justify-between p-4 bg-white/5 border border-white/10 hover:border-white/20 transition-colors rounded-lg">
                       <div className="flex items-center space-x-4">
-                        <div className="w-12 h-12 bg-slate-200 rounded-lg flex items-center justify-center">
-                          <Play className="w-6 h-6 text-slate-500" />
+                        <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center">
+                          <Play className="w-6 h-6 text-zinc-400" />
                         </div>
                         <div>
-                          <p className="font-medium text-slate-900 flex items-center">
+                          <p className="font-medium text-zinc-100 flex items-center">
                             {video.title}
                             {video.is_featured && (
-                              <Star className="w-4 h-4 text-earth_yellow-500 ml-2 fill-current" />
+                              <Star className="w-4 h-4 text-horizon-400 ml-2 fill-current" />
                             )}
                           </p>
-                          <p className="text-sm text-slate-500">
+                          <p className="text-sm text-zinc-400">
                             {video.views_count} views • {format(new Date(video.created_at), 'MMM d, yyyy')}
                           </p>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center space-x-2">
                         <button
                           onClick={() => toggleFeatured(video.id, video.is_featured)}
-                          className={`p-2 rounded-lg transition-colors ${
-                            video.is_featured 
-                              ? 'bg-dark_moss_green-100 text-dark_moss_green-700 hover:bg-dark_moss_green-200' 
-                              : 'bg-slate-100 text-slate-500 hover:bg-slate-200'
-                          }`}
+                          className={`p-2 rounded-lg transition-colors ${video.is_featured
+                            ? 'bg-horizon-600 text-white hover:bg-horizon-500'
+                            : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'
+                            }`}
                           title={video.is_featured ? 'Remove from featured' : 'Add to featured'}
                         >
                           <Star className="w-4 h-4" />
@@ -702,8 +706,8 @@ export function Admin() {
                   ))
                 ) : (
                   <div className="text-center py-12">
-                    <Video className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                    <p className="text-slate-500">No videos uploaded yet</p>
+                    <Video className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+                    <p className="text-zinc-400">No videos uploaded yet</p>
                   </div>
                 )}
               </div>
@@ -713,41 +717,39 @@ export function Admin() {
           {/* Analytics Tab */}
           {activeTab === 'analytics' && (
             <div>
-              <h2 className="text-lg font-semibold text-slate-900 mb-6">Recent Activity</h2>
+              <h2 className="text-lg font-semibold text-zinc-100 mb-6">Recent Activity</h2>
               <div className="space-y-4">
                 {usageStats.recentActivity.length > 0 ? (
                   usageStats.recentActivity.map((activity) => (
-                    <div key={activity.id} className="flex items-center space-x-4 p-3 bg-cornsilk-100 rounded-lg">
-                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                        activity.status === 'completed' ? 'bg-pakistan_green-100' : 'bg-earth_yellow-100'
-                      }`}>
+                    <div key={activity.id} className="flex items-center space-x-4 p-3 bg-white/5 border border-white/10 hover:border-white/20 transition-colors rounded-lg">
+                      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${activity.status === 'completed' ? 'bg-horizon-600/20' : 'bg-horizon-500/20'
+                        }`}>
                         {activity.status === 'completed' ? (
-                          <CheckCircle className="w-5 h-5 text-pakistan_green-600" />
+                          <CheckCircle className="w-5 h-5 text-horizon-400" />
                         ) : (
-                          <Clock className="w-5 h-5 text-earth_yellow-600" />
+                          <Clock className="w-5 h-5 text-horizon-300" />
                         )}
                       </div>
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-slate-900">
+                        <p className="text-sm font-medium text-zinc-100">
                           Report generated for {activity.clients.name}
                         </p>
-                        <p className="text-xs text-slate-500">
+                        <p className="text-xs text-zinc-400">
                           {format(new Date(activity.created_at), 'MMM d, yyyy • h:mm a')}
                         </p>
                       </div>
-                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        activity.status === 'completed' 
-                          ? 'bg-pakistan_green-100 text-pakistan_green-800' 
-                          : 'bg-dark_moss_green-100 text-dark_moss_green-800'
-                      }`}>
+                      <div className={`px-2 py-1 rounded-full text-xs font-medium ${activity.status === 'completed'
+                        ? 'bg-horizon-600 text-white'
+                        : 'bg-horizon-500 text-white'
+                        }`}>
                         {activity.status === 'completed' ? 'Complete' : 'Processing'}
                       </div>
                     </div>
                   ))
                 ) : (
                   <div className="text-center py-12">
-                    <BarChart3 className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-                    <p className="text-slate-500">No recent activity</p>
+                    <BarChart3 className="w-12 h-12 text-zinc-600 mx-auto mb-4" />
+                    <p className="text-zinc-400">No recent activity</p>
                   </div>
                 )}
               </div>
@@ -758,10 +760,10 @@ export function Admin() {
           {activeTab === 'branding' && (
             <div>
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-semibold text-slate-900">Brand Assets</h2>
+                <h2 className="text-lg font-semibold text-zinc-100">Brand Assets</h2>
                 <button
                   onClick={() => setShowBrandForm(true)}
-                  className="bg-tiger_s_eye-600 hover:bg-tiger_s_eye-700 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2"
+                  className="bg-horizon-600 hover:bg-horizon-500 text-white px-4 py-2 rounded-lg font-medium flex items-center space-x-2 transition-colors"
                 >
                   <Upload className="w-4 h-4" />
                   <span>Upload Assets</span>
@@ -769,16 +771,16 @@ export function Admin() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="bg-cornsilk-100 rounded-lg p-6">
-                  <h3 className="font-medium text-slate-900 mb-4 flex items-center">
+                <div className="bg-white/5 border border-white/10 hover:border-white/20 transition-colors rounded-lg p-6">
+                  <h3 className="font-medium text-zinc-100 mb-4 flex items-center">
                     <Image className="w-5 h-5 mr-2" />
                     Logo
                   </h3>
                   {brandSettings.logoUrl ? (
                     <div className="text-center">
-                      <img 
-                        src={brandSettings.logoUrl} 
-                        alt="Logo" 
+                      <img
+                        src={brandSettings.logoUrl}
+                        alt="Logo"
                         className="max-w-full h-16 mx-auto object-contain border border-slate-200 rounded bg-white p-2"
                         data-logo
                         onError={(e) => {
@@ -787,53 +789,53 @@ export function Admin() {
                         }}
                       />
                       <div className="hidden">
-                        <div className="w-16 h-16 bg-slate-200 rounded-lg flex items-center justify-center mx-auto">
-                          <Image className="w-8 h-8 text-slate-400" />
+                        <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mx-auto">
+                          <Image className="w-8 h-8 text-zinc-400" />
                         </div>
-                        <p className="text-sm text-slate-500 mt-2">No logo uploaded</p>
+                        <p className="text-sm text-zinc-400 mt-2">No logo uploaded</p>
                       </div>
-                      <p className="text-xs text-slate-500 mt-2">Current logo</p>
+                      <p className="text-xs text-zinc-400 mt-2">Current logo</p>
                     </div>
                   ) : (
                     <div className="text-center">
-                      <div className="w-16 h-16 bg-slate-200 rounded-lg flex items-center justify-center mx-auto">
-                        <Image className="w-8 h-8 text-slate-400" />
+                      <div className="w-16 h-16 bg-white/10 rounded-lg flex items-center justify-center mx-auto">
+                        <Image className="w-8 h-8 text-zinc-400" />
                       </div>
-                      <p className="text-sm text-slate-500 mt-2">No logo uploaded</p>
+                      <p className="text-sm text-zinc-400 mt-2">No logo uploaded</p>
                     </div>
                   )}
                 </div>
 
-                <div className="bg-cornsilk-100 rounded-lg p-6">
-                  <h3 className="font-medium text-slate-900 mb-4 flex items-center">
+                <div className="bg-white/5 border border-white/10 hover:border-white/20 transition-colors rounded-lg p-6">
+                  <h3 className="font-medium text-zinc-100 mb-4 flex items-center">
                     <Globe className="w-5 h-5 mr-2" />
                     Favicon
                   </h3>
                   {brandSettings.faviconUrl ? (
                     <div className="text-center">
-                      <img 
-                        src={brandSettings.faviconUrl} 
-                        alt="Favicon" 
-                        className="w-8 h-8 mx-auto border border-slate-200 rounded bg-white p-1"
+                      <img
+                        src={brandSettings.faviconUrl}
+                        alt="Favicon"
+                        className="w-8 h-8 mx-auto border border-white/20 rounded bg-white/10 p-1"
                         onError={(e) => {
                           e.currentTarget.style.display = 'none';
                           e.currentTarget.nextElementSibling!.classList.remove('hidden');
                         }}
                       />
                       <div className="hidden">
-                        <div className="w-8 h-8 bg-slate-200 rounded flex items-center justify-center mx-auto">
-                          <Globe className="w-4 h-4 text-slate-400" />
+                        <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center mx-auto">
+                          <Globe className="w-4 h-4 text-zinc-400" />
                         </div>
-                        <p className="text-sm text-slate-500 mt-2">No favicon uploaded</p>
+                        <p className="text-sm text-zinc-400 mt-2">No favicon uploaded</p>
                       </div>
-                      <p className="text-xs text-slate-500 mt-2">Current favicon</p>
+                      <p className="text-xs text-zinc-400 mt-2">Current favicon</p>
                     </div>
                   ) : (
                     <div className="text-center">
-                      <div className="w-8 h-8 bg-slate-200 rounded flex items-center justify-center mx-auto">
-                        <Globe className="w-4 h-4 text-slate-400" />
+                      <div className="w-8 h-8 bg-white/10 rounded flex items-center justify-center mx-auto">
+                        <Globe className="w-4 h-4 text-zinc-400" />
                       </div>
-                      <p className="text-sm text-slate-500 mt-2">No favicon uploaded</p>
+                      <p className="text-sm text-zinc-400 mt-2">No favicon uploaded</p>
                     </div>
                   )}
                 </div>
@@ -1208,11 +1210,10 @@ export function Admin() {
       {/* Toast Notification */}
       {toast && (
         <div className="fixed bottom-4 right-4 z-50 animate-in slide-in-from-bottom-5">
-          <div className={`flex items-center space-x-3 px-6 py-4 rounded-lg shadow-lg ${
-            toast.type === 'success'
-              ? 'bg-pakistan_green-600 text-white'
-              : 'bg-red-600 text-white'
-          }`}>
+          <div className={`flex items-center space-x-3 px-6 py-4 rounded-lg shadow-lg ${toast.type === 'success'
+            ? 'bg-pakistan_green-600 text-white'
+            : 'bg-red-600 text-white'
+            }`}>
             {toast.type === 'success' ? (
               <CheckCircle className="w-5 h-5" />
             ) : (
